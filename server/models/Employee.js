@@ -12,10 +12,11 @@ const employeeSchema = new Schema(
     lastName: {
       type: String,
       required: [true, "Họ nhân viên không được bỏ trống"],
-      maxLength: [50, "Họ nhân viênkhông được vượt quá 50 ký tự"],
+      maxLength: [50, "Họ nhân viên không được vượt quá 50 ký tự"],
     },
     phoneNumber: {
       type: String,
+      unique: [true, "Số điên thoại nhân viên không được trùng"],
       maxLength: [50, "Số điện thoại nhân viên không được vượt quá 50 ký tự"],
       validate: {
         validator: function (value) {
@@ -30,7 +31,7 @@ const employeeSchema = new Schema(
     address: {
       type: String,
       required: [true, "Địa chỉ nhân viên không được bỏ trống"],
-      maxLength: [500, "Địa chỉ nhân viên không được vượt quá 500 ký tự"],
+      maxLength: [50, "Địa chỉ nhân viên không được vượt quá 50 ký tự"],
     },
     email: {
       type: String,

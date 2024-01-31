@@ -29,8 +29,8 @@ const customerSchema = new Schema(
     },
     address: {
       type: String,
-      required: [true, "Địa chỉ khách hàng không được bỏ trống"],
-      maxLength: [500, "Địa chỉ khách hàng không được vượt quá 500 ký tự"],
+      required: [true, "Tên khách hàng không được bỏ trống"],
+      maxLength: [50, "Tên khách hàng không được vượt quá 50 ký tự"],
     },
     email: {
       type: String,
@@ -47,7 +47,12 @@ const customerSchema = new Schema(
       unique: [true, "Email khách hàng không được trùng"],
     },
     birthday: { type: Date },
-
+    password: {
+      type: String,
+      required: true,
+      minLength: [3, "Mật khẩu khách hàng không được ít hơn 3 ký tự"],
+      maxLength: [12, "Mật khẩu khách hàng không được vượt quá 12 ký tự"],
+    },
     isDeleted: {
       type: Boolean,
       default: false,

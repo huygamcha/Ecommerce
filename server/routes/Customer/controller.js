@@ -56,21 +56,21 @@ module.exports = {
         password,
       } = req.body;
 
-      const error = [];
+      const errors = [];
       const exitPhoneNumber = await Customer.findOne({
         phoneNumber: phoneNumber,
       });
       if (exitPhoneNumber)
-        error.push({ phoneNumber: "Số điện thoại đã tồn tại" });
+        errors.push({ phoneNumber: "Số điện thoại đã tồn tại" });
       const exitEmail = await Customer.findOne({
         email: email,
       });
-      if (exitEmail) error.push({ email: "Email đã tồn tại" });
+      if (exitEmail) errors.push({ email: "Email đã tồn tại" });
 
-      if (error.length > 0) {
+      if (errors.length > 0) {
         return res.send(400, {
           message: "Tạo không thành công",
-          errors: error,
+          errors: errors,
         });
       }
 
