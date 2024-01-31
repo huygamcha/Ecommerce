@@ -9,7 +9,6 @@ module.exports = {
         payload: result,
       });
     } catch (error) {
-      console.log("««««« error »»»»»", error);
       return res.send(400, {
         message: "Lấy thông tin danh mục không thành công",
       });
@@ -113,6 +112,18 @@ module.exports = {
       const { id } = req.params;
       const { name, description } = req.body;
       const payload = await Category.findById(id);
+
+      const error = [];
+      const exitName = await Category.findOne({ name, _id: { $ne: id } });
+      if (exitName) {
+        error.push("Tên danh mục đã tồn tại!");
+      }
+      if (error.length > 0) {
+        return res.send(400, {
+          message: "Cập nhật không thành công",
+          error: error,
+        });
+      }
 
       if (!payload) {
         return res.send(404, {

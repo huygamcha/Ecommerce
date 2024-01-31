@@ -47,12 +47,6 @@ const employeeSchema = new Schema(
       unique: [true, "Email nhân viên không được trùng"],
     },
     birthday: { type: Date },
-    password: {
-      type: String,
-      required: true,
-      minLength: [3, "Mật khẩu nhân viên không được ít hơn 3 ký tự"],
-      maxLength: [12, "Mật khẩu nhân viên không được vượt quá 12 ký tự"],
-    },
     isDeleted: {
       type: Boolean,
       default: false,

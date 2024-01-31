@@ -1,29 +1,29 @@
-const { Supplier } = require("../../models");
+const { Employee } = require("../../models");
 
 module.exports = {
-  getAllSupplier: async (req, res, next) => {
+  getAllEmployee: async (req, res, next) => {
     try {
-      const result = await Supplier.find();
+      const result = await Employee.find();
       return res.send(200, {
-        message: "Lấy thông tin nhà cung cấp thành công",
+        message: "Lấy thông tin nhân viên thành công",
         payload: result,
       });
     } catch (error) {
       console.log("««««« error »»»»»", error);
       return res.send(400, {
-        message: "Lấy thông tin nhà cung cấp không thành công",
+        message: "Lấy thông tin nhân viên không thành công",
       });
     }
   },
 
-  getDetailSupplier: async (req, res, next) => {
+  getDetailEmployee: async (req, res, next) => {
     try {
       const { id } = req.params;
 
-      const payload = await Supplier.findById(id);
+      const payload = await Employee.findById(id);
       if (!payload) {
         return res.send(404, {
-          message: "Không tìm thấy nhà cung cấp",
+          message: "Không tìm thấy nhân viên",
         });
       }
 
@@ -34,27 +34,28 @@ module.exports = {
       }
 
       return res.send(200, {
-        message: "Tìm nhà cung cấp thành công",
+        message: "Tìm nhân viên thành công",
         payload: payload,
       });
     } catch (error) {
       return res.send(400, {
-        message: "Lấy thông tin nhà cung cấp không thành công",
+        message: "Lấy thông tin nhân viên không thành công",
       });
     }
   },
 
-  createSupplier: async (req, res, next) => {
+  createEmployee: async (req, res, next) => {
     try {
-      const { name, email, phoneNumber, address } = req.body;
+      const { firstName, lastName, email, phoneNumber, address, birthday } =
+        req.body;
 
       const error = [];
-      const exitPhoneNumber = await Supplier.findOne({
+      const exitPhoneNumber = await Employee.findOne({
         phoneNumber: phoneNumber,
       });
       if (exitPhoneNumber)
         error.push({ phoneNumber: "Số điện thoại đã tồn tại" });
-      const exitEmail = await Supplier.findOne({
+      const exitEmail = await Employee.findOne({
         email: email,
       });
       if (exitEmail) error.push({ email: "Email đã tồn tại" });
@@ -66,35 +67,37 @@ module.exports = {
         });
       }
 
-      const newSupplier = new Supplier({
-        name,
+      const newEmployee = new Employee({
+        firstName,
+        lastName,
         email,
         phoneNumber,
         address,
+        birthday,
       });
 
-      const payload = await newSupplier.save();
+      const payload = await newEmployee.save();
       return res.send(200, {
-        message: "Tạo nhà cung cấp thành công",
+        message: "Tạo nhân viên thành công",
         payload: payload,
       });
     } catch (error) {
       console.log("««««« error »»»»»", error);
       return res.send(400, {
-        message: "Tạo nhà cung cấp không thành công",
+        message: "Tạo nhân viên không thành công",
         error: error,
       });
     }
   },
 
-  deleteSupplier: async (req, res) => {
+  deleteEmployee: async (req, res) => {
     try {
       const { id } = req.params;
 
-      const payload = await Supplier.findById(id);
+      const payload = await Employee.findById(id);
       if (!payload) {
         return res.send(404, {
-          message: "Không tìm thấy nhà cung cấp",
+          message: "Không tìm thấy nhân viên",
         });
       }
 
@@ -104,44 +107,45 @@ module.exports = {
         });
       }
 
-      await Supplier.findByIdAndUpdate(id, { isDeleted: true });
+      await Employee.findByIdAndUpdate(id, { isDeleted: true });
 
       return res.send(200, {
-        message: "Xoá nhà cung cấp thành công",
+        message: "Xoá nhân viên thành công",
       });
     } catch (error) {
       return res.send(404, {
-        message: "Xoá nhà cung cấp không thành công",
+        message: "Xoá nhân viên không thành công",
       });
     }
   },
 
-  updateSupplier: async (req, res, next) => {
+  updateEmployee: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const { name, email, phoneNumber, address } = req.body;
+      const { firstName, lastName, email, phoneNumber, address, birthday } =
+        req.body;
 
       const errors = [];
-      const exitEmail = await Supplier.findOne({ email, _id: id });
+      const exitEmail = await Employee.findOne({ email, _id: id });
       if (exitEmail) {
-        errors.push({ email: "Email nhà cung cấp đã tồn tại" });
+        errors.push({ email: "Email nhân viên đã tồn tại" });
       }
-      const exitPhoneNumber = await Supplier.findOne({ phoneNumber, _id: id });
+      const exitPhoneNumber = await Employee.findOne({ phoneNumber, _id: id });
       if (exitPhoneNumber) {
-        errors.push({ phoneNumber: "Số điện thoại nhà cung cấp đã tồn tại" });
+        errors.push({ phoneNumber: "Số điện thoại nhân viên đã tồn tại" });
       }
 
       if (errors.length > 0) {
         return res.send(400, {
-          message: "Cập nhật nhà cung cấp không thành công",
+          message: "Cập nhật nhân viên không thành công",
           errors: errors,
         });
       }
 
-      const payload = await Supplier.findById(id);
+      const payload = await Employee.findById(id);
       if (!payload) {
         return res.send(404, {
-          message: "Không tìm thấy nhà cung cấp",
+          message: "Không tìm thấy nhân viên",
         });
       }
 
@@ -151,7 +155,7 @@ module.exports = {
         });
       }
 
-      const result = await Supplier.findByIdAndUpdate(
+      const result = await Employee.findByIdAndUpdate(
         id,
         {
           name: name || this.name,
@@ -165,12 +169,12 @@ module.exports = {
       );
 
       return res.send(404, {
-        message: "Cập nhật nhà cung cấp thành công",
+        message: "Cập nhật nhân viên thành công",
         payload: result,
       });
     } catch (error) {
       return res.send(404, {
-        message: "Sửa nhà cung cấp không thành công",
+        message: "Sửa nhân viên không thành công",
       });
     }
   },
