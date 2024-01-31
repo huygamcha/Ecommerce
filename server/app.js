@@ -20,6 +20,7 @@ mongoose.connect(`${process.env.CONNECTION_STRING}${process.env.DB_NAME}`);
 var categoryRouter = require("./routes/Category/router.js");
 var supplierRouter = require("./routes/Supplier/router.js");
 var employeeRouter = require("./routes/Employee/router.js");
+var customerRouter = require("./routes/Customer/router.js");
 // var usersRouter = require("./routes/users");
 
 // view engine setup
@@ -35,6 +36,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/categories", categoryRouter);
 app.use("/suppliers", supplierRouter);
 app.use("/employees", employeeRouter);
+app.use("/customers", customerRouter);
 // app.use("/users", usersRouter);
 
 // catch 404 and forward to error handler

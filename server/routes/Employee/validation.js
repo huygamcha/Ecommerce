@@ -22,6 +22,16 @@ const checkCreateEmployee = yup.object({
       .max(50, "Tên nhân viên không được dài hơn 50 kí tự")
       .min(2, "Tên nhân viên không được nhỏ hơn 2 kí tự"),
 
+    password: yup
+      .string()
+      .test({
+        name: "required",
+        message: "Mật khẩu không được bỏ trống",
+        test: (value) => value !== undefined && value !== null && value !== "",
+      })
+      .max(50, "Mật khẩu không được dài hơn 50 kí tự")
+      .min(6, "Mật khẩu không được nhỏ hơn 6 kí tự"),
+
     email: yup
       .string()
       .test({
@@ -62,11 +72,6 @@ const checkCreateEmployee = yup.object({
         message: "Địa chỉ nhân viên không được bỏ trống",
         test: (value) => value !== undefined && value !== null && value !== "",
       })
-      .test({
-        name: "required",
-        message: "Địa chỉ nhân viên không được bỏ trống",
-        test: (value) => value !== undefined && value !== null && value !== "",
-      })
       .max(500, "Địa chỉ nhân viên không được dài hơn 500 kí tự"),
     birthday: yup.date(),
   }),
@@ -83,6 +88,11 @@ const checkUpdateEmployee = yup.object({
       .string()
       .max(50, "Tên nhân viên không được dài hơn 50 kí tự")
       .min(2, "Tên nhân viên không được nhỏ hơn 2 kí tự"),
+
+    password: yup
+      .string()
+      .max(50, "Mật khẩu không được dài hơn 50 kí tự")
+      .min(6, "Mật khẩu không được nhỏ hơn 6 kí tự"),
 
     email: yup
       .string()

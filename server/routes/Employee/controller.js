@@ -46,8 +46,15 @@ module.exports = {
 
   createEmployee: async (req, res, next) => {
     try {
-      const { firstName, lastName, email, phoneNumber, address, birthday } =
-        req.body;
+      const {
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        address,
+        birthday,
+        password,
+      } = req.body;
 
       const error = [];
       const exitPhoneNumber = await Employee.findOne({
@@ -74,6 +81,7 @@ module.exports = {
         phoneNumber,
         address,
         birthday,
+        password,
       });
 
       const payload = await newEmployee.save();
@@ -122,8 +130,15 @@ module.exports = {
   updateEmployee: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const { firstName, lastName, email, phoneNumber, address, birthday } =
-        req.body;
+      const {
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        address,
+        birthday,
+        password,
+      } = req.body;
 
       const errors = [];
       const exitEmail = await Employee.findOne({ email, _id: id });
@@ -158,10 +173,13 @@ module.exports = {
       const result = await Employee.findByIdAndUpdate(
         id,
         {
-          name: name || this.name,
           phoneNumber: phoneNumber || this.phoneNumber,
           email: email || this.email,
           address: address || this.address,
+          firstName: firstName || this.firstName,
+          lastName: lastName || this.lastName,
+          password: password || this.password,
+          birthday: birthday || this.birthday,
         },
         {
           new: true,

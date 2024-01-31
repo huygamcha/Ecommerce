@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
+const mongooseLeanVirtuals = require("mongoose-lean-virtuals");
 
 const customerSchema = new Schema(
   {
@@ -30,7 +31,6 @@ const customerSchema = new Schema(
       type: String,
       required: [true, "Địa chỉ khách hàng không được bỏ trống"],
       maxLength: [500, "Địa chỉ khách hàng không được vượt quá 500 ký tự"],
-      unique: [true, "Địa chỉ khách hàng không được trùng"],
     },
     email: {
       type: String,
@@ -47,12 +47,7 @@ const customerSchema = new Schema(
       unique: [true, "Email khách hàng không được trùng"],
     },
     birthday: { type: Date },
-    password: {
-      type: String,
-      required: true,
-      minLength: [3, "Mật khẩu khách hàng không được ít hơn 3 ký tự"],
-      maxLength: [12, "Mật khẩu khách hàng không được vượt quá 12 ký tự"],
-    },
+
     isDeleted: {
       type: Boolean,
       default: false,
@@ -68,6 +63,11 @@ const customerSchema = new Schema(
 customerSchema.virtual("fullName", function () {
   return this.firstName + " " + this.lastName;
 });
+
+customerSchema.set("toJSON", { virtuals: true });
+customerSchema.set("toObject", { virtuals: true });
+//
+customerSchema.plugin(mongooseLeanVirtuals);
 
 const Customer = model("customer", customerSchema);
 module.exports = Customer;
