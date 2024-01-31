@@ -1,26 +1,26 @@
 const yup = require("yup");
 
-const checkCreateCustomer = yup.object({
+const checkCreateProduct = yup.object({
   body: yup.object({
     firstName: yup
       .string()
       .test({
         name: "required",
-        message: "Họ khách hàng không được bỏ trống",
+        message: "Họ sản phẩm không được bỏ trống",
         test: (value) => value !== undefined && value !== null && value !== "",
       })
-      .max(50, "Họ khách hàng không được dài hơn 50 kí tự")
-      .min(2, "Họ khách hàng không được nhỏ hơn 2 kí tự"),
+      .max(50, "Họ sản phẩm không được dài hơn 50 kí tự")
+      .min(2, "Họ sản phẩm không được nhỏ hơn 2 kí tự"),
 
     lastName: yup
       .string()
       .test({
         name: "required",
-        message: "Tên khách hàng không được bỏ trống",
+        message: "Tên sản phẩm không được bỏ trống",
         test: (value) => value !== undefined && value !== null && value !== "",
       })
-      .max(50, "Tên khách hàng không được dài hơn 50 kí tự")
-      .min(2, "Tên khách hàng không được nhỏ hơn 2 kí tự"),
+      .max(50, "Tên sản phẩm không được dài hơn 50 kí tự")
+      .min(2, "Tên sản phẩm không được nhỏ hơn 2 kí tự"),
 
     password: yup
       .string()
@@ -36,11 +36,11 @@ const checkCreateCustomer = yup.object({
       .string()
       .test({
         name: "required",
-        message: "Email khách hàng không được bỏ trống",
+        message: "Email sản phẩm không được bỏ trống",
         test: (value) => value !== undefined && value !== null && value !== "",
       })
-      .max(50, "Email khách hàng không được dài hơn 50 kí tự")
-      .min(2, "Email khách hàng không được nhỏ hơn 2 kí tự")
+      .max(50, "Email sản phẩm không được dài hơn 50 kí tự")
+      .min(2, "Email sản phẩm không được nhỏ hơn 2 kí tự")
       .test("email type", "Không phải là email hợp lệ", (value) => {
         if (value !== undefined && value !== null && value !== "") {
           const emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
@@ -53,12 +53,12 @@ const checkCreateCustomer = yup.object({
       .string()
       .test({
         name: "required",
-        message: "Số điện thoại khách hàng không được bỏ trống",
+        message: "Số điện thoại sản phẩm không được bỏ trống",
         test: (value) => value !== undefined && value !== null && value !== "",
       })
       .test(
         "phoneNumber type",
-        "Số điện thoại khách hàng không hợp lệ",
+        "Số điện thoại sản phẩm không hợp lệ",
         (value) => {
           if (value !== undefined && value !== null && value !== "") {
             const phoneRegex =
@@ -73,25 +73,25 @@ const checkCreateCustomer = yup.object({
       .string()
       .test({
         name: "required",
-        message: "Địa chỉ khách hàng không được bỏ trống",
+        message: "Địa chỉ sản phẩm không được bỏ trống",
         test: (value) => value !== undefined && value !== null && value !== "",
       })
-      .max(500, "Địa chỉ khách hàng không được dài hơn 500 kí tự"),
+      .max(500, "Địa chỉ sản phẩm không được dài hơn 500 kí tự"),
     birthday: yup.date(),
   }),
 });
 
-const checkUpdateCustomer = yup.object({
+const checkUpdateProduct = yup.object({
   body: yup.object({
     firstName: yup
       .string()
-      .max(50, "Họ khách hàng không được dài hơn 50 kí tự")
-      .min(2, "Họ khách hàng không được nhỏ hơn 2 kí tự"),
+      .max(50, "Họ sản phẩm không được dài hơn 50 kí tự")
+      .min(2, "Họ sản phẩm không được nhỏ hơn 2 kí tự"),
 
     lastName: yup
       .string()
-      .max(50, "Tên khách hàng không được dài hơn 50 kí tự")
-      .min(2, "Tên khách hàng không được nhỏ hơn 2 kí tự"),
+      .max(50, "Tên sản phẩm không được dài hơn 50 kí tự")
+      .min(2, "Tên sản phẩm không được nhỏ hơn 2 kí tự"),
 
     password: yup
       .string()
@@ -100,8 +100,8 @@ const checkUpdateCustomer = yup.object({
 
     email: yup
       .string()
-      .max(50, "Email khách hàng không được dài hơn 50 kí tự")
-      .min(2, "Email khách hàng không được nhỏ hơn 2 kí tự")
+      .max(50, "Email sản phẩm không được dài hơn 50 kí tự")
+      .min(2, "Email sản phẩm không được nhỏ hơn 2 kí tự")
       .test("email type", "Không phải là email hợp lệ", (value) => {
         if (value !== undefined && value !== null && value !== "") {
           const emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
@@ -123,12 +123,12 @@ const checkUpdateCustomer = yup.object({
 
     address: yup
       .string()
-      .max(500, "Địa chỉ khách hàng không được dài hơn 500 kí tự"),
+      .max(500, "Địa chỉ sản phẩm không được dài hơn 500 kí tự"),
     birthday: yup.date(),
   }),
 });
 
 module.exports = {
-  checkCreateCustomer,
-  checkUpdateCustomer,
+  checkCreateProduct,
+  checkUpdateProduct,
 };
