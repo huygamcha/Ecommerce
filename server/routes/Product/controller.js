@@ -1,9 +1,9 @@
-const { Product } = require("../../models");
+const { Product, Category, Supplier } = require("../../models");
 
 module.exports = {
   getAllProduct: async (req, res, next) => {
     try {
-      const result = await Product.find();
+      const result = await Product.find().populate("category");
       return res.send(200, {
         message: "Lấy thông tin sản phẩm thành công",
         payload: result,
@@ -47,41 +47,33 @@ module.exports = {
   createProduct: async (req, res, next) => {
     try {
       const {
-        firstName,
-        lastName,
-        email,
-        phoneNumber,
-        address,
-        birthday,
-        password,
+        name,
+        price,
+        discount,
+        stock,
+        description,
+        categoryId,
+        supplierId,
       } = req.body;
 
-      const errors = [];
-      const exitPhoneNumber = await Product.findOne({
-        phoneNumber: phoneNumber,
-      });
-      if (exitPhoneNumber)
-        errors.push({ phoneNumber: "Số điện thoại đã tồn tại" });
-      const exitEmail = await Product.findOne({
-        email: email,
-      });
-      if (exitEmail) errors.push({ email: "Email đã tồn tại" });
-
-      if (errors.length > 0) {
-        return res.send(400, {
-          message: "Tạo không thành công",
-          errors: errors,
-        });
-      }
+      // const errors = [];
+      // const exitCategoryId = await Category.findById({ categoryId });
+      // if (!exitCategoryId) {
+      //   errors.push({ categoryId: "Không tìm thấy danh muc" });
+      // }
+      // const exitSupplier = await Supplier.findById({ supplierId });
+      // if (!exitSupplier) {
+      //   errors.push({ supplierId: "Không tìm thấy nhà cung cấp" });
+      // }
 
       const newProduct = new Product({
-        firstName,
-        lastName,
-        email,
-        phoneNumber,
-        address,
-        birthday,
-        password,
+        name,
+        price,
+        discount,
+        stock,
+        description,
+        categoryId,
+        supplierId,
       });
 
       const payload = await newProduct.save();

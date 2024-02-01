@@ -29,7 +29,7 @@ module.exports = {
 
       if (payload.isDeleted) {
         return res.send(404, {
-          message: "Danh mục đã được xoá trước đó",
+          message: "Nhân viên đã được xoá trước đó",
         });
       }
 
@@ -69,7 +69,7 @@ module.exports = {
 
       if (error.length > 0) {
         return res.send(400, {
-          message: "Tạo không thành công",
+          message: "Tạo nhân viên không thành công",
           errors: error,
         });
       }

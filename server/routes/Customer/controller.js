@@ -69,7 +69,7 @@ module.exports = {
 
       if (errors.length > 0) {
         return res.send(400, {
-          message: "Tạo không thành công",
+          message: "Tạo khách hàng không thành công",
           errors: errors,
         });
       }
