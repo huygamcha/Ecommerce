@@ -122,11 +122,14 @@ module.exports = {
       const { name, email, phoneNumber, address } = req.body;
 
       const errors = [];
-      const exitEmail = await Supplier.findOne({ email, _id: id });
+      const exitEmail = await Supplier.findOne({ email, _id: { $ne: id } });
       if (exitEmail) {
         errors.push({ email: "Email nhà cung cấp đã tồn tại" });
       }
-      const exitPhoneNumber = await Supplier.findOne({ phoneNumber, _id: id });
+      const exitPhoneNumber = await Supplier.findOne({
+        phoneNumber,
+        _id: { $ne: id },
+      });
       if (exitPhoneNumber) {
         errors.push({ phoneNumber: "Số điện thoại nhà cung cấp đã tồn tại" });
       }

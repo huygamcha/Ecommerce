@@ -66,14 +66,14 @@ const employeeSchema = new Schema(
   }
 );
 
+employeeSchema.virtual("fullName").get(function () {
+  return this.firstName + " " + this.lastName;
+});
+
 employeeSchema.set("toJSON", { virtuals: true });
 employeeSchema.set("toObject", { virtuals: true });
 //
 employeeSchema.plugin(mongooseLeanVirtuals);
-
-employeeSchema.virtual("fullName", function () {
-  return `${this.firstName} ${this.lastName}}`;
-});
 
 const Employee = model("employee", employeeSchema);
 module.exports = Employee;

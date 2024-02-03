@@ -3,7 +3,10 @@ const { Product, Category, Supplier } = require("../../models");
 module.exports = {
   getAllProduct: async (req, res, next) => {
     try {
-      const result = await Product.find().populate("category");
+      const result = await Product.find()
+        .populate("category")
+        .populate("supplier")
+        .lean({ virtuals: true });
       return res.send(200, {
         message: "Lấy thông tin sản phẩm thành công",
         payload: result,
@@ -20,7 +23,10 @@ module.exports = {
     try {
       const { id } = req.params;
 
-      const payload = await Product.findById(id);
+      const payload = await Product.findById(id)
+        .populate("category")
+        .populate("supplier")
+        .lean({ virtual: true });
       if (!payload) {
         return res.send(404, {
           message: "Không tìm thấy sản phẩm",
@@ -56,15 +62,39 @@ module.exports = {
         supplierId,
       } = req.body;
 
-      // const errors = [];
-      // const exitCategoryId = await Category.findById({ categoryId });
-      // if (!exitCategoryId) {
-      //   errors.push({ categoryId: "Không tìm thấy danh muc" });
-      // }
-      // const exitSupplier = await Supplier.findById({ supplierId });
-      // if (!exitSupplier) {
-      //   errors.push({ supplierId: "Không tìm thấy nhà cung cấp" });
-      // }
+      const errors = [];
+      const exitName = Product.findOne({ name });
+      const exitCategoryId = Category.findOne({ _id: categoryId });
+      const exitSupplierId = Supplier.findOne({ _id: supplierId });
+      const [checkName, checkCategoryId, checkSupplierId] = await Promise.all([
+        exitName,
+        exitCategoryId,
+        exitSupplierId,
+      ]);
+
+      if (checkName) {
+        errors.push({ name: "Sản phẩm này đã tồn tại" });
+      }
+      if (!checkCategoryId)
+        errors.push({ categoryId: "Không có danh mục này" });
+      else {
+        if (checkCategoryId.isDeleted) {
+          errors.push({ categoryId: "Danh mục này đã bị xoá" });
+        }
+      }
+      if (!checkSupplierId)
+        errors.push({ categoryId: "Không có nhà cung cấp này" });
+      else {
+        if (checkSupplierId.isDeleted)
+          errors.push({ categoryId: "Nhà cung cấp này đã bị xoá" });
+      }
+
+      if (errors.length > 0) {
+        return res.send(400, {
+          message: "Tạo sản phẩm không thành công",
+          errors: errors,
+        });
+      }
 
       const newProduct = new Product({
         name,
@@ -82,10 +112,8 @@ module.exports = {
         payload: payload,
       });
     } catch (error) {
-      console.log("««««« error »»»»»", error);
       return res.send(400, {
         message: "Tạo sản phẩm không thành công",
-        error: error,
       });
     }
   },
@@ -103,7 +131,7 @@ module.exports = {
 
       if (payload.isDeleted) {
         return res.send(404, {
-          message: "Danh mục đã được xoá trước đó",
+          message: "Sản phẩm đã được xoá trước đó",
         });
       }
 
@@ -123,23 +151,40 @@ module.exports = {
     try {
       const { id } = req.params;
       const {
-        firstName,
-        lastName,
-        email,
-        phoneNumber,
-        address,
-        birthday,
-        password,
+        name,
+        price,
+        discount,
+        stock,
+        categoryId,
+        supplierId,
+        description,
       } = req.body;
 
       const errors = [];
-      const exitEmail = await Product.findOne({ email, _id: id });
-      if (exitEmail) {
-        errors.push({ email: "Email sản phẩm đã tồn tại" });
+      const exitName = Product.findOne({ _id: { $ne: id }, name });
+      const exitCategoryId = Category.findOne({ _id: { $ne: categoryId } });
+      const exitSupplierId = Supplier.findOne({ _id: { $ne: supplierId } });
+      const [checkName, checkCategoryId, checkSupplierId] = await Promise.all([
+        exitName,
+        exitCategoryId,
+        exitSupplierId,
+      ]);
+
+      if (checkName) {
+        errors.push({ name: "Tên sản phẩm đã tồn tại" });
       }
-      const exitPhoneNumber = await Product.findOne({ phoneNumber, _id: id });
-      if (exitPhoneNumber) {
-        errors.push({ phoneNumber: "Số điện thoại sản phẩm đã tồn tại" });
+      if (!checkCategoryId)
+        errors.push({ categoryId: "Không có danh mục này" });
+      else {
+        if (checkCategoryId.isDeleted) {
+          errors.push({ categoryId: "Danh mục này đã bị xoá" });
+        }
+      }
+      if (!checkSupplierId)
+        errors.push({ supplierId: "Không có nhà cung cấp này" });
+      else {
+        if (checkSupplierId.isDeleted)
+          errors.push({ supplierId: "Nhà cung cấp này đã bị xoá" });
       }
 
       if (errors.length > 0) {
@@ -165,13 +210,13 @@ module.exports = {
       const result = await Product.findByIdAndUpdate(
         id,
         {
-          phoneNumber: phoneNumber || this.phoneNumber,
-          email: email || this.email,
-          address: address || this.address,
-          firstName: firstName || this.firstName,
-          lastName: lastName || this.lastName,
-          password: password || this.password,
-          birthday: birthday || this.birthday,
+          name: name || this.name,
+          price: price || this.price,
+          stock: stock || this.stock,
+          discount: discount || this.discount,
+          description: description || this.description,
+          categoryId: categoryId || this.categoryId,
+          supplierId: supplierId || this.supplierId,
         },
         {
           new: true,
@@ -185,6 +230,7 @@ module.exports = {
     } catch (error) {
       return res.send(404, {
         message: "Sửa sản phẩm không thành công",
+        error: error,
       });
     }
   },

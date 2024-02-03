@@ -10,8 +10,7 @@ const checkCreateCategory = yup.object({
         test: (value) => value !== undefined && value !== null && value !== "",
       })
       .max(50, "Tên danh mục không được dài hơn 50 kí tự")
-      .min(2, "Tên danh mục không được nhỏ hơn 2 kí tự")
-      .required(),
+      .min(2, "Tên danh mục không được nhỏ hơn 2 kí tự"),
     description: yup
       .string()
       .max(500, "Mô tả danh mục không được lớn hơn 500 kí tự"),

@@ -141,11 +141,14 @@ module.exports = {
       } = req.body;
 
       const errors = [];
-      const exitEmail = await Employee.findOne({ email, _id: id });
+      const exitEmail = await Employee.findOne({ email, _id: { $ne: id } });
       if (exitEmail) {
         errors.push({ email: "Email nhân viên đã tồn tại" });
       }
-      const exitPhoneNumber = await Employee.findOne({ phoneNumber, _id: id });
+      const exitPhoneNumber = await Employee.findOne({
+        phoneNumber,
+        _id: { $ne: id },
+      });
       if (exitPhoneNumber) {
         errors.push({ phoneNumber: "Số điện thoại nhân viên đã tồn tại" });
       }

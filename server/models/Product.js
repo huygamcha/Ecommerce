@@ -8,6 +8,7 @@ const productSchema = new Schema(
       type: String,
       require: [true, "Tên sản phẩm không được bỏ trống"],
       maxLength: [50, "Tên sản phẩm không được quá 50 kí tự"],
+      unique: [true, "Tên sản phẩm không được trùng"],
     },
 
     price: {
@@ -22,7 +23,7 @@ const productSchema = new Schema(
       require: [true, "Phần trăm giảm giá sản phẩm không được bỏ trống"],
       default: 0,
       min: [0, "Phần trăm giảm giá sản phẩm không được âm"],
-      max: [75, "Phần trăm giảm giá sản phẩm không được nhỏ hơn 76%"],
+      max: [75, "Phần trăm giảm giá sản phẩm không được nhỏ hơn 75%"],
     },
 
     stock: {
@@ -70,7 +71,7 @@ productSchema.virtual("supplier", {
   justOne: true,
 });
 
-productSchema.virtual("total", function () {
+productSchema.virtual("total").get(function () {
   return this.price * ((100 - this.discount) / 100);
 });
 
