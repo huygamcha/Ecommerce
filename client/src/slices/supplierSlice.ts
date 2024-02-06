@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, } from "@reduxjs/toolkit";
 import axios from "axios";
 
-interface CategoriesType {
+interface SuppliersType {
   name: string;
   description: string;
 }
@@ -10,40 +10,40 @@ interface CategoriesType {
 interface InitialType {
   success: boolean;
   error: { message?: string, errors?: any } | string;
-  category: CategoriesType;
+  supplier: SuppliersType;
   loading: boolean;
   deleted: boolean;
   updated: boolean;
-  categories: CategoriesType[];
+  suppliers: SuppliersType[];
 }
 
 const initialState: InitialType = {
   success: false,
   error: '',
-  category: {
+  supplier: {
     name: "",
     description: ""
   },
   loading: false,
   deleted: false,
   updated: false,
-  categories: [],
+  suppliers: [],
 };
 
-const getAllCategory = createAsyncThunk<CategoriesType[]>("category/getAll", async () => {
+const getAllSupplier = createAsyncThunk<SuppliersType[]>("supplier/getAll", async () => {
 
   // trả về response rồi lấy ra, để tránh lỗi A non-serializable value was detected in an action, in the path: `payload.headers`
   //https://chat.openai.com/c/48f823af-3e96-48aa-8df3-fe6e306aef10
-  const response = await axios.get("http://localhost:4000/categories");
-  const data: CategoriesType[] = response.data.payload;
-  return data; // Assuming categories are in the `data` property of the response
+  const response = await axios.get("http://localhost:4000/suppliers");
+  const data: SuppliersType[] = response.data.payload;
+  return data; // Assuming suppliers are in the `data` property of the response
 });
 
 // tham số thứ 2 là tham số truyền vào gửi từ client
-const createCategory = createAsyncThunk<CategoriesType, CategoriesType>("category/createCategory", async (name, { rejectWithValue }) => {
+const createSupplier = createAsyncThunk<SuppliersType, SuppliersType>("supplier/createSupplier", async (name, { rejectWithValue }) => {
   try {
-    const response = await axios.post("http://localhost:4000/categories", name);
-    const data: CategoriesType = response.data;
+    const response = await axios.post("http://localhost:4000/suppliers", name);
+    const data: SuppliersType = response.data;
     return data;
   } catch (error: any) {
     if (error.response && error.response.data) {
@@ -54,14 +54,14 @@ const createCategory = createAsyncThunk<CategoriesType, CategoriesType>("categor
   }
 });
 
-const deleteCategory = createAsyncThunk<CategoriesType, string>("category/deleteCategory", async (id, { rejectWithValue }) => {
+const deleteSupplier = createAsyncThunk<SuppliersType, string>("supplier/deleteSupplier", async (id, { rejectWithValue }) => {
   try {
     const config = {
       headers: {
         "Content-type": "application/json",
       },
     };
-    const response = await axios.delete(`http://localhost:4000/categories/${id}`, config);
+    const response = await axios.delete(`http://localhost:4000/suppliers/${id}`, config);
     const data = response.data;
     return data;
   } catch (error: any) {
@@ -73,14 +73,14 @@ const deleteCategory = createAsyncThunk<CategoriesType, string>("category/delete
   }
 });
 
-const updateCategory = createAsyncThunk<CategoriesType, { id: string, values: CategoriesType }>("category/updateCategory", async ({ id, values }, { rejectWithValue }) => {
+const updateSupplier = createAsyncThunk<SuppliersType, { id: string, values: SuppliersType }>("supplier/updateSupplier", async ({ id, values }, { rejectWithValue }) => {
   try {
     const config = {
       headers: {
         "Content-type": "application/json",
       },
     };
-    const response = await axios.patch(`http://localhost:4000/categories/${id}`, values, config);
+    const response = await axios.patch(`http://localhost:4000/suppliers/${id}`, values, config);
 
 
     const data = response.data;
@@ -95,25 +95,25 @@ const updateCategory = createAsyncThunk<CategoriesType, { id: string, values: Ca
 });
 
 
-const categorySlice = createSlice({
-  name: "category",
+const supplierSlice = createSlice({
+  name: "supplier",
   initialState: initialState,
   reducers: {},
   extraReducers(builder) {
-    builder.addCase(getAllCategory.pending, (state) => {
+    builder.addCase(getAllSupplier.pending, (state) => {
       state.loading = true;
     });
 
     builder.addCase(
-      getAllCategory.fulfilled,
+      getAllSupplier.fulfilled,
       (state, action) => {
         state.loading = false;
-        state.categories = action.payload;
+        state.suppliers = action.payload;
 
       }
     );
     builder.addCase(
-      getAllCategory.rejected,
+      getAllSupplier.rejected,
       (state, action) => {
         state.loading = false;
         state.error = action.error.message || "An error occurred"; // Ensure a default message or fallback if action.error is undefined
@@ -121,22 +121,22 @@ const categorySlice = createSlice({
     );
 
     // create
-    builder.addCase(createCategory.pending, (state) => {
+    builder.addCase(createSupplier.pending, (state) => {
       state.loading = true;
 
       // state.error = "";
     });
 
     builder.addCase(
-      createCategory.fulfilled,
+      createSupplier.fulfilled,
       (state, action) => {
         state.loading = false;
-        state.category = action.payload;
+        state.supplier = action.payload;
         state.error = "";
       }
     );
     builder.addCase(
-      createCategory.rejected,
+      createSupplier.rejected,
       (state, action) => {
         console.log('««««« action »»»»»', action);
         // custom lại lỗi error trả về như postman
@@ -150,20 +150,20 @@ const categorySlice = createSlice({
     );
 
     //delete
-    builder.addCase(deleteCategory.pending, (state) => {
+    builder.addCase(deleteSupplier.pending, (state) => {
       state.loading = true;
       state.error = "";
     });
 
     builder.addCase(
-      deleteCategory.fulfilled,
+      deleteSupplier.fulfilled,
       (state, action) => {
         state.loading = false;
-        state.category = action.payload;
+        state.supplier = action.payload;
       }
     );
     builder.addCase(
-      deleteCategory.rejected,
+      deleteSupplier.rejected,
       (state, action) => {
         const customErrors = action.payload as { message?: string, errors?: any }
         state.loading = false;
@@ -172,22 +172,22 @@ const categorySlice = createSlice({
     );
 
     //update
-    builder.addCase(updateCategory.pending, (state) => {
+    builder.addCase(updateSupplier.pending, (state) => {
       state.loading = true;
       state.error = "";
     });
 
     builder.addCase(
-      updateCategory.fulfilled,
+      updateSupplier.fulfilled,
       (state, action) => {
         state.loading = false;
-        state.category = action.payload;
+        state.supplier = action.payload;
         state.error = "";
 
       }
     );
     builder.addCase(
-      updateCategory.rejected,
+      updateSupplier.rejected,
       (state, action) => {
         const customErrors = action.payload as { message?: string, errors?: any }
         state.loading = false;
@@ -198,13 +198,13 @@ const categorySlice = createSlice({
   },
 });
 
-const { reducer } = categorySlice;
+const { reducer } = supplierSlice;
 
 export default reducer;
 export {
-  getAllCategory,
-  createCategory,
-  deleteCategory,
-  updateCategory
+  getAllSupplier,
+  createSupplier,
+  deleteSupplier,
+  updateSupplier
 }
 

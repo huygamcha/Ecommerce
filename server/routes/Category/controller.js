@@ -3,7 +3,7 @@ const { Category } = require("../../models");
 module.exports = {
   getAllCategory: async (req, res, next) => {
     try {
-      const result = await Category.find();
+      const result = await Category.find({ isDeleted: false });
       return res.send(200, {
         message: "Lấy thông tin danh mục thành công",
         payload: result,
@@ -67,6 +67,7 @@ module.exports = {
       });
 
       const payload = await newCategory.save();
+
       return res.send(200, {
         message: "Tạo danh mục thành công",
         payload: payload,
@@ -113,15 +114,15 @@ module.exports = {
       const { name, description } = req.body;
       const payload = await Category.findById(id);
 
-      const error = [];
+      const errors = [];
       const exitName = await Category.findOne({ name, _id: { $ne: id } });
       if (exitName) {
-        error.push("Tên danh mục đã tồn tại!");
+        errors.push({ name: "Tên danh mục đã tồn tại!" });
       }
-      if (error.length > 0) {
+      if (errors.length > 0) {
         return res.send(400, {
           message: "Cập nhật không thành công",
-          error: error,
+          errors: errors,
         });
       }
 
@@ -147,8 +148,7 @@ module.exports = {
           new: true,
         }
       );
-
-      return res.send(404, {
+      return res.send(200, {
         message: "Cập nhật danh mục thành công",
         payload: result,
       });

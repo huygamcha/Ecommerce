@@ -14,6 +14,7 @@ const rootReducer = {
 const store = configureStore({reducer: rootReducer})
 export default store
 
+// config useSelector and useDispatch
 export type  RootState  = ReturnType<typeof store.getState>
 export const useAppDispatch: () => typeof store.dispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
