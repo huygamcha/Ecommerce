@@ -23,28 +23,31 @@ import {
 import { useAppSelector, useAppDispatch } from "../../store";
 import { useForm } from "antd/es/form/Form";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { getAllCategory } from "../../slices/categorySlice";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { getAllSupplier } from "../../slices/supplierSlice";
+import { getAllCategory } from "../../slices/categorySlice";
+import { render } from "@testing-library/react";
 
 type Props = {};
 
 const Product = (props: Props) => {
+  const navigate = useNavigate();
+  const param = useParams();
   // không hiển thị khi lần đầu load trang
   const [initialRender, setInitialRender] = useState<boolean>(true);
-  const [nameForm, setNameForm] = useState<string>("");
+  const [isActive, setIsActive] = useState<boolean>(false);
   // get from database
   const dispatch = useAppDispatch();
 
-  const { products, product, error } = useAppSelector(
-    (state) => state.products
-  );
-  const { categories } = useAppSelector((state) => state.categories);
+  const { products, error } = useAppSelector((state) => state.products);
   const { suppliers } = useAppSelector((state) => state.suppliers);
+  const { categories } = useAppSelector((state) => state.categories);
 
   useEffect(() => {
+    setInitialRender(false);
     dispatch(getAllProduct());
-    dispatch(getAllCategory());
     dispatch(getAllSupplier());
+    dispatch(getAllCategory());
   }, [dispatch]);
 
   //set active modal
@@ -85,55 +88,66 @@ const Product = (props: Props) => {
   useEffect(() => {
     if (!initialRender) {
       if (error) {
-        if (nameForm === "create") {
-          onShowMessage("Tạo danh mục không thành công", "error");
+        if (!param.id) {
+          onShowMessage("Tạo sản phẩm không thành công", "error");
         } else {
-          onShowMessage("Cập nhật danh mục không thành công", "error");
+          onShowMessage("Cập nhật sản phẩm không thành công", "error");
         }
       } else {
-        if (nameForm === "create") {
-          onShowMessage("Tạo danh mục thành công", "success");
+        if (!param.id) {
+          onShowMessage("Tạo sản phẩm thành công", "success");
         } else {
-          onShowMessage("Cập nhật danh mục thành công", "success");
+          onShowMessage("Cập nhật sản phẩm thành công", "success");
         }
         createForm.resetFields();
       }
-      dispatch(getAllProduct());
     }
-  }, [error, createForm, onShowMessage, dispatch, updateForm, nameForm]);
+  }, [createForm, onShowMessage, dispatch, updateForm, isActive]);
 
   const onFinish = async (values: any) => {
     await dispatch(createProduct(values));
-    setNameForm("create");
-    setInitialRender(false);
+    // setInitialRender(false);
+    setIsActive(!isActive);
+    dispatch(getAllProduct());
   };
 
   // update product modal
+
+  // xác định form tạo hoặc update
+  const handleClose = () => {
+    navigate(-1);
+    setSelectedProduct(false);
+  };
+
   const onUpdate = async (values: any) => {
     await dispatch(updateProduct({ id: selectedProduct, values: values }));
-    setSelectedProduct(false);
-    setNameForm("update");
+    dispatch(getAllProduct());
+    // setInitialRender(false);
+    if (error) {
+      onShowMessage("Cập nhật sản phẩm không thành công", "error");
+    }
+    setIsActive(!isActive);
+    handleClose();
   };
 
   const onDelete = async (values: any) => {
-    console.log("««««« values »»»»»", values);
     await dispatch(deleteProduct(values));
     dispatch(getAllProduct());
-    onShowMessage("Xoá danh mục thành công");
+    onShowMessage("Xoá sản phẩm thành công");
   };
 
-  // console.log("««««« product »»»»»", product);
-  // console.log("««««« products »»»»»", products);
-  // console.log("««««« error »»»»»", error);
-  // console.log("««««« suppliers »»»»»", suppliers);
+  console.log("««««« initialRender »»»»»", initialRender);
 
   // table
   const columns = [
     {
-      title: "ID",
-      dataIndex: "_id",
-      key: "_id",
+      title: "No.",
+      dataIndex: "index",
+      key: "index",
       width: "1%",
+      render: (text: any, record: any, index: number) => (
+        <div style={{ textAlign: "right" }}>{index + 1}</div>
+      ),
     },
     {
       title: "Danh mục",
@@ -148,7 +162,7 @@ const Product = (props: Props) => {
       render: (text: any, record: any) => record.supplier.name, // Render nested data
     },
     {
-      title: "Name",
+      title: "Tên sản phẩm",
       dataIndex: "name",
       key: "name",
     },
@@ -157,16 +171,27 @@ const Product = (props: Props) => {
       dataIndex: "price",
       key: "price",
       width: "1%",
+      render: (text: any, record: any, index: number) => (
+        <div style={{ textAlign: "right" }}>{record.price}</div>
+      ),
     },
     {
       title: "Số lượng",
       dataIndex: "stock",
       key: "stock",
+      width: "1%",
+      render: (text: any, record: any, index: number) => (
+        <div style={{ textAlign: "right" }}>{record.stock}</div>
+      ),
     },
     {
       title: "Giảm giá",
       dataIndex: "discount",
       key: "discount",
+      width: "1%",
+      render: (text: any, record: any, index: number) => (
+        <div style={{ textAlign: "right" }}>{record.discount}</div>
+      ),
     },
 
     {
@@ -177,18 +202,20 @@ const Product = (props: Props) => {
       render: (text: any, record: any) => {
         return (
           <Space size="small">
-            <Button
-              type="primary"
-              icon={<EditOutlined />}
-              onClick={() => {
-                setSelectedProduct(record._id);
-                updateForm.setFieldsValue(record);
-              }}
-            />
+            <Link to={`/admin/products/${record._id}`}>
+              <Button
+                type="primary"
+                icon={<EditOutlined />}
+                onClick={() => {
+                  setSelectedProduct(record._id);
+                  updateForm.setFieldsValue(record);
+                }}
+              ></Button>
+            </Link>
 
             <Popconfirm
-              title="Xoá danh mục"
-              description="Bạn có chắc xoá danh mục này không?"
+              title="Xoá sản phẩm"
+              description="Bạn có chắc xoá sản phẩm này không?"
               onConfirm={() => {
                 onDelete(record._id);
               }}
@@ -200,10 +227,11 @@ const Product = (props: Props) => {
       },
     },
   ];
+
   return (
     <div>
       {contextHolder}
-      <Card title="Tạo danh mục mới" style={{ width: "100%" }}>
+      <Card title="Tạo sản phẩm mới" style={{ width: "100%" }}>
         <Form
           form={createForm}
           name="basic"
@@ -259,20 +287,15 @@ const Product = (props: Props) => {
             label="Giá sản phẩm"
             name="price"
             rules={[{ required: true, message: "Vui lòng nhập giá sản phẩm!" }]}
-            hasFeedback
           >
             <InputNumber min={0} />
           </Form.Item>
 
-          <Form.Item<FieldType> label="Giảm giá" name="discount" hasFeedback>
+          <Form.Item<FieldType> label="Giảm giá" name="discount">
             <InputNumber defaultValue={0} min={0} max={75} />
           </Form.Item>
 
-          <Form.Item<FieldType>
-            label="Số lượng sản phẩm"
-            name="stock"
-            hasFeedback
-          >
+          <Form.Item<FieldType> label="Số lượng sản phẩm" name="stock">
             <InputNumber defaultValue={0} min={0} />
           </Form.Item>
 
@@ -286,15 +309,18 @@ const Product = (props: Props) => {
           </Form.Item>
         </Form>
       </Card>
-      <Card title="Danh sách các danh mục">
+      <Card title="Danh sách các sản phẩm">
         <Table dataSource={products} columns={columns} />
       </Card>
 
       {/* form edit và delete */}
       <Modal
         centered
-        title="Chỉnh sửa danh mục"
-        onCancel={() => setSelectedProduct(false)}
+        title="Chỉnh sửa sản phẩm"
+        onCancel={() => {
+          navigate(-1);
+          setSelectedProduct(false);
+        }}
         open={selectedProduct}
         okText="Save changes"
         onOk={() => {
@@ -304,7 +330,7 @@ const Product = (props: Props) => {
         <Card style={{ width: "100%" }}>
           <Form
             form={updateForm}
-            name="update-form"
+            name="basic"
             labelCol={{ span: 8 }}
             wrapperCol={{ span: 12 }}
             initialValues={{ name: "", description: "" }}
@@ -323,11 +349,10 @@ const Product = (props: Props) => {
             </Form.Item>
 
             <Form.Item<FieldType>
-              label="Danh mục"
+              label="sản phẩm"
               name="categoryId"
-              rules={[{ required: true, message: "Vui lòng chọn danh mục!" }]}
+              rules={[{ required: true, message: "Vui lòng chọn sản phẩm!" }]}
               hasFeedback
-              // help={error ? "ok" : "123"}
             >
               <Select
                 options={categories.map((item: any) => {

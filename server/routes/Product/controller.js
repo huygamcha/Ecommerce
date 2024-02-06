@@ -71,7 +71,6 @@ module.exports = {
         exitCategoryId,
         exitSupplierId,
       ]);
-
       if (checkName) {
         errors.push({ name: "Sản phẩm này đã tồn tại" });
       }
@@ -163,13 +162,14 @@ module.exports = {
 
       const errors = [];
       const exitName = Product.findOne({ _id: { $ne: id }, name });
-      const exitCategoryId = Category.findOne({ _id: { $ne: categoryId } });
-      const exitSupplierId = Supplier.findOne({ _id: { $ne: supplierId } });
+      const exitCategoryId = Category.findOne({ _id: categoryId });
+      const exitSupplierId = Supplier.findOne({ _id: supplierId });
       const [checkName, checkCategoryId, checkSupplierId] = await Promise.all([
         exitName,
         exitCategoryId,
         exitSupplierId,
       ]);
+      console.log("««««« checkName »»»»»", checkCategoryId);
 
       if (checkName) {
         errors.push({ name: "Tên sản phẩm đã tồn tại" });
@@ -178,7 +178,7 @@ module.exports = {
         errors.push({ categoryId: "Không có danh mục này" });
       else {
         if (checkCategoryId.isDeleted) {
-          errors.push({ categoryId: "Danh mục này đã bị xoá" });
+          errors.push({ categoryId: "Danh mục này đã bị xoá thật không" });
         }
       }
       if (!checkSupplierId)

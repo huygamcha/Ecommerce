@@ -23,7 +23,7 @@ const checkCreateSupplier = yup.object({
       .min(2, "Email nhà cung cấp không được nhỏ hơn 2 kí tự")
       .test("email type", "Không phải là email hợp lệ", (value) => {
         if (value !== undefined && value !== null && value !== "") {
-          const emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+          const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
           return emailRegex.test(value);
         }
         return true;
@@ -74,8 +74,7 @@ const checkUpdateSupplier = yup.object({
       .min(2, "Email nhà cung cấp không được nhỏ hơn 2 kí tự")
       .test("email type", "Không phải là email hợp lệ", (value) => {
         if (value !== undefined && value !== null && value !== "") {
-          const phoneRegex =
-            /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/;
+          const phoneRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
           return phoneRegex.test(value);
         }
         return true;

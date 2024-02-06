@@ -21,21 +21,25 @@ import {
 import { useAppSelector, useAppDispatch } from "../../store";
 import { useForm } from "antd/es/form/Form";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 type Props = {};
 
 const Supplier = (props: Props) => {
+  const navigate = useNavigate();
+  const param = useParams();
   // không hiển thị khi lần đầu load trang
   const [initialRender, setInitialRender] = useState<boolean>(true);
-  const [nameForm, setNameForm] = useState<string>("");
+  const [isActive, setIsActive] = useState<boolean>(false);
   // get from database
   const dispatch = useAppDispatch();
 
-  const { suppliers, supplier, error } = useAppSelector(
+  const { suppliers, error, loading } = useAppSelector(
     (state) => state.suppliers
   );
 
   useEffect(() => {
+    setInitialRender(false);
     dispatch(getAllSupplier());
   }, [dispatch]);
 
@@ -74,34 +78,44 @@ const Supplier = (props: Props) => {
   useEffect(() => {
     if (!initialRender) {
       if (error) {
-        if (nameForm === "create") {
+        if (!param.id) {
           onShowMessage("Tạo nhà cung cấp không thành công", "error");
         } else {
           onShowMessage("Cập nhật nhà cung cấp không thành công", "error");
         }
       } else {
-        if (nameForm === "create") {
+        if (!param.id) {
           onShowMessage("Tạo nhà cung cấp thành công", "success");
         } else {
           onShowMessage("Cập nhật nhà cung cấp thành công", "success");
         }
-        dispatch(getAllSupplier());
         createForm.resetFields();
       }
     }
-  }, [error, createForm, onShowMessage, dispatch, updateForm, nameForm]);
+  }, [createForm, onShowMessage, dispatch, updateForm, isActive]);
 
   const onFinish = async (values: any) => {
     await dispatch(createSupplier(values));
-    setNameForm("create");
-    setInitialRender(false);
+    // setInitialRender(false);
+    setIsActive(!isActive);
+    dispatch(getAllSupplier());
   };
 
   // update supplier modal
-  const onUpdate = async (values: any) => {
-    await dispatch(updateSupplier({ id: selectedSupplier, values: values }));
+
+  // xác định form tạo hoặc update
+  const handleClose = () => {
+    navigate(-1);
     setSelectedSupplier(false);
-    setNameForm("update");
+  };
+
+  const onUpdate = async (values: any) => {
+    console.log("««««« values »»»»»", values, selectedSupplier);
+    await dispatch(updateSupplier({ id: selectedSupplier, values: values }));
+    dispatch(getAllSupplier());
+    // setInitialRender(false);
+    setIsActive(!isActive);
+    handleClose();
   };
 
   const onDelete = async (values: any) => {
@@ -113,14 +127,18 @@ const Supplier = (props: Props) => {
   // console.log("««««« supplier »»»»»", supplier);
   // console.log("««««« suppliers »»»»»", suppliers);
   // console.log("««««« error »»»»»", error);
+  console.log("««««« initialRender »»»»»", initialRender);
 
   // table
   const columns = [
     {
-      title: "ID",
-      dataIndex: "_id",
-      key: "_id",
+      title: "No.",
+      dataIndex: "index",
+      key: "index",
       width: "1%",
+      render: (text: any, record: any, index: number) => {
+        return <div style={{ textAlign: "right" }}>{index + 1}</div>;
+      },
     },
     {
       title: "Name",
@@ -150,18 +168,20 @@ const Supplier = (props: Props) => {
       render: (text: any, record: any) => {
         return (
           <Space size="small">
-            <Button
-              type="primary"
-              icon={<EditOutlined />}
-              onClick={() => {
-                setSelectedSupplier(record._id);
-                updateForm.setFieldsValue(record);
-              }}
-            />
+            <Link to={`/admin/suppliers/${record._id}`}>
+              <Button
+                type="primary"
+                icon={<EditOutlined />}
+                onClick={() => {
+                  setSelectedSupplier(record._id);
+                  updateForm.setFieldsValue(record);
+                }}
+              ></Button>
+            </Link>
 
             <Popconfirm
-              title="Xoá nhà cung cấp"
-              description="Bạn có chắc xoá nhà cung cấp này không?"
+              title="Xoá danh mục"
+              description="Bạn có chắc xoá danh mục này không?"
               onConfirm={() => {
                 onDelete(record._id);
               }}
@@ -199,13 +219,37 @@ const Supplier = (props: Props) => {
           >
             <Input />
           </Form.Item>
-          <Form.Item<FieldType> label="Email" name="email">
+          <Form.Item<FieldType>
+            label="Email"
+            name="email"
+            rules={[
+              { required: true, message: "Vui lòng điền email nhà cung cấp!" },
+            ]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item<FieldType> label="Số điện thoại" name="phoneNumber">
+          <Form.Item<FieldType>
+            label="Số điện thoại"
+            name="phoneNumber"
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng điền số điện thoại nhà cung cấp!",
+              },
+            ]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item<FieldType> label="Địa chỉ" name="address">
+          <Form.Item<FieldType>
+            label="Địa chỉ"
+            name="address"
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng điền địa chỉ nhà cung cấp!",
+              },
+            ]}
+          >
             <Input />
           </Form.Item>
           <Form.Item wrapperCol={{ offset: 6 }}>
@@ -223,37 +267,72 @@ const Supplier = (props: Props) => {
       <Modal
         centered
         title="Chỉnh sửa nhà cung cấp"
-        onCancel={() => setSelectedSupplier(false)}
+        onCancel={() => {
+          navigate(-1);
+          setSelectedSupplier(false);
+        }}
         open={selectedSupplier}
         okText="Save changes"
         onOk={() => {
           updateForm.submit();
         }}
       >
-        <Card style={{ width: "100%" }}>
-          <Form
-            form={updateForm}
-            name="update-form"
-            labelCol={{ span: 8 }}
-            wrapperCol={{ span: 12 }}
-            initialValues={{ name: "", description: "" }}
-            onFinish={onUpdate}
-            autoComplete="off"
+        <Form
+          form={updateForm}
+          name="basic"
+          labelCol={{ span: 8 }}
+          wrapperCol={{ span: 12 }}
+          initialValues={{ name: "", description: "" }}
+          onFinish={onUpdate}
+          autoComplete="off"
+        >
+          <Form.Item<FieldType>
+            label="Tên nhà cung cấp"
+            name="name"
+            rules={[
+              { required: true, message: "Vui lòng điền tên nhà cung cấp!" },
+              {
+                min: 2,
+                message: "Tên nhà cung cấp phải lớn hơn 2 kí tự",
+              },
+            ]}
           >
-            <Form.Item<FieldType> label="Tên nhà cung cấp" name="name">
-              <Input />
-            </Form.Item>
-            <Form.Item<FieldType> label="Email" name="email">
-              <Input />
-            </Form.Item>
-            <Form.Item<FieldType> label="Số điện thoại" name="phoneNumber">
-              <Input />
-            </Form.Item>
-            <Form.Item<FieldType> label="Địa chỉ" name="address">
-              <Input />
-            </Form.Item>
-          </Form>
-        </Card>
+            <Input />
+          </Form.Item>
+          <Form.Item<FieldType>
+            label="Email"
+            name="email"
+            rules={[
+              { required: true, message: "Vui lòng điền email nhà cung cấp!" },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item<FieldType>
+            label="Số điện thoại"
+            name="phoneNumber"
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng điền số điện thoại nhà cung cấp!",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item<FieldType>
+            label="Địa chỉ"
+            name="address"
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng điền địa chỉ nhà cung cấp!",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+        </Form>
       </Modal>
     </div>
   );

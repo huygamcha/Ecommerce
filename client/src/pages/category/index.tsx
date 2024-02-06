@@ -30,14 +30,15 @@ const Category = (props: Props) => {
   const param = useParams();
   // không hiển thị khi lần đầu load trang
   const [initialRender, setInitialRender] = useState<boolean>(true);
+  const [isActive, setIsActive] = useState<boolean>(false);
   // get from database
   const dispatch = useAppDispatch();
 
   const { categories, error } = useAppSelector((state) => state.categories);
 
   useEffect(() => {
-    dispatch(getAllCategory());
     setInitialRender(false);
+    dispatch(getAllCategory());
   }, [dispatch]);
 
   //set active modal
@@ -71,15 +72,11 @@ const Category = (props: Props) => {
   const [updateForm] = Form.useForm<FieldType>();
 
   useEffect(() => {
-    console.log("««««« error »»»»»", error);
-    console.log("««««« initialRender »»»»»", initialRender);
-    console.log("««««« param »»»»»", param);
     if (!initialRender) {
       if (error) {
         if (!param.id) {
           onShowMessage("Tạo danh mục không thành công", "error");
         } else {
-          console.log("««««« 321 »»»»»", 321);
           onShowMessage("Cập nhật danh mục không thành công", "error");
         }
       } else {
@@ -87,14 +84,18 @@ const Category = (props: Props) => {
           onShowMessage("Tạo danh mục thành công", "success");
         } else {
           onShowMessage("Cập nhật danh mục thành công", "success");
+          navigate(-1);
+          setSelectedCategory(false);
         }
         createForm.resetFields();
       }
     }
-  }, [error, createForm, onShowMessage, dispatch, updateForm]);
+  }, [isActive]);
 
   const onFinish = async (values: any) => {
     await dispatch(createCategory(values));
+    // setInitialRender(false);
+    setIsActive(!isActive);
     dispatch(getAllCategory());
   };
 
@@ -102,13 +103,13 @@ const Category = (props: Props) => {
 
   // xác định form tạo hoặc update
   const handleClose = () => {
-    navigate(-1);
-    setSelectedCategory(false);
+    setIsActive(!isActive);
   };
 
   const onUpdate = async (values: any) => {
     await dispatch(updateCategory({ id: selectedCategory, values: values }));
     dispatch(getAllCategory());
+    setIsActive(!isActive);
     handleClose();
   };
 
@@ -121,14 +122,18 @@ const Category = (props: Props) => {
   // console.log("««««« category »»»»»", category);
   // console.log("««««« categories »»»»»", categories);
   // console.log("««««« error »»»»»", error);
+  console.log("««««« initialRender »»»»»", initialRender);
 
   // table
   const columns = [
     {
-      title: "ID",
-      dataIndex: "_id",
-      key: "_id",
+      title: "No.",
+      dataIndex: "index",
+      key: "index",
       width: "1%",
+      render: (text: any, record: any, index: number) => {
+        return <div style={{ textAlign: "right" }}>{index + 1}</div>;
+      },
     },
     {
       title: "Name",
@@ -148,7 +153,7 @@ const Category = (props: Props) => {
       render: (text: any, record: any) => {
         return (
           <Space size="small">
-            <Link to={`/categories/${record._id}`}>
+            <Link to={`/admin/categories/${record._id}`}>
               <Button
                 type="primary"
                 icon={<EditOutlined />}

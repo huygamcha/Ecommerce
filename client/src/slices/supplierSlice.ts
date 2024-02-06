@@ -84,8 +84,6 @@ const updateSupplier = createAsyncThunk<SuppliersType, { id: string, values: Sup
       },
     };
     const response = await axios.patch(`http://localhost:4000/suppliers/${id}`, values, config);
-
-
     const data = response.data;
     return data;
   } catch (error: any) {
