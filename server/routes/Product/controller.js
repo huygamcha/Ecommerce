@@ -82,6 +82,7 @@ module.exports = {
           errors.push({ categoryId: "Danh mục này đã bị xoá" });
         }
       }
+      console.log("««««« checkSupplierId »»»»»", checkSupplierId);
       if (!checkSupplierId)
         errors.push({ categoryId: "Không có nhà cung cấp này" });
       else {
@@ -135,7 +136,7 @@ module.exports = {
         });
       }
 
-      await Product.findByIdAndUpdate(id, { isDeleted: true });
+      await Product.findByIdAndDelete(id);
 
       return res.send(200, {
         message: "Xoá sản phẩm thành công",
@@ -223,7 +224,7 @@ module.exports = {
         }
       );
 
-      return res.send(404, {
+      return res.send(200, {
         message: "Cập nhật sản phẩm thành công",
         payload: result,
       });

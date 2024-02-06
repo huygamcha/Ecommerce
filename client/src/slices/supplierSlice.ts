@@ -3,9 +3,10 @@ import axios from "axios";
 
 interface SuppliersType {
   name: string;
-  description: string;
+  email: string;
+  phoneNumber: string;
+  address: string;
 }
-
 
 interface InitialType {
   success: boolean;
@@ -21,8 +22,10 @@ const initialState: InitialType = {
   success: false,
   error: '',
   supplier: {
-    name: "",
-    description: ""
+    name: '',
+    email: '',
+    phoneNumber: '',
+    address: ''
   },
   loading: false,
   deleted: false,

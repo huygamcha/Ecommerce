@@ -1,5 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import categorySlice from './slices/categorySlice'
+import productSlice from './slices/productSlice'
+import supplierSlice from './slices/supplierSlice'
 import { 
   TypedUseSelectorHook, 
   useDispatch, 
@@ -8,7 +10,9 @@ import {
 
 // ...
 const rootReducer = {
-  categories: categorySlice
+  categories: categorySlice,
+  products: productSlice,
+  suppliers: supplierSlice
 }
 
 const store = configureStore({reducer: rootReducer})

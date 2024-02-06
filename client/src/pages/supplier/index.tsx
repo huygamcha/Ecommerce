@@ -13,35 +13,34 @@ import {
 } from "antd";
 import { useEffect } from "react";
 import {
-  createCategory,
-  getAllCategory,
-  deleteCategory,
-  updateCategory,
-} from "../../slices/categorySlice";
+  createSupplier,
+  getAllSupplier,
+  deleteSupplier,
+  updateSupplier,
+} from "../../slices/supplierSlice";
 import { useAppSelector, useAppDispatch } from "../../store";
 import { useForm } from "antd/es/form/Form";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Link, useNavigate, useParams } from "react-router-dom";
 
 type Props = {};
 
-const Category = (props: Props) => {
-  const navigate = useNavigate();
-  const param = useParams();
+const Supplier = (props: Props) => {
   // không hiển thị khi lần đầu load trang
   const [initialRender, setInitialRender] = useState<boolean>(true);
+  const [nameForm, setNameForm] = useState<string>("");
   // get from database
   const dispatch = useAppDispatch();
 
-  const { categories, error } = useAppSelector((state) => state.categories);
+  const { suppliers, supplier, error } = useAppSelector(
+    (state) => state.suppliers
+  );
 
   useEffect(() => {
-    dispatch(getAllCategory());
-    setInitialRender(false);
+    dispatch(getAllSupplier());
   }, [dispatch]);
 
   //set active modal
-  const [selectedCategory, setSelectedCategory] = useState<any>(); // boolean or record._id
+  const [selectedSupplier, setSelectedSupplier] = useState<any>(); // boolean or record._id
 
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -64,62 +63,55 @@ const Category = (props: Props) => {
   // form
   type FieldType = {
     name?: string;
-    description?: string;
+    email?: string;
+    phoneNumber?: string;
+    address?: string;
   };
 
   const [createForm] = Form.useForm<FieldType>();
   const [updateForm] = Form.useForm<FieldType>();
 
   useEffect(() => {
-    console.log("««««« error »»»»»", error);
-    console.log("««««« initialRender »»»»»", initialRender);
-    console.log("««««« param »»»»»", param);
     if (!initialRender) {
       if (error) {
-        if (!param.id) {
-          onShowMessage("Tạo danh mục không thành công", "error");
+        if (nameForm === "create") {
+          onShowMessage("Tạo nhà cung cấp không thành công", "error");
         } else {
-          console.log("««««« 321 »»»»»", 321);
-          onShowMessage("Cập nhật danh mục không thành công", "error");
+          onShowMessage("Cập nhật nhà cung cấp không thành công", "error");
         }
       } else {
-        if (!param.id) {
-          onShowMessage("Tạo danh mục thành công", "success");
+        if (nameForm === "create") {
+          onShowMessage("Tạo nhà cung cấp thành công", "success");
         } else {
-          onShowMessage("Cập nhật danh mục thành công", "success");
+          onShowMessage("Cập nhật nhà cung cấp thành công", "success");
         }
+        dispatch(getAllSupplier());
         createForm.resetFields();
       }
     }
-  }, [error, createForm, onShowMessage, dispatch, updateForm]);
+  }, [error, createForm, onShowMessage, dispatch, updateForm, nameForm]);
 
   const onFinish = async (values: any) => {
-    await dispatch(createCategory(values));
-    dispatch(getAllCategory());
+    await dispatch(createSupplier(values));
+    setNameForm("create");
+    setInitialRender(false);
   };
 
-  // update category modal
-
-  // xác định form tạo hoặc update
-  const handleClose = () => {
-    navigate(-1);
-    setSelectedCategory(false);
-  };
-
+  // update supplier modal
   const onUpdate = async (values: any) => {
-    await dispatch(updateCategory({ id: selectedCategory, values: values }));
-    dispatch(getAllCategory());
-    handleClose();
+    await dispatch(updateSupplier({ id: selectedSupplier, values: values }));
+    setSelectedSupplier(false);
+    setNameForm("update");
   };
 
   const onDelete = async (values: any) => {
-    await dispatch(deleteCategory(values));
-    dispatch(getAllCategory());
-    onShowMessage("Xoá danh mục thành công");
+    await dispatch(deleteSupplier(values));
+    dispatch(getAllSupplier());
+    onShowMessage("Xoá nhà cung cấp thành công");
   };
 
-  // console.log("««««« category »»»»»", category);
-  // console.log("««««« categories »»»»»", categories);
+  // console.log("««««« supplier »»»»»", supplier);
+  // console.log("««««« suppliers »»»»»", suppliers);
   // console.log("««««« error »»»»»", error);
 
   // table
@@ -136,9 +128,19 @@ const Category = (props: Props) => {
       key: "name",
     },
     {
-      title: "Description",
-      dataIndex: "description",
-      key: "description",
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+    },
+    {
+      title: "Phone Number",
+      dataIndex: "phoneNumber",
+      key: "phoneNumber",
+    },
+    {
+      title: "Address",
+      dataIndex: "address",
+      key: "address",
     },
     {
       title: "Actions",
@@ -148,20 +150,18 @@ const Category = (props: Props) => {
       render: (text: any, record: any) => {
         return (
           <Space size="small">
-            <Link to={`/categories/${record._id}`}>
-              <Button
-                type="primary"
-                icon={<EditOutlined />}
-                onClick={() => {
-                  setSelectedCategory(record._id);
-                  updateForm.setFieldsValue(record);
-                }}
-              ></Button>
-            </Link>
+            <Button
+              type="primary"
+              icon={<EditOutlined />}
+              onClick={() => {
+                setSelectedSupplier(record._id);
+                updateForm.setFieldsValue(record);
+              }}
+            />
 
             <Popconfirm
-              title="Xoá danh mục"
-              description="Bạn có chắc xoá danh mục này không?"
+              title="Xoá nhà cung cấp"
+              description="Bạn có chắc xoá nhà cung cấp này không?"
               onConfirm={() => {
                 onDelete(record._id);
               }}
@@ -176,7 +176,7 @@ const Category = (props: Props) => {
   return (
     <div>
       {contextHolder}
-      <Card title="Tạo danh mục mới" style={{ width: "100%" }}>
+      <Card title="Tạo nhà cung cấp mới" style={{ width: "100%" }}>
         <Form
           form={createForm}
           name="basic"
@@ -187,44 +187,44 @@ const Category = (props: Props) => {
           autoComplete="off"
         >
           <Form.Item<FieldType>
-            label="Tên danh mục"
+            label="Tên nhà cung cấp"
             name="name"
             rules={[
-              { required: true, message: "Vui lòng điền tên danh mục!" },
+              { required: true, message: "Vui lòng điền tên nhà cung cấp!" },
               {
                 min: 2,
-                message: "Tên danh mục phải lớn hơn 2 kí tự",
+                message: "Tên nhà cung cấp phải lớn hơn 2 kí tự",
               },
-              {},
             ]}
-            hasFeedback
-            // help={error ? "ok" : "123"}
           >
             <Input />
           </Form.Item>
-          <Form.Item<FieldType> label="Mô  tả" name="description">
-            <Input.TextArea rows={3} />
+          <Form.Item<FieldType> label="Email" name="email">
+            <Input />
+          </Form.Item>
+          <Form.Item<FieldType> label="Số điện thoại" name="phoneNumber">
+            <Input />
+          </Form.Item>
+          <Form.Item<FieldType> label="Địa chỉ" name="address">
+            <Input />
           </Form.Item>
           <Form.Item wrapperCol={{ offset: 6 }}>
             <Button type="primary" htmlType="submit">
-              Thêm danh mục
+              Thêm nhà cung cấp
             </Button>
           </Form.Item>
         </Form>
       </Card>
-      <Card title="Danh sách các danh mục">
-        <Table dataSource={categories} columns={columns} />
+      <Card title="Danh sách các nhà cung cấp">
+        <Table dataSource={suppliers} columns={columns} />
       </Card>
 
       {/* form edit và delete */}
       <Modal
         centered
-        title="Chỉnh sửa danh mục"
-        onCancel={() => {
-          navigate(-1);
-          setSelectedCategory(false);
-        }}
-        open={selectedCategory}
+        title="Chỉnh sửa nhà cung cấp"
+        onCancel={() => setSelectedSupplier(false)}
+        open={selectedSupplier}
         okText="Save changes"
         onOk={() => {
           updateForm.submit();
@@ -240,18 +240,17 @@ const Category = (props: Props) => {
             onFinish={onUpdate}
             autoComplete="off"
           >
-            <Form.Item<FieldType>
-              label="Sửa danh mục"
-              name="name"
-              rules={[
-                { required: true, message: "Vui lòng điền tên danh mục!" },
-                { min: 2, message: "Tên danh mục phải có ít nhất 2 ký tự!" },
-              ]}
-            >
+            <Form.Item<FieldType> label="Tên nhà cung cấp" name="name">
               <Input />
             </Form.Item>
-            <Form.Item<FieldType> label="Mô tả" name="description">
-              <Input.TextArea rows={3} />
+            <Form.Item<FieldType> label="Email" name="email">
+              <Input />
+            </Form.Item>
+            <Form.Item<FieldType> label="Số điện thoại" name="phoneNumber">
+              <Input />
+            </Form.Item>
+            <Form.Item<FieldType> label="Địa chỉ" name="address">
+              <Input />
             </Form.Item>
           </Form>
         </Card>
@@ -260,4 +259,4 @@ const Category = (props: Props) => {
   );
 };
 
-export default Category;
+export default Supplier;

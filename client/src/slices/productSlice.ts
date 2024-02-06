@@ -4,6 +4,12 @@ import axios from "axios";
 interface ProductsType {
   name: string;
   description: string;
+  supplierId: string;
+  categoryId: string;
+  price: number;
+  discount: number;
+  stock: number;
+  total: number;
 }
 
 
@@ -21,8 +27,14 @@ const initialState: InitialType = {
   success: false,
   error: '',
   product: {
-    name: "",
-    description: ""
+    name: '',
+    description: '',
+    supplierId: '',
+    categoryId: '',
+    price: 0,
+    discount: 0,
+    stock: 0,
+    total: 0,
   },
   loading: false,
   deleted: false,
