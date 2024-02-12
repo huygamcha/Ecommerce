@@ -6,6 +6,7 @@ interface SuppliersType {
   email: string;
   phoneNumber: string;
   address: string;
+  _id: string
 }
 
 interface InitialType {
@@ -22,6 +23,7 @@ const initialState: InitialType = {
   success: false,
   error: '',
   supplier: {
+    _id: '',
     name: '',
     email: '',
     phoneNumber: '',

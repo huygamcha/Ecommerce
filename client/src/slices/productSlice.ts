@@ -10,6 +10,7 @@ interface ProductsType {
   discount: number;
   stock: number;
   total: number;
+  pic: string;
 }
 
 
@@ -35,6 +36,8 @@ const initialState: InitialType = {
     discount: 0,
     stock: 0,
     total: 0,
+    pic: ''
+
   },
   loading: false,
   deleted: false,
@@ -42,11 +45,32 @@ const initialState: InitialType = {
   products: [],
 };
 
-const getAllProduct = createAsyncThunk<ProductsType[]>("product/getAll", async () => {
+const getAllProduct = createAsyncThunk<ProductsType[], { search: string | undefined, page: number | null, pageSize: number | null}>("product/getAll", async ({search, page, pageSize}) => {
+
+  if (!search) {
+    search = ''
+  }
+  // trả về response rồi lấy ra, để tránh lỗi A non-serializable value was detected in an action, in the path: `payload.headers`
+  //https://chat.openai.com/c/48f823af-3e96-48aa-8df3-fe6e306aef10
+  const response = await axios.get(`http://localhost:4000/products?search=${search}`);
+  const data: ProductsType[] = response.data.payload;
+  return data; // Assuming products are in the `data` property of the response
+});
+
+const getProductByCategories = createAsyncThunk<ProductsType[], string | undefined>("product/getProductByCategories", async (id) => {
 
   // trả về response rồi lấy ra, để tránh lỗi A non-serializable value was detected in an action, in the path: `payload.headers`
   //https://chat.openai.com/c/48f823af-3e96-48aa-8df3-fe6e306aef10
-  const response = await axios.get("http://localhost:4000/products");
+  const response = await axios.get(`http://localhost:4000/products/byCategories?id=${id}`);
+  const data: ProductsType[] = response.data.payload;
+  return data; // Assuming products are in the `data` property of the response
+});
+
+const getProductBySuppliers = createAsyncThunk<ProductsType[], string | undefined>("product/getProductBySuppliers", async (id) => {
+
+  // trả về response rồi lấy ra, để tránh lỗi A non-serializable value was detected in an action, in the path: `payload.headers`
+  //https://chat.openai.com/c/48f823af-3e96-48aa-8df3-fe6e306aef10
+  const response = await axios.get(`http://localhost:4000/products/BySuppliers?id=${id}`);
   const data: ProductsType[] = response.data.payload;
   return data; // Assuming products are in the `data` property of the response
 });
@@ -112,6 +136,7 @@ const productSlice = createSlice({
   initialState: initialState,
   reducers: {},
   extraReducers(builder) {
+    //get all
     builder.addCase(getAllProduct.pending, (state) => {
       state.loading = true;
     });
@@ -132,11 +157,52 @@ const productSlice = createSlice({
       }
     );
 
+    //get by category
+    builder.addCase(getProductByCategories.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(
+      getProductByCategories.fulfilled,
+      (state, action) => {
+        state.loading = false;
+        state.products = action.payload;
+        state.error = "";
+      }
+    );
+    builder.addCase(
+      getProductByCategories.rejected,
+      (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "An error occurred"; // Ensure a default message or fallback if action.error is undefined
+      }
+    );
+
+    //get by supplier
+    builder.addCase(getProductBySuppliers.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(
+      getProductBySuppliers.fulfilled,
+      (state, action) => {
+        state.loading = false;
+        state.products = action.payload;
+        state.error = "";
+      }
+    );
+    builder.addCase(
+      getProductBySuppliers.rejected,
+      (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "An error occurred"; // Ensure a default message or fallback if action.error is undefined
+      }
+    );
+
+
     // create
     builder.addCase(createProduct.pending, (state) => {
       state.loading = true;
-
-      // state.error = "";
     });
 
     builder.addCase(
@@ -217,6 +283,8 @@ export {
   getAllProduct,
   createProduct,
   deleteProduct,
-  updateProduct
+  updateProduct,
+  getProductByCategories,
+  getProductBySuppliers
 }
 

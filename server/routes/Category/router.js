@@ -8,6 +8,7 @@ const {
 } = require("./controller");
 const { checkCreateCategory, checkUpdateCategory } = require("./validation");
 const { checkId, validateSchema } = require("../../utils");
+const { admin } = require("../../authentication/checkRole");
 var router = express.Router();
 
 router.route("/").get(getAllCategory);
@@ -19,6 +20,7 @@ router
   .patch(
     validateSchema(checkId),
     validateSchema(checkUpdateCategory),
+
     updateCategory
   );
 

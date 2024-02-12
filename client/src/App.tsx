@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { Children, useEffect, useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import Category from "./pages/category";
-import Supplier from "./pages/supplier";
-import Product from "./pages/product";
+import numeral from "numeral";
+import "numeral/locales/vi";
+
+import Category from "./pages/admin/category";
+import Supplier from "./pages/admin/supplier";
+import Product from "./pages/admin/product";
 import {
-  Routes,
-  Route,
-  BrowserRouter,
   createBrowserRouter,
   RouterProvider,
   useNavigate,
@@ -15,19 +15,60 @@ import {
 } from "react-router-dom";
 
 import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
   UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, Button, theme } from "antd";
-
+import ProductScreen from "./pages/user/product";
+import CartScreen from "./pages/user/cart";
+import MainLayOut from "./pages/layout/mainLayout";
+import HomeScreen from "./pages/user/home";
+import ProfileScreen from "./pages/user/profile";
+import ProductDetail from "./pages/user/product/productDetail";
 const { Header, Sider, Content } = Layout;
+numeral.locale("vi");
+
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Root />,
+    element: <MainLayOut />,
+    children: [
+      {
+        path: "/home",
+        element: <HomeScreen />,
+      },
+      {
+        path: "/product",
+        element: <ProductScreen />,
+        children: [
+          {
+            path: "/product/search/:id",
+            element: <ProductScreen />,
+          },
+        ],
+      },
+      {
+        path: "/profile",
+        element: <ProfileScreen />,
+      },
+      {
+        path: "/cart",
+        element: <CartScreen />,
+      },
+      {
+        path: "/product/:id",
+        element: <ProductDetail />,
+      },
+    ],
+  },
+  {
+    path: "/home",
+    element: <ProductScreen />,
+  },
+  {
+    path: "/admin",
+    element: <AdminRouter />,
     children: [
       {
         path: "/admin/categories",
@@ -62,19 +103,19 @@ const router = createBrowserRouter([
     ],
   },
 ]);
-function App() {
-  return (
-    <React.StrictMode>
-      <RouterProvider router={router} />
-    </React.StrictMode>
-  );
-}
-function Root() {
+
+function AdminRouter() {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  useEffect(() => {
+    if (localStorage.getItem("admin") === "true") {
+      navigate("/");
+    }
+  });
 
   return (
     <Layout>
@@ -82,7 +123,6 @@ function Root() {
         <div className="demo-logo-vertical" />
         <Menu
           onClick={(items) => {
-            console.log("««««« item »»»»»", items.key);
             navigate(items.key);
           }}
           theme="dark"
@@ -133,6 +173,13 @@ function Root() {
         </Content>
       </Layout>
     </Layout>
+  );
+}
+function App() {
+  return (
+    <React.StrictMode>
+      <RouterProvider router={router} />
+    </React.StrictMode>
   );
 }
 

@@ -31,4 +31,20 @@ const checkId = yup.object({
   }),
 });
 
-module.exports = { validateSchema, checkId };
+const checkIdQuery = yup.object({
+  query: yup.object({
+    id: yup
+      .string()
+      .test("Validate ObjectID", "Không phải là id hợp lệ", (value) => {
+        return ObjectId.isValid(value);
+      }),
+  }),
+});
+
+const fuzzySearch = (text) => {
+  const regex = text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+
+  return new RegExp(regex, "gi");
+};
+
+module.exports = { validateSchema, checkId, fuzzySearch, checkIdQuery };

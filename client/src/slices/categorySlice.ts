@@ -4,6 +4,7 @@ import axios from "axios";
 interface CategoriesType {
   name: string;
   description: string;
+  _id: string;
 }
 
 
@@ -21,6 +22,7 @@ const initialState: InitialType = {
   success: false,
   error: '',
   category: {
+    _id: '',
     name: "",
     description: ""
   },
@@ -38,6 +40,9 @@ const getAllCategory = createAsyncThunk<CategoriesType[]>("category/getAll", asy
   const data: CategoriesType[] = response.data.payload;
   return data; // Assuming categories are in the `data` property of the response
 });
+
+
+
 
 // tham số thứ 2 là tham số truyền vào gửi từ client
 const createCategory = createAsyncThunk<CategoriesType, CategoriesType>("category/createCategory", async (name, { rejectWithValue }) => {

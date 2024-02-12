@@ -1,0 +1,13 @@
+.wrapper {
+    text-decoration: none;
+    color: #000;
+}
+.wrapper:hover {
+    text-decoration: none;
+    color: #000;
+}
+
+.header_text {
+    font-size: 18px;
+    font-weight: bold;
+}

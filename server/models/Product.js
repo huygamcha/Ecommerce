@@ -50,6 +50,9 @@ const productSchema = new Schema(
       ref: "supplier",
       required: true,
     },
+    pic: {
+      type: String,
+    },
   },
   {
     timestamps: true,
