@@ -167,7 +167,9 @@ function HeaderScreen() {
           <Col xs={24} sm={19}>
             <Flex>
               <Input
-                onChange={(e) => dispatch(getAllProduct(e.target.value))}
+                onChange={(e) =>
+                  dispatch(getAllProduct({ search: e.target.value }))
+                }
                 className={clsx(style.header_search_input)}
                 placeholder="Tìm kiếm sản phẩm"
               ></Input>

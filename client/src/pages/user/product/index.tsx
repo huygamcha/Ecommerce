@@ -32,11 +32,12 @@ function ProductScreen() {
   const navigate = useNavigate();
   const param = useParams();
   const handlePagination = (e: number) => {
-    console.log("««««« e »»»»»", e);
+    dispatch(getAllProduct({ page: e }));
+    navigate(`/product?page=${e}`);
   };
 
   useEffect(() => {
-    dispatch(getAllProduct());
+    dispatch(getAllProduct({}));
     dispatch(getAllCategory());
     dispatch(getAllSupplier());
   }, [dispatch]);
@@ -133,7 +134,7 @@ function ProductScreen() {
                 <Empty />
               </Col>
             )}
-            <Col flex="end">
+            <Col xs={24}>
               <Pagination
                 onChange={handlePagination}
                 defaultCurrent={1}

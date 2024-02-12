@@ -44,7 +44,7 @@ const Product = (props: Props) => {
 
   useEffect(() => {
     setInitialRender(false);
-    dispatch(getAllProduct());
+    dispatch(getAllProduct({}));
     dispatch(getAllSupplier());
     dispatch(getAllCategory());
   }, [dispatch]);
@@ -104,7 +104,7 @@ const Product = (props: Props) => {
         createForm.resetFields();
       }
     }
-    dispatch(getAllProduct());
+    dispatch(getAllProduct({}));
   }, [isActive]);
 
   const onFinish = async (values: any) => {
@@ -125,7 +125,7 @@ const Product = (props: Props) => {
 
   const onDelete = async (values: any) => {
     await dispatch(deleteProduct(values));
-    dispatch(getAllProduct());
+    dispatch(getAllProduct({}));
     onShowMessage("Xoá sản phẩm thành công");
   };
 

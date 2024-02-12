@@ -24,6 +24,12 @@ interface InitialType {
   products: ProductsType[];
 }
 
+interface ProductSearchType {
+  search? :string;
+  page?: number;
+  pageSize?: number ;
+}
+
 const initialState: InitialType = {
   success: false,
   error: '',
@@ -45,14 +51,23 @@ const initialState: InitialType = {
   products: [],
 };
 
-const getAllProduct = createAsyncThunk<ProductsType[], { search: string | undefined, page: number | null, pageSize: number | null}>("product/getAll", async ({search, page, pageSize}) => {
+const getAllProduct = createAsyncThunk<ProductsType[], ProductSearchType>("product/getAll", async (arg = {}) => {
 
+  let {search  ,page, pageSize } = arg;
   if (!search) {
     search = ''
   }
+  if (!page) {
+    page = 1;
+  }
+  if (!pageSize) {
+    pageSize = 6;
+  }
+
+  console.log('««««« arg »»»»»', search  , page, pageSize);
   // trả về response rồi lấy ra, để tránh lỗi A non-serializable value was detected in an action, in the path: `payload.headers`
   //https://chat.openai.com/c/48f823af-3e96-48aa-8df3-fe6e306aef10
-  const response = await axios.get(`http://localhost:4000/products?search=${search}`);
+  const response = await axios.get(`http://localhost:4000/products?search=${search}&page=${page}&pageSize=${pageSize}`);
   const data: ProductsType[] = response.data.payload;
   return data; // Assuming products are in the `data` property of the response
 });
