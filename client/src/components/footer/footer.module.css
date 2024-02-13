@@ -1,0 +1,7 @@
+.text_center {
+    text-align: center;
+}
+
+.items > a {
+    padding: 0 5px;
+}

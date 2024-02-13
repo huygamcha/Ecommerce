@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk, } from "@reduxjs/toolkit";
 import axios from "axios";
 
 interface ProductsType {
+  _id: string;
   name: string;
   description: string;
   supplierId: string;
@@ -17,7 +18,7 @@ interface ProductsType {
 interface InitialType {
   success: boolean;
   error: { message?: string, errors?: any } | string;
-  product: ProductsType;
+  product: ProductsType | undefined;
   loading: boolean;
   deleted: boolean;
   updated: boolean;
@@ -34,6 +35,7 @@ const initialState: InitialType = {
   success: false,
   error: '',
   product: {
+    _id: '',
     name: '',
     description: '',
     supplierId: '',
@@ -43,7 +45,6 @@ const initialState: InitialType = {
     stock: 0,
     total: 0,
     pic: ''
-
   },
   loading: false,
   deleted: false,
@@ -64,7 +65,6 @@ const getAllProduct = createAsyncThunk<ProductsType[], ProductSearchType>("produ
     pageSize = 6;
   }
 
-  console.log('««««« arg »»»»»', search  , page, pageSize);
   // trả về response rồi lấy ra, để tránh lỗi A non-serializable value was detected in an action, in the path: `payload.headers`
   //https://chat.openai.com/c/48f823af-3e96-48aa-8df3-fe6e306aef10
   const response = await axios.get(`http://localhost:4000/products?search=${search}&page=${page}&pageSize=${pageSize}`);
@@ -87,6 +87,15 @@ const getProductBySuppliers = createAsyncThunk<ProductsType[], string | undefine
   //https://chat.openai.com/c/48f823af-3e96-48aa-8df3-fe6e306aef10
   const response = await axios.get(`http://localhost:4000/products/BySuppliers?id=${id}`);
   const data: ProductsType[] = response.data.payload;
+  return data; // Assuming products are in the `data` property of the response
+});
+
+const getProductById = createAsyncThunk<ProductsType, string | undefined>("product/getProductById", async (id) => {
+
+  // trả về response rồi lấy ra, để tránh lỗi A non-serializable value was detected in an action, in the path: `payload.headers`
+  //https://chat.openai.com/c/48f823af-3e96-48aa-8df3-fe6e306aef10
+  const response = await axios.get(`http://localhost:4000/products/${id}`);
+  const data: ProductsType = response.data.payload;
   return data; // Assuming products are in the `data` property of the response
 });
 
@@ -214,6 +223,28 @@ const productSlice = createSlice({
       }
     );
 
+    //get by id 
+    builder.addCase(getProductById.pending, (state) => {
+      state.loading = true;
+      state.product = undefined;
+    });
+
+    builder.addCase(
+      getProductById.fulfilled,
+      (state, action) => {
+        state.loading = false;
+        state.product = action.payload;
+        state.error = "";
+      }
+    );
+    builder.addCase(
+      getProductById.rejected,
+      (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "An error occurred"; // Ensure a default message or fallback if action.error is undefined
+      }
+    );
+
 
     // create
     builder.addCase(createProduct.pending, (state) => {
@@ -300,6 +331,7 @@ export {
   deleteProduct,
   updateProduct,
   getProductByCategories,
-  getProductBySuppliers
+  getProductBySuppliers,
+  getProductById
 }
 

@@ -47,7 +47,7 @@ module.exports = {
       const payload = await Product.findById(id)
         .populate("category")
         .populate("supplier")
-        .lean({ virtual: true });
+        .lean({ virtuals: true });
       if (!payload) {
         return res.send(404, {
           message: "Không tìm thấy sản phẩm",

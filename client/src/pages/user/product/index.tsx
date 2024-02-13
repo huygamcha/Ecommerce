@@ -30,7 +30,6 @@ function ProductScreen() {
   const { suppliers } = useAppSelector((state) => state.suppliers);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const param = useParams();
   const handlePagination = (e: number) => {
     dispatch(getAllProduct({ page: e }));
     navigate(`/product?page=${e}`);
@@ -97,7 +96,7 @@ function ProductScreen() {
               products.map((product) => (
                 <Col xs={24} sm={8} style={{ paddingBottom: "25px" }}>
                   <Link
-                    to={`/product/${product.name}`}
+                    to={`/product/${product._id}`}
                     className={clsx(style.wrapper)}
                   >
                     <Flex

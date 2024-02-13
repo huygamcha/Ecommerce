@@ -18,7 +18,7 @@ function HeaderScreen() {
         <Col style={{ fontSize: "25px", fontWeight: "bold" }} md={12} xs={12}>
           TAA
         </Col>
-        <Col xs={0} sm={8} md={8}>
+        <Col xs={0} sm={8} md={8} lg={6}>
           <Flex style={{ fontSize: "15px" }} justify="space-between">
             <Link to="/home">
               <Space
@@ -159,7 +159,9 @@ function HeaderScreen() {
         </Space>
       </Row>
 
-      <div style={{ background: "#f5f5f3", padding: "15px" }}>
+      <div
+        style={{ background: "#f5f5f3", padding: "15px", marginTop: "70px" }}
+      >
         <Row className={clsx(style.wrapper_sub)} gutter={24}>
           <Col style={{ fontSize: "20px", display: "flex" }} xs={0} sm={5}>
             <MenuUnfoldOutlined />
