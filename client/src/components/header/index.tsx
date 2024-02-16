@@ -1,16 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Button, Col, Flex, Input, Layout, Row, Space } from "antd";
+import { Button, Col, Flex, Input, Layout, Row, Space, Image } from "antd";
 import clsx from "clsx";
 import style from "./header.module.css";
 import { MenuUnfoldOutlined, SearchOutlined } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { getAllProduct } from "../../slices/productSlice";
+import Discount from "../discount";
+import numeral from "numeral";
 
 function HeaderScreen() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [search, setSearch] = useState<string>();
+
   const location = useLocation();
   const dispatch = useAppDispatch();
+  const { products } = useAppSelector((state) => state.products);
+
+  const handleSearch = (e: any) => {
+    console.log("««««« e »»»»»", e.target.value);
+    dispatch(getAllProduct({ search: e.target.value }));
+    setSearch(e.target.value);
+  };
 
   return (
     <div>
@@ -169,12 +180,49 @@ function HeaderScreen() {
           <Col xs={24} sm={19}>
             <Flex>
               <Input
-                onChange={(e) =>
-                  dispatch(getAllProduct({ search: e.target.value }))
-                }
+                value={search}
+                onChange={handleSearch}
                 className={clsx(style.header_search_input)}
                 placeholder="Tìm kiếm sản phẩm"
               ></Input>
+              <Space className={clsx(style.header_search_result)}>
+                {search && products ? (
+                  products.map((product) => (
+                    <Link
+                      className={clsx(style.header_search_items)}
+                      to={`/product/${product._id}`}
+                      onClick={() => setSearch("")}
+                    >
+                      <Flex>
+                        <Space style={{ marginRight: "10px" }}>
+                          <Image
+                            width="40px"
+                            height="40px"
+                            src={product?.pic}
+                          ></Image>
+                        </Space>
+                        <Flex vertical>
+                          <Space style={{ fontSize: "16px" }}>
+                            {product.name}
+                          </Space>
+                          <Space style={{ fontWeight: "bold" }}>
+                            {numeral(product.total).format("$0,0.0")}
+                            <Space>
+                              <Discount
+                                font={9}
+                                discount={product.discount}
+                              ></Discount>
+                            </Space>
+                          </Space>
+                        </Flex>
+                      </Flex>
+                    </Link>
+                  ))
+                ) : (
+                  <></>
+                )}
+              </Space>
+
               <div className={clsx(style.header_search_icon)}>
                 <SearchOutlined />
               </div>

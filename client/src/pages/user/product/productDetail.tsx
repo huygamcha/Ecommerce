@@ -19,10 +19,10 @@ function ProductDetail() {
     dispatch(getProductById(param.id));
   }, [param]);
   return (
-    <Space style={{ padding: "15px", background: "#fff" }}>
+    <div style={{ padding: "15px", background: "#fff" }}>
       <Row gutter={24}>
         <Col span={12}>
-          <Image width="100%" height="100%" src={product?.pic}></Image>
+          <Image width="100%" height="435px" src={product?.pic}></Image>
         </Col>
         <Col span={12}>
           <Flex vertical>
@@ -47,7 +47,7 @@ function ProductDetail() {
           </Flex>
         </Col>
       </Row>
-    </Space>
+    </div>
   );
 }
 

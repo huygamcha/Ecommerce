@@ -1,10 +1,14 @@
 const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
 const mongooseLeanVirtuals = require("mongoose-lean-virtuals");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 const employeeSchema = new Schema(
   {
+    isAdmin: {
+      type: Boolean,
+      default: true,
+    },
     firstName: {
       type: String,
       required: [true, "Tên nhân viên không được bỏ trống"],
@@ -84,6 +88,7 @@ employeeSchema.pre("save", async function (next) {
 
 employeeSchema.methods.isValidPass = async function (password) {
   try {
+    console.log("««««« password, this.password »»»»»", password, this.password);
     return await bcrypt.compare(password, this.password);
   } catch (err) {
     throw new Error(err);

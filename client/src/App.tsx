@@ -26,10 +26,27 @@ import MainLayOut from "./pages/layout/mainLayout";
 import HomeScreen from "./pages/user/home";
 import ProfileScreen from "./pages/user/profile";
 import ProductDetail from "./pages/user/product/productDetail";
-const { Header, Sider, Content } = Layout;
+import LoginLayout from "./pages/layout/loginLayout";
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
+const { Sider, Content } = Layout;
 numeral.locale("vi");
 
 const router = createBrowserRouter([
+  {
+    path: "/auth",
+    element: <LoginLayout />,
+    children: [
+      {
+        path: "/auth/login",
+        element: <Login />,
+      },
+      {
+        path: "/auth/register",
+        element: <Register />,
+      },
+    ],
+  },
   {
     path: "/",
     element: <MainLayOut />,
@@ -65,10 +82,6 @@ const router = createBrowserRouter([
         element: <ProductDetail />,
       },
     ],
-  },
-  {
-    path: "/home",
-    element: <ProductScreen />,
   },
   {
     path: "/admin",
@@ -114,10 +127,11 @@ function AdminRouter() {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
-
+  const currentUser = JSON.parse(localStorage.getItem("userInfor")!);
   useEffect(() => {
-    if (localStorage.getItem("admin") === "true") {
-      navigate("/");
+    if (!currentUser?.payload.isAdmin) {
+      localStorage.removeItem("userInfor");
+      navigate("/auth/login");
     }
   });
 

@@ -6,21 +6,21 @@ const checkCreateCustomer = yup.object({
       .string()
       .test({
         name: "required",
-        message: "Họ khách hàng không được bỏ trống",
-        test: (value) => value !== undefined && value !== null && value !== "",
-      })
-      .max(50, "Họ khách hàng không được dài hơn 50 kí tự")
-      .min(2, "Họ khách hàng không được nhỏ hơn 2 kí tự"),
-
-    lastName: yup
-      .string()
-      .test({
-        name: "required",
         message: "Tên khách hàng không được bỏ trống",
         test: (value) => value !== undefined && value !== null && value !== "",
       })
       .max(50, "Tên khách hàng không được dài hơn 50 kí tự")
       .min(2, "Tên khách hàng không được nhỏ hơn 2 kí tự"),
+
+    lastName: yup
+      .string()
+      .test({
+        name: "required",
+        message: "Họ khách hàng không được bỏ trống",
+        test: (value) => value !== undefined && value !== null && value !== "",
+      })
+      .max(50, "Họ khách hàng không được dài hơn 50 kí tự")
+      .min(2, "Họ khách hàng không được nhỏ hơn 2 kí tự"),
 
     password: yup
       .string()

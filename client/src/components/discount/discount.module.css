@@ -1,7 +1,9 @@
 .wrapper {
-    background-color: #d0011b;
-    color: #fff;
+    /* background-color: #d0011b; */
+    border:  1px solid #d0011b;
+    color: #d0011b;
     font-size: 14px;
     padding: 2px;
     border-radius: 5px;
+
 }

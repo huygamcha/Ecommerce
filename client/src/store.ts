@@ -2,17 +2,22 @@ import { configureStore } from '@reduxjs/toolkit'
 import categorySlice from './slices/categorySlice'
 import productSlice from './slices/productSlice'
 import supplierSlice from './slices/supplierSlice'
+import auth from './slices/authSlice'
+import customerSlice from './slices/customerSlice'
 import { 
   TypedUseSelectorHook, 
   useDispatch, 
-  useSelector 
+  useSelector
 } from "react-redux";
 
 // ...
 const rootReducer = {
   categories: categorySlice,
   products: productSlice,
-  suppliers: supplierSlice
+  suppliers: supplierSlice,
+  auth: auth,
+  customers: customerSlice
+  
 }
 
 const store = configureStore({reducer: rootReducer})

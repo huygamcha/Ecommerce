@@ -25,7 +25,6 @@
 
 .wrapper_sub {
     margin: 15px;
-
 }
 .header_search_input {
     padding: 10px;
@@ -39,7 +38,34 @@
     transform: translateY(50%);
     cursor: pointer;
 }
+.header_search_result{
+    overflow-y: auto;
+    max-height: 300px;
+    display: block;
+    position: absolute;
+    top: 50px;
+    right: 10px;
+    width: calc(100% - 22px);
+    background-color: #fff;
+    cursor: pointer;
+    z-index: 999;
+    border-radius: 5px;
+   box-shadow: 1px 0 3px rgba(155,155,155,.6);
 
+}
+
+.header_search_items{
+   color: #000;
+   display: block;
+   padding: 10px;
+}
+
+.header_search_items:hover{
+    border-radius: 5px;
+
+    color: #000;
+    background-color: #ffccbf;
+ }
 /* responsive */
 
 .menu_mobile {
@@ -65,3 +91,5 @@
     color: #fff;
     transition: 0.2s linear;
 }
+
+

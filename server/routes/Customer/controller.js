@@ -9,7 +9,6 @@ module.exports = {
         payload: result,
       });
     } catch (error) {
-      console.log("««««« error »»»»»", error);
       return res.send(400, {
         message: "Lấy thông tin khách hàng không thành công",
       });
@@ -29,7 +28,7 @@ module.exports = {
 
       if (payload.isDeleted) {
         return res.send(404, {
-          message: "Danh mục đã được xoá trước đó",
+          message: "Khách hàng đã được xoá trước đó",
         });
       }
 
@@ -56,18 +55,18 @@ module.exports = {
         password,
       } = req.body;
 
-      const errors = [];
+      const errors = {};
       const exitPhoneNumber = await Customer.findOne({
         phoneNumber: phoneNumber,
       });
-      if (exitPhoneNumber)
-        errors.push({ phoneNumber: "Số điện thoại đã tồn tại" });
+      if (exitPhoneNumber) errors.phoneNumber = "Số điện thoại đã tồn tại";
+
       const exitEmail = await Customer.findOne({
         email: email,
       });
-      if (exitEmail) errors.push({ email: "Email đã tồn tại" });
+      if (exitEmail) errors.email = "Email đã tồn tại";
 
-      if (errors.length > 0) {
+      if (Object.keys(errors).length > 0) {
         return res.send(400, {
           message: "Tạo khách hàng không thành công",
           errors: errors,
@@ -111,7 +110,7 @@ module.exports = {
 
       if (payload.isDeleted) {
         return res.send(404, {
-          message: "Danh mục đã được xoá trước đó",
+          message: "Khách hàng đã được xoá trước đó",
         });
       }
 
@@ -169,7 +168,7 @@ module.exports = {
 
       if (payload.isDeleted) {
         return res.send(404, {
-          message: "Danh mục đã được xoá trước đó",
+          message: "Khách hàng đã được xoá trước đó",
         });
       }
 

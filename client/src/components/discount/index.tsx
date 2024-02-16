@@ -3,9 +3,9 @@ import React from "react";
 import style from "./discount.module.css";
 import clsx from "clsx";
 
-function Discount({ discount }: any) {
+function Discount({ discount, font }: any) {
   return (
-    <Flex className={clsx(style.wrapper)}>
+    <Flex style={{ fontSize: `${font}px` }} className={clsx(style.wrapper)}>
       <span> {discount}</span>
       <span>% GIẢM</span>
     </Flex>

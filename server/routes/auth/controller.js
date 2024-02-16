@@ -10,6 +10,7 @@ module.exports = {
   login: async (req, res, next) => {
     try {
       const { email, password } = req.body;
+      console.log("««««« email »»»»»", email);
 
       const userEmployee = Employee.findOne({ email });
       const userCustomer = Customer.findOne({ email });
@@ -19,18 +20,24 @@ module.exports = {
       ]);
       if (exitEmployee) user = exitEmployee;
       if (exitCustomer) user = exitCustomer;
-      user.password = "fake";
-      if (user && user.isValidPass(password)) {
-        res.send(200, {
+      console.log("««««« user »»»»»", user);
+      if (user && (await user.isValidPass(password))) {
+        return res.send(200, {
           message: "Đăng nhập thành công",
           payload: {
+            id: user._id,
+            name: user.fullName,
+            isAdmin: user.isAdmin,
             token: generateToken(user),
             refreshToken: generateRefreshToken(user._id),
           },
         });
+      } else {
+        return res.send(404, {
+          message: "Sai mật khẩu hoặc email",
+        });
       }
     } catch (err) {
-      console.log("««««« err »»»»»", err);
       return res.send(500, { code: 500, error: err });
     }
   },

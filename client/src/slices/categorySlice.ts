@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk, } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const currentUser = JSON.parse(localStorage.getItem('userInfor')!);
+
 interface CategoriesType {
   name: string;
   description: string;
@@ -83,6 +85,7 @@ const updateCategory = createAsyncThunk<CategoriesType, { id: string, values: Ca
     const config = {
       headers: {
         "Content-type": "application/json",
+        Authorization: `Bearer ${currentUser.payload.token}`,
       },
     };
     const response = await axios.patch(`http://localhost:4000/categories/${id}`, values, config);

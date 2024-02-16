@@ -317,8 +317,8 @@ module.exports = {
       });
     } catch (error) {
       return res.send(404, {
-        message: "Sửa sản phẩm không thành công",
-        error: error,
+        message: "Cập nhật sản phẩm không thành công",
+        errors: error,
       });
     }
   },

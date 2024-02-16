@@ -59,8 +59,8 @@ module.exports = {
       password: yup
         .string()
         .required()
-        .min(3, "Không được ít hơn 3 ký tự")
-        .max(12, "Không được vượt quá 12 ký tự"),
+        .min(3, "Mật khẩu không được ít hơn 3 ký tự")
+        .max(12, "Mật khẩu không được vượt quá 12 ký tự"),
     }),
   }),
 };

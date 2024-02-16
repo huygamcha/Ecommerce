@@ -1,9 +1,19 @@
 const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
 const mongooseLeanVirtuals = require("mongoose-lean-virtuals");
+const bcrypt = require("bcryptjs");
 
 const customerSchema = new Schema(
   {
+    avatar: {
+      type: String,
+      default:
+        "https://res.cloudinary.com/drqphlfn6/image/upload/v1702114657/cld-sample-2.jpg",
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
     firstName: {
       type: String,
       required: [true, "Tên khách hàng không được bỏ trống"],
