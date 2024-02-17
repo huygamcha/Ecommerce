@@ -83,13 +83,13 @@ const Login: React.FC = () => {
             placeholder="Password"
           />
         </Form.Item>
-        <Form.Item wrapperCol={{ span: 8, offset: 8 }}>
+        <Form.Item wrapperCol={{ xs: 8, offset: 8 }}>
           <a className="login-form-forgot" href="">
             Quên mật khẩu
           </a>
         </Form.Item>
 
-        <Form.Item wrapperCol={{ span: 8, offset: 8 }}>
+        <Form.Item wrapperCol={{ xs: 8, offset: 8 }}>
           <Button
             type="primary"
             htmlType="submit"
@@ -97,7 +97,7 @@ const Login: React.FC = () => {
           >
             Đăng nhập
           </Button>
-          <Link style={{ marginLeft: "4px" }} to="/auth/register">
+          <Link style={{ marginLeft: "5px" }} to="/auth/register">
             Đăng kí!{" "}
           </Link>
         </Form.Item>

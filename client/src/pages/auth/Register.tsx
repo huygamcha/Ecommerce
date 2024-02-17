@@ -232,7 +232,7 @@ const Register: React.FC = () => {
           ></Input>
         </Form.Item>
 
-        <Form.Item wrapperCol={{ offset: 8 }}>
+        <Form.Item wrapperCol={{ offset: 8, xs: 8 }}>
           <Button
             type="primary"
             htmlType="submit"
@@ -240,7 +240,7 @@ const Register: React.FC = () => {
           >
             Đăng kí
           </Button>
-          <Link style={{ marginLeft: "4px" }} to="/auth/login">
+          <Link style={{ marginLeft: "5px" }} to="/auth/login">
             Đăng nhập!
           </Link>
         </Form.Item>

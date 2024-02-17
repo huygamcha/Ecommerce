@@ -9,29 +9,30 @@ const { Customer, Employee } = require("../../models");
 module.exports = {
   login: async (req, res, next) => {
     try {
+      let user;
       const { email, password } = req.body;
-      console.log("««««« email »»»»»", email);
-
-      const userEmployee = Employee.findOne({ email });
-      const userCustomer = Customer.findOne({ email });
+      const userEmployee = Employee.findOne({ email: email });
+      const userCustomer = Customer.findOne({ email: email });
       const [exitEmployee, exitCustomer] = await Promise.all([
         userEmployee,
         userCustomer,
       ]);
-      if (exitEmployee) user = exitEmployee;
+
       if (exitCustomer) user = exitCustomer;
-      console.log("««««« user »»»»»", user);
-      if (user && (await user.isValidPass(password))) {
-        return res.send(200, {
-          message: "Đăng nhập thành công",
-          payload: {
-            id: user._id,
-            name: user.fullName,
-            isAdmin: user.isAdmin,
-            token: generateToken(user),
-            refreshToken: generateRefreshToken(user._id),
-          },
-        });
+      if (exitEmployee) user = exitEmployee;
+
+      if (user) {
+        if (await user.isValidPass(password))
+          return res.send(200, {
+            message: "Đăng nhập thành công",
+            payload: {
+              id: user._id,
+              name: user.fullName,
+              isAdmin: user.isAdmin,
+              token: generateToken(user),
+              refreshToken: generateRefreshToken(user._id),
+            },
+          });
       } else {
         return res.send(404, {
           message: "Sai mật khẩu hoặc email",

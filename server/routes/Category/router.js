@@ -8,7 +8,7 @@ const {
 } = require("./controller");
 const { checkCreateCategory, checkUpdateCategory } = require("./validation");
 const { checkId, validateSchema } = require("../../utils");
-const { admin } = require("../../authentication/checkRole");
+const { admin, protect } = require("../../authentication/checkRole");
 var router = express.Router();
 
 router.route("/").get(getAllCategory);
@@ -16,11 +16,10 @@ router.route("/").post(validateSchema(checkCreateCategory), createCategory);
 router
   .route("/:id")
   .delete(validateSchema(checkId), deleteCategory)
-  .get(validateSchema(checkId), getDetailCategory)
+  .get(validateSchema(checkId), protect, admin, getDetailCategory)
   .patch(
     validateSchema(checkId),
     validateSchema(checkUpdateCategory),
-
     updateCategory
   );
 

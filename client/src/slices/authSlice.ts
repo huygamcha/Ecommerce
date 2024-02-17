@@ -1,16 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-interface RegisterType {
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
-  address: string;
-  password: string;
-  avatar: string;
-  email: string;
-  birthday: string;
-}
 
 interface LoginType {
   name: string;
@@ -69,7 +59,18 @@ const loginUser = createAsyncThunk<UserType, LoginType>(
 const authSlice = createSlice({
   name: "auth",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+
+    logout: (state) => {
+      state.user = {
+        id: '',
+        fullName: '',
+        token: '',
+        refreshToken: '',
+      }
+      localStorage.removeItem('userInfor')
+    }
+  },
   extraReducers(builder) {
     builder.addCase(loginUser.pending, (state) => {
       state.loading = true;
@@ -92,7 +93,8 @@ const authSlice = createSlice({
   },
 });
 
-const { reducer } = authSlice;
+const { reducer, actions } = authSlice;
 
 export default reducer;
 export { loginUser };
+export const {logout} = actions

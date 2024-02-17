@@ -3,7 +3,11 @@ import { Link, useLocation } from "react-router-dom";
 import { Button, Col, Flex, Input, Layout, Row, Space, Image } from "antd";
 import clsx from "clsx";
 import style from "./header.module.css";
-import { MenuUnfoldOutlined, SearchOutlined } from "@ant-design/icons";
+import {
+  MenuUnfoldOutlined,
+  SearchOutlined,
+  ShoppingCartOutlined,
+} from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { getAllProduct } from "../../slices/productSlice";
 import Discount from "../discount";

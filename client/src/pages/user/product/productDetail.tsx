@@ -8,6 +8,7 @@ import numeral from "numeral";
 import style from "./product.module.css";
 import clsx from "clsx";
 import Discount from "../../../components/discount/index";
+import { addToCart } from "../../../slices/cartSlice";
 
 function ProductDetail() {
   const param = useParams();
@@ -18,6 +19,12 @@ function ProductDetail() {
   useEffect(() => {
     dispatch(getProductById(param.id));
   }, [param]);
+
+  // add to cart
+  const handleAddToCart = () => {
+    dispatch(addToCart({ id: product?._id, name: product?.name, quantity: 1 }));
+  };
+
   return (
     <div style={{ padding: "15px", background: "#fff" }}>
       <Row gutter={24}>
@@ -43,7 +50,12 @@ function ProductDetail() {
               </Flex>
             </Space>
             <Space style={{ lineHeight: "1.5" }}>{product?.description}</Space>
-            <Space className={clsx(style.add_to_cart)}>Add to cart</Space>
+            <Space
+              onClick={handleAddToCart}
+              className={clsx(style.add_to_cart)}
+            >
+              Add to cart
+            </Space>
           </Flex>
         </Col>
       </Row>

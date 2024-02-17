@@ -94,7 +94,7 @@ function ProductScreen() {
           <Row gutter={30}>
             {products && error === "" ? (
               products.map((product) => (
-                <Col xs={24} sm={8} style={{ paddingBottom: "25px" }}>
+                <Col xs={24} md={12} lg={8} style={{ paddingBottom: "25px" }}>
                   <Link
                     to={`/product/${product._id}`}
                     className={clsx(style.wrapper)}
