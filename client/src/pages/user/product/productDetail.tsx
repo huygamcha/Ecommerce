@@ -22,7 +22,18 @@ function ProductDetail() {
 
   // add to cart
   const handleAddToCart = () => {
-    dispatch(addToCart({ id: product?._id, name: product?.name, quantity: 1 }));
+    dispatch(
+      addToCart({
+        id: product?._id,
+        name: product?.name,
+        quantity: 1,
+        pic: product?.pic,
+        price: product?.price,
+        stock: product?.stock,
+        total: product?.total,
+        discount: product?.discount,
+      })
+    );
   };
 
   return (
