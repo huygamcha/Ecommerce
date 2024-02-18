@@ -7,11 +7,11 @@ const checkCreateProduct = yup.object({
       .string()
       .test({
         name: "required",
-        message: "Họ sản phẩm không được bỏ trống",
+        message: "Tên sản phẩm không được bỏ trống",
         test: (value) => value !== undefined && value !== null && value !== "",
       })
-      .max(50, "Họ sản phẩm không được dài hơn 50 kí tự")
-      .min(2, "Họ sản phẩm không được nhỏ hơn 2 kí tự"),
+      .max(50, "Tên sản phẩm không được dài hơn 50 kí tự")
+      .min(2, "Tên sản phẩm không được nhỏ hơn 2 kí tự"),
 
     price: yup
       .number()
@@ -88,8 +88,13 @@ const checkUpdateProduct = yup.object({
   body: yup.object({
     name: yup
       .string()
-      .max(50, "Họ sản phẩm không được dài hơn 50 kí tự")
-      .min(2, "Họ sản phẩm không được nhỏ hơn 2 kí tự"),
+      .test({
+        name: "required",
+        message: "Tên sản phẩm không được bỏ trống",
+        test: (value) => value !== undefined && value !== null && value !== "",
+      })
+      .max(50, "Tên sản phẩm không được dài hơn 50 kí tự")
+      .min(2, "Tên sản phẩm không được nhỏ hơn 2 kí tự"),
 
     price: yup.number().min(0, "Giá sản phẩm không được âm").integer(),
 

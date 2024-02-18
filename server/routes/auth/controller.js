@@ -21,18 +21,17 @@ module.exports = {
       if (exitCustomer) user = exitCustomer;
       if (exitEmployee) user = exitEmployee;
 
-      if (user) {
-        if (await user.isValidPass(password))
-          return res.send(200, {
-            message: "Đăng nhập thành công",
-            payload: {
-              id: user._id,
-              name: user.fullName,
-              isAdmin: user.isAdmin,
-              token: generateToken(user),
-              refreshToken: generateRefreshToken(user._id),
-            },
-          });
+      if (user && (await user.isValidPass(password))) {
+        return res.send(200, {
+          message: "Đăng nhập thành công",
+          payload: {
+            id: user._id,
+            name: user.fullName,
+            isAdmin: user.isAdmin,
+            token: generateToken(user),
+            refreshToken: generateRefreshToken(user._id),
+          },
+        });
       } else {
         return res.send(404, {
           message: "Sai mật khẩu hoặc email",

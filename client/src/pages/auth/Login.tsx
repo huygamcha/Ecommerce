@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect } from "react";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Space, message } from "antd";
+import { Button, ConfigProvider, Form, Input, Space, message } from "antd";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { loginUser } from "../../slices/authSlice";
 import { Link, useNavigate, Navigate } from "react-router-dom";
+import { getCartFromCustomer } from "../../slices/cartSlice";
 
 const Login: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -34,6 +35,7 @@ const Login: React.FC = () => {
     }
     if (success) {
       onShowMessage(`Đăng nhập thành công`, "success");
+      dispatch(getCartFromCustomer());
       setTimeout(() => {
         navigate("/profile");
       }, 3000);
@@ -46,62 +48,72 @@ const Login: React.FC = () => {
 
   return (
     <>
-      {contextHolder}
-
-      <Form
-        name="normal_login"
-        className="login-form"
-        initialValues={{ remember: true }}
-        onFinish={onFinish}
-        wrapperCol={{ span: 8 }}
-        labelCol={{ span: 8 }}
+      <ConfigProvider
+        theme={{
+          components: {
+            Message: {
+              zIndexPopup: 99999,
+            },
+          },
+        }}
       >
-        <Form.Item
-          label="Email"
-          name="email"
-          rules={[
-            { required: true, message: "Vui lòng nhập email" },
-            { type: "email", message: "Email không hợp lệ" },
-          ]}
-        >
-          <Input
-            prefix={<UserOutlined className="site-form-item-icon" />}
-            placeholder="Email"
-          />
-        </Form.Item>
-        <Form.Item
-          label="Mật khẩu"
-          name="password"
-          rules={[
-            { required: true, message: "Vui lòng điền mật khẩu" },
-            { min: 6, message: "Mật khẩu lớn hơn 6 kí tự" },
-          ]}
-        >
-          <Input.Password
-            prefix={<LockOutlined className="site-form-item-icon" />}
-            type="password"
-            placeholder="Password"
-          />
-        </Form.Item>
-        <Form.Item wrapperCol={{ xs: 8, offset: 8 }}>
-          <a className="login-form-forgot" href="">
-            Quên mật khẩu
-          </a>
-        </Form.Item>
+        {contextHolder}
 
-        <Form.Item wrapperCol={{ xs: 8, offset: 8 }}>
-          <Button
-            type="primary"
-            htmlType="submit"
-            className="login-form-button"
+        <Form
+          name="normal_login"
+          className="login-form"
+          initialValues={{ remember: true }}
+          onFinish={onFinish}
+          wrapperCol={{ span: 8 }}
+          labelCol={{ span: 8 }}
+        >
+          <Form.Item
+            label="Email"
+            name="email"
+            rules={[
+              { required: true, message: "Vui lòng nhập email" },
+              { type: "email", message: "Email không hợp lệ" },
+            ]}
           >
-            Đăng nhập
-          </Button>
-          <Link style={{ marginLeft: "5px" }} to="/auth/register">
-            Đăng kí!{" "}
-          </Link>
-        </Form.Item>
-      </Form>
+            <Input
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              placeholder="Email"
+            />
+          </Form.Item>
+          <Form.Item
+            label="Mật khẩu"
+            name="password"
+            rules={[
+              { required: true, message: "Vui lòng điền mật khẩu" },
+              { min: 6, message: "Mật khẩu lớn hơn 6 kí tự" },
+            ]}
+          >
+            <Input.Password
+              prefix={<LockOutlined className="site-form-item-icon" />}
+              type="password"
+              placeholder="Password"
+            />
+          </Form.Item>
+          <Form.Item wrapperCol={{ xs: 8, offset: 8 }}>
+            <a className="login-form-forgot" href="">
+              Quên mật khẩu
+            </a>
+          </Form.Item>
+
+          <Form.Item wrapperCol={{ xs: 8, offset: 8 }}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="login-form-button"
+            >
+              Đăng nhập
+            </Button>
+            <Link style={{ marginLeft: "5px" }} to="/auth/register">
+              Đăng kí!{" "}
+            </Link>
+          </Form.Item>
+        </Form>
+      </ConfigProvider>
     </>
   );
 };

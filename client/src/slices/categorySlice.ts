@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const currentUser = JSON.parse(localStorage.getItem('userInfor')!);
+const currentUser =  localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
 
 interface CategoriesType {
   name: string;
@@ -42,9 +42,6 @@ const getAllCategory = createAsyncThunk<CategoriesType[]>("category/getAll", asy
   const data: CategoriesType[] = response.data.payload;
   return data; // Assuming categories are in the `data` property of the response
 });
-
-
-
 
 // tham số thứ 2 là tham số truyền vào gửi từ client
 const createCategory = createAsyncThunk<CategoriesType, CategoriesType>("category/createCategory", async (name, { rejectWithValue }) => {

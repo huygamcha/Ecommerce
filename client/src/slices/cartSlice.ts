@@ -21,8 +21,6 @@ interface InitialType {
   deleted: boolean;
   updated: boolean;
   totalPrice: number;
-  //   user: CartType;
-  //   users: CartType[];
 }
 
 const initialState: InitialType = {
@@ -33,8 +31,36 @@ const initialState: InitialType = {
   deleted: false,
   updated: false,
   totalPrice: 0,
-  //   users: [],
 };
+
+const getCartFromCustomer = createAsyncThunk<CartType[]>(
+  "cart/getCartFromCustomer",
+  async ( _ ,{ rejectWithValue }) => {
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+      const currentUser = localStorage.getItem("userInfor")
+        ? JSON.parse(localStorage.getItem("userInfor")!)
+        : undefined;
+
+      const response = await axios.get(
+        `http://localhost:4000/carts/${currentUser.payload.id}`,
+        config
+      );
+      const data: CartType[] = response.data;
+      return data;
+    } catch (error: any) {
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data);
+      } else {
+        throw error;
+      }
+    }
+  }
+);
 
 const cartSlice = createSlice({
   name: "cart",
@@ -48,6 +74,7 @@ const cartSlice = createSlice({
       state.totalPrice = state.carts.reduce((total, cart) => {
         return total + cart.total * cart.quantity;
       }, 0);
+
     },
 
     changeQuantityCart: (state, action) => {
@@ -76,20 +103,40 @@ const cartSlice = createSlice({
 
     deleteCart: (state, action) => {
       // kiểm tra nếu sản phẩm giống nhau thì tăng số lượng
-      state.carts = state.carts.filter(
-        (cart) => cart.id !== action.payload.id
-      );
-      // if (specificItem) {
-      //   specificItem.quantity++;
-      // } else {
-      //   state.carts.push(action.payload);
-      // }
+      state.carts = state.carts.filter((cart) => cart.id !== action.payload.id);
       localStorage.setItem("carts", JSON.stringify(state.carts));
     },
+  },
+  
+  extraReducers(builder) {
+     //get all
+     builder.addCase(getCartFromCustomer.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(
+      getCartFromCustomer.fulfilled,
+      (state, action) => {
+        state.loading = false;
+        state.carts = action.payload;
+        localStorage.setItem('carts', JSON.stringify(state.carts))
+      }
+    );
+    builder.addCase(
+      getCartFromCustomer.rejected,
+      (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "An error occurred"; // Ensure a default message or fallback if action.error is undefined
+      }
+    );
   },
 });
 
 const { reducer, actions } = cartSlice;
 
 export default reducer;
-export const { addToCart, getAllCart, changeQuantityCart, deleteCart } = actions;
+export   {
+  getCartFromCustomer
+}
+export const { addToCart, getAllCart, changeQuantityCart, deleteCart } =
+  actions;
