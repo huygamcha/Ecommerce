@@ -67,7 +67,7 @@ const getAllProduct = createAsyncThunk<ProductsType[], ProductSearchType>("produ
 
   // trả về response rồi lấy ra, để tránh lỗi A non-serializable value was detected in an action, in the path: `payload.headers`
   //https://chat.openai.com/c/48f823af-3e96-48aa-8df3-fe6e306aef10
-  const response = await axios.get(`http://localhost:4000/products?search=${search}&page=${page}&pageSize=${pageSize}`);
+  const response = await axios.get(`${process.env.REACT_APP_BACKEND}/products?search=${search}&page=${page}&pageSize=${pageSize}`);
   const data: ProductsType[] = response.data.payload;
   return data; // Assuming products are in the `data` property of the response
 });
@@ -76,7 +76,7 @@ const getProductByCategories = createAsyncThunk<ProductsType[], string | undefin
 
   // trả về response rồi lấy ra, để tránh lỗi A non-serializable value was detected in an action, in the path: `payload.headers`
   //https://chat.openai.com/c/48f823af-3e96-48aa-8df3-fe6e306aef10
-  const response = await axios.get(`http://localhost:4000/products/byCategories?id=${id}`);
+  const response = await axios.get(`${process.env.REACT_APP_BACKEND}/products/byCategories?id=${id}`);
   const data: ProductsType[] = response.data.payload;
   return data; // Assuming products are in the `data` property of the response
 });
@@ -85,7 +85,7 @@ const getProductBySuppliers = createAsyncThunk<ProductsType[], string | undefine
 
   // trả về response rồi lấy ra, để tránh lỗi A non-serializable value was detected in an action, in the path: `payload.headers`
   //https://chat.openai.com/c/48f823af-3e96-48aa-8df3-fe6e306aef10
-  const response = await axios.get(`http://localhost:4000/products/BySuppliers?id=${id}`);
+  const response = await axios.get(`${process.env.REACT_APP_BACKEND}/products/BySuppliers?id=${id}`);
   const data: ProductsType[] = response.data.payload;
   return data; // Assuming products are in the `data` property of the response
 });
@@ -94,7 +94,7 @@ const getProductById = createAsyncThunk<ProductsType, string | undefined>("produ
 
   // trả về response rồi lấy ra, để tránh lỗi A non-serializable value was detected in an action, in the path: `payload.headers`
   //https://chat.openai.com/c/48f823af-3e96-48aa-8df3-fe6e306aef10
-  const response = await axios.get(`http://localhost:4000/products/${id}`);
+  const response = await axios.get(`${process.env.REACT_APP_BACKEND}/products/${id}`);
   const data: ProductsType = response.data.payload;
   return data; // Assuming products are in the `data` property of the response
 });
@@ -102,7 +102,7 @@ const getProductById = createAsyncThunk<ProductsType, string | undefined>("produ
 // tham số thứ 2 là tham số truyền vào gửi từ client
 const createProduct = createAsyncThunk<ProductsType, ProductsType>("product/createProduct", async (name, { rejectWithValue }) => {
   try {
-    const response = await axios.post("http://localhost:4000/products", name);
+    const response = await axios.post(`${process.env.REACT_APP_BACKEND}/products`, name);
     const data: ProductsType = response.data;
     return data;
   } catch (error: any) {
@@ -121,7 +121,7 @@ const deleteProduct = createAsyncThunk<ProductsType, string>("product/deleteProd
         "Content-type": "application/json",
       },
     };
-    const response = await axios.delete(`http://localhost:4000/products/${id}`, config);
+    const response = await axios.delete(`${process.env.REACT_APP_BACKEND}/products/${id}`, config);
     const data = response.data;
     return data;
   } catch (error: any) {
@@ -140,7 +140,7 @@ const updateProduct = createAsyncThunk<ProductsType, { id: string, values: Produ
         "Content-type": "application/json",
       },
     };
-    const response = await axios.patch(`http://localhost:4000/products/${id}`, values, config);
+    const response = await axios.patch(`${process.env.REACT_APP_BACKEND}/products/${id}`, values, config);
 
 
     const data = response.data;

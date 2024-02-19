@@ -43,7 +43,9 @@ const loginUser = createAsyncThunk<UserType, LoginType>(
   "auth/loginUser",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axios.post("http://localhost:4000/login", values);
+      console.log('«««««  »»»»»',  );
+      // const response = await axios.post("http://localhost:4000/login", values);
+      const response = await axios.post(`${process.env.REACT_APP_BACKEND}/login`, values);
       const data: UserType = response.data.payload;
       return data;
     } catch (error: any) {

@@ -51,7 +51,7 @@ const registerUser = createAsyncThunk<RegisterType, RegisterType>(
   async (values, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "http://localhost:4000/customers",
+        `${process.env.REACT_APP_BACKEND}/customers`,
         values
       );
       const data: RegisterType = response.data;
@@ -71,7 +71,7 @@ const getInforUser = createAsyncThunk<RegisterType, string>(
   async (values, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `http://localhost:4000/customers/${values}`,
+        `${process.env.REACT_APP_BACKEND}/customers/${values}`,
         
       );
       const data: RegisterType = response.data.payload;
@@ -91,7 +91,7 @@ const updateUser = createAsyncThunk<RegisterType, RegisterType>(
   async (values, { rejectWithValue }) => {
     try {
       const response = await axios.patch(
-        `http://localhost:4000/customers/${currentUser.id}`,
+        `${process.env.REACT_APP_BACKEND}/customers/${currentUser.id}`,
         values
       );
       const data: RegisterType = response.data.payload;

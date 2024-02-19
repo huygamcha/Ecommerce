@@ -39,7 +39,7 @@ const getAllSupplier = createAsyncThunk<SuppliersType[]>("supplier/getAll", asyn
 
   // trả về response rồi lấy ra, để tránh lỗi A non-serializable value was detected in an action, in the path: `payload.headers`
   //https://chat.openai.com/c/48f823af-3e96-48aa-8df3-fe6e306aef10
-  const response = await axios.get("http://localhost:4000/suppliers");
+  const response = await axios.get(`${process.env.REACT_APP_BACKEND}/suppliers`);
   const data: SuppliersType[] = response.data.payload;
   return data; // Assuming suppliers are in the `data` property of the response
 });
@@ -47,7 +47,7 @@ const getAllSupplier = createAsyncThunk<SuppliersType[]>("supplier/getAll", asyn
 // tham số thứ 2 là tham số truyền vào gửi từ client
 const createSupplier = createAsyncThunk<SuppliersType, SuppliersType>("supplier/createSupplier", async (name, { rejectWithValue }) => {
   try {
-    const response = await axios.post("http://localhost:4000/suppliers", name);
+    const response = await axios.post(`${process.env.REACT_APP_BACKEND}/suppliers`, name);
     const data: SuppliersType = response.data;
     return data;
   } catch (error: any) {
@@ -66,7 +66,7 @@ const deleteSupplier = createAsyncThunk<SuppliersType, string>("supplier/deleteS
         "Content-type": "application/json",
       },
     };
-    const response = await axios.delete(`http://localhost:4000/suppliers/${id}`, config);
+    const response = await axios.delete(`${process.env.REACT_APP_BACKEND}/suppliers/${id}`, config);
     const data = response.data;
     return data;
   } catch (error: any) {
@@ -85,7 +85,7 @@ const updateSupplier = createAsyncThunk<SuppliersType, { id: string, values: Sup
         "Content-type": "application/json",
       },
     };
-    const response = await axios.patch(`http://localhost:4000/suppliers/${id}`, values, config);
+    const response = await axios.patch(`${process.env.REACT_APP_BACKEND}/suppliers/${id}`, values, config);
     const data = response.data;
     return data;
   } catch (error: any) {

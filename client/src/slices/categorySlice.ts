@@ -38,7 +38,7 @@ const getAllCategory = createAsyncThunk<CategoriesType[]>("category/getAll", asy
 
   // trả về response rồi lấy ra, để tránh lỗi A non-serializable value was detected in an action, in the path: `payload.headers`
   //https://chat.openai.com/c/48f823af-3e96-48aa-8df3-fe6e306aef10
-  const response = await axios.get("http://localhost:4000/categories");
+  const response = await axios.get(`${process.env.REACT_APP_BACKEND}/categories`);
   const data: CategoriesType[] = response.data.payload;
   return data; // Assuming categories are in the `data` property of the response
 });
@@ -46,7 +46,7 @@ const getAllCategory = createAsyncThunk<CategoriesType[]>("category/getAll", asy
 // tham số thứ 2 là tham số truyền vào gửi từ client
 const createCategory = createAsyncThunk<CategoriesType, CategoriesType>("category/createCategory", async (name, { rejectWithValue }) => {
   try {
-    const response = await axios.post("http://localhost:4000/categories", name);
+    const response = await axios.post(`${process.env.REACT_APP_BACKEND}/categories`, name);
     const data: CategoriesType = response.data;
     return data;
   } catch (error: any) {
@@ -65,7 +65,7 @@ const deleteCategory = createAsyncThunk<CategoriesType, string>("category/delete
         "Content-type": "application/json",
       },
     };
-    const response = await axios.delete(`http://localhost:4000/categories/${id}`, config);
+    const response = await axios.delete(`${process.env.REACT_APP_BACKEND}/categories/${id}`, config);
     const data = response.data;
     return data;
   } catch (error: any) {
@@ -85,7 +85,7 @@ const updateCategory = createAsyncThunk<CategoriesType, { id: string, values: Ca
         Authorization: `Bearer ${currentUser.payload.token}`,
       },
     };
-    const response = await axios.patch(`http://localhost:4000/categories/${id}`, values, config);
+    const response = await axios.patch(`${process.env.REACT_APP_BACKEND}/categories/${id}`, values, config);
 
 
     const data = response.data;
