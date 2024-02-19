@@ -1,4 +1,5 @@
 const { Customer } = require("../../models");
+const bcrypt = require("bcryptjs");
 
 module.exports = {
   getAllCustomer: async (req, res, next) => {
@@ -147,11 +148,13 @@ module.exports = {
       const errors = {};
       const exitPhoneNumber = await Customer.findOne({
         phoneNumber: phoneNumber,
+        _id: { $ne: id },
       });
       if (exitPhoneNumber) errors.phoneNumber = "Số điện thoại đã tồn tại";
 
       const exitEmail = await Customer.findOne({
         email: email,
+        _id: { $ne: id },
       });
       if (exitEmail) errors.email = "Email đã tồn tại";
 
@@ -175,6 +178,13 @@ module.exports = {
       //   });
       // }
 
+      // Mã hóa mật khẩu nếu có sự thay đổi
+      let hashedPassword = this.password;
+      if (password) {
+        const salt = await bcrypt.genSalt(10);
+        hashedPassword = await bcrypt.hash(password, salt);
+      }
+
       const result = await Customer.findByIdAndUpdate(
         id,
         {
@@ -183,7 +193,7 @@ module.exports = {
           address: address || this.address,
           firstName: firstName || this.firstName,
           lastName: lastName || this.lastName,
-          password: password || this.password,
+          password: hashedPassword,
           birthday: birthday || this.birthday,
           avatar: avatar || this.avatar,
         },
@@ -192,7 +202,7 @@ module.exports = {
         }
       );
 
-      return res.send(404, {
+      return res.send(200, {
         message: "Cập nhật khách hàng thành công",
         payload: result,
       });

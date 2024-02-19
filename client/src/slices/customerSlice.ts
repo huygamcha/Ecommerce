@@ -22,7 +22,7 @@ interface InitialType {
   customers: RegisterType[];
 }
 
-// const currentUser : UserType = localStorage.getItem("userInfor") ? JSON.parse(localStorage.getItem("userInfor")!)  : null;
+const currentUser = localStorage.getItem("userInfor") ? JSON.parse(localStorage.getItem("userInfor")!)  : null;
 
 const initialState: InitialType = {
   success: false,
@@ -90,11 +90,11 @@ const updateUser = createAsyncThunk<RegisterType, RegisterType>(
   "auth/updateUser",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        "http://localhost:4000/customers",
+      const response = await axios.patch(
+        `http://localhost:4000/customers/${currentUser.id}`,
         values
       );
-      const data: RegisterType = response.data;
+      const data: RegisterType = response.data.payload;
       return data;
     } catch (error: any) {
       if (error.response && error.response.data) {
@@ -140,7 +140,7 @@ const customerSlice = createSlice({
 
     builder.addCase(getInforUser.fulfilled, (state, action) => {
       state.loading = false;
-      state.success = true;
+      // state.success = true;
       state.customer = action.payload
     });
     builder.addCase(getInforUser.rejected, (state, action) => {
@@ -160,6 +160,7 @@ const customerSlice = createSlice({
     });
 
     builder.addCase(updateUser.fulfilled, (state, action) => {
+      console.log('««««« action »»»»»', action);
       state.loading = false;
       state.success = true;
       state.customer = action.payload
