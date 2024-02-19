@@ -15,11 +15,11 @@ interface RegisterType {
 interface InitialType {
   success: boolean;
   error: { message: string; errors: { phoneNumber: string; email: string } };
-  user: RegisterType;
+  customer: RegisterType;
   loading: boolean;
   deleted: boolean;
   updated: boolean;
-  users: RegisterType[];
+  customers: RegisterType[];
 }
 
 // const currentUser : UserType = localStorage.getItem("userInfor") ? JSON.parse(localStorage.getItem("userInfor")!)  : null;
@@ -30,7 +30,7 @@ const initialState: InitialType = {
     message: "",
     errors: { phoneNumber: "", email: "" },
   },
-  user: {
+  customer: {
     firstName: "",
     lastName: "",
     phoneNumber: "",
@@ -43,7 +43,7 @@ const initialState: InitialType = {
   loading: false,
   deleted: false,
   updated: false,
-  users: [],
+  customers: [],
 };
 
 const registerUser = createAsyncThunk<RegisterType, RegisterType>(
@@ -55,6 +55,26 @@ const registerUser = createAsyncThunk<RegisterType, RegisterType>(
         values
       );
       const data: RegisterType = response.data;
+      return data;
+    } catch (error: any) {
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data);
+      } else {
+        throw error;
+      }
+    }
+  }
+);
+
+const getInforUser = createAsyncThunk<RegisterType, string>(
+  "auth/getInforUser",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:4000/customers/${values}`,
+        
+      );
+      const data: RegisterType = response.data.payload;
       return data;
     } catch (error: any) {
       if (error.response && error.response.data) {
@@ -80,9 +100,30 @@ const customerSlice = createSlice({
     builder.addCase(registerUser.fulfilled, (state, action) => {
       state.loading = false;
       state.success = true;
-      state.user = action.payload
+      state.customer = action.payload
     });
     builder.addCase(registerUser.rejected, (state, action) => {
+      state.loading = false;
+      const customErrors = action.payload as {
+        message: string;
+        errors: { phoneNumber: string; email: string };
+      };
+      state.error = customErrors;
+    });
+
+    //get user
+    builder.addCase(getInforUser.pending, (state) => {
+      state.success = false;
+      state.loading = false;
+      state.error = { message: "", errors: { phoneNumber: "", email: "" } };
+    });
+
+    builder.addCase(getInforUser.fulfilled, (state, action) => {
+      state.loading = false;
+      state.success = true;
+      state.customer = action.payload
+    });
+    builder.addCase(getInforUser.rejected, (state, action) => {
       state.loading = false;
       const customErrors = action.payload as {
         message: string;
@@ -96,4 +137,4 @@ const customerSlice = createSlice({
 const { reducer } = customerSlice;
 
 export default reducer;
-export { registerUser };
+export { registerUser, getInforUser };

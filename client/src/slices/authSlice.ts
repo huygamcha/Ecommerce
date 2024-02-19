@@ -44,7 +44,7 @@ const loginUser = createAsyncThunk<UserType, LoginType>(
   async (values, { rejectWithValue }) => {
     try {
       const response = await axios.post("http://localhost:4000/login", values);
-      const data: UserType = response.data;
+      const data: UserType = response.data.payload;
       return data;
     } catch (error: any) {
       if (error.response && error.response.data) {
@@ -69,7 +69,7 @@ const authSlice = createSlice({
         refreshToken: '',
       }
       state.success = false;
-      localStorage.removeItem('userInfor')
+      localStorage.clear()
     }
   },
   extraReducers(builder) {

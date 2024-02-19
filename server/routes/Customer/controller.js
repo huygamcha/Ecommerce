@@ -53,6 +53,7 @@ module.exports = {
         address,
         birthday,
         password,
+        avatar,
       } = req.body;
 
       const errors = {};
@@ -81,6 +82,7 @@ module.exports = {
         address,
         birthday,
         password,
+        avatar,
       });
 
       const payload = await newCustomer.save();
@@ -137,6 +139,7 @@ module.exports = {
         address,
         birthday,
         password,
+        avatar,
       } = req.body;
 
       const errors = [];
@@ -182,6 +185,7 @@ module.exports = {
           lastName: lastName || this.lastName,
           password: password || this.password,
           birthday: birthday || this.birthday,
+          birthday: avatar || this.avatar,
         },
         {
           new: true,

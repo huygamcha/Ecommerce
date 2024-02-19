@@ -5,7 +5,7 @@ import {
   deleteCart,
   getAllCart,
 } from "../../../slices/cartSlice";
-import { Col, Flex, Row, Space, Image, InputNumber } from "antd";
+import { Col, Flex, Row, Space, Image, InputNumber, Popconfirm } from "antd";
 import numeral from "numeral";
 import Discount from "../../../components/discount";
 import { Link } from "react-router-dom";
@@ -26,12 +26,12 @@ function CartScreen() {
   }, []);
 
   const handleQuantity = async (value: string, e: number | null) => {
-    await dispatch(changeQuantityCart({ id: value, quantity: e }));
+    dispatch(changeQuantityCart({ id: value, quantity: e }));
     dispatch(getAllCart());
   };
 
   const handleDelete = async (value: string) => {
-    await dispatch(deleteCart({ id: value }));
+    dispatch(deleteCart({ id: value }));
     dispatch(getAllCart());
   };
   console.log("««««« totalPrice »»»»»", totalPrice);
@@ -102,7 +102,15 @@ function CartScreen() {
                   className={clsx(style.flex_center)}
                   span={1}
                 >
-                  <DeleteOutlined onClick={() => handleDelete(cart.id)} />
+                  <Popconfirm
+                    title="Xoá sản phẩm"
+                    description="Bạn có chắc xoá sản phẩm này không?"
+                    onConfirm={() => {
+                      handleDelete(cart.id);
+                    }}
+                  >
+                    <DeleteOutlined />
+                  </Popconfirm>
                 </Col>
               </Row>
             </Col>

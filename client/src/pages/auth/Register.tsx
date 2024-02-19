@@ -6,7 +6,15 @@ import {
   PhoneOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Avatar, Button, Form, Input, Space, message } from "antd";
+import {
+  Avatar,
+  Button,
+  ConfigProvider,
+  Form,
+  Input,
+  Space,
+  message,
+} from "antd";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { loginUser } from "../../slices/authSlice";
 import { Link, useNavigate, Navigate } from "react-router-dom";
@@ -30,7 +38,7 @@ const Register: React.FC = () => {
   };
 
   const dispatch = useAppDispatch();
-  const { user, error, success } = useAppSelector((state) => state.customers);
+  const { error, success } = useAppSelector((state) => state.customers);
   const navigate = useNavigate();
 
   const [messageApi, contextHolder] = message.useMessage();
@@ -101,150 +109,164 @@ const Register: React.FC = () => {
 
   return (
     <>
-      {contextHolder}
-
-      <Form
-        name="register"
-        onFinish={onFinish}
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 8 }}
-      >
-        <Form.Item<FieldType>
-          name="firstName"
-          label="Tên"
-          rules={[
-            { required: true, message: "Vui lòng nhập tên" },
-            { min: 2, message: "Tên phải lớn hơn 2 kí tự" },
-          ]}
-        >
-          <Input
-            prefix={<UserOutlined className="site-form-item-icon" />}
-            placeholder="Tên"
-          />
-        </Form.Item>
-
-        <Form.Item<FieldType>
-          name="lastName"
-          label="Họ"
-          rules={[
-            { required: true, message: "Vui lòng nhập họ" },
-            { min: 2, message: "Họ phải lớn hơn 2 kí tự" },
-          ]}
-        >
-          <Input
-            prefix={<UserOutlined className="site-form-item-icon" />}
-            placeholder="Họ"
-          />
-        </Form.Item>
-
-        <Form.Item<FieldType>
-          name="address"
-          label="Địa chỉ"
-          rules={[{ required: true, message: "Vui lòng nhập địa chỉ" }]}
-        >
-          <Input prefix={<HomeOutlined />} placeholder="Địa chỉ" />
-        </Form.Item>
-
-        <Form.Item<FieldType>
-          name="phoneNumber"
-          label="Số điện thoại"
-          rules={[{ required: true, message: "Vui lòng nhập số điện thoại" }]}
-          validateStatus={
-            error && error.errors.phoneNumber ? "error" : undefined
-          }
-          help={error ? error.errors.phoneNumber : ""}
-        >
-          <Input prefix={<PhoneOutlined />} placeholder="Số điện thoại" />
-        </Form.Item>
-
-        <Form.Item
-          name="email"
-          label="Email"
-          rules={[
-            { required: true, message: "Vui lòng nhập email" },
-            { type: "email", message: "Email không hợp lệ" },
-          ]}
-          validateStatus={
-            error && error.errors && error.errors.email ? "error" : undefined
-          }
-          help={error && error.errors ? error.errors.email : ""}
-        >
-          <Input prefix={<MailOutlined />} placeholder="Email" />
-        </Form.Item>
-        <Form.Item<FieldType>
-          name="password"
-          label="Mật khẩu"
-          rules={[
-            { required: true, message: "Vui lòng điền mật khẩu" },
-            { min: 6, message: "Mật khẩu lớn hơn 6 kí tự" },
-          ]}
-        >
-          <Input.Password
-            prefix={<LockOutlined className="site-form-item-icon" />}
-            type="password"
-            placeholder="Mật khẩu"
-          />
-        </Form.Item>
-
-        <Form.Item
-          name="confirm"
-          label="Xác nhận mật khẩu"
-          dependencies={["password"]}
-          rules={[
-            {
-              required: true,
-              message: "Vui lòng xác nhận mật khẩu!",
+      <ConfigProvider
+        theme={{
+          components: {
+            Message: {
+              zIndexPopup: 99999,
             },
-            ({ getFieldValue }) => ({
-              validator(_, value) {
-                if (!value || getFieldValue("password") === value) {
-                  return Promise.resolve();
-                }
-                return Promise.reject(new Error("Mật khẩu không trùng khớp!"));
-              },
-            }),
-          ]}
+          },
+        }}
+      >
+        {contextHolder}
+
+        <Form
+          name="register"
+          onFinish={onFinish}
+          labelCol={{ span: 8 }}
+          wrapperCol={{ span: 8 }}
         >
-          <Input.Password
-            prefix={<LockOutlined className="site-form-item-icon" />}
-            placeholder="Xác nhận mật khẩu"
-          />
-        </Form.Item>
-
-        <Form.Item<FieldType>
-          rules={[{ required: true, message: "Vui lòng điền ngày sinh nhật" }]}
-          name="birthday"
-          label="Sinh nhật"
-        >
-          <DatePicker defaultValue={dayjs()} />
-        </Form.Item>
-
-        <Form.Item<FieldType> label="Chọn ảnh" name="avatar">
-          <Input
-            type="file"
-            accept="image/*"
-            onChange={(e) => {
-              const selectedFile = e.target.files && e.target.files[0];
-              if (selectedFile) {
-                postDetails(selectedFile);
-              }
-            }}
-          ></Input>
-        </Form.Item>
-
-        <Form.Item wrapperCol={{ offset: 8, xs: 8 }}>
-          <Button
-            type="primary"
-            htmlType="submit"
-            className="login-form-button"
+          <Form.Item<FieldType>
+            name="firstName"
+            label="Tên"
+            rules={[
+              { required: true, message: "Vui lòng nhập tên" },
+              { min: 2, message: "Tên phải lớn hơn 2 kí tự" },
+            ]}
           >
-            Đăng kí
-          </Button>
-          <Link style={{ marginLeft: "5px" }} to="/auth/login">
-            Đăng nhập!
-          </Link>
-        </Form.Item>
-      </Form>
+            <Input
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              placeholder="Tên"
+            />
+          </Form.Item>
+
+          <Form.Item<FieldType>
+            name="lastName"
+            label="Họ"
+            rules={[
+              { required: true, message: "Vui lòng nhập họ" },
+              { min: 2, message: "Họ phải lớn hơn 2 kí tự" },
+            ]}
+          >
+            <Input
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              placeholder="Họ"
+            />
+          </Form.Item>
+
+          <Form.Item<FieldType>
+            name="address"
+            label="Địa chỉ"
+            rules={[{ required: true, message: "Vui lòng nhập địa chỉ" }]}
+          >
+            <Input prefix={<HomeOutlined />} placeholder="Địa chỉ" />
+          </Form.Item>
+
+          <Form.Item<FieldType>
+            name="phoneNumber"
+            label="Số điện thoại"
+            rules={[{ required: true, message: "Vui lòng nhập số điện thoại" }]}
+            validateStatus={
+              error && error.errors.phoneNumber ? "error" : undefined
+            }
+            help={error ? error.errors.phoneNumber : ""}
+          >
+            <Input prefix={<PhoneOutlined />} placeholder="Số điện thoại" />
+          </Form.Item>
+
+          <Form.Item
+            name="email"
+            label="Email"
+            rules={[
+              { required: true, message: "Vui lòng nhập email" },
+              { type: "email", message: "Email không hợp lệ" },
+            ]}
+            validateStatus={
+              error && error.errors && error.errors.email ? "error" : undefined
+            }
+            help={error && error.errors ? error.errors.email : ""}
+          >
+            <Input prefix={<MailOutlined />} placeholder="Email" />
+          </Form.Item>
+          <Form.Item<FieldType>
+            name="password"
+            label="Mật khẩu"
+            rules={[
+              { required: true, message: "Vui lòng điền mật khẩu" },
+              { min: 6, message: "Mật khẩu lớn hơn 6 kí tự" },
+            ]}
+          >
+            <Input.Password
+              prefix={<LockOutlined className="site-form-item-icon" />}
+              type="password"
+              placeholder="Mật khẩu"
+            />
+          </Form.Item>
+
+          <Form.Item
+            name="confirm"
+            label="Xác nhận mật khẩu"
+            dependencies={["password"]}
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng xác nhận mật khẩu!",
+              },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue("password") === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error("Mật khẩu không trùng khớp!")
+                  );
+                },
+              }),
+            ]}
+          >
+            <Input.Password
+              prefix={<LockOutlined className="site-form-item-icon" />}
+              placeholder="Xác nhận mật khẩu"
+            />
+          </Form.Item>
+
+          <Form.Item<FieldType>
+            rules={[
+              { required: true, message: "Vui lòng điền ngày sinh nhật" },
+            ]}
+            name="birthday"
+            label="Sinh nhật"
+          >
+            <DatePicker />
+          </Form.Item>
+
+          <Form.Item<FieldType> label="Chọn ảnh" name="avatar">
+            <Input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const selectedFile = e.target.files && e.target.files[0];
+                if (selectedFile) {
+                  postDetails(selectedFile);
+                }
+              }}
+            ></Input>
+          </Form.Item>
+
+          <Form.Item wrapperCol={{ offset: 8, xs: 8 }}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="login-form-button"
+            >
+              Đăng kí
+            </Button>
+            <Link style={{ marginLeft: "5px" }} to="/auth/login">
+              Đăng nhập!
+            </Link>
+          </Form.Item>
+        </Form>
+      </ConfigProvider>
     </>
   );
 };

@@ -5,10 +5,11 @@ import { useAppDispatch, useAppSelector } from "../../store";
 import { loginUser } from "../../slices/authSlice";
 import { Link, useNavigate, Navigate } from "react-router-dom";
 import { getCartFromCustomer } from "../../slices/cartSlice";
+import { getInforUser } from "../../slices/customerSlice";
 
 const Login: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { error, success } = useAppSelector((state) => state.auth);
+  const { error, success, user } = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
 
   const [messageApi, contextHolder] = message.useMessage();
@@ -35,6 +36,7 @@ const Login: React.FC = () => {
     }
     if (success) {
       onShowMessage(`Đăng nhập thành công`, "success");
+      // dispatch(getInforUser(user.id));
       dispatch(getCartFromCustomer());
       navigate("/profile");
     }

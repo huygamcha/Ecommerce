@@ -46,7 +46,7 @@ const getCartFromCustomer = createAsyncThunk<CartType[]>(
         : undefined;
 
       const response = await axios.get(
-        `http://localhost:4000/carts/${currentUser.payload.id}`,
+        `http://localhost:4000/carts/${currentUser.id}`,
         config
       );
       const data: CartType[] = response.data;
@@ -79,7 +79,7 @@ const createCartFromCustomer = createAsyncThunk<CartType[]>(
       : [];
 
       const response = await axios.post(
-        `http://localhost:4000/carts`,{userId: currentUser.payload.id, cartList: allCarts},
+        `http://localhost:4000/carts`,{userId: currentUser.id, cartList: allCarts},
         config
       );
       const data: CartType[] = response.data;

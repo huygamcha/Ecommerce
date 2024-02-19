@@ -28,7 +28,6 @@ function HeaderScreen() {
   const { products } = useAppSelector((state) => state.products);
 
   const handleSearch = (e: any) => {
-    console.log("««««« e »»»»»", e.target.value);
     dispatch(getAllProduct({ search: e.target.value }));
     setSearch(e.target.value);
   };
