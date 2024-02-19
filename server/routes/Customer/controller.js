@@ -142,20 +142,20 @@ module.exports = {
         avatar,
       } = req.body;
 
-      const errors = [];
-      const exitEmail = await Customer.findOne({ email, _id: { $ne: id } });
-      if (exitEmail) {
-        errors.push({ email: "Email khách hàng đã tồn tại" });
-      }
-      const exitPhoneNumber = await Customer.findOne({
-        phoneNumber,
-        _id: { $ne: id },
-      });
-      if (exitPhoneNumber) {
-        errors.push({ phoneNumber: "Số điện thoại khách hàng đã tồn tại" });
-      }
+      console.log("««««« password  update»»»»»", password);
 
-      if (errors.length > 0) {
+      const errors = {};
+      const exitPhoneNumber = await Customer.findOne({
+        phoneNumber: phoneNumber,
+      });
+      if (exitPhoneNumber) errors.phoneNumber = "Số điện thoại đã tồn tại";
+
+      const exitEmail = await Customer.findOne({
+        email: email,
+      });
+      if (exitEmail) errors.email = "Email đã tồn tại";
+
+      if (Object.keys(errors).length > 0) {
         return res.send(400, {
           message: "Cập nhật khách hàng không thành công",
           errors: errors,
@@ -169,11 +169,11 @@ module.exports = {
         });
       }
 
-      if (payload.isDeleted) {
-        return res.send(404, {
-          message: "Khách hàng đã được xoá trước đó",
-        });
-      }
+      // if (payload.isDeleted) {
+      //   return res.send(404, {
+      //     message: "Khách hàng đã được xoá trước đó",
+      //   });
+      // }
 
       const result = await Customer.findByIdAndUpdate(
         id,
@@ -185,7 +185,7 @@ module.exports = {
           lastName: lastName || this.lastName,
           password: password || this.password,
           birthday: birthday || this.birthday,
-          birthday: avatar || this.avatar,
+          avatar: avatar || this.avatar,
         },
         {
           new: true,

@@ -86,6 +86,26 @@ const getInforUser = createAsyncThunk<RegisterType, string>(
   }
 );
 
+const updateUser = createAsyncThunk<RegisterType, RegisterType>(
+  "auth/updateUser",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:4000/customers",
+        values
+      );
+      const data: RegisterType = response.data;
+      return data;
+    } catch (error: any) {
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data);
+      } else {
+        throw error;
+      }
+    }
+  }
+);
+
 const customerSlice = createSlice({
   name: "customer",
   initialState: initialState,
@@ -131,10 +151,31 @@ const customerSlice = createSlice({
       };
       state.error = customErrors;
     });
+
+    //update
+    builder.addCase(updateUser.pending, (state) => {
+      state.success = false;
+      state.loading = false;
+      state.error = { message: "", errors: { phoneNumber: "", email: "" } };
+    });
+
+    builder.addCase(updateUser.fulfilled, (state, action) => {
+      state.loading = false;
+      state.success = true;
+      state.customer = action.payload
+    });
+    builder.addCase(updateUser.rejected, (state, action) => {
+      state.loading = false;
+      const customErrors = action.payload as {
+        message: string;
+        errors: { phoneNumber: string; email: string };
+      };
+      state.error = customErrors;
+    });
   },
 });
 
 const { reducer } = customerSlice;
 
 export default reducer;
-export { registerUser, getInforUser };
+export { registerUser, getInforUser ,updateUser };
