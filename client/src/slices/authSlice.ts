@@ -68,6 +68,7 @@ const authSlice = createSlice({
         token: '',
         refreshToken: '',
       }
+      state.success = false;
       localStorage.removeItem('userInfor')
     }
   },
@@ -80,7 +81,6 @@ const authSlice = createSlice({
 
     builder.addCase(loginUser.fulfilled, (state, action) => {
       state.success = true;
-
       state.loading = false;
       state.user = action.payload;
       localStorage.setItem("userInfor", JSON.stringify(state.user));

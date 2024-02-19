@@ -36,9 +36,7 @@ const Login: React.FC = () => {
     if (success) {
       onShowMessage(`Đăng nhập thành công`, "success");
       dispatch(getCartFromCustomer());
-      setTimeout(() => {
-        navigate("/profile");
-      }, 3000);
+      navigate("/profile");
     }
   }, [error, success]);
 

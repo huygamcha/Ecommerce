@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, Navigate, useNavigate } from "react-router-dom";
 import { Button, Col, Flex, Input, Layout, Row, Space, Image } from "antd";
 import clsx from "clsx";
 import style from "./header.module.css";
@@ -12,10 +12,16 @@ import { useAppDispatch, useAppSelector } from "../../store";
 import { getAllProduct } from "../../slices/productSlice";
 import Discount from "../discount";
 import numeral from "numeral";
+import { logout } from "../../slices/authSlice";
+import { createCartFromCustomer } from "../../slices/cartSlice";
 
 function HeaderScreen() {
+  const currentUser = localStorage.getItem("userInfor")
+    ? JSON.parse(localStorage.getItem("userInfor")!)
+    : undefined;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [search, setSearch] = useState<string>();
+  const navigate = useNavigate();
 
   const location = useLocation();
   const dispatch = useAppDispatch();
@@ -25,6 +31,13 @@ function HeaderScreen() {
     console.log("««««« e »»»»»", e.target.value);
     dispatch(getAllProduct({ search: e.target.value }));
     setSearch(e.target.value);
+  };
+
+  // logout
+  const handleLogout = async () => {
+    await dispatch(createCartFromCustomer());
+    dispatch(logout());
+    navigate(-1);
   };
 
   return (
@@ -59,18 +72,50 @@ function HeaderScreen() {
                 Product
               </Space>
             </Link>
-            <Link to="/profile">
-              <Space
-                className={clsx(style.child_wrapper)}
-                style={{
-                  ...(location.pathname === "/profile"
-                    ? { textDecoration: "underline", fontWeight: "bold" }
-                    : {}),
-                }}
-              >
-                Profile
+
+            {currentUser ? (
+              <Space className={clsx(style.profile_detail)}>
+                <Space
+                  style={{
+                    ...(location.pathname === "/profile"
+                      ? { textDecoration: "underline", fontWeight: "bold" }
+                      : {}),
+                  }}
+                >
+                  Profile
+                  <Flex className={clsx(style.profile_detail_child)}>
+                    <Space>
+                      <Link
+                        style={{ color: "#000", fontWeight: "normal" }}
+                        to="/profile"
+                      >
+                        <Space>Tài khoản</Space>
+                      </Link>
+                    </Space>
+                    <Space
+                      onClick={handleLogout}
+                      style={{ color: "#000", fontWeight: "normal" }}
+                    >
+                      Đăng xuất
+                    </Space>
+                  </Flex>
+                </Space>
               </Space>
-            </Link>
+            ) : (
+              <Link to="/profile">
+                <Space
+                  className={clsx(style.child_wrapper)}
+                  style={{
+                    ...(location.pathname === "/profile"
+                      ? { textDecoration: "underline", fontWeight: "bold" }
+                      : {}),
+                  }}
+                >
+                  Profile
+                </Space>
+              </Link>
+            )}
+
             <Link to="/cart">
               <Space
                 className={clsx(style.child_wrapper)}

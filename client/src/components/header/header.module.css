@@ -1,23 +1,25 @@
 .wrapper {
-   cursor: pointer;
-   font-size: 25px;
-   align-items: center;
-   padding: 15px;
-   background-color: #fff;
-   position: relative;
-   display: flex;
-   justify-content: space-between;
-   position: fixed;
-   z-index: 9999;
-   width: 100%;
-   box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 12px;
+    cursor: pointer;
+    font-size: 25px;
+    align-items: center;
+    padding: 15px;
+    background-color: #fff;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    position: fixed;
+    z-index: 9999;
+    width: 100%;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 12px;
 }
+
 .child_wrapper {
     color: #000;
     padding: 10px;
-    width: 50px;
+    width: 100%;
 }
-.child_wrapper:hover{
+
+.child_wrapper:hover {
     font-weight: bold;
     transition: 0.2s linear;
     text-decoration: underline;
@@ -26,11 +28,13 @@
 .wrapper_sub {
     margin: 15px;
 }
+
 .header_search_input {
     padding: 10px;
     position: relative;
 }
-.header_search_icon{
+
+.header_search_icon {
     display: block;
     position: absolute;
     right: 3%;
@@ -38,7 +42,8 @@
     transform: translateY(50%);
     cursor: pointer;
 }
-.header_search_result{
+
+.header_search_result {
     overflow-y: auto;
     max-height: 300px;
     display: block;
@@ -50,22 +55,22 @@
     cursor: pointer;
     z-index: 999;
     border-radius: 5px;
-   box-shadow: 1px 0 3px rgba(155,155,155,.6);
+    box-shadow: 1px 0 3px rgba(155, 155, 155, .6);
 
 }
 
-.header_search_items{
-   color: #000;
-   display: block;
-   padding: 10px;
-}
-
-.header_search_items:hover{
-    border-radius: 5px;
-
+.header_search_items {
     color: #000;
-    background-color: #ffccbf;
- }
+    display: block;
+    padding: 10px;
+}
+
+.header_search_items:hover {
+    border-radius: 5px;
+    color: #000;
+    background-color: #fff4fc;
+}
+
 /* responsive */
 
 .menu_mobile {
@@ -82,9 +87,11 @@
     font-size: 20px;
     padding: 25px;
 }
-.menu_mobile > div {
+
+.menu_mobile>div {
     padding: 5px;
 }
+
 .menu_mobile_child {
     color: #000;
     text-decoration: none;
@@ -92,4 +99,34 @@
     transition: 0.2s linear;
 }
 
+/* With logout */
+.profile_detail {
+    position: relative;
+}
 
+.profile_detail:hover .profile_detail_child {
+    display: block;
+}
+
+.profile_detail_child {
+    display: none;
+    position: absolute;
+    top: 34px;
+    left: 0;
+    background-color: #fff;
+    width: 200%;
+    border-radius: 4px;
+    color: #000;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 12px;
+}
+
+.profile_detail_child > div {
+    padding: 10px;
+    border-radius: 4px;
+
+}
+
+.profile_detail_child > div:hover {
+    background-color: #fff4fc;
+    width: 100%;
+}

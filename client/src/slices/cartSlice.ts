@@ -1,6 +1,5 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 import axios from "axios";
-import { zeroFormat } from "numeral";
 
 interface CartType {
   id: string;
@@ -48,6 +47,39 @@ const getCartFromCustomer = createAsyncThunk<CartType[]>(
 
       const response = await axios.get(
         `http://localhost:4000/carts/${currentUser.payload.id}`,
+        config
+      );
+      const data: CartType[] = response.data;
+      return data;
+    } catch (error: any) {
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data);
+      } else {
+        throw error;
+      }
+    }
+  }
+);
+
+const createCartFromCustomer = createAsyncThunk<CartType[]>(
+  "cart/createCartFromCustomer",
+  async ( _ ,{ rejectWithValue }) => {
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+      const currentUser = localStorage.getItem("userInfor")
+        ? JSON.parse(localStorage.getItem("userInfor")!)
+        : undefined;
+
+      const allCarts = localStorage.getItem("carts")
+      ? JSON.parse(localStorage.getItem("carts")!)
+      : [];
+
+      const response = await axios.post(
+        `http://localhost:4000/carts`,{userId: currentUser.payload.id, cartList: allCarts},
         config
       );
       const data: CartType[] = response.data;
@@ -129,14 +161,42 @@ const cartSlice = createSlice({
         state.error = action.error.message || "An error occurred"; // Ensure a default message or fallback if action.error is undefined
       }
     );
+
+    // create
+    builder.addCase(createCartFromCustomer.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(
+      createCartFromCustomer.fulfilled,
+      (state, action) => {
+        console.log('««««« action »»»»»', action);
+        state.loading = false;
+        state.error = "";
+      }
+    );
+    builder.addCase(
+      createCartFromCustomer.rejected,
+      (state, action) => {
+      
+        const customErrors = action.payload as { message?: string, errors?: any }
+        state.loading = false;
+        state.error = customErrors.message || 'Có lỗi xảy ra ở cartSlice'; // Ensure a default message or fallback if action.error is undefined
+      }
+    );
+
   },
+
+  //create
+  
 });
 
 const { reducer, actions } = cartSlice;
 
 export default reducer;
 export   {
-  getCartFromCustomer
+  getCartFromCustomer,
+  createCartFromCustomer
 }
 export const { addToCart, getAllCart, changeQuantityCart, deleteCart } =
   actions;

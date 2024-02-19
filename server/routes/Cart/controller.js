@@ -20,10 +20,11 @@ module.exports = {
     try {
       const { id } = req.params;
 
-      const payload = await Cart.find({ userId: id }).lean({
+      const payload = await Cart.findOne({ userId: id }).lean({
         virtual: true,
       });
-      if (payload.length > 0) {
+      console.log("««««« payload »»»»»");
+      if (payload) {
         return res.send(200, payload.cartList);
       } else {
         return res.send(200, []);
@@ -38,7 +39,7 @@ module.exports = {
   createCart: async (req, res, next) => {
     try {
       const { userId, cartList } = req.body;
-      console.log("««««« req.body »»»»»", req.body);
+      // console.log("««««« userId, cartList »»»»»", userId, cartList);
 
       const exitUser = await Customer.findById(userId);
       if (!exitUser) {
@@ -47,8 +48,8 @@ module.exports = {
         });
       }
 
-      const exitCart = await Cart.find({ userId: userId });
-
+      const exitCart = await Cart.findOneAndUpdate({ userId: userId });
+      console.log("««««« exitCart »»»»»", exitCart);
       if (!exitCart) {
         const newCart = new Cart({
           userId,
@@ -57,7 +58,7 @@ module.exports = {
 
         const payload = await newCart.save();
         return res.send(200, {
-          message: "Lưu giỏ hàng thành công",
+          message: "Lưu giỏ hàng thành công chưa",
           payload: payload,
         });
       } else {
@@ -69,7 +70,7 @@ module.exports = {
           }
         );
         return res.send(200, {
-          message: "Lưu giỏ hàng thành công",
+          message: "Lưu giỏ hàng thành công rồi",
           payload: exitCart,
         });
       }
