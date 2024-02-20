@@ -43,7 +43,7 @@ function HeaderScreen() {
     <div>
       <Row className={clsx(style.wrapper)}>
         <Col style={{ fontSize: "25px", fontWeight: "bold" }} md={12} xs={12}>
-          TAA
+          PAM
         </Col>
         <Col xs={0} sm={8} md={8} lg={6}>
           <Flex style={{ fontSize: "15px" }} justify="space-between">
