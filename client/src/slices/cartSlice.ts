@@ -20,6 +20,8 @@ interface InitialType {
   deleted: boolean;
   updated: boolean;
   totalPrice: number;
+  add: number,
+
 }
 
 const initialState: InitialType = {
@@ -30,6 +32,7 @@ const initialState: InitialType = {
   deleted: false,
   updated: false,
   totalPrice: 0,
+  add: 0,
 };
 
 const getCartFromCustomer = createAsyncThunk<CartType[]>(
@@ -130,6 +133,7 @@ const cartSlice = createSlice({
       } else {
         state.carts.push(action.payload);
       }
+      state.add++;
       localStorage.setItem("carts", JSON.stringify(state.carts));
     },
 

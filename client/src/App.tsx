@@ -29,10 +29,17 @@ import ProductDetail from "./pages/user/product/productDetail";
 import LoginLayout from "./pages/layout/loginLayout";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
+import NotPermit from "./pages/auth/NotPermit";
+import Payment from "./pages/user/payment";
 const { Sider, Content } = Layout;
 numeral.locale("vi");
 
 const router = createBrowserRouter([
+  {
+    path: "/notPermit",
+    element: <NotPermit />,
+  },
+
   {
     path: "/auth",
     element: <LoginLayout />,
@@ -47,10 +54,15 @@ const router = createBrowserRouter([
       },
     ],
   },
+
   {
     path: "/",
     element: <MainLayOut />,
     children: [
+      {
+        path: "/payment",
+        element: <Payment />,
+      },
       {
         path: "/home",
         element: <HomeScreen />,
@@ -128,12 +140,12 @@ function AdminRouter() {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
   const currentUser = JSON.parse(localStorage.getItem("userInfor")!);
-  useEffect(() => {
-    if (!currentUser?.payload.isAdmin) {
-      localStorage.removeItem("userInfor");
-      navigate("/auth/login");
-    }
-  });
+
+  // useEffect(() => {
+  //   if (!currentUser?.isAdmin) {
+  //     navigate("/notPermit");
+  //   }
+  // });
 
   return (
     <Layout>

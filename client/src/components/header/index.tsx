@@ -1,6 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, Navigate, useNavigate } from "react-router-dom";
-import { Button, Col, Flex, Input, Layout, Row, Space, Image } from "antd";
+import {
+  Button,
+  Col,
+  Flex,
+  Input,
+  Layout,
+  Row,
+  Space,
+  Image,
+  Badge,
+  Avatar,
+} from "antd";
 import clsx from "clsx";
 import style from "./header.module.css";
 import {
@@ -22,10 +33,13 @@ function HeaderScreen() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [search, setSearch] = useState<string>();
   const navigate = useNavigate();
+  // notifications
+  const [show, setShow] = useState(false);
 
   const location = useLocation();
   const dispatch = useAppDispatch();
   const { products } = useAppSelector((state) => state.products);
+  const { add } = useAppSelector((state) => state.carts);
 
   const handleSearch = (e: any) => {
     dispatch(getAllProduct({ search: e.target.value }));
@@ -38,6 +52,17 @@ function HeaderScreen() {
     dispatch(logout());
     navigate(-1);
   };
+
+  // notifications
+  const handleCart = () => {
+    setShow(false);
+  };
+
+  useEffect(() => {
+    if (add > 0) {
+      setShow(true);
+    }
+  }, [add]);
 
   return (
     <div>
@@ -116,16 +141,19 @@ function HeaderScreen() {
             )}
 
             <Link to="/cart">
-              <Space
-                className={clsx(style.child_wrapper)}
-                style={{
-                  ...(location.pathname === "/cart"
-                    ? { textDecoration: "underline", fontWeight: "bold" }
-                    : {}),
-                }}
-              >
-                Cart
-              </Space>
+              <Badge dot={show}>
+                <Space
+                  onClick={handleCart}
+                  className={clsx(style.child_wrapper)}
+                  style={{
+                    ...(location.pathname === "/cart"
+                      ? { textDecoration: "underline", fontWeight: "bold" }
+                      : {}),
+                  }}
+                >
+                  Cart
+                </Space>
+              </Badge>
             </Link>
           </Flex>
         </Col>
