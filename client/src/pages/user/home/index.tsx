@@ -22,11 +22,15 @@ function HomeScreen() {
   return (
     <>
       <Carousel easing="linear" speed={200} autoplay>
-        {products.map((product) => (
-          <div style={contentStyle}>
-            <img src={`${product.pic}`} alt="" style={contentStyle}></img>
-          </div>
-        ))}
+        {products ? (
+          products.map((product) => (
+            <div style={contentStyle}>
+              <img src={`${product.pic}`} alt="" style={contentStyle}></img>
+            </div>
+          ))
+        ) : (
+          <></>
+        )}
         {/* <div>
           <div style={contentStyle}></div>
         </div> */}

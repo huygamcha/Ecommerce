@@ -114,7 +114,6 @@ const categorySlice = createSlice({
       (state, action) => {
         state.loading = false;
         state.categories = action.payload;
-
       }
     );
     builder.addCase(
@@ -128,7 +127,6 @@ const categorySlice = createSlice({
     // create
     builder.addCase(createCategory.pending, (state) => {
       state.loading = true;
-
       // state.error = "";
     });
 

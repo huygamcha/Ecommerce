@@ -10,11 +10,11 @@ import {
   Popconfirm,
   Space,
   Modal,
+  Select,
 } from "antd";
 import { useEffect } from "react";
 import {
   createCategory,
-  getAllCategory,
   deleteCategory,
   updateCategory,
 } from "../../../slices/categorySlice";
@@ -22,10 +22,16 @@ import { useAppSelector, useAppDispatch } from "../../../store";
 import { useForm } from "antd/es/form/Form";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import {
+  createFooter,
+  deleteFooter,
+  getAllFooter,
+  updateFooter,
+} from "../../../slices/footerSlice";
 
 type Props = {};
 
-const Category = (props: Props) => {
+const FooterAdmin = (props: Props) => {
   const navigate = useNavigate();
   const param = useParams();
   // không hiển thị khi lần đầu load trang
@@ -34,15 +40,15 @@ const Category = (props: Props) => {
   // get from database
   const dispatch = useAppDispatch();
 
-  const { categories, error } = useAppSelector((state) => state.categories);
+  const { footers, success, error } = useAppSelector((state) => state.footers);
 
   useEffect(() => {
     setInitialRender(false);
-    dispatch(getAllCategory());
+    dispatch(getAllFooter());
   }, [dispatch]);
 
   //set active modal
-  const [selectedCategory, setSelectedCategory] = useState<any>(); // boolean or record._id
+  const [selectedFooter, setSelectedFooter] = useState<any>(); // boolean or record._id
 
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -65,7 +71,8 @@ const Category = (props: Props) => {
   // form
   type FieldType = {
     name?: string;
-    description?: string;
+    url?: string;
+    column?: number;
   };
 
   const [createForm] = Form.useForm<FieldType>();
@@ -73,28 +80,29 @@ const Category = (props: Props) => {
 
   useEffect(() => {
     if (!initialRender) {
-      if (error) {
+      if (!success) {
         if (!param.id) {
-          onShowMessage("Tạo danh mục không thành công", "error");
+          onShowMessage(`${error.errors.name}`, "error");
         } else {
-          onShowMessage("Cập nhật danh mục không thành công", "error");
+          onShowMessage(`${error.errors.name}`, "error");
         }
       } else {
         if (!param.id) {
-          onShowMessage("Tạo danh mục thành công", "success");
+          onShowMessage("Tạo footer thành công", "success");
         } else {
-          onShowMessage("Cập nhật danh mục thành công", "success");
+          onShowMessage("Cập nhật footer thành công", "success");
           navigate(-1);
-          setSelectedCategory(false);
+          setSelectedFooter(false);
         }
         createForm.resetFields();
       }
     }
-    dispatch(getAllCategory());
+    dispatch(getAllFooter());
   }, [isActive]);
 
   const onFinish = async (values: any) => {
-    await dispatch(createCategory(values));
+    console.log("««««« values »»»»»", values);
+    await dispatch(createFooter(values));
     // setInitialRender(false);
     setIsActive(!isActive);
   };
@@ -102,18 +110,22 @@ const Category = (props: Props) => {
   // update category modal
 
   const onUpdate = async (values: any) => {
-    await dispatch(updateCategory({ id: selectedCategory, values: values }));
+    console.log("««««« { id: selectedFooter, values: values } »»»»»", {
+      id: selectedFooter,
+      values: values,
+    });
+    await dispatch(updateFooter({ id: selectedFooter, values: values }));
     setIsActive(!isActive);
   };
 
   const onDelete = async (values: any) => {
-    await dispatch(deleteCategory(values));
-    dispatch(getAllCategory());
-    onShowMessage("Xoá danh mục thành công");
+    await dispatch(deleteFooter(values));
+    dispatch(getAllFooter());
+    onShowMessage("Xoá footer thành công");
   };
 
   // console.log("««««« category »»»»»", category);
-  // console.log("««««« categories »»»»»", categories);
+  // console.log("««««« footers »»»»»", footers);
   // console.log("««««« error »»»»»", error);
   console.log("««««« initialRender »»»»»", initialRender);
 
@@ -133,10 +145,36 @@ const Category = (props: Props) => {
       dataIndex: "name",
       key: "name",
     },
+
     {
-      title: "Description",
-      dataIndex: "description",
-      key: "description",
+      title: "Url",
+      dataIndex: "url",
+      key: "url",
+      width: "45%",
+      render: (text: string, record: any, index: number) => {
+        if (text) {
+          return (
+            <a
+              target="_blank"
+              href={`https://${text}`}
+              style={{ color: "black" }}
+              rel="noreferrer"
+            >
+              {`https://${text}`}
+            </a>
+          );
+        }
+      },
+    },
+
+    {
+      title: "Column",
+      dataIndex: "column",
+      key: "column",
+      width: "1%",
+      render: (text: number, record: any, index: number) => (
+        <div style={{ textAlign: "right" }}>{text}</div>
+      ),
     },
     {
       title: "Actions",
@@ -146,20 +184,20 @@ const Category = (props: Props) => {
       render: (text: any, record: any) => {
         return (
           <Space size="small">
-            <Link to={`/admin/categories/${record._id}`}>
+            <Link to={`/admin/footers/${record._id}`}>
               <Button
                 type="primary"
                 icon={<EditOutlined />}
                 onClick={() => {
-                  setSelectedCategory(record._id);
+                  setSelectedFooter(record._id);
                   updateForm.setFieldsValue(record);
                 }}
               ></Button>
             </Link>
 
             <Popconfirm
-              title="Xoá danh mục"
-              description="Bạn có chắc xoá danh mục này không?"
+              title="Xoá footer"
+              description="Bạn có chắc xoá footer này không?"
               onConfirm={() => {
                 onDelete(record._id);
               }}
@@ -174,7 +212,7 @@ const Category = (props: Props) => {
   return (
     <div>
       {contextHolder}
-      <Card title="Tạo danh mục mới" style={{ width: "100%" }}>
+      <Card title="Tạo footer mới" style={{ width: "100%" }}>
         <Form
           form={createForm}
           name="basic"
@@ -185,13 +223,13 @@ const Category = (props: Props) => {
           autoComplete="off"
         >
           <Form.Item<FieldType>
-            label="Tên danh mục"
+            label="Tên footer"
             name="name"
             rules={[
-              { required: true, message: "Vui lòng điền tên danh mục!" },
+              { required: true, message: "Vui lòng điền tên footer!" },
               {
                 min: 2,
-                message: "Tên danh mục phải lớn hơn 2 kí tự",
+                message: "Tên footer phải lớn hơn 2 kí tự",
               },
               {},
             ]}
@@ -199,29 +237,47 @@ const Category = (props: Props) => {
           >
             <Input />
           </Form.Item>
-          <Form.Item<FieldType> label="Mô  tả" name="description">
-            <Input.TextArea rows={3} />
+
+          <Form.Item<FieldType>
+            label="Cột"
+            name="column"
+            rules={[{ required: true, message: "Vui lòng chọn cột!" }]}
+            hasFeedback
+          >
+            <Select
+              options={[
+                { value: 1, label: "VỀ CHÚNG TÔI" },
+                { value: 2, label: "DANH MỤC" },
+                { value: 3, label: "TÌM HIỂU THÊM" },
+                { value: 4, label: "TỔNG ĐÀI" },
+              ]}
+            />
           </Form.Item>
+
+          <Form.Item<FieldType> label="Url" name="url">
+            <Input addonBefore="https://" />
+          </Form.Item>
+
           <Form.Item wrapperCol={{ offset: 6 }}>
             <Button type="primary" htmlType="submit">
-              Thêm danh mục
+              Thêm footer
             </Button>
           </Form.Item>
         </Form>
       </Card>
-      <Card title="Danh sách các danh mục">
-        <Table dataSource={categories} columns={columns} />
+      <Card title="Danh sách các footer">
+        <Table dataSource={footers} columns={columns} />
       </Card>
 
       {/* form edit và delete */}
       <Modal
         centered
-        title="Chỉnh sửa danh mục"
+        title="Chỉnh sửa footer"
         onCancel={() => {
           navigate(-1);
-          setSelectedCategory(false);
+          setSelectedFooter(false);
         }}
-        open={selectedCategory}
+        open={selectedFooter}
         okText="Save changes"
         onOk={() => {
           updateForm.submit();
@@ -238,17 +294,33 @@ const Category = (props: Props) => {
             autoComplete="off"
           >
             <Form.Item<FieldType>
-              label="Sửa danh mục"
+              label="Sửa footer"
               name="name"
               rules={[
-                { required: true, message: "Vui lòng điền tên danh mục!" },
-                { min: 2, message: "Tên danh mục phải có ít nhất 2 ký tự!" },
+                { required: true, message: "Vui lòng điền tên footer!" },
+                { min: 2, message: "Tên footer phải có ít nhất 2 ký tự!" },
               ]}
             >
               <Input />
             </Form.Item>
-            <Form.Item<FieldType> label="Mô tả" name="description">
-              <Input.TextArea rows={3} />
+            <Form.Item<FieldType>
+              label="Cột"
+              name="column"
+              rules={[{ required: true, message: "Vui lòng chọn cột!" }]}
+              hasFeedback
+            >
+              <Select
+                options={[
+                  { value: 1, label: "VỀ CHÚNG TÔI" },
+                  { value: 2, label: "DANH MỤC" },
+                  { value: 3, label: "TÌM HIỂU THÊM" },
+                  { value: 4, label: "TỔNG ĐÀI" },
+                ]}
+              />
+            </Form.Item>
+
+            <Form.Item<FieldType> label="Url" name="url">
+              <Input addonBefore="https://" />
             </Form.Item>
           </Form>
         </Card>
@@ -257,4 +329,4 @@ const Category = (props: Props) => {
   );
 };
 
-export default Category;
+export default FooterAdmin;

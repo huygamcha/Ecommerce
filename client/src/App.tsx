@@ -31,6 +31,7 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import NotPermit from "./pages/auth/NotPermit";
 import Payment from "./pages/user/payment";
+import FooterAdmin from "./pages/admin/footer";
 const { Sider, Content } = Layout;
 numeral.locale("vi");
 
@@ -129,6 +130,16 @@ const router = createBrowserRouter([
           },
         ],
       },
+      {
+        path: "/admin/footers",
+        element: <FooterAdmin />,
+        children: [
+          {
+            path: "/admin/footers/:id",
+            element: <Supplier />,
+          },
+        ],
+      },
     ],
   },
 ]);
@@ -149,7 +160,12 @@ function AdminRouter() {
 
   return (
     <Layout>
-      <Sider trigger={null} collapsible collapsed={collapsed}>
+      <Sider
+        style={{ height: "auto" }}
+        trigger={null}
+        collapsible
+        collapsed={collapsed}
+      >
         <div className="demo-logo-vertical" />
         <Menu
           onClick={(items) => {
@@ -173,6 +189,12 @@ function AdminRouter() {
               key: "/admin/products",
               icon: <UploadOutlined />,
               label: "Sản phẩm",
+            },
+
+            {
+              key: "/admin/footers",
+              icon: <UploadOutlined />,
+              label: "Footer",
             },
           ]}
         />

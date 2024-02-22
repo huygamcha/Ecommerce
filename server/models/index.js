@@ -5,6 +5,7 @@ const Customer = require("./Customer");
 const Product = require("./Product");
 const Order = require("./Order");
 const Cart = require("./Cart");
+const Footer = require("./Footer");
 module.exports = {
   Category,
   Customer,
@@ -13,4 +14,5 @@ module.exports = {
   Order,
   Product,
   Cart,
+  Footer,
 };

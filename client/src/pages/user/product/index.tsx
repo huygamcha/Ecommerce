@@ -73,7 +73,7 @@ function ProductScreen() {
   return (
     <div style={{ padding: "15px", background: "#fff" }}>
       <Row gutter={24}>
-        <Col xs={0} sm={5}>
+        {/* <Col xs={0} sm={5}>
           search
           <Row>
             <Col>
@@ -89,12 +89,12 @@ function ProductScreen() {
               </Dropdown>
             </Col>
           </Row>
-        </Col>
-        <Col xs={24} sm={19}>
+        </Col> */}
+        <Col xs={24} sm={24}>
           <Row gutter={30}>
             {products && error === "" ? (
               products.map((product) => (
-                <Col xs={24} md={12} lg={8} style={{ paddingBottom: "25px" }}>
+                <Col xs={24} md={12} lg={6} style={{ paddingBottom: "25px" }}>
                   <Link
                     to={`/product/${product._id}`}
                     className={clsx(style.wrapper)}

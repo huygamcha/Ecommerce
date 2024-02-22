@@ -5,3 +5,62 @@
 .items > a {
     padding: 0 5px;
 }
+
+.text_heading {
+    color: #657384;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 16px;
+    margin-bottom: 8px;
+}
+
+.text_item {
+    font-size: 14px;
+    line-height: 20px;
+    color: #1250dc;
+    margin: 5px 0px;
+}
+
+.text_item:hover {
+    color: #1250dc;
+}
+
+/* Thiết lập padding cho xs */
+@media (max-width: 575.98px) {
+    .global_wrapper {
+      padding: 10px;
+      text-align: center;
+    }
+    .items{
+      display: flex ;
+      justify-content: center;
+    }
+  }
+  
+  /* Thiết lập padding cho sm */
+  @media (min-width: 576px) and (max-width: 767.98px) {
+    .global_wrapper {
+      padding: 20px;
+    }
+  }
+  
+  /* Thiết lập padding cho md */
+  @media (min-width: 768px) and (max-width: 991.98px) {
+    .global_wrapper {
+      padding: 30px;
+    }
+  }
+  
+  /* Thiết lập padding cho lg */
+  @media (min-width: 992px) and (max-width: 1199.98px) {
+    .global_wrapper {
+      padding: 40px;
+    }
+  }
+  
+  /* Thiết lập padding cho xl */
+  @media (min-width: 1200px) {
+    .global_wrapper {
+      padding: 100px;
+    }
+  }

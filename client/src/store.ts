@@ -5,6 +5,7 @@ import supplierSlice from './slices/supplierSlice'
 import auth from './slices/authSlice'
 import customerSlice from './slices/customerSlice'
 import cartSlice from './slices/cartSlice'
+import footerSlice from './slices/footerSlice'
 import { 
   TypedUseSelectorHook, 
   useDispatch, 
@@ -18,7 +19,8 @@ const rootReducer = {
   suppliers: supplierSlice,
   auth: auth,
   customers: customerSlice,
-  carts: cartSlice
+  carts: cartSlice,
+  footers: footerSlice
   
 }
 
