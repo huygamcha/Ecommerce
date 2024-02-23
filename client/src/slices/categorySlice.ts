@@ -82,7 +82,7 @@ const updateCategory = createAsyncThunk<CategoriesType, { id: string, values: Ca
     const config = {
       headers: {
         "Content-type": "application/json",
-        Authorization: `Bearer ${currentUser.payload.token}`,
+        // Authorization: `Bearer ${currentUser.payload.token}`,
       },
     };
     const response = await axios.patch(`${process.env.REACT_APP_BACKEND}/categories/${id}`, values, config);
@@ -186,12 +186,13 @@ const categorySlice = createSlice({
         state.loading = false;
         state.category = action.payload;
         state.error = "";
-
       }
     );
+
     builder.addCase(
       updateCategory.rejected,
       (state, action) => {
+        console.log('««««« action »»»»»', action);
         const customErrors = action.payload as { message?: string, errors?: any }
         state.loading = false;
         state.error = customErrors.errors; // Ensure a default message or fallback if action.error is undefined

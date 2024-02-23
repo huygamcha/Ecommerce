@@ -71,7 +71,7 @@ function CartScreen() {
                     <Flex vertical>
                       <Flex style={{ fontSize: "16px" }}>{cart.name}</Flex>
                       <Space style={{ fontWeight: "bold" }}>
-                        {numeral(cart.total).format("$0,0.0")}
+                        {numeral(cart.total).format("$0,0")}
                         <Space>
                           <Discount
                             font={9}
@@ -91,11 +91,11 @@ function CartScreen() {
                   ></InputNumber>
                 </Col>
                 <Col className={clsx(style.flex_center)} span={4}>
-                  {numeral(cart.total).format("$0,0.0")}
+                  {numeral(cart.total).format("$0,0")}
                 </Col>
 
                 <Col className={clsx(style.flex_center)} span={3}>
-                  {numeral(cart.total * cart.quantity).format("$0,0.0")}
+                  {numeral(cart.total * cart.quantity).format("$0,0")}
                 </Col>
                 <Col
                   style={{ paddingRight: "10px" }}
@@ -123,24 +123,26 @@ function CartScreen() {
           <Col span={24}>
             <Flex justify="space-between">
               <Space>Tính tạm</Space>
-              <Space> {numeral(totalPrice).format("$0,0.0")}</Space>
+              <Space> {numeral(totalPrice).format("$0,0")}</Space>
             </Flex>
           </Col>
           <Col span={24}>
             <Flex justify="space-between">
               <Space>Phí ship</Space>
-              <Space> {numeral(0).format("$0,0.0")}</Space>
+              <Space> {numeral(0).format("$0,0")}</Space>
             </Flex>
           </Col>
           <Col span={24}>
             <Flex style={{ fontWeight: "bold" }} justify="space-between">
               <Space>Tổng tiền</Space>
-              <Space> {numeral(totalPrice).format("$0,0.0")}</Space>
+              <Space> {numeral(totalPrice).format("$0,0")}</Space>
             </Flex>
           </Col>
           <Col span={24}>
             {currentUser ? (
-              <h3 className={clsx(style.button_payment)}>Thanh toán</h3>
+              <Link to="/payment">
+                <h3 className={clsx(style.button_payment)}>Thanh toán</h3>
+              </Link>
             ) : (
               <Link to="/auth/login">
                 <h3 className={clsx(style.button_payment)}>

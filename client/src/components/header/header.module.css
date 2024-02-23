@@ -35,13 +35,16 @@
 
 .profile_detail:hover .profile_detail_child {
     display: block;
+    width: 200px;
+    color: red;
 }
 
 .profile_detail_child {
+    width: 150%;
     display: none;
     position: absolute;
-    top: 34px;
-    left: 0;
+    top: 50px;
+    right: 0;
     background-color: #fff;
     width: 200%;
     border-radius: 4px;
@@ -50,14 +53,14 @@
 }
 
 .profile_detail_child > div {
-    padding: 10px;
+    padding: 16px;
     border-radius: 4px;
-
 }
 
 .profile_detail_child > div:hover {
     background-color: #fff4fc;
-    width: 100%;
+    width: 200px;
+
 }
 
 /*  */
@@ -83,6 +86,10 @@
     font-weight: bold;
 }
 
+.header_text:hover {
+    color: #fff;
+}
+
 .button_header {
     font-weight: 500;
     font-size: 16px;
@@ -105,6 +112,8 @@
 
 .button_icon {
     font-size: 20px;
+    color: #fff;
+    margin-right: 4px;
 }
 .button_icon_mobile {
     font-size: 22px;
@@ -148,6 +157,7 @@
     font-size: 18px;
 }
 
+
 .header_search_result {
     overflow-y: auto;
     max-height: 300px;
@@ -161,7 +171,6 @@
     z-index: 999;
     border-radius: 5px;
     box-shadow: 1px 0 3px rgba(155, 155, 155, .6);
-
 }
 
 .header_search_items {
@@ -185,6 +194,9 @@
     .wrapper_try {
       padding: 10px;
     }
+    .button_background_mobile{
+        background-color: none;
+    }
   }
   
   /* Thiết lập padding cho sm */
@@ -192,6 +204,7 @@
     .wrapper_try {
       padding: 20px;
     }
+  
   }
   
   /* Thiết lập padding cho md */

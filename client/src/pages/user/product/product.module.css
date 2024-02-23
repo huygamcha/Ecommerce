@@ -7,9 +7,60 @@
     color: #000;
 }
 
+.content {  
+    background: #fff;
+    border-radius: 10px;
+    padding: 14px 0px;
+    height: 250px;
+    position: relative;
+  border: 1px solid #fff;
+
+}
+
+.content:hover {  
+  border: 1px solid #1250dc;
+  transition: 0.3s ease-in;
+}
+
+.content_discount {
+    position: absolute;
+    content: '';
+    display: block;
+    top: 8px;
+    width: 50px;
+}
+.content_discount > div{
+   width: 100%;
+}
+
+.content_img {
+    height: 128px;
+    width: 128px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
 .header_text {
-    font-size: 18px;
-    font-weight: bold;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 16px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.header_discount {
+    margin-top: 14px;
+    color: #1250dc;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.header_price {
+    font-size: 12px;
+
+    margin-top: 4px;
+    font-weight: 400;
 }
 
 /* product detail */
@@ -24,8 +75,10 @@
     margin-top: 20px;
     padding: 26px;
     width: 100%;
-    background-color: #262626;
+    background-color: #1958de;
     color: #fff;
+    border-radius: 30px;
+    font-weight: 500;
 }
 .custom_wf > div {
     width: 100%;
@@ -36,3 +89,49 @@
     margin: 0px 10px;
     color: #d0011b;
 }
+
+/* Thiết lập padding cho xs */
+@media (max-width: 575.98px) {
+    .wrapper_global {
+      padding: 10px;
+
+    }
+  }
+  
+  /* Thiết lập padding cho sm */
+  @media (min-width: 576px) and (max-width: 767.98px) {
+    .wrapper_global {
+      padding: 20px;
+    }
+  }
+  
+  /* Thiết lập padding cho md */
+  @media (min-width: 768px) and (max-width: 991.98px) {
+    .wrapper_global {
+      padding: 30px;
+    }
+  }
+  
+  /* Thiết lập padding cho lg */
+  @media (min-width: 992px) and (max-width: 1199.98px) {
+    .wrapper_global {
+      padding: 40px;
+    }
+  }
+  
+  /* Thiết lập padding cho xl */
+  @media (min-width: 1200px) {
+    .wrapper_global {
+      padding: 30px 100px;
+    }
+    .top_sale {
+      background-color: #fcf3e9;
+      width: 100%;
+    }
+    .product_background {
+      background-color: #EDF0F3;
+    }
+    .product_wrapper {
+      background-color: #fff;
+    }
+  }

@@ -23,6 +23,7 @@ import { getAllCategory } from "../../../slices/categorySlice";
 import { getAllSupplier } from "../../../slices/supplierSlice";
 import clsx from "clsx";
 import style from "./product.module.css";
+import Discount from "../../../components/discount";
 
 function ProductScreen() {
   const { products, error } = useAppSelector((state) => state.products);
@@ -71,7 +72,7 @@ function ProductScreen() {
   );
 
   return (
-    <div style={{ padding: "15px", background: "#fff" }}>
+    <div className={clsx(style.wrapper_global, style.top_sale)}>
       <Row gutter={24}>
         {/* <Col xs={0} sm={5}>
           search
@@ -91,38 +92,49 @@ function ProductScreen() {
           </Row>
         </Col> */}
         <Col xs={24} sm={24}>
-          <Row gutter={30}>
+          <Row gutter={[14, 2]}>
             {products && error === "" ? (
               products.map((product) => (
-                <Col xs={24} md={12} lg={6} style={{ paddingBottom: "25px" }}>
+                <Col
+                  xs={12}
+                  md={12}
+                  lg={4}
+                  style={{
+                    paddingBottom: "10px",
+                  }}
+                >
                   <Link
                     to={`/product/${product._id}`}
                     className={clsx(style.wrapper)}
                   >
-                    <Flex
-                      style={{
-                        background: "#f5f5f5",
-                        borderRadius: "5px",
-                      }}
-                      vertical
-                    >
-                      <Space>
+                    <Flex className={clsx(style.content)} vertical>
+                      <Space className={clsx(style.content_discount)}>
+                        <Discount discount={product.discount}></Discount>
+                      </Space>
+
+                      <Flex justify="center">
                         <img
                           src={product.pic}
-                          style={{
-                            height: "300px",
-                            width: "100%",
-                            borderTopLeftRadius: "5px",
-                            borderTopRightRadius: "5px",
-                          }}
+                          className={clsx(style.content_img)}
                           alt=""
                         />
-                      </Space>
-                      <Flex justify="space-between" style={{ padding: "20px" }}>
+                      </Flex>
+                      <Flex
+                        vertical
+                        justify="space-between"
+                        style={{ padding: "20px" }}
+                      >
                         <Space className={clsx(style.header_text)}>
                           {product.name}
                         </Space>
-                        <Space>{numeral(product.price).format("$0,0.0")}</Space>
+                        <Space className={clsx(style.header_discount)}>
+                          {numeral(
+                            (product.price * (100 - product.discount)) / 100
+                          ).format("$0,0")}
+                        </Space>
+                        <del className={clsx(style.header_price)}>
+                          {numeral(product.price).format("$0,0")}
+                        </del>
                       </Flex>
                     </Flex>
                   </Link>

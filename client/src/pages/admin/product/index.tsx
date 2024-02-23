@@ -41,6 +41,7 @@ const Product = (props: Props) => {
   const { products, error } = useAppSelector((state) => state.products);
   const { suppliers } = useAppSelector((state) => state.suppliers);
   const { categories } = useAppSelector((state) => state.categories);
+  const { tags } = useAppSelector((state) => state.tags);
 
   useEffect(() => {
     setInitialRender(false);
@@ -80,6 +81,7 @@ const Product = (props: Props) => {
     categoryId: string;
     supplierId: string;
     pic: string;
+    tagId: string;
   };
 
   const [createForm] = Form.useForm<FieldType>();

@@ -1,5 +1,8 @@
+import { Flex } from "antd";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../../store";
+import { getAllCart } from "../../../slices/cartSlice";
 
 function Payment() {
   const navigate = useNavigate();
@@ -7,6 +10,11 @@ function Payment() {
   const [success, setSuccess] = useState<boolean>(false);
   const [isCountinue, setIsCountinue] = useState<boolean>(true); // Biến state để kiểm tra và điều khiển vòng lặp
 
+  const { carts, totalPrice } = useAppSelector((state) => state.carts);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(getAllCart());
+  }, []);
   useEffect(() => {
     if (!success) {
       const intervalId = setInterval(() => {
@@ -38,8 +46,8 @@ function Payment() {
       console.log("««««« successPay »»»»»", successPay);
 
       if (
-        successPay["Giá trị"] === 2001 &&
-        successPay["Mô tả"].includes("testthuchuyenkhoan")
+        successPay["Giá trị"] >= totalPrice &&
+        successPay["Mô tả"].includes("chuyenkhoan")
       ) {
         alert("thanh toán thành công");
         setSuccess(true);
@@ -54,13 +62,13 @@ function Payment() {
   };
 
   return (
-    <div>
-      Payment
+    <Flex justify="center">
       <img
-        src="https://img.vietqr.io/image/970422-0703414500-print.png?amount=2001&addInfo=testthuchuyenkhoan&accountName=LE HUYNH HUY"
+        style={{ width: "500px" }}
+        src={`https://img.vietqr.io/image/970422-0703414500-print.png?amount=${totalPrice}&addInfo=chuyenkhoan&accountName=LE HUYNH HUY`}
         alt="payment"
       />
-    </div>
+    </Flex>
   );
 }
 

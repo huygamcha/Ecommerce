@@ -62,7 +62,7 @@ const getAllProduct = createAsyncThunk<ProductsType[], ProductSearchType>("produ
     page = 1;
   }
   if (!pageSize) {
-    pageSize = 6;
+    pageSize = 12;
   }
 
   // trả về response rồi lấy ra, để tránh lỗi A non-serializable value was detected in an action, in the path: `payload.headers`
@@ -291,7 +291,7 @@ const productSlice = createSlice({
       (state, action) => {
         const customErrors = action.payload as { message?: string, errors?: any }
         state.loading = false;
-        state.error = customErrors.errors; // Ensure a default message or fallback if action.error is undefined
+        state.error = customErrors.errors || undefined; // Ensure a default message or fallback if action.error is undefined
       }
     );
 

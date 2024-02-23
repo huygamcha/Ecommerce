@@ -37,39 +37,50 @@ function ProductDetail() {
   };
 
   return (
-    <div style={{ padding: "15px", background: "#fff" }}>
-      <Row gutter={24}>
-        <Col span={12}>
-          <Image width="100%" height="435px" src={product?.pic}></Image>
-        </Col>
-        <Col span={12}>
-          <Flex vertical>
-            <Space>
-              <h1>{product?.name}</h1>
-            </Space>
-            <Space>
-              <Flex align="center">
-                <h4>
-                  <del>{numeral(product?.price).format("$0,0")}</del>
-                </h4>
-                <div className={clsx(style.price_total)}>
-                  {numeral(product?.total).format("$0,0")}
-                </div>
-                <h3>
-                  <Discount discount={product?.discount}></Discount>
-                </h3>
-              </Flex>
-            </Space>
-            <Space style={{ lineHeight: "1.5" }}>{product?.description}</Space>
-            <Space
-              onClick={handleAddToCart}
-              className={clsx(style.add_to_cart)}
-            >
-              Add to cart
-            </Space>
-          </Flex>
-        </Col>
-      </Row>
+    <div className={clsx(style.wrapper_global, style.product_background)}>
+      <div className={clsx(style.product_wrapper)}>
+        <Row gutter={24}>
+          <Col span={8}>
+            <Flex justify="center">
+              <Image
+                style={{ padding: "50px" }}
+                width="400px"
+                height="335px"
+                src={product?.pic}
+              ></Image>
+            </Flex>
+          </Col>
+          <Col span={16}>
+            <Flex style={{ padding: "50px" }} vertical>
+              <Space>
+                <h1>{product?.name}</h1>
+              </Space>
+              <Space>
+                <Flex align="center">
+                  <h4>
+                    <del>{numeral(product?.price).format("$0,0")}</del>
+                  </h4>
+                  <div className={clsx(style.price_total)}>
+                    {numeral(product?.total).format("$0,0")}
+                  </div>
+                  <h3>
+                    <Discount discount={product?.discount}></Discount>
+                  </h3>
+                </Flex>
+              </Space>
+              <Space style={{ lineHeight: "1.5" }}>
+                {product?.description}
+              </Space>
+              <Space
+                onClick={handleAddToCart}
+                className={clsx(style.add_to_cart)}
+              >
+                Chọn mua
+              </Space>
+            </Flex>
+          </Col>
+        </Row>
+      </div>
     </div>
   );
 }

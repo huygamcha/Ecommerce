@@ -1,20 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { Link, useLocation, Navigate, useNavigate } from "react-router-dom";
-import {
-  Button,
-  Col,
-  Flex,
-  Input,
-  Layout,
-  Row,
-  Space,
-  Image,
-  Badge,
-  Avatar,
-} from "antd";
+import { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Col, Flex, Input, Row, Space, Image, Badge } from "antd";
 import clsx from "clsx";
 import style from "./header.module.css";
 import {
+  LogoutOutlined,
   MenuUnfoldOutlined,
   SearchOutlined,
   ShoppingCartOutlined,
@@ -25,7 +15,10 @@ import { getAllProduct } from "../../slices/productSlice";
 import Discount from "../discount";
 import numeral from "numeral";
 import { logout } from "../../slices/authSlice";
-import { createCartFromCustomer } from "../../slices/cartSlice";
+import {
+  createCartFromCustomer,
+  resetCartNotification,
+} from "../../slices/cartSlice";
 
 function HeaderScreen() {
   const currentUser = localStorage.getItem("userInfor")
@@ -51,28 +44,32 @@ function HeaderScreen() {
   const handleLogout = async () => {
     await dispatch(createCartFromCustomer());
     dispatch(logout());
-    navigate(-1);
+    navigate("/auth/login");
   };
 
   // notifications
   const handleCart = () => {
     setShow(false);
+    dispatch(resetCartNotification());
   };
 
   useEffect(() => {
+    console.log("««««« add »»»»»", add);
     if (add > 0) {
       setShow(true);
     }
   }, [add]);
 
+  console.log("««««« add day »»»»»", add);
   return (
     <>
-      {" "}
       <Row justify="end" className={clsx(style.wrapper_try)}>
         <Col xs={4} sm={2} md={2} lg={2}>
-          <Space className={clsx(style.header_text)}>Pam</Space>
+          <Link to="/" className={clsx(style.header_text)}>
+            Pam
+          </Link>
         </Col>
-        <Col xs={17} sm={12} md={12} lg={16}>
+        <Col xs={17} sm={14} md={13} lg={16}>
           <Flex>
             <Input
               value={search}
@@ -123,23 +120,72 @@ function HeaderScreen() {
             </div>
           </Flex>
         </Col>
-        <Col xs={0} sm={10} md={10} lg={6}>
+        <Col xs={0} sm={8} md={9} lg={6}>
           <Flex justify="end">
-            <Space
-              style={{ marginRight: "14px" }}
-              className={clsx(style.button_header)}
-            >
-              <UserDeleteOutlined className={clsx(style.button_icon)} />
-              <Link className={clsx(style.button_header_text)} to="/auth/login">
-                <Space>{currentUser ? currentUser.name : "Đăng nhập"}</Space>
-              </Link>
-            </Space>
+            {currentUser ? (
+              <Space className={clsx(style.profile_detail)}>
+                <Space
+                  style={{ marginRight: "14px" }}
+                  className={`${style.button_header}`}
+                >
+                  <Link
+                    className={clsx(style.button_header_text)}
+                    to="/profile"
+                  >
+                    <UserDeleteOutlined className={clsx(style.button_icon)} />
+                    <Space>{currentUser.name}</Space>
+                  </Link>
+                </Space>
+
+                <Flex className={clsx(style.profile_detail_child)}>
+                  <Space>
+                    <Link
+                      style={{ color: "#000", fontWeight: "normal" }}
+                      to="/profile"
+                    >
+                      <UserDeleteOutlined />
+                      <Space style={{ marginLeft: "5px" }}>
+                        Thông tin cá nhân
+                      </Space>
+                    </Link>
+                  </Space>
+                  <Space
+                    onClick={handleLogout}
+                    style={{ color: "#000", fontWeight: "normal" }}
+                  >
+                    <LogoutOutlined />
+                    <Space>Đăng xuất</Space>
+                  </Space>
+                </Flex>
+              </Space>
+            ) : (
+              <>
+                <Space
+                  style={{ marginRight: "14px" }}
+                  className={clsx(style.button_header)}
+                >
+                  <Link
+                    className={clsx(style.button_header_text)}
+                    to="/auth/login"
+                  >
+                    <UserDeleteOutlined className={clsx(style.button_icon)} />
+                    Đăng nhập
+                  </Link>
+                </Space>
+              </>
+            )}
 
             <Space
               className={clsx(style.button_header, style.button_background)}
             >
-              <ShoppingCartOutlined className={clsx(style.button_icon)} />
-              <Link className={clsx(style.button_header_text)} to="/cart">
+              <Link
+                onClick={handleCart}
+                className={clsx(style.button_header_text)}
+                to="/cart"
+              >
+                <Badge dot={show} status="warning">
+                  <ShoppingCartOutlined className={clsx(style.button_icon)} />
+                </Badge>
                 Giỏ hàng
               </Link>
             </Space>
@@ -165,8 +211,9 @@ function HeaderScreen() {
         <Space>
           {isOpen ? (
             <Flex className={clsx(style.menu_mobile)} vertical>
-              <div style={{ fontSize: "35px" }}>Pam</div>
-
+              <Link to="/product">
+                <div style={{ fontSize: "35px" }}>Pam</div>
+              </Link>
               <div>
                 <Link
                   className={clsx(style.menu_mobile_child)}

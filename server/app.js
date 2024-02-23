@@ -25,6 +25,7 @@ var productRouter = require("./routes/Product/router.js");
 var orderRouter = require("./routes/Order/router.js");
 var cartRouter = require("./routes/Cart/router.js");
 var footerRouter = require("./routes/Footer/router.js");
+var tagRouter = require("./routes/Tag/router.js");
 var authRouter = require("./routes/auth/router.js");
 const { admin } = require("./authentication/checkRole.js");
 // var usersRouter = require("./routes/users");
@@ -47,6 +48,7 @@ app.use("/products", productRouter);
 app.use("/orders", orderRouter);
 app.use("/carts", cartRouter);
 app.use("/footers", footerRouter);
+app.use("/tags", tagRouter);
 app.use("/", authRouter);
 // app.use("/users", usersRouter);
 

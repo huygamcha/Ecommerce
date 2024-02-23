@@ -90,13 +90,7 @@ module.exports = {
         });
       }
 
-      if (payload.isDeleted) {
-        return res.send(404, {
-          message: "Danh mục đã được xoá trước đó",
-        });
-      }
-
-      await Category.findByIdAndUpdate(id, { isDeleted: true });
+      await Category.findByIdAndDelete(id, { isDeleted: true });
 
       return res.send(200, {
         message: "Xoá danh mục thành công",

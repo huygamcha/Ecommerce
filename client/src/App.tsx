@@ -15,6 +15,8 @@ import {
 } from "react-router-dom";
 
 import {
+  ProductOutlined,
+  TagOutlined,
   UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
@@ -32,6 +34,7 @@ import Register from "./pages/auth/Register";
 import NotPermit from "./pages/auth/NotPermit";
 import Payment from "./pages/user/payment";
 import FooterAdmin from "./pages/admin/footer";
+import Tag from "./pages/admin/tag";
 const { Sider, Content } = Layout;
 numeral.locale("vi");
 
@@ -69,7 +72,7 @@ const router = createBrowserRouter([
         element: <HomeScreen />,
       },
       {
-        path: "/product",
+        path: "/",
         element: <ProductScreen />,
         children: [
           {
@@ -107,6 +110,16 @@ const router = createBrowserRouter([
           {
             path: "/admin/categories/:id",
             element: <Category />,
+          },
+        ],
+      },
+      {
+        path: "/admin/tags",
+        element: <Tag />,
+        children: [
+          {
+            path: "/admin/tags/:id",
+            element: <Tag />,
           },
         ],
       },
@@ -176,6 +189,11 @@ function AdminRouter() {
           defaultSelectedKeys={["1"]}
           items={[
             {
+              key: "/admin/products",
+              icon: <ProductOutlined />,
+              label: "Sản phẩm",
+            },
+            {
               key: "/admin/categories",
               icon: <UserOutlined />,
               label: "Danh mục",
@@ -186,9 +204,9 @@ function AdminRouter() {
               label: "Nhà cung cấp",
             },
             {
-              key: "/admin/products",
-              icon: <UploadOutlined />,
-              label: "Sản phẩm",
+              key: "/admin/tags",
+              icon: <TagOutlined />,
+              label: "Tags",
             },
 
             {

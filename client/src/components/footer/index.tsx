@@ -9,9 +9,9 @@ function FooterScreen() {
   const dispatch = useAppDispatch();
   const { footers } = useAppSelector((state) => state.footers);
 
-  useEffect(() => {
-    dispatch(getAllFooter());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(getAllFooter());
+  // }, []);
 
   return (
     <div className={clsx(style.global_wrapper)}>

@@ -50,6 +50,13 @@ const productSchema = new Schema(
       ref: "supplier",
       required: true,
     },
+
+    tagId: {
+      type: Schema.Types.ObjectId,
+      ref: "tag",
+      required: true,
+    },
+
     pic: {
       type: String,
     },
@@ -70,6 +77,13 @@ productSchema.virtual("category", {
 productSchema.virtual("supplier", {
   ref: "supplier",
   localField: "supplierId",
+  foreignField: "_id",
+  justOne: true,
+});
+
+productSchema.virtual("tag", {
+  ref: "tag",
+  localField: "tagTd",
   foreignField: "_id",
   justOne: true,
 });

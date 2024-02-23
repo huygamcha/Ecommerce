@@ -8,7 +8,7 @@ module.exports = {
 
       const { page, pageSize } = req.query;
 
-      const limit = pageSize || 6;
+      const limit = pageSize || 12;
       const skip = limit * (page - 1) || 0;
 
       let { search } = req.query;
@@ -18,6 +18,7 @@ module.exports = {
       const result = await Product.find({ name: fuzzySearch(search) })
         .populate("category")
         .populate("supplier")
+        .populate("tag")
         .limit(limit)
         .skip(skip)
         .sort({ createdAt: -1 })
@@ -46,17 +47,12 @@ module.exports = {
 
       const payload = await Product.findById(id)
         .populate("category")
+        .populate("tag")
         .populate("supplier")
         .lean({ virtuals: true });
       if (!payload) {
         return res.send(404, {
           message: "Không tìm thấy sản phẩm",
-        });
-      }
-
-      if (payload.isDeleted) {
-        return res.send(404, {
-          message: "Danh mục đã được xoá trước đó",
         });
       }
 
@@ -77,6 +73,7 @@ module.exports = {
 
       const payload = await Product.find({ categoryId: id })
         .populate("category")
+        .populate("tag")
         .populate("supplier")
         .lean({ virtual: true });
 
@@ -108,6 +105,7 @@ module.exports = {
       const payload = await Product.find({ supplierId: id })
 
         .populate("category")
+        .populate("tag")
         .populate("supplier")
         .lean({ virtual: true });
       if (payload.length > 0) {
@@ -143,10 +141,11 @@ module.exports = {
         description,
         categoryId,
         supplierId,
+        tagId,
         pic,
       } = req.body;
 
-      const errors = [];
+      const errors = {};
       const exitName = Product.findOne({ name });
       const exitCategoryId = Category.findOne({ _id: categoryId });
       const exitSupplierId = Supplier.findOne({ _id: supplierId });
@@ -156,24 +155,14 @@ module.exports = {
         exitSupplierId,
       ]);
       if (checkName) {
-        errors.push({ name: "Sản phẩm này đã tồn tại" });
+        errors.name = "Sản phẩm này đã tồn tại";
       }
-      if (!checkCategoryId)
-        errors.push({ categoryId: "Không có danh mục này" });
-      else {
-        if (checkCategoryId.isDeleted) {
-          errors.push({ categoryId: "Danh mục này đã bị xoá" });
-        }
-      }
-      console.log("««««« checkSupplierId »»»»»", checkSupplierId);
-      if (!checkSupplierId)
-        errors.push({ categoryId: "Không có nhà cung cấp này" });
-      else {
-        if (checkSupplierId.isDeleted)
-          errors.push({ categoryId: "Nhà cung cấp này đã bị xoá" });
-      }
+      if (!checkCategoryId) errors.categoryId = "Không có danh mục này";
 
-      if (errors.length > 0) {
+      console.log("««««« checkSupplierId »»»»»", checkSupplierId);
+      if (!checkSupplierId) errors.categoryId = "Không có nhà cung cấp này";
+
+      if (Object.keys(errors).length > 0) {
         return res.send(400, {
           message: "Tạo sản phẩm không thành công",
           errors: errors,
@@ -214,13 +203,7 @@ module.exports = {
         });
       }
 
-      if (payload.isDeleted) {
-        return res.send(404, {
-          message: "Sản phẩm đã được xoá trước đó",
-        });
-      }
-
-      await Product.findByIdAndDelete(id);
+      await Product.findByIdAndDelete(id, { new: true });
 
       return res.send(200, {
         message: "Xoá sản phẩm thành công",
@@ -258,23 +241,13 @@ module.exports = {
       console.log("««««« checkName »»»»»", checkCategoryId);
 
       if (checkName) {
-        errors.push({ name: "Tên sản phẩm đã tồn tại" });
+        errors.name = "Tên sản phẩm đã tồn tại";
       }
-      if (!checkCategoryId)
-        errors.push({ categoryId: "Không có danh mục này" });
-      else {
-        if (checkCategoryId.isDeleted) {
-          errors.push({ categoryId: "Danh mục này đã bị xoá thật không" });
-        }
-      }
-      if (!checkSupplierId)
-        errors.push({ supplierId: "Không có nhà cung cấp này" });
-      else {
-        if (checkSupplierId.isDeleted)
-          errors.push({ supplierId: "Nhà cung cấp này đã bị xoá" });
-      }
+      if (!checkCategoryId) errors.categoryId = "Không có danh mục này";
 
-      if (errors.length > 0) {
+      if (!checkSupplierId) errors.supplierId = "Không có nhà cung cấp này";
+
+      if (Object.keys(errors).length > 0) {
         return res.send(400, {
           message: "Cập nhật sản phẩm không thành công",
           errors: errors,

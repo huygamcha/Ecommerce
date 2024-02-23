@@ -26,7 +26,7 @@ module.exports = {
           message: "Đăng nhập thành công",
           payload: {
             id: user._id,
-            name: user.fullName,
+            name: user.lastName,
             isAdmin: user.isAdmin,
             token: generateToken(user),
             refreshToken: generateRefreshToken(user._id),

@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 import axios from "axios";
+import { reset } from "numeral";
 
 interface CartType {
   id: string;
@@ -142,6 +143,10 @@ const cartSlice = createSlice({
       state.carts = state.carts.filter((cart) => cart.id !== action.payload.id);
       localStorage.setItem("carts", JSON.stringify(state.carts));
     },
+
+    resetCartNotification: (state) => {
+        state.add = 0
+    }
   },
   
   extraReducers(builder) {
@@ -202,5 +207,5 @@ export   {
   getCartFromCustomer,
   createCartFromCustomer
 }
-export const { addToCart, getAllCart, changeQuantityCart, deleteCart } =
+export const { addToCart, getAllCart, changeQuantityCart, deleteCart ,resetCartNotification} =
   actions;
