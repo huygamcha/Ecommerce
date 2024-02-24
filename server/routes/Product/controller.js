@@ -1,5 +1,5 @@
-const { Product, Category, Supplier } = require("../../models");
-const { fuzzySearch } = require("../../utils");
+const { Product, Category, Supplier, Tag } = require("../../models");
+const { fuzzySearch, asyncForEach } = require("../../utils");
 
 module.exports = {
   getAllProduct: async (req, res, next) => {
@@ -18,7 +18,7 @@ module.exports = {
       const result = await Product.find({ name: fuzzySearch(search) })
         .populate("category")
         .populate("supplier")
-        .populate("tag")
+        .populate("tagList.tagId")
         .limit(limit)
         .skip(skip)
         .sort({ createdAt: -1 })
@@ -141,26 +141,43 @@ module.exports = {
         description,
         categoryId,
         supplierId,
-        tagId,
+        tagList,
         pic,
       } = req.body;
 
       const errors = {};
+      const errorsTagList = {};
+
+      await asyncForEach(tagList, async (item, index) => {
+        const error = await Tag.findOne({ _id: item.tagId });
+        if (!error) {
+          errorsTagList[`tag ${index + 1}`] = `Không tìm thấy tag thứ ${
+            index + 1
+          }`;
+        }
+      });
+
+      if (Object.keys(errorsTagList).length > 0) {
+        errors.errorsTagList = errorsTagList;
+      }
+
       const exitName = Product.findOne({ name });
       const exitCategoryId = Category.findOne({ _id: categoryId });
       const exitSupplierId = Supplier.findOne({ _id: supplierId });
+      // const exitTagId = Tag.findOne({ _id: tagId });
+
       const [checkName, checkCategoryId, checkSupplierId] = await Promise.all([
         exitName,
         exitCategoryId,
         exitSupplierId,
+        // exitTagId,
       ]);
       if (checkName) {
         errors.name = "Sản phẩm này đã tồn tại";
       }
       if (!checkCategoryId) errors.categoryId = "Không có danh mục này";
-
-      console.log("««««« checkSupplierId »»»»»", checkSupplierId);
-      if (!checkSupplierId) errors.categoryId = "Không có nhà cung cấp này";
+      if (!checkSupplierId) errors.supplierId = "Không có nhà cung cấp này";
+      // if (!checkSupplierId) errors.tagId = "Không có tag cấp này";
 
       if (Object.keys(errors).length > 0) {
         return res.send(400, {
@@ -177,6 +194,7 @@ module.exports = {
         description,
         categoryId,
         supplierId,
+        tagList,
         pic,
       });
 
@@ -186,6 +204,7 @@ module.exports = {
         payload: payload,
       });
     } catch (error) {
+      console.log("««««« error »»»»»", error);
       return res.send(400, {
         message: "Tạo sản phẩm không thành công",
       });
@@ -226,26 +245,45 @@ module.exports = {
         categoryId,
         supplierId,
         description,
+        tagList,
         pic,
       } = req.body;
 
-      const errors = [];
+      const errors = {};
       const exitName = Product.findOne({ _id: { $ne: id }, name });
       const exitCategoryId = Category.findOne({ _id: categoryId });
       const exitSupplierId = Supplier.findOne({ _id: supplierId });
+
+      const errorsTagList = {};
+
+      await asyncForEach(tagList, async (item, index) => {
+        const error = await Tag.findOne({ _id: item.tagId });
+        if (!error) {
+          errorsTagList[`tag ${index + 1}`] = `Không tìm thấy tag thứ ${
+            index + 1
+          }`;
+        }
+      });
+
+      if (Object.keys(errorsTagList).length > 0) {
+        errors.errorsTagList = errorsTagList;
+      }
+      // const exitTagId = Tag.findOne({ _id: tagId });
       const [checkName, checkCategoryId, checkSupplierId] = await Promise.all([
         exitName,
         exitCategoryId,
         exitSupplierId,
+        // exitTagId,
       ]);
-      console.log("««««« checkName »»»»»", checkCategoryId);
 
       if (checkName) {
         errors.name = "Tên sản phẩm đã tồn tại";
       }
-      if (!checkCategoryId) errors.categoryId = "Không có danh mục này";
-
-      if (!checkSupplierId) errors.supplierId = "Không có nhà cung cấp này";
+      if (!checkCategoryId && categoryId)
+        errors.categoryId = "Không có danh mục này";
+      if (!checkSupplierId && supplierId)
+        errors.supplierId = "Không có nhà cung cấp này";
+      // if (!exitTagId) errors.exitTagId = "Không có tag này";
 
       if (Object.keys(errors).length > 0) {
         return res.send(400, {
@@ -261,12 +299,6 @@ module.exports = {
         });
       }
 
-      if (payload.isDeleted) {
-        return res.send(404, {
-          message: "Danh mục đã được xoá trước đó",
-        });
-      }
-
       const result = await Product.findByIdAndUpdate(
         id,
         {
@@ -278,6 +310,7 @@ module.exports = {
           categoryId: categoryId || this.categoryId,
           supplierId: supplierId || this.supplierId,
           pic: pic || this.pic,
+          tagList: tagList || this.tagList,
         },
         {
           new: true,
@@ -289,6 +322,7 @@ module.exports = {
         payload: result,
       });
     } catch (error) {
+      console.log("««««« error »»»»»", error);
       return res.send(404, {
         message: "Cập nhật sản phẩm không thành công",
         errors: error,

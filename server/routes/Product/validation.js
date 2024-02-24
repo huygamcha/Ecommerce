@@ -80,6 +80,24 @@ const checkCreateProduct = yup.object({
         test: (value) => value !== undefined && value !== null && value !== "",
       }),
 
+    tagList: yup.array().of(
+      yup.object().shape({
+        tagId: yup.string().test(
+          "object valid",
+          ({ path }) =>
+            `tagId thứ ${
+              parseInt(path.split(".")[1].split("[")[1].split("]")[0]) + 1
+            } không phải là id hợp lệ`,
+          (value) => {
+            if (value !== null && value !== "" && value !== undefined) {
+              return ObjectId.isValid(value);
+            }
+            return true;
+          }
+        ),
+      })
+    ),
+
     description: yup.string(),
   }),
 });
@@ -88,11 +106,6 @@ const checkUpdateProduct = yup.object({
   body: yup.object({
     name: yup
       .string()
-      .test({
-        name: "required",
-        message: "Tên sản phẩm không được bỏ trống",
-        test: (value) => value !== undefined && value !== null && value !== "",
-      })
       .max(50, "Tên sản phẩm không được dài hơn 50 kí tự")
       .min(2, "Tên sản phẩm không được nhỏ hơn 2 kí tự"),
 
@@ -134,6 +147,24 @@ const checkUpdateProduct = yup.object({
           return true;
         }
       ),
+
+    tagList: yup.array().of(
+      yup.object().shape({
+        tagId: yup.string().test(
+          "object valid",
+          ({ path }) =>
+            `tagId thứ ${
+              parseInt(path.split(".")[1].split("[")[1].split("]")[0]) + 1
+            } không phải là id hợp lệ`,
+          (value) => {
+            if (value !== null && value !== "" && value !== undefined) {
+              return ObjectId.isValid(value);
+            }
+            return true;
+          }
+        ),
+      })
+    ),
 
     description: yup.string(),
   }),

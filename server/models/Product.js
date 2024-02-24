@@ -2,6 +2,23 @@ const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
 const mongooseLeanVirtuals = require("mongoose-lean-virtuals");
 
+const tagSchema = new Schema({
+  tagId: {
+    type: Schema.Types.ObjectId,
+    ref: "tag",
+  },
+});
+
+// tagSchema.virtual("tag", {
+//   ref: "tag",
+//   localField: "tagId",
+//   foreignField: "_id",
+//   justOne: true,
+// });
+
+// tagSchema.set("toJSON", { virtuals: true });
+// tagSchema.set("toObject", { virtuals: true });
+
 const productSchema = new Schema(
   {
     name: {
@@ -51,11 +68,7 @@ const productSchema = new Schema(
       required: true,
     },
 
-    tagId: {
-      type: Schema.Types.ObjectId,
-      ref: "tag",
-      required: true,
-    },
+    tagList: [tagSchema],
 
     pic: {
       type: String,

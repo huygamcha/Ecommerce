@@ -43,8 +43,21 @@ const checkIdQuery = yup.object({
 
 const fuzzySearch = (text) => {
   const regex = text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-
   return new RegExp(regex, "gi");
 };
 
-module.exports = { validateSchema, checkId, fuzzySearch, checkIdQuery };
+// tạo bất đồng bộ để kiểm tra từng phần tử
+
+const asyncForEach = async (array, callback) => {
+  for (let i = 0; i < array.length; i++) {
+    await callback(array[i], i, array);
+  }
+};
+
+module.exports = {
+  validateSchema,
+  checkId,
+  fuzzySearch,
+  checkIdQuery,
+  asyncForEach,
+};
