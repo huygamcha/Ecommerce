@@ -1,23 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
 const mongooseLeanVirtuals = require("mongoose-lean-virtuals");
-
-const tagSchema = new Schema({
-  tagId: {
-    type: Schema.Types.ObjectId,
-    ref: "tag",
-  },
-});
-
-// tagSchema.virtual("tag", {
-//   ref: "tag",
-//   localField: "tagId",
-//   foreignField: "_id",
-//   justOne: true,
-// });
-
-// tagSchema.set("toJSON", { virtuals: true });
-// tagSchema.set("toObject", { virtuals: true });
+const slugify = require("slugify");
 
 const productSchema = new Schema(
   {
@@ -30,14 +14,14 @@ const productSchema = new Schema(
 
     price: {
       type: Number,
-      require: [true, "Giá sản phẩm không được bỏ trống"],
+      // require: [true, "Giá sản phẩm không được bỏ trống"],
       default: 0,
       min: [0, "Giá sản phẩm không được âm"],
     },
 
     discount: {
       type: Number,
-      require: [true, "Phần trăm giảm giá sản phẩm không được bỏ trống"],
+      // require: [true, "Phần trăm giảm giá sản phẩm không được bỏ trống"],
       default: 0,
       min: [0, "Phần trăm giảm giá sản phẩm không được âm"],
       max: [75, "Phần trăm giảm giá sản phẩm không được nhỏ hơn 75%"],
@@ -45,14 +29,14 @@ const productSchema = new Schema(
 
     stock: {
       type: Number,
-      require: [true, "Số lượng sản phẩm không được bỏ trống"],
+      // require: [true, "Số lượng sản phẩm không được bỏ trống"],
       default: 0,
       min: [0, "Số lượng sản phẩm không được âm"],
     },
 
     description: {
       type: String,
-      require: [true, "Mô tả sản phẩm không được bỏ trống"],
+      // require: [true, "Mô tả sản phẩm không được bỏ trống"],
       maxLength: [3000, "Mô tả sản phẩm không được quá 3000 kí tự"],
     },
 
@@ -68,10 +52,21 @@ const productSchema = new Schema(
       required: true,
     },
 
-    tagList: [tagSchema],
+    tagList: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "tag",
+      },
+    ],
+
+    slug: {
+      type: String,
+    },
 
     pic: {
       type: String,
+      default:
+        "http://res.cloudinary.com/drqphlfn6/image/upload/v1708647316/ws1meb2jitqwlqcwara3.jpg",
     },
   },
   {
@@ -103,6 +98,31 @@ productSchema.virtual("tag", {
 
 productSchema.virtual("total").get(function () {
   return this.price * ((100 - this.discount) / 100);
+});
+
+productSchema.pre("save", function (next) {
+  console.log("««««« this.name »»»»»", this.name);
+  // Chỉ chuyển đổi name thành slug nếu name đã thay đổi
+  if (this.isModified("name")) {
+    this.slug = slugify(this.name, { lower: true });
+  }
+  next();
+});
+
+// Pre-findOneAndUpdate hook
+productSchema.pre("findOneAndUpdate", function (next) {
+  console.log(
+    "««««« this.getUpdate(), this.getQuery() »»»»»",
+    this.getUpdate()
+  );
+
+  console.log("««««« this»»»»»", this);
+
+  // Chuyển đổi name thành slug bất kể name có được thay đổi hay không
+  const update = this.getUpdate();
+
+  update.slug = slugify(update.name, { lower: true });
+  next();
 });
 
 productSchema.set("toJSON", { virtuals: true });

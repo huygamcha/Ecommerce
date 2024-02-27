@@ -1,5 +1,6 @@
 const { Product, Category, Supplier, Tag } = require("../../models");
 const { fuzzySearch, asyncForEach } = require("../../utils");
+const unidecode = require("unidecode");
 
 module.exports = {
   getAllProduct: async (req, res, next) => {
@@ -11,14 +12,14 @@ module.exports = {
       const limit = pageSize || 12;
       const skip = limit * (page - 1) || 0;
 
+      // search theo tag
       let { search } = req.query;
       if (!search) {
         search = "";
       }
-      const result = await Product.find({ name: fuzzySearch(search) })
+      const result = await Product.find({ slug: fuzzySearch(search) })
         .populate("category")
         .populate("supplier")
-        .populate("tagList.tagId")
         .limit(limit)
         .skip(skip)
         .sort({ createdAt: -1 })
@@ -35,6 +36,48 @@ module.exports = {
         });
       }
     } catch (error) {
+      console.log("««««« error »»»»»", error);
+      return res.send(400, {
+        message: "Lấy thông tin sản phẩm không thành công",
+      });
+    }
+  },
+
+  getAllProductSearch: async (req, res, next) => {
+    try {
+      const total = await Product.find();
+
+      const { page, pageSize } = req.query;
+
+      const limit = pageSize || 12;
+      const skip = limit * (page - 1) || 0;
+
+      // search theo tag
+      const { searchTag } = req.query;
+
+      if (searchTag !== "") {
+        console.log("««««« searchTag »»»»»", searchTag);
+        const result = await Product.find({ tagList: { $in: [searchTag] } })
+          .populate("category")
+          .populate("supplier")
+          .limit(limit)
+          .skip(skip)
+          .sort({ createdAt: -1 })
+          .lean({ virtuals: true });
+        if (result.length > 0) {
+          return res.send(200, {
+            message: "Lấy thông tin sản phẩm thành công",
+            payload: result,
+            total: total.length,
+          });
+        } else {
+          return res.send(200, {
+            message: "Không có sản phẩm nào trùng khớp",
+          });
+        }
+      }
+    } catch (error) {
+      console.log("««««« error »»»»»", error);
       return res.send(400, {
         message: "Lấy thông tin sản phẩm không thành công",
       });
@@ -44,7 +87,6 @@ module.exports = {
   getDetailProduct: async (req, res, next) => {
     try {
       const { id } = req.params;
-
       const payload = await Product.findById(id)
         .populate("category")
         .populate("tag")
@@ -118,12 +160,6 @@ module.exports = {
           message: "Không tìm thấy sản phẩm",
         });
       }
-
-      // if (payload.isDeleted) {
-      //   return res.send(404, {
-      //     message: "Danh mục đã được xoá trước đó",
-      //   });
-      // }
     } catch (error) {
       return res.send(400, {
         message: "Lấy thông tin sản phẩm không thành công",
@@ -147,15 +183,16 @@ module.exports = {
 
       const errors = {};
       const errorsTagList = {};
-
-      await asyncForEach(tagList, async (item, index) => {
-        const error = await Tag.findOne({ _id: item.tagId });
-        if (!error) {
-          errorsTagList[`tag ${index + 1}`] = `Không tìm thấy tag thứ ${
-            index + 1
-          }`;
-        }
-      });
+      console.log("««««« tagList »»»»»", tagList);
+      if (tagList)
+        await asyncForEach(tagList, async (item, index) => {
+          const error = await Tag.findOne({ _id: item });
+          if (!error) {
+            errorsTagList[`tag ${index + 1}`] = `Không tìm thấy tag thứ ${
+              index + 1
+            }`;
+          }
+        });
 
       if (Object.keys(errorsTagList).length > 0) {
         errors.errorsTagList = errorsTagList;
@@ -256,14 +293,15 @@ module.exports = {
 
       const errorsTagList = {};
 
-      await asyncForEach(tagList, async (item, index) => {
-        const error = await Tag.findOne({ _id: item.tagId });
-        if (!error) {
-          errorsTagList[`tag ${index + 1}`] = `Không tìm thấy tag thứ ${
-            index + 1
-          }`;
-        }
-      });
+      if (tagList)
+        await asyncForEach(tagList, async (item, index) => {
+          const error = await Tag.findOne({ _id: item });
+          if (!error) {
+            errorsTagList[`tag ${index + 1}`] = `Không tìm thấy tag thứ ${
+              index + 1
+            }`;
+          }
+        });
 
       if (Object.keys(errorsTagList).length > 0) {
         errors.errorsTagList = errorsTagList;
@@ -311,6 +349,7 @@ module.exports = {
           supplierId: supplierId || this.supplierId,
           pic: pic || this.pic,
           tagList: tagList || this.tagList,
+          slug: this.slug,
         },
         {
           new: true,

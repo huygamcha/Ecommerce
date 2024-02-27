@@ -1,5 +1,6 @@
 const ObjectId = require("mongodb").ObjectId;
 const yup = require("yup");
+const slugify = require("slugify");
 
 const validateSchema = (schema) => async (req, res, next) => {
   try {
@@ -42,13 +43,16 @@ const checkIdQuery = yup.object({
 });
 
 const fuzzySearch = (text) => {
+  text = slugify(text, { lower: true });
   const regex = text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+  console.log("««««« regex »»»»»", new RegExp(regex, "gi"));
   return new RegExp(regex, "gi");
 };
 
 // tạo bất đồng bộ để kiểm tra từng phần tử
 
 const asyncForEach = async (array, callback) => {
+  console.log("««««« array »»»»»", array);
   for (let i = 0; i < array.length; i++) {
     await callback(array[i], i, array);
   }

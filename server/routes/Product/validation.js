@@ -79,24 +79,23 @@ const checkCreateProduct = yup.object({
         message: "SupplierId không được bỏ trống",
         test: (value) => value !== undefined && value !== null && value !== "",
       }),
-
-    tagList: yup.array().of(
-      yup.object().shape({
-        tagId: yup.string().test(
-          "object valid",
-          ({ path }) =>
-            `tagId thứ ${
-              parseInt(path.split(".")[1].split("[")[1].split("]")[0]) + 1
-            } không phải là id hợp lệ`,
-          (value) => {
-            if (value !== null && value !== "" && value !== undefined) {
-              return ObjectId.isValid(value);
-            }
-            return true;
-          }
-        ),
-      })
-    ),
+    //future
+    // tagList: yup
+    //   .array()
+    //   .of(yup.string())
+    //   .test("valid value", (value, { createError }) => {
+    //     const errorsTagList = {};
+    //     for (let i = 0; i < value.length; i++) {
+    //       if (!ObjectId.isValid(value[i])) {
+    //         errorsTagList[`tagId thứ ${i + 1}`] = "không phải là id hợp lệ";
+    //       }
+    //     }
+    //     if (Object.keys(errorsTagList).length > 0) {
+    //       console.log("««««« kok »»»»»", errorsTagList);
+    //       return errorsTagList;
+    //     }
+    //     return true;
+    //   }),
 
     description: yup.string(),
   }),
@@ -148,23 +147,23 @@ const checkUpdateProduct = yup.object({
         }
       ),
 
-    tagList: yup.array().of(
-      yup.object().shape({
-        tagId: yup.string().test(
-          "object valid",
-          ({ path }) =>
-            `tagId thứ ${
-              parseInt(path.split(".")[1].split("[")[1].split("]")[0]) + 1
-            } không phải là id hợp lệ`,
-          (value) => {
-            if (value !== null && value !== "" && value !== undefined) {
-              return ObjectId.isValid(value);
-            }
-            return true;
-          }
-        ),
-      })
-    ),
+    // tagList: yup.array().of(
+    //   yup.object().shape({
+    //     tagId: yup.string().test(
+    //       "object valid",
+    //       ({ path }) =>
+    //         `tagId thứ ${
+    //           parseInt(path.split(".")[1].split("[")[1].split("]")[0]) + 1
+    //         } không phải là id hợp lệ`,
+    //       (value) => {
+    //         if (value !== null && value !== "" && value !== undefined) {
+    //           return ObjectId.isValid(value);
+    //         }
+    //         return true;
+    //       }
+    //     ),
+    //   })
+    // ),
 
     description: yup.string(),
   }),

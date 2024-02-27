@@ -7,12 +7,14 @@ const {
   updateProduct,
   getProductByCategories,
   getProductBySuppliers,
+  getAllProductSearch,
 } = require("./controller");
 const { checkCreateProduct, checkUpdateProduct } = require("./validation");
 const { checkId, validateSchema, checkIdQuery } = require("../../utils");
 var router = express.Router();
 
 router.route("/").get(getAllProduct);
+router.route("/search").get(getAllProductSearch);
 router.route("/").post(validateSchema(checkCreateProduct), createProduct);
 router
   .route("/byCategories")

@@ -16,9 +16,9 @@ function ProductDetail() {
   const { product, error } = useAppSelector((state) => state.products);
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    dispatch(getProductById(param.id));
-  }, [param]);
+  // useEffect(() => {
+  //   dispatch(getProductById(product?._id));
+  // }, []);
 
   // add to cart
   const handleAddToCart = () => {

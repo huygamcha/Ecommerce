@@ -1,0 +1,46 @@
+.navbar {
+  background-color: #fff;
+  width: 100%;
+  height: auto;
+}
+
+
+/* Thiết lập padding cho xs */
+@media (max-width: 575.98px) {
+    .wrapper_global {
+      background-color: #edf0f3;
+      padding: 10px;
+    }
+  }
+  
+  /* Thiết lập padding cho sm */
+  @media (min-width: 576px) and (max-width: 767.98px) {
+    .wrapper_global {
+      background-color: #edf0f3;
+      padding: 20px;
+    }
+  }
+  
+  /* Thiết lập padding cho md */
+  @media (min-width: 768px) and (max-width: 991.98px) {
+    .wrapper_global {
+      background-color: #edf0f3;
+      padding: 30px;
+    }
+  }
+  
+  /* Thiết lập padding cho lg */
+  @media (min-width: 992px) and (max-width: 1199.98px) {
+    .wrapper_global {
+      background-color: #edf0f3;
+      padding: 40px;
+    }
+  }
+  
+  /* Thiết lập padding cho xl */
+  @media (min-width: 1200px) {
+    .wrapper_global {
+      background-color: #edf0f3;
+      padding: 30px 100px;
+    }
+  }

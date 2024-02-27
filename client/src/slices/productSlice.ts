@@ -12,29 +12,33 @@ interface ProductsType {
   stock: number;
   total: number;
   pic: string;
+  slug: string;
 }
 
 
 interface InitialType {
   success: boolean;
-  error: { message?: string, errors?: any } | string;
+  error: { message?: string, errors?: {name: string} };
   product: ProductsType | undefined;
   loading: boolean;
   deleted: boolean;
   updated: boolean;
   products: ProductsType[];
+  productsSearch: ProductsType[];
 }
 
 interface ProductSearchType {
   search? :string;
   page?: number;
   pageSize?: number ;
+  searchTag?: string
 }
 
 const initialState: InitialType = {
   success: false,
-  error: '',
+  error: { message: '', errors: {name: ''} },
   product: {
+    slug: '',
     _id: '',
     name: '',
     description: '',
@@ -50,6 +54,7 @@ const initialState: InitialType = {
   deleted: false,
   updated: false,
   products: [],
+  productsSearch: [],
 };
 
 const getAllProduct = createAsyncThunk<ProductsType[], ProductSearchType>("product/getAll", async (arg = {}) => {
@@ -68,6 +73,20 @@ const getAllProduct = createAsyncThunk<ProductsType[], ProductSearchType>("produ
   // trả về response rồi lấy ra, để tránh lỗi A non-serializable value was detected in an action, in the path: `payload.headers`
   //https://chat.openai.com/c/48f823af-3e96-48aa-8df3-fe6e306aef10
   const response = await axios.get(`${process.env.REACT_APP_BACKEND}/products?search=${search}&page=${page}&pageSize=${pageSize}`);
+  const data: ProductsType[] = response.data.payload;
+  return data; // Assuming products are in the `data` property of the response
+});
+
+const getAllProductSearch = createAsyncThunk<ProductsType[], ProductSearchType>("product/getAllProductSearch", async (arg = {}) => {
+
+  let { searchTag } = arg;
+  if (!searchTag) {
+    searchTag = ''
+  }
+
+  // trả về response rồi lấy ra, để tránh lỗi A non-serializable value was detected in an action, in the path: `payload.headers`
+  //https://chat.openai.com/c/48f823af-3e96-48aa-8df3-fe6e306aef10
+  const response = await axios.get(`${process.env.REACT_APP_BACKEND}/products/search?&searchTag=${searchTag}`);
   const data: ProductsType[] = response.data.payload;
   return data; // Assuming products are in the `data` property of the response
 });
@@ -163,6 +182,7 @@ const productSlice = createSlice({
     //get all
     builder.addCase(getAllProduct.pending, (state) => {
       state.loading = true;
+      state.error = { message: "", errors: { name: "" } };
     });
 
     builder.addCase(
@@ -170,20 +190,54 @@ const productSlice = createSlice({
       (state, action) => {
         state.loading = false;
         state.products = action.payload;
-
       }
     );
     builder.addCase(
       getAllProduct.rejected,
       (state, action) => {
+        console.log('««««« action »»»»»', action);
         state.loading = false;
-        state.error = action.error.message || "An error occurred"; // Ensure a default message or fallback if action.error is undefined
+
+        if (action.payload) {
+          const customErrors = action.payload as { message?: string, errors?: any }
+          state.error = customErrors;
+        } 
+        // Ensure a default message or fallback if action.error is undefined
       }
     );
+
+    //get search tag
+      builder.addCase(getAllProductSearch.pending, (state) => {
+        state.loading = true;
+        state.error = { message: "", errors: { name: "" } };
+      });
+  
+      builder.addCase(
+        getAllProductSearch.fulfilled,
+        (state, action) => {
+          state.loading = false;
+          state.productsSearch = action.payload;
+        }
+      );
+      builder.addCase(
+        getAllProductSearch.rejected,
+        (state, action) => {
+          console.log('««««« action »»»»»', action);
+          state.loading = false;
+  
+          if (action.payload) {
+            const customErrors = action.payload as { message?: string, errors?: any }
+            state.error = customErrors;
+          } 
+          // Ensure a default message or fallback if action.error is undefined
+        }
+      );
 
     //get by category
     builder.addCase(getProductByCategories.pending, (state) => {
       state.loading = true;
+      state.error = { message: "", errors: { name: "", } };
+
     });
 
     builder.addCase(
@@ -191,20 +245,21 @@ const productSlice = createSlice({
       (state, action) => {
         state.loading = false;
         state.products = action.payload;
-        state.error = "";
       }
     );
     builder.addCase(
       getProductByCategories.rejected,
       (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "An error occurred"; // Ensure a default message or fallback if action.error is undefined
+        const customErrors = action.payload as { message?: string, errors?: any }
+        state.error = customErrors.errors; // Ensure a default message or fallback if action.error is undefined
       }
     );
 
     //get by supplier
     builder.addCase(getProductBySuppliers.pending, (state) => {
-      state.loading = true;
+        state.error = { message: "", errors: { name: "", } };
+        state.loading = true;
     });
 
     builder.addCase(
@@ -212,14 +267,14 @@ const productSlice = createSlice({
       (state, action) => {
         state.loading = false;
         state.products = action.payload;
-        state.error = "";
       }
     );
     builder.addCase(
       getProductBySuppliers.rejected,
       (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "An error occurred"; // Ensure a default message or fallback if action.error is undefined
+        const customErrors = action.payload as { message?: string, errors?: any }
+        state.error = customErrors.errors; // Ensure a default message or fallback if action.error is undefined
       }
     );
 
@@ -227,6 +282,8 @@ const productSlice = createSlice({
     builder.addCase(getProductById.pending, (state) => {
       state.loading = true;
       state.product = undefined;
+      state.error = { message: "", errors: { name: "", } };
+
     });
 
     builder.addCase(
@@ -234,14 +291,15 @@ const productSlice = createSlice({
       (state, action) => {
         state.loading = false;
         state.product = action.payload;
-        state.error = "";
       }
     );
     builder.addCase(
       getProductById.rejected,
       (state, action) => {
+        console.log('««««« action »»»»»', action);
         state.loading = false;
-        state.error = action.error.message || "An error occurred"; // Ensure a default message or fallback if action.error is undefined
+        const customErrors = action.payload as { message?: string, errors?: any }
+        state.error = customErrors.errors; // Ensure a default message or fallback if action.error is undefined
       }
     );
 
@@ -249,6 +307,7 @@ const productSlice = createSlice({
     // create
     builder.addCase(createProduct.pending, (state) => {
       state.loading = true;
+      state.error = { message: "", errors: { name: "", } };
     });
 
     builder.addCase(
@@ -256,7 +315,6 @@ const productSlice = createSlice({
       (state, action) => {
         state.loading = false;
         state.product = action.payload;
-        state.error = "";
       }
     );
     builder.addCase(
@@ -269,14 +327,14 @@ const productSlice = createSlice({
         // redux không chắc rằng errors có phải là một object không nên nó không lưu => lỗi
         const customErrors = action.payload as { message?: string, errors?: any }
         state.loading = false;
-        state.error = customErrors.errors; // Ensure a default message or fallback if action.error is undefined
+        state.error = customErrors; // Ensure a default message or fallback if action.error is undefined
       }
     );
 
     //delete
     builder.addCase(deleteProduct.pending, (state) => {
       state.loading = true;
-      state.error = "";
+      state.error = { message: "", errors: { name: "", } };
     });
 
     builder.addCase(
@@ -284,6 +342,7 @@ const productSlice = createSlice({
       (state, action) => {
         state.loading = false;
         state.product = action.payload;
+
       }
     );
     builder.addCase(
@@ -298,7 +357,8 @@ const productSlice = createSlice({
     //update
     builder.addCase(updateProduct.pending, (state) => {
       state.loading = true;
-      state.error = "";
+      state.error = { message: "", errors: { name: "", } };
+
     });
 
     builder.addCase(
@@ -306,16 +366,15 @@ const productSlice = createSlice({
       (state, action) => {
         state.loading = false;
         state.product = action.payload;
-        state.error = "";
 
       }
     );
     builder.addCase(
       updateProduct.rejected,
       (state, action) => {
-        const customErrors = action.payload as { message?: string, errors?: any }
         state.loading = false;
-        state.error = customErrors.errors; // Ensure a default message or fallback if action.error is undefined
+        const customErrors = action.payload as { message?: string, errors?: any }
+        state.error = customErrors; // Ensure a default message or fallback if action.error is undefined
       }
     );
 
@@ -332,6 +391,7 @@ export {
   updateProduct,
   getProductByCategories,
   getProductBySuppliers,
-  getProductById
+  getProductById,
+  getAllProductSearch
 }
 

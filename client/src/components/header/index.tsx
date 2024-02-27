@@ -11,7 +11,11 @@ import {
   UserDeleteOutlined,
 } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "../../store";
-import { getAllProduct } from "../../slices/productSlice";
+import {
+  getAllProduct,
+  getAllProductSearch,
+  getProductById,
+} from "../../slices/productSlice";
 import Discount from "../discount";
 import numeral from "numeral";
 import { logout } from "../../slices/authSlice";
@@ -19,6 +23,7 @@ import {
   createCartFromCustomer,
   resetCartNotification,
 } from "../../slices/cartSlice";
+import { getAllTag } from "../../slices/tagSlice";
 
 function HeaderScreen() {
   const currentUser = localStorage.getItem("userInfor")
@@ -34,10 +39,17 @@ function HeaderScreen() {
   const dispatch = useAppDispatch();
   const { products } = useAppSelector((state) => state.products);
   const { add } = useAppSelector((state) => state.carts);
+  const { tags } = useAppSelector((state) => state.tags);
 
   const handleSearch = (e: any) => {
     dispatch(getAllProduct({ search: e.target.value }));
     setSearch(e.target.value);
+  };
+
+  //
+  const handleSearchTag = (e: string) => {
+    console.log("««««« e »»»»»", e);
+    dispatch(getAllProductSearch({ searchTag: e }));
   };
 
   // logout
@@ -59,6 +71,16 @@ function HeaderScreen() {
       setShow(true);
     }
   }, [add]);
+
+  useEffect(() => {
+    dispatch(getAllTag());
+  }, []);
+
+  //click
+  const handleDetail = (value: string) => {
+    dispatch(getProductById(value));
+    setSearch("");
+  };
 
   console.log("««««« add day »»»»»", add);
   return (
@@ -82,8 +104,9 @@ function HeaderScreen() {
                 products.map((product) => (
                   <Link
                     className={clsx(style.header_search_items)}
-                    to={`/product/${product._id}`}
-                    onClick={() => setSearch("")}
+                    to={`/sanpham/${product.slug}`}
+                    // onClick={() => setSearch("")}
+                    onClick={() => handleDetail(product._id)}
                   >
                     <Flex>
                       <Space style={{ marginRight: "10px" }}>
@@ -255,6 +278,23 @@ function HeaderScreen() {
             <></>
           )}
         </Space>
+        <Col offset={2}>
+          <Flex justify="center">
+            {tags ? (
+              tags.map((tag) => (
+                <Link
+                  onClick={() => handleSearchTag(tag._id)}
+                  className={clsx(style.tag_item)}
+                  to={`/timkiem/${tag.name}`}
+                >
+                  {tag.name}
+                </Link>
+              ))
+            ) : (
+              <div>312</div>
+            )}
+          </Flex>
+        </Col>
       </Row>
     </>
   );

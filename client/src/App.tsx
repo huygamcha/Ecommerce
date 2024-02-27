@@ -35,6 +35,7 @@ import NotPermit from "./pages/auth/NotPermit";
 import Payment from "./pages/user/payment";
 import FooterAdmin from "./pages/admin/footer";
 import Tag from "./pages/admin/tag";
+import Timkiem from "./pages/user/timkiem";
 const { Sider, Content } = Layout;
 numeral.locale("vi");
 
@@ -94,8 +95,12 @@ const router = createBrowserRouter([
         element: <CartScreen />,
       },
       {
-        path: "/product/:id",
+        path: "/sanpham/:id",
         element: <ProductDetail />,
+      },
+      {
+        path: "/timkiem/:id",
+        element: <Timkiem />,
       },
     ],
   },

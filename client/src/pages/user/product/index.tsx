@@ -16,6 +16,7 @@ import { useAppDispatch, useAppSelector } from "../../../store";
 import {
   getAllProduct,
   getProductByCategories,
+  getProductById,
   getProductBySuppliers,
 } from "../../../slices/productSlice";
 import numeral from "numeral";
@@ -42,6 +43,10 @@ function ProductScreen() {
     dispatch(getAllSupplier());
   }, [dispatch]);
 
+  const handleDetail = (value: string) => {
+    dispatch(getProductById(value));
+  };
+
   const categoryItems: MenuProps["items"] = [];
   const supplierItems: MenuProps["items"] = [];
   categories.map((category) =>
@@ -49,7 +54,7 @@ function ProductScreen() {
       key: category.name,
       label: (
         <Link
-          to={`/product/search/${category.name}`}
+          to={`/sanpham/search/${category.name}`}
           onClick={(e) => dispatch(getProductByCategories(category._id))}
         >
           {category.name}
@@ -62,7 +67,7 @@ function ProductScreen() {
       key: supplier.name,
       label: (
         <Link
-          to={`/product/search/${supplier.name}`}
+          to={`/sanpham/search/${supplier.name}`}
           onClick={(e) => dispatch(getProductBySuppliers(supplier._id))}
         >
           {supplier.name}
@@ -74,26 +79,10 @@ function ProductScreen() {
   return (
     <div className={clsx(style.wrapper_global, style.top_sale)}>
       <Row gutter={24}>
-        {/* <Col xs={0} sm={5}>
-          search
-          <Row>
-            <Col>
-              <Dropdown menu={{ items: categoryItems }} placement="bottom">
-                <Button> Search by category</Button>
-              </Dropdown>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Dropdown menu={{ items: supplierItems }} placement="bottom">
-                <Button> Search by supplier</Button>
-              </Dropdown>
-            </Col>
-          </Row>
-        </Col> */}
+        ''{" "}
         <Col xs={24} sm={24}>
           <Row gutter={[14, 2]}>
-            {products && error === "" ? (
+            {products && error.message === "" ? (
               products.map((product) => (
                 <Col
                   xs={12}
@@ -104,7 +93,8 @@ function ProductScreen() {
                   }}
                 >
                   <Link
-                    to={`/product/${product._id}`}
+                    onClick={() => handleDetail(product._id)}
+                    to={`/sanpham/${product.slug}`}
                     className={clsx(style.wrapper)}
                   >
                     <Flex className={clsx(style.content)} vertical>

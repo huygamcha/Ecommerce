@@ -61,6 +61,6 @@
   /* Thiết lập padding cho xl */
   @media (min-width: 1200px) {
     .global_wrapper {
-      padding: 100px;
+      padding: 0px 100px 100px 100px;
     }
   }

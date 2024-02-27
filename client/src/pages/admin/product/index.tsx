@@ -12,6 +12,9 @@ import {
   InputNumber,
   Select,
   Image,
+  ConfigProvider,
+  Tag,
+  SelectProps,
 } from "antd";
 import { useEffect } from "react";
 import {
@@ -26,6 +29,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { getAllSupplier } from "../../../slices/supplierSlice";
 import { getAllCategory } from "../../../slices/categorySlice";
 import numeral from "numeral";
+import { getAllTag } from "../../../slices/tagSlice";
 
 type Props = {};
 
@@ -48,6 +52,7 @@ const Product = (props: Props) => {
     dispatch(getAllProduct({}));
     dispatch(getAllSupplier());
     dispatch(getAllCategory());
+    dispatch(getAllTag());
   }, [dispatch]);
 
   //set active modal
@@ -72,6 +77,7 @@ const Product = (props: Props) => {
   );
 
   // form
+
   type FieldType = {
     name: string;
     description?: string;
@@ -81,7 +87,7 @@ const Product = (props: Props) => {
     categoryId: string;
     supplierId: string;
     pic: string;
-    tagId: string;
+    tagList: Array<string>;
   };
 
   const [createForm] = Form.useForm<FieldType>();
@@ -89,11 +95,11 @@ const Product = (props: Props) => {
 
   useEffect(() => {
     if (!initialRender) {
-      if (error) {
+      if (error.message !== "") {
         if (!param.id) {
-          onShowMessage("Tạo sản phẩm không thành công", "error");
+          onShowMessage(`${error.errors?.name}`, "error");
         } else {
-          onShowMessage("Cập nhật sản phẩm không thành công", "error");
+          onShowMessage(`${error.errors?.name}`, "error");
         }
       } else {
         if (!param.id) {
@@ -292,123 +298,24 @@ const Product = (props: Props) => {
 
   return (
     <div>
-      {contextHolder}
-      <Card title="Tạo sản phẩm mới" style={{ width: "100%" }}>
-        <Form
-          form={createForm}
-          name="basic"
-          labelCol={{ span: 6 }}
-          wrapperCol={{ span: 12 }}
-          initialValues={{ name: "", description: "" }}
-          onFinish={onFinish}
-          autoComplete="off"
-        >
-          <Form.Item<FieldType>
-            label="Tên sản phẩm"
-            name="name"
-            rules={[{ required: true, message: "Vui lòng nhập tên sản phẩm!" }]}
-            hasFeedback
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item<FieldType>
-            label="Danh mục"
-            name="categoryId"
-            rules={[{ required: true, message: "Vui lòng chọn danh mục!" }]}
-            hasFeedback
-            // help={error ? "ok" : "123"}
-          >
-            <Select
-              options={categories.map((item: any) => {
-                return {
-                  label: item.name,
-                  value: item._id,
-                };
-              })}
-            />
-          </Form.Item>
-
-          <Form.Item<FieldType>
-            label="Nhà cung cấp"
-            name="supplierId"
-            rules={[{ required: true, message: "Vui lòng chọn nhà cung cấp!" }]}
-            hasFeedback
-          >
-            <Select
-              options={suppliers.map((item: any) => {
-                return {
-                  label: item.name,
-                  value: item._id,
-                };
-              })}
-            />
-          </Form.Item>
-
-          <Form.Item<FieldType>
-            label="Giá sản phẩm"
-            name="price"
-            rules={[{ required: true, message: "Vui lòng nhập giá sản phẩm!" }]}
-          >
-            <InputNumber min={0} />
-          </Form.Item>
-
-          <Form.Item<FieldType> label="Giảm giá" name="discount">
-            <InputNumber defaultValue={0} min={0} max={75} />
-          </Form.Item>
-
-          <Form.Item<FieldType> label="Số lượng sản phẩm" name="stock">
-            <InputNumber defaultValue={0} min={0} />
-          </Form.Item>
-
-          <Form.Item<FieldType> label="Mô tả" name="description">
-            <Input.TextArea rows={3} />
-          </Form.Item>
-          <Form.Item<FieldType> label="Chọn ảnh" name="pic">
-            <Input
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                const selectedFile = e.target.files && e.target.files[0];
-                if (selectedFile) {
-                  postDetails(selectedFile);
-                }
-              }}
-            ></Input>
-          </Form.Item>
-          <Form.Item wrapperCol={{ offset: 6 }}>
-            <Button type="primary" htmlType="submit">
-              Thêm sản phẩm
-            </Button>
-          </Form.Item>
-        </Form>
-      </Card>
-      <Card title="Danh sách các sản phẩm">
-        <Table dataSource={products} columns={columns} />
-      </Card>
-
-      {/* form edit và delete */}
-      <Modal
-        centered
-        title="Chỉnh sửa sản phẩm"
-        onCancel={() => {
-          navigate(-1);
-          setSelectedProduct(false);
-        }}
-        open={selectedProduct}
-        okText="Save changes"
-        onOk={() => {
-          updateForm.submit();
+      <ConfigProvider
+        theme={{
+          components: {
+            InputNumber: {
+              controlWidth: 300,
+            },
+          },
         }}
       >
-        <Card style={{ width: "100%" }}>
+        {contextHolder}
+        <Card title="Tạo sản phẩm mới" style={{ width: "100%" }}>
           <Form
-            form={updateForm}
+            form={createForm}
             name="basic"
-            labelCol={{ span: 8 }}
+            labelCol={{ span: 6 }}
             wrapperCol={{ span: 12 }}
             initialValues={{ name: "", description: "" }}
-            onFinish={onUpdate}
+            onFinish={onFinish}
             autoComplete="off"
           >
             <Form.Item<FieldType>
@@ -423,16 +330,30 @@ const Product = (props: Props) => {
             </Form.Item>
 
             <Form.Item<FieldType>
-              label="sản phẩm"
+              label="Danh mục"
               name="categoryId"
-              rules={[{ required: true, message: "Vui lòng chọn sản phẩm!" }]}
+              rules={[{ required: true, message: "Vui lòng chọn danh mục!" }]}
               hasFeedback
+              // help={error ? "ok" : "123"}
             >
               <Select
                 options={categories.map((item: any) => {
                   return {
                     label: item.name,
                     value: item._id,
+                  };
+                })}
+              />
+            </Form.Item>
+
+            <Form.Item<FieldType> label="Tag" name="tagList">
+              <Select
+                mode="multiple"
+                style={{ width: "100%" }}
+                options={tags.map((tag) => {
+                  return {
+                    label: tag.name,
+                    value: tag._id,
                   };
                 })}
               />
@@ -462,19 +383,26 @@ const Product = (props: Props) => {
               rules={[
                 { required: true, message: "Vui lòng nhập giá sản phẩm!" },
               ]}
-              hasFeedback
             >
-              <InputNumber min={0} />
+              <InputNumber defaultValue={0} min={0} />
             </Form.Item>
 
-            <Form.Item<FieldType> label="Giảm giá" name="discount" hasFeedback>
+            <Form.Item<FieldType>
+              rules={[
+                { required: true, message: "Vui lòng nhập giảm giá sản phẩm!" },
+              ]}
+              label="Giảm giá"
+              name="discount"
+            >
               <InputNumber defaultValue={0} min={0} max={75} />
             </Form.Item>
 
             <Form.Item<FieldType>
+              rules={[
+                { required: true, message: "Vui lòng nhập số lượng sản phẩm!" },
+              ]}
               label="Số lượng sản phẩm"
               name="stock"
-              hasFeedback
             >
               <InputNumber defaultValue={0} min={0} />
             </Form.Item>
@@ -482,10 +410,9 @@ const Product = (props: Props) => {
             <Form.Item<FieldType> label="Mô tả" name="description">
               <Input.TextArea rows={3} />
             </Form.Item>
-
             <Form.Item<FieldType> label="Chọn ảnh" name="pic">
               <Input
-                // type="file"
+                type="file"
                 accept="image/*"
                 onChange={(e) => {
                   const selectedFile = e.target.files && e.target.files[0];
@@ -495,9 +422,147 @@ const Product = (props: Props) => {
                 }}
               ></Input>
             </Form.Item>
+            <Form.Item wrapperCol={{ offset: 6 }}>
+              <Button type="primary" htmlType="submit">
+                Thêm sản phẩm
+              </Button>
+            </Form.Item>
           </Form>
         </Card>
-      </Modal>
+        <Card title="Danh sách các sản phẩm">
+          <Table dataSource={products} columns={columns} />
+        </Card>
+
+        {/* form edit và delete */}
+        <Modal
+          centered
+          title="Chỉnh sửa sản phẩm"
+          onCancel={() => {
+            navigate(-1);
+            setSelectedProduct(false);
+          }}
+          open={selectedProduct}
+          okText="Save changes"
+          onOk={() => {
+            updateForm.submit();
+          }}
+        >
+          <Card style={{ width: "100%" }}>
+            <Form
+              form={updateForm}
+              name="basic"
+              labelCol={{ span: 8 }}
+              wrapperCol={{ span: 12 }}
+              initialValues={{ name: "", description: "" }}
+              onFinish={onUpdate}
+              autoComplete="off"
+            >
+              <Form.Item<FieldType>
+                label="Tên sản phẩm"
+                name="name"
+                rules={[
+                  { required: true, message: "Vui lòng nhập tên sản phẩm!" },
+                ]}
+                hasFeedback
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item<FieldType>
+                label="Danh mục"
+                name="categoryId"
+                rules={[{ required: true, message: "Vui lòng chọn Danh mục!" }]}
+                hasFeedback
+              >
+                <Select
+                  options={categories.map((item: any) => {
+                    return {
+                      label: item.name,
+                      value: item._id,
+                    };
+                  })}
+                />
+              </Form.Item>
+
+              <Form.Item<FieldType>
+                label="Nhà cung cấp"
+                name="supplierId"
+                rules={[
+                  { required: true, message: "Vui lòng chọn nhà cung cấp!" },
+                ]}
+                hasFeedback
+              >
+                <Select
+                  options={suppliers.map((item: any) => {
+                    return {
+                      label: item.name,
+                      value: item._id,
+                    };
+                  })}
+                />
+              </Form.Item>
+
+              <Form.Item<FieldType> label="Tag" name="tagList">
+                <Select
+                  mode="multiple"
+                  // tagRender={tagRender}
+                  style={{ width: "100%" }}
+                  options={tags.map((tag) => {
+                    return {
+                      label: tag.name,
+                      value: tag._id,
+                    };
+                  })}
+                />
+              </Form.Item>
+
+              <Form.Item<FieldType>
+                label="Giá sản phẩm"
+                name="price"
+                rules={[
+                  { required: true, message: "Vui lòng nhập giá sản phẩm!" },
+                ]}
+                hasFeedback
+              >
+                <InputNumber min={0} />
+              </Form.Item>
+
+              <Form.Item<FieldType>
+                label="Giảm giá"
+                name="discount"
+                hasFeedback
+              >
+                <InputNumber defaultValue={0} min={0} max={75} />
+              </Form.Item>
+
+              <Form.Item<FieldType>
+                label="Số lượng sản phẩm"
+                name="stock"
+                hasFeedback
+              >
+                <InputNumber defaultValue={0} min={0} />
+              </Form.Item>
+
+              <Form.Item<FieldType> label="Mô tả" name="description">
+                <Input.TextArea rows={3} />
+              </Form.Item>
+
+              <Form.Item<FieldType> label="Chọn ảnh" name="pic">
+                <Input
+                  // type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const selectedFile = e.target.files && e.target.files[0];
+                    if (selectedFile) {
+                      postDetails(selectedFile);
+                    }
+                  }}
+                ></Input>
+              </Form.Item>
+            </Form>
+          </Card>
+        </Modal>
+      </ConfigProvider>
     </div>
   );
 };
