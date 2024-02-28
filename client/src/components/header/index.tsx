@@ -48,8 +48,9 @@ function HeaderScreen() {
 
   //
   const handleSearchTag = (e: string) => {
-    console.log("««««« e »»»»»", e);
+    console.log("««««« searchTag »»»»»", e);
     dispatch(getAllProductSearch({ searchTag: e }));
+    localStorage.setItem("searchTag", JSON.stringify(e));
   };
 
   // logout
@@ -285,7 +286,7 @@ function HeaderScreen() {
                 <Link
                   onClick={() => handleSearchTag(tag._id)}
                   className={clsx(style.tag_item)}
-                  to={`/timkiem/${tag.name}`}
+                  to={`/timkiem?s=${tag.name}`}
                 >
                   {tag.name}
                 </Link>

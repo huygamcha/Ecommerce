@@ -34,6 +34,13 @@ const productSchema = new Schema(
       min: [0, "Số lượng sản phẩm không được âm"],
     },
 
+    age: {
+      type: Number,
+      // require: [true, "Số lượng sản phẩm không được bỏ trống"],
+      default: 0,
+      min: [0, "Độ tuổi sản phẩm không được âm"],
+    },
+
     description: {
       type: String,
       // require: [true, "Mô tả sản phẩm không được bỏ trống"],
@@ -116,12 +123,12 @@ productSchema.pre("findOneAndUpdate", function (next) {
     this.getUpdate()
   );
 
-  console.log("««««« this»»»»»", this);
-
+  if (this.getQuery().name) {
+    const update = this.getUpdate();
+    update.slug = slugify(update.name, { lower: true });
+  }
   // Chuyển đổi name thành slug bất kể name có được thay đổi hay không
-  const update = this.getUpdate();
 
-  update.slug = slugify(update.name, { lower: true });
   next();
 });
 

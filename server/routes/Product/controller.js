@@ -53,28 +53,40 @@ module.exports = {
       const skip = limit * (page - 1) || 0;
 
       // search theo tag
-      const { searchTag } = req.query;
+      let { searchTag, priceFrom, priceTo, ageFrom, ageTo } = req.query;
 
-      if (searchTag !== "") {
-        console.log("««««« searchTag »»»»»", searchTag);
-        const result = await Product.find({ tagList: { $in: [searchTag] } })
-          .populate("category")
-          .populate("supplier")
-          .limit(limit)
-          .skip(skip)
-          .sort({ createdAt: -1 })
-          .lean({ virtuals: true });
-        if (result.length > 0) {
-          return res.send(200, {
-            message: "Lấy thông tin sản phẩm thành công",
-            payload: result,
-            total: total.length,
-          });
-        } else {
-          return res.send(200, {
-            message: "Không có sản phẩm nào trùng khớp",
-          });
-        }
+      priceFrom = parseInt(priceFrom);
+      priceTo = parseInt(priceTo);
+      ageFrom = parseInt(ageFrom);
+      ageTo = parseInt(ageTo);
+
+      if (!priceFrom) priceFrom = 0;
+      if (!priceTo) priceTo = 100000000;
+      if (!ageFrom) ageFrom = 0;
+      if (!ageTo) ageTo = 100;
+
+      // console.log("««««« searchTag »»»»»", searchTag);
+      const result = await Product.find({
+        tagList: { $in: [searchTag] },
+        price: { $gte: priceFrom, $lte: priceTo },
+        age: { $gte: ageFrom, $lte: ageTo },
+      })
+        .populate("category")
+        .populate("supplier")
+        .limit(limit)
+        .skip(skip)
+        .sort({ createdAt: -1 })
+        .lean({ virtuals: true });
+      if (result.length > 0) {
+        return res.send(200, {
+          message: "Lấy thông tin sản phẩm thành công",
+          payload: result,
+          total: total.length,
+        });
+      } else {
+        return res.send(200, {
+          message: "Không có sản phẩm nào trùng khớp",
+        });
       }
     } catch (error) {
       console.log("««««« error »»»»»", error);
@@ -179,6 +191,7 @@ module.exports = {
         supplierId,
         tagList,
         pic,
+        age,
       } = req.body;
 
       const errors = {};
@@ -233,6 +246,7 @@ module.exports = {
         supplierId,
         tagList,
         pic,
+        age,
       });
 
       const payload = await newProduct.save();
@@ -284,6 +298,7 @@ module.exports = {
         description,
         tagList,
         pic,
+        age,
       } = req.body;
 
       const errors = {};
@@ -350,6 +365,7 @@ module.exports = {
           pic: pic || this.pic,
           tagList: tagList || this.tagList,
           slug: this.slug,
+          age: age || this.age,
         },
         {
           new: true,

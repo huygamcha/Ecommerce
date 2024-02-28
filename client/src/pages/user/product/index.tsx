@@ -1,17 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
-import {
-  Col,
-  Flex,
-  Row,
-  Space,
-  Image,
-  Dropdown,
-  Button,
-  MenuProps,
-  Empty,
-  Pagination,
-} from "antd";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Col, Flex, Row, Space, MenuProps, Empty, Pagination } from "antd";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import {
   getAllProduct,
@@ -32,10 +21,11 @@ function ProductScreen() {
   const { suppliers } = useAppSelector((state) => state.suppliers);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const handlePagination = (e: number) => {
-    dispatch(getAllProduct({ page: e }));
-    navigate(`/product?page=${e}`);
-  };
+
+  // const handlePagination = (e: number) => {
+  //   dispatch(getAllProduct({ page: e }));
+  //   navigate(`/product?page=${e}`);
+  // };
 
   useEffect(() => {
     dispatch(getAllProduct({}));
@@ -79,7 +69,6 @@ function ProductScreen() {
   return (
     <div className={clsx(style.wrapper_global, style.top_sale)}>
       <Row gutter={24}>
-        ''{" "}
         <Col xs={24} sm={24}>
           <Row gutter={[14, 2]}>
             {products && error.message === "" ? (
@@ -136,12 +125,12 @@ function ProductScreen() {
               </Col>
             )}
             <Col xs={24}>
-              <Pagination
+              {/* <Pagination
                 onChange={handlePagination}
                 defaultCurrent={1}
                 pageSize={6}
                 total={20}
-              ></Pagination>
+              ></Pagination> */}
             </Col>
           </Row>
         </Col>

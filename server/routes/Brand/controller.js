@@ -1,0 +1,149 @@
+const { Brand } = require("../../models");
+
+module.exports = {
+  getAllBrand: async (req, res, next) => {
+    try {
+      const result = await Brand.find();
+      return res.send(200, {
+        message: "Lấy thông tin thương hiệu thành công",
+        payload: result,
+      });
+    } catch (error) {
+      return res.send(400, {
+        message: "Lấy thông tin thương hiệu không thành công",
+      });
+    }
+  },
+
+  getDetailBrand: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+
+      const payload = await Brand.findById(id);
+      if (!payload) {
+        return res.send(404, {
+          message: "Không tìm thấy thương hiệu",
+        });
+      }
+
+      return res.send(200, {
+        message: "Tìm thương hiệu thành công",
+        payload: payload,
+      });
+    } catch (error) {
+      return res.send(400, {
+        message: "Lấy thông tin thương hiệu không thành công",
+      });
+    }
+  },
+
+  createBrand: async (req, res, next) => {
+    try {
+      const { name, description } = req.body;
+
+      const error = [];
+
+      const exitName = await Brand.findOne({
+        name: name,
+      });
+      if (exitName) error.push({ Name: "Tên thương hiệu đã tồn tại" });
+
+      if (error.length > 0) {
+        return res.send(400, {
+          message: "Tạo không thành công",
+          errors: error,
+        });
+      }
+
+      const newBrand = new Brand({
+        name,
+        description,
+      });
+
+      const payload = await newBrand.save();
+
+      return res.send(200, {
+        message: "Tạo thương hiệu thành công",
+        payload: payload,
+      });
+    } catch (error) {
+      return res.send(400, {
+        message: "Tạo thương hiệu không thành công",
+      });
+    }
+  },
+
+  deleteBrand: async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const payload = await Brand.findById(id);
+      if (!payload) {
+        return res.send(404, {
+          message: "Không tìm thấy thương hiệu",
+        });
+      }
+
+      await Brand.findByIdAndDelete(id, { isDeleted: true });
+
+      return res.send(200, {
+        message: "Xoá thương hiệu thành công",
+      });
+    } catch (error) {
+      return res.send(404, {
+        message: "Xoá thương hiệu không thành công",
+      });
+    }
+  },
+
+  updateBrand: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const { name, description } = req.body;
+      const payload = await Brand.findById(id);
+
+      const errors = [];
+      const exitName = await Brand.findOne({ name, _id: { $ne: id } });
+      if (exitName) {
+        errors.push({ name: "Tên thương hiệu đã tồn tại!" });
+      }
+      if (errors.length > 0) {
+        return res.send(400, {
+          message: "Cập nhật không thành công",
+          errors: errors,
+        });
+      }
+
+      if (!payload) {
+        return res.send(404, {
+          message: "Không tìm thấy thương hiệu",
+        });
+      }
+
+      if (payload.isDeleted) {
+        return res.send(404, {
+          message: "Danh mục đã được xoá trước đó",
+        });
+      }
+
+      const result = await Brand.findByIdAndUpdate(
+        id,
+        {
+          name: name || this.name,
+          description: description || this.description,
+        },
+        {
+          new: true,
+        }
+      );
+      return res.send(200, {
+        message: "Cập nhật thương hiệu thành công",
+        payload: result,
+      });
+    } catch (error) {
+      return res.send(404, {
+        message: "Sửa thương hiệu không thành công",
+      });
+    }
+  },
+};
