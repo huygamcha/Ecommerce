@@ -48,9 +48,9 @@ function HeaderScreen() {
 
   //
   const handleSearchTag = (e: string) => {
-    console.log("««««« searchTag »»»»»", e);
     dispatch(getAllProductSearch({ searchTag: e }));
-    localStorage.setItem("searchTag", JSON.stringify(e));
+
+    localStorage.setItem("filter", JSON.stringify({ searchTag: e }));
   };
 
   // logout
@@ -67,7 +67,6 @@ function HeaderScreen() {
   };
 
   useEffect(() => {
-    console.log("««««« add »»»»»", add);
     if (add > 0) {
       setShow(true);
     }
@@ -83,7 +82,7 @@ function HeaderScreen() {
     setSearch("");
   };
 
-  console.log("««««« add day »»»»»", add);
+  // console.log("««««« add day »»»»»", add);
   return (
     <>
       <Row justify="end" className={clsx(style.wrapper_try)}>

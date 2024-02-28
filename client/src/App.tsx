@@ -16,6 +16,7 @@ import {
 
 import {
   ProductOutlined,
+  SafetyOutlined,
   TagOutlined,
   UploadOutlined,
   UserOutlined,
@@ -119,6 +120,16 @@ const router = createBrowserRouter([
         ],
       },
       {
+        path: "/admin/brands",
+        element: <Category />,
+        children: [
+          {
+            path: "/admin/brands/:id",
+            element: <Category />,
+          },
+        ],
+      },
+      {
         path: "/admin/tags",
         element: <Tag />,
         children: [
@@ -202,6 +213,11 @@ function AdminRouter() {
               key: "/admin/categories",
               icon: <UserOutlined />,
               label: "Danh mục",
+            },
+            {
+              key: "/admin/brands",
+              icon: <SafetyOutlined />,
+              label: "Thương hiệu",
             },
             {
               key: "/admin/suppliers",

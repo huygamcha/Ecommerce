@@ -10,7 +10,25 @@
 .navbar_wrapper{
   background-color: #fff;
   border-radius: 10px;
+  max-height: 600px;
+  overflow-y: auto;
   /* padding: 10px 0px; */
+}
+
+/* For webkit-based browsers */
+.navbar_wrapper::-webkit-scrollbar {
+  width: 1px; /* Set the width of the scrollbar */
+}
+
+/* Track */
+.navbar_wrapper::-webkit-scrollbar-track {
+  background: transparent; /* Optional: Set the background color of the track */
+}
+
+/* Handle */
+.navbar_wrapper::-webkit-scrollbar-thumb {
+  background: #888; /* Set the color of the scrollbar handle */
+  border-radius: 1px; /* Optional: Set the border radius of the scrollbar handle */
 }
 
 .navbar {

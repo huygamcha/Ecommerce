@@ -39,25 +39,25 @@ module.exports = {
 
   createBrand: async (req, res, next) => {
     try {
-      const { name, description } = req.body;
+      const { name, categoryId } = req.body;
 
-      const error = [];
+      const errors = {};
 
       const exitName = await Brand.findOne({
         name: name,
       });
-      if (exitName) error.push({ Name: "Tên thương hiệu đã tồn tại" });
+      if (exitName) error.name = "Tên thương hiệu đã tồn tại";
 
-      if (error.length > 0) {
+      if (Object.keys(error).length > 0) {
         return res.send(400, {
           message: "Tạo không thành công",
-          errors: error,
+          errors: errors,
         });
       }
 
       const newBrand = new Brand({
         name,
-        description,
+        categoryId,
       });
 
       const payload = await newBrand.save();
@@ -99,15 +99,15 @@ module.exports = {
   updateBrand: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const { name, description } = req.body;
+      const { name, categoryId } = req.body;
       const payload = await Brand.findById(id);
 
-      const errors = [];
+      const errors = {};
       const exitName = await Brand.findOne({ name, _id: { $ne: id } });
       if (exitName) {
-        errors.push({ name: "Tên thương hiệu đã tồn tại!" });
+        errors.name = "Tên thương hiệu đã tồn tại!";
       }
-      if (errors.length > 0) {
+      if (Object.keys(errors).length > 0) {
         return res.send(400, {
           message: "Cập nhật không thành công",
           errors: errors,
@@ -120,17 +120,11 @@ module.exports = {
         });
       }
 
-      if (payload.isDeleted) {
-        return res.send(404, {
-          message: "Danh mục đã được xoá trước đó",
-        });
-      }
-
       const result = await Brand.findByIdAndUpdate(
         id,
         {
           name: name || this.name,
-          description: description || this.description,
+          categoryId: categoryId || this.categoryId,
         },
         {
           new: true,

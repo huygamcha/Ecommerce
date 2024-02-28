@@ -11,9 +11,23 @@ const checkCreateBrand = yup.object({
       })
       .max(50, "Tên thương hiệu không được dài hơn 50 kí tự")
       .min(2, "Tên thương hiệu không được nhỏ hơn 2 kí tự"),
-    description: yup
+    categoryId: yup
       .string()
-      .max(500, "Mô tả thương hiệu không được lớn hơn 500 kí tự"),
+      .test(
+        "Validate ObjectID",
+        "CategoryId không phải là id hợp lệ",
+        (value) => {
+          if (value !== undefined && value !== null && value !== "") {
+            return ObjectId.isValid(value);
+          }
+          return true;
+        }
+      )
+      .test({
+        name: "required",
+        message: "CategoryId không được bỏ trống",
+        test: (value) => value !== undefined && value !== null && value !== "",
+      }),
   }),
 });
 
@@ -23,9 +37,23 @@ const checkUpdateBrand = yup.object({
       .string()
       .max(50, "Tên thương hiệu không được dài hơn 50 kí tự")
       .min(2, "Tên thương hiệu không được nhỏ hơn 2 kí tự"),
-    description: yup
+    categoryId: yup
       .string()
-      .max(500, "Mô tả thương hiệu không được lớn hơn 500 kí tự"),
+      .test(
+        "Validate ObjectID",
+        "CategoryId không phải là id hợp lệ",
+        (value) => {
+          if (value !== undefined && value !== null && value !== "") {
+            return ObjectId.isValid(value);
+          }
+          return true;
+        }
+      )
+      .test({
+        name: "required",
+        message: "CategoryId không được bỏ trống",
+        test: (value) => value !== undefined && value !== null && value !== "",
+      }),
   }),
 });
 

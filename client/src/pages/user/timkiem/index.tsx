@@ -2,12 +2,13 @@ import { Button, Col, Empty, Flex, Row, Space, Spin } from "antd";
 import React, { useEffect, useState } from "react";
 import style from "./timkiem.module.css";
 import clsx from "clsx";
-import { Link, useLocation, Navigate } from "react-router-dom";
+import { Link, useLocation, Navigate, useNavigate } from "react-router-dom";
 import Discount from "../../../components/discount";
 import numeral from "numeral";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import {
   getAllProductSearch,
+  getProductByCategories,
   getProductById,
 } from "../../../slices/productSlice";
 import { CheckOutlined, DownOutlined, UpOutlined } from "@ant-design/icons";
@@ -18,10 +19,13 @@ function Timkiem() {
   const { categories } = useAppSelector((state) => state.categories);
   const dispatch = useAppDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
+  // set product render
 
-  // set search
+  // set active search
   const [activePrice, setActivePrice] = useState<number>(0);
   const [activeAge, setActiveAge] = useState<number>(0);
+  const [activeCategory, setActiveCategory] = useState<string>("");
 
   // set dropdown
   const [dropPrice, setDropPrice] = useState<boolean>(true);
@@ -37,12 +41,19 @@ function Timkiem() {
   }, []);
 
   useEffect(() => {
-    if (location.pathname === "/timkiem" && productsSearch.length === 0) {
-      localStorage.removeItem("searchPrice");
-      localStorage.removeItem("searchAge");
-      dispatch(getAllProductSearch({ searchTag: undefined }));
-    }
+    localStorage.removeItem("searchPrice");
+    localStorage.removeItem("searchAge");
+    dispatch(getAllProductSearch({ searchTag: "" }));
   }, [location]);
+
+  //search category
+  const handleSearchCategory = (id: string, name: string) => {
+    dispatch(getAllProductSearch({ categoryId: id }));
+    setActiveCategory(id);
+
+    localStorage.setItem("filter", JSON.stringify({ categoryId: id }));
+    navigate(`/timkiem?s=${name}`);
+  };
 
   // search price
   const handleSearchPrice = (
@@ -58,15 +69,16 @@ function Timkiem() {
     );
   };
 
+  //search age
   const handleSearchAge = (ageFrom: number, ageTo: number, no: number) => {
-    setActiveAge(no);
     dispatch(getAllProductSearch({ ageFrom: ageFrom, ageTo: ageTo }));
+    setActiveAge(no);
     localStorage.setItem(
       "searchAge",
       JSON.stringify({ ageFrom: ageFrom, ageTo: ageTo })
     );
   };
-  console.log("««««« categories »»»»»", categories);
+
   return (
     <>
       <Row gutter={12} className={clsx(style.wrapper_global)}>
@@ -95,17 +107,19 @@ function Timkiem() {
                     <Button
                       style={{
                         boxShadow:
-                          0 === activePrice
+                          category._id === activeCategory
                             ? "inset 0 0 0 1px #1250dc"
                             : "none",
                       }}
-                      onClick={() => handleSearchPrice(0, 1000000000, 0)}
+                      onClick={() =>
+                        handleSearchCategory(category._id, category.name)
+                      }
                       className={clsx(style.filter_select)}
                     >
                       {category.name}
                       <Space
                         className={clsx(
-                          0 === activePrice
+                          category._id === activeCategory
                             ? style.filter_label
                             : { display: "none" }
                         )}
@@ -224,7 +238,7 @@ function Timkiem() {
                         4 === activePrice ? "inset 0 0 0 1px #1250dc" : "none",
                     }}
                     value={4}
-                    onClick={() => handleSearchPrice(500000, 10000000, 4)}
+                    onClick={() => handleSearchPrice(500000, 100000000, 4)}
                     className={clsx(style.filter_select)}
                   >
                     Trên đ500.000

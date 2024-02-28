@@ -7,6 +7,7 @@ import customerSlice from './slices/customerSlice'
 import cartSlice from './slices/cartSlice'
 import footerSlice from './slices/footerSlice'
 import tagSlice from './slices/tagSlice'
+import brandSlice from './slices/brandSlice'
 import { 
   TypedUseSelectorHook, 
   useDispatch, 
@@ -22,7 +23,8 @@ const rootReducer = {
   customers: customerSlice,
   carts: cartSlice,
   footers: footerSlice,
-  tags: tagSlice
+  tags: tagSlice,
+  brands: brandSlice
 }
 
 const store = configureStore({reducer: rootReducer})

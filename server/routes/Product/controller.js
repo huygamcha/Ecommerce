@@ -53,7 +53,10 @@ module.exports = {
       const skip = limit * (page - 1) || 0;
 
       // search theo tag
-      let { searchTag, priceFrom, priceTo, ageFrom, ageTo } = req.query;
+      let { searchTag, priceFrom, priceTo, ageFrom, ageTo, categoryId } =
+        req.query;
+
+      console.log("««««« searchTag »»»»»", categoryId);
 
       priceFrom = parseInt(priceFrom);
       priceTo = parseInt(priceTo);
@@ -61,22 +64,41 @@ module.exports = {
       ageTo = parseInt(ageTo);
 
       if (!priceFrom) priceFrom = 0;
-      if (!priceTo) priceTo = 100000000;
+      if (!priceTo) priceTo = 1000000000;
       if (!ageFrom) ageFrom = 0;
       if (!ageTo) ageTo = 100;
 
       // console.log("««««« searchTag »»»»»", searchTag);
-      const result = await Product.find({
-        tagList: { $in: [searchTag] },
-        price: { $gte: priceFrom, $lte: priceTo },
-        age: { $gte: ageFrom, $lte: ageTo },
-      })
-        .populate("category")
-        .populate("supplier")
-        .limit(limit)
-        .skip(skip)
-        .sort({ createdAt: -1 })
-        .lean({ virtuals: true });
+      let result;
+      // khi lọc theo tag
+      if (searchTag) {
+        result = await Product.find({
+          tagList: { $in: [searchTag] },
+          price: { $gte: priceFrom, $lte: priceTo },
+          age: { $gte: ageFrom, $lte: ageTo },
+        })
+          .populate("category")
+          .populate("supplier")
+          .limit(limit)
+          .skip(skip)
+          .sort({ createdAt: -1 })
+          .lean({ virtuals: true });
+      } else if (categoryId) {
+        // khi lọc theo danh mục
+        result = await Product.find({
+          categoryId: categoryId,
+          price: { $gte: priceFrom, $lte: priceTo },
+          age: { $gte: ageFrom, $lte: ageTo },
+        })
+          .populate("category")
+          .populate("supplier")
+          .limit(limit)
+          .skip(skip)
+          .sort({ createdAt: -1 })
+          .lean({ virtuals: true });
+      }
+      // khi lọc theo danh mục và brand
+
       if (result.length > 0) {
         return res.send(200, {
           message: "Lấy thông tin sản phẩm thành công",

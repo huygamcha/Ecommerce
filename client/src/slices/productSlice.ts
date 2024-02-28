@@ -20,6 +20,7 @@ interface ProductSearchType {
   page?: number;
   pageSize?: number;
   searchTag?: string;
+  categoryId?: string;
   priceFrom?: number;
   priceTo?: number;
   ageFrom?: number;
@@ -89,37 +90,45 @@ const getAllProduct = createAsyncThunk<ProductsType[], ProductSearchType>(
 const getAllProductSearch = createAsyncThunk<ProductsType[], ProductSearchType>(
   "product/getAllProductSearch",
   async (arg = {}) => {
-    const tagId = localStorage.getItem("searchTag")
-      ? JSON.parse(localStorage.getItem("searchTag")!)
+    const filter = localStorage.getItem("filter")
+      ? JSON.parse(localStorage.getItem("filter")!)
       : undefined;
 
     const searchPriceInfor = localStorage.getItem("searchPrice")
       ? JSON.parse(localStorage.getItem("searchPrice")!)
       : undefined;
 
-      const searchAgeInfor = localStorage.getItem("searchAge")
+    const searchAgeInfor = localStorage.getItem("searchAge")
       ? JSON.parse(localStorage.getItem("searchAge")!)
       : undefined;
 
-    let { searchTag, priceFrom, priceTo, ageFrom, ageTo } = arg;
+    let { searchTag, priceFrom, priceTo, ageFrom, ageTo , categoryId } = arg;
 
-    if (!searchTag) {
-      searchTag = tagId;
-
+    if (!searchTag && filter.searchTag) {
+      searchTag = filter.searchTag;
     }
+    else if (!searchTag && !filter.searchTag){
+      searchTag = undefined
+    }
+
+    if (!categoryId && filter.categoryId) {
+      categoryId = filter.categoryId;
+    }
+    else if (!categoryId && !filter.categoryId){
+      categoryId = undefined
+    }
+
     if (!priceFrom && searchPriceInfor && priceFrom !== 0) {
       priceFrom = searchPriceInfor.priceFrom;
     } else if (!priceFrom && !searchPriceInfor) {
       priceFrom = 0;
     }
 
-    if (!priceTo && searchPriceInfor && priceTo !== 0 ) {
+    if (!priceTo && searchPriceInfor && priceTo !== 0) {
       priceTo = searchPriceInfor.priceTo;
     } else if (!priceTo && !searchPriceInfor) {
       priceTo = 1000000000;
     }
-
-    console.log('««««« searchAgeInfor »»»»»', searchAgeInfor);
 
     if (!ageFrom && searchAgeInfor && ageFrom !== 0) {
       ageFrom = searchAgeInfor.ageFrom;
@@ -127,16 +136,14 @@ const getAllProductSearch = createAsyncThunk<ProductsType[], ProductSearchType>(
       ageFrom = 0;
     }
 
-    if (!ageTo && searchAgeInfor && ageTo !== 0 ) {
+    if (!ageTo && searchAgeInfor && ageTo !== 0) {
       ageTo = searchAgeInfor.ageTo;
     } else if (!ageTo && !searchAgeInfor) {
       ageTo = 100;
     }
 
-
-
     const response = await axios.get(
-      `${process.env.REACT_APP_BACKEND}/products/search?searchTag=${searchTag}&priceFrom=${priceFrom}&priceTo=${priceTo}&ageFrom=${ageFrom}&ageTo=${ageTo}`
+      `${process.env.REACT_APP_BACKEND}/products/search?${categoryId? `categoryId=${categoryId}` : ''}${searchTag? `&searchTag=${searchTag}` : ''}&priceFrom=${priceFrom}&priceTo=${priceTo}&ageFrom=${ageFrom}&ageTo=${ageTo}`
     );
     console.log("««««« response »»»»»");
     const data: ProductsType[] = response.data.payload;
@@ -148,8 +155,15 @@ const getProductByCategories = createAsyncThunk<
   ProductsType[],
   string | undefined
 >("product/getProductByCategories", async (id) => {
-  // trả về response rồi lấy ra, để tránh lỗi A non-serializable value was detected in an action, in the path: `payload.headers`
-  //https://chat.openai.com/c/48f823af-3e96-48aa-8df3-fe6e306aef10
+  
+  const categoryId = localStorage.getItem("searchCategory")
+  ? JSON.parse(localStorage.getItem("searchCategory")!)
+  : undefined;
+
+  if (!id) {
+    id = categoryId.id
+  }
+  console.log('««««« id »»»»»', id);
   const response = await axios.get(
     `${process.env.REACT_APP_BACKEND}/products/byCategories?id=${id}`
   );
@@ -161,8 +175,7 @@ const getProductBySuppliers = createAsyncThunk<
   ProductsType[],
   string | undefined
 >("product/getProductBySuppliers", async (id) => {
-  // trả về response rồi lấy ra, để tránh lỗi A non-serializable value was detected in an action, in the path: `payload.headers`
-  //https://chat.openai.com/c/48f823af-3e96-48aa-8df3-fe6e306aef10
+
   const response = await axios.get(
     `${process.env.REACT_APP_BACKEND}/products/BySuppliers?id=${id}`
   );
@@ -173,8 +186,7 @@ const getProductBySuppliers = createAsyncThunk<
 const getProductById = createAsyncThunk<ProductsType, string | undefined>(
   "product/getProductById",
   async (id) => {
-    // trả về response rồi lấy ra, để tránh lỗi A non-serializable value was detected in an action, in the path: `payload.headers`
-    //https://chat.openai.com/c/48f823af-3e96-48aa-8df3-fe6e306aef10
+  
     const response = await axios.get(
       `${process.env.REACT_APP_BACKEND}/products/${id}`
     );
@@ -322,7 +334,7 @@ const productSlice = createSlice({
     builder.addCase(getProductByCategories.rejected, (state, action) => {
       state.loading = false;
       const customErrors = action.payload as { message?: string; errors?: any };
-      state.error = customErrors.errors; // Ensure a default message or fallback if action.error is undefined
+      state.error = customErrors; // Ensure a default message or fallback if action.error is undefined
     });
 
     //get by supplier
