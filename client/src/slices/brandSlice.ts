@@ -5,14 +5,15 @@ const currentUser =  localStorage.getItem('userInfor') ? JSON.parse(localStorage
 
 interface BrandsType {
   name: string;
-  description: string;
   _id: string;
+  pic: string;
+  categoryId: string
 }
 
 
 interface InitialType {
   success: boolean;
-  error: { message?: string, errors?: any } | string;
+  error: { message?: string, errors?: {name? : string} } ;
   brand: BrandsType;
   loading: boolean;
   deleted: boolean;
@@ -22,11 +23,12 @@ interface InitialType {
 
 const initialState: InitialType = {
   success: false,
-  error: '',
+  error:{ message : '', errors : {name  : ''} } ,
   brand: {
     _id: '',
     name: "",
-    description: ""
+    pic: "",
+  categoryId: ""
   },
   loading: false,
   deleted: false,
@@ -44,9 +46,10 @@ const getAllBrand = createAsyncThunk<BrandsType[]>("brand/getAll", async () => {
 });
 
 // tham số thứ 2 là tham số truyền vào gửi từ client
-const createBrand = createAsyncThunk<BrandsType, BrandsType>("brand/createBrand", async (name, { rejectWithValue }) => {
+const createBrand = createAsyncThunk<BrandsType, BrandsType>("brand/createBrand", async (value, { rejectWithValue }) => {
   try {
-    const response = await axios.post(`${process.env.REACT_APP_BACKEND}/brands`, name);
+    console.log('««««« value abc »»»»»', value);
+    const response = await axios.post(`${process.env.REACT_APP_BACKEND}/brands`, value);
     const data: BrandsType = response.data;
     return data;
   } catch (error: any) {
@@ -107,6 +110,8 @@ const brandSlice = createSlice({
   extraReducers(builder) {
     builder.addCase(getAllBrand.pending, (state) => {
       state.loading = true;
+      state.error = {message: '', errors: {name : ''}};
+
     });
 
     builder.addCase(
@@ -120,14 +125,15 @@ const brandSlice = createSlice({
       getAllBrand.rejected,
       (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "An error occurred"; // Ensure a default message or fallback if action.error is undefined
+        const customErrors = action.payload as {message: string , errors : {name: string}}
+        state.error = customErrors
       }
     );
 
     // create
     builder.addCase(createBrand.pending, (state) => {
       state.loading = true;
-      // state.error = "";
+      state.error = {message: '', errors: {name : ''}};
     });
 
     builder.addCase(
@@ -135,7 +141,6 @@ const brandSlice = createSlice({
       (state, action) => {
         state.loading = false;
         state.brand = action.payload;
-        state.error = "";
       }
     );
     builder.addCase(
@@ -148,14 +153,14 @@ const brandSlice = createSlice({
         // redux không chắc rằng errors có phải là một object không nên nó không lưu => lỗi
         const customErrors = action.payload as { message?: string, errors?: any }
         state.loading = false;
-        state.error = customErrors.errors; // Ensure a default message or fallback if action.error is undefined
+        state.error = customErrors; // Ensure a default message or fallback if action.error is undefined
       }
     );
 
     //delete
     builder.addCase(deleteBrand.pending, (state) => {
       state.loading = true;
-      state.error = "";
+      state.error = {message: '', errors: {name : ''}};
     });
 
     builder.addCase(
@@ -170,14 +175,15 @@ const brandSlice = createSlice({
       (state, action) => {
         const customErrors = action.payload as { message?: string, errors?: any }
         state.loading = false;
-        state.error = customErrors.errors; // Ensure a default message or fallback if action.error is undefined
+        state.error = customErrors; // Ensure a default message or fallback if action.error is undefined
       }
     );
 
     //update
     builder.addCase(updateBrand.pending, (state) => {
       state.loading = true;
-      state.error = "";
+      state.error = {message: '', errors: {name : ''}};
+
     });
 
     builder.addCase(
@@ -185,7 +191,7 @@ const brandSlice = createSlice({
       (state, action) => {
         state.loading = false;
         state.brand = action.payload;
-        state.error = "";
+      
       }
     );
 
@@ -193,9 +199,9 @@ const brandSlice = createSlice({
       updateBrand.rejected,
       (state, action) => {
         console.log('««««« action »»»»»', action);
-        const customErrors = action.payload as { message?: string, errors?: any }
+        const customErrors = action.payload as { message?: string, errors?: {name: string} }
         state.loading = false;
-        state.error = customErrors.errors; // Ensure a default message or fallback if action.error is undefined
+        state.error = customErrors; // Ensure a default message or fallback if action.error is undefined
       }
     );
 

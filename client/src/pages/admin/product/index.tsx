@@ -123,8 +123,6 @@ const Product = (props: Props) => {
   // update product modal
 
   const onUpdate = async (values: any) => {
-    console.log("««««« values »»»»»", values);
-    console.log("««««« {...values,pic: pic} »»»»»", { ...values, pic: pic });
     await dispatch(
       updateProduct({ id: selectedProduct, values: { ...values, pic: pic } })
     );
@@ -334,7 +332,6 @@ const Product = (props: Props) => {
               name="categoryId"
               rules={[{ required: true, message: "Vui lòng chọn danh mục!" }]}
               hasFeedback
-              // help={error ? "ok" : "123"}
             >
               <Select
                 options={categories.map((item: any) => {
@@ -410,6 +407,7 @@ const Product = (props: Props) => {
             <Form.Item<FieldType> label="Mô tả" name="description">
               <Input.TextArea rows={3} />
             </Form.Item>
+
             <Form.Item<FieldType> label="Chọn ảnh" name="pic">
               <Input
                 type="file"
@@ -422,6 +420,7 @@ const Product = (props: Props) => {
                 }}
               ></Input>
             </Form.Item>
+
             <Form.Item wrapperCol={{ offset: 6 }}>
               <Button type="primary" htmlType="submit">
                 Thêm sản phẩm

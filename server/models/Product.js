@@ -53,6 +53,12 @@ const productSchema = new Schema(
       required: true,
     },
 
+    brandId: {
+      type: Schema.Types.ObjectId,
+      ref: "brand",
+      required: true,
+    },
+
     supplierId: {
       type: Schema.Types.ObjectId,
       ref: "supplier",

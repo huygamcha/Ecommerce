@@ -16,7 +16,7 @@ router.route("/").post(validateSchema(checkCreateBrand), createBrand);
 router
   .route("/:id")
   .delete(validateSchema(checkId), deleteBrand)
-  .get(validateSchema(checkId), protect, admin, getDetailBrand)
+  .get(validateSchema(checkId), getDetailBrand)
   .patch(
     validateSchema(checkId),
     validateSchema(checkUpdateBrand),

@@ -212,13 +212,13 @@ module.exports = {
         categoryId,
         supplierId,
         tagList,
+        brandId,
         pic,
         age,
       } = req.body;
 
       const errors = {};
       const errorsTagList = {};
-      console.log("««««« tagList »»»»»", tagList);
       if (tagList)
         await asyncForEach(tagList, async (item, index) => {
           const error = await Tag.findOne({ _id: item });
@@ -267,6 +267,7 @@ module.exports = {
         categoryId,
         supplierId,
         tagList,
+        brandId,
         pic,
         age,
       });
@@ -320,6 +321,7 @@ module.exports = {
         description,
         tagList,
         pic,
+        brandId,
         age,
       } = req.body;
 
@@ -388,6 +390,7 @@ module.exports = {
           tagList: tagList || this.tagList,
           slug: this.slug,
           age: age || this.age,
+          brandId: brandId || this.brandId,
         },
         {
           new: true,

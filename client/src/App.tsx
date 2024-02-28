@@ -37,6 +37,7 @@ import Payment from "./pages/user/payment";
 import FooterAdmin from "./pages/admin/footer";
 import Tag from "./pages/admin/tag";
 import Timkiem from "./pages/user/timkiem";
+import Brand from "./pages/admin/brand";
 const { Sider, Content } = Layout;
 numeral.locale("vi");
 
@@ -121,11 +122,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/admin/brands",
-        element: <Category />,
+        element: <Brand />,
         children: [
           {
             path: "/admin/brands/:id",
-            element: <Category />,
+            element: <Brand />,
           },
         ],
       },

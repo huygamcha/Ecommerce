@@ -1,7 +1,6 @@
-import React, { useCallback, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import {
   Button,
-  Checkbox,
   Form,
   Input,
   Card,
@@ -10,6 +9,9 @@ import {
   Popconfirm,
   Space,
   Modal,
+  Select,
+  Image,
+  Spin,
 } from "antd";
 import { useEffect } from "react";
 import {
@@ -19,9 +21,10 @@ import {
   updateBrand,
 } from "../../../slices/brandSlice";
 import { useAppSelector, useAppDispatch } from "../../../store";
-import { useForm } from "antd/es/form/Form";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { getAllCategory } from "../../../slices/categorySlice";
+import { render } from "@testing-library/react";
 
 type Props = {};
 
@@ -31,14 +34,17 @@ const Brand = (props: Props) => {
   // không hiển thị khi lần đầu load trang
   const [initialRender, setInitialRender] = useState<boolean>(true);
   const [isActive, setIsActive] = useState<boolean>(false);
+
   // get from database
   const dispatch = useAppDispatch();
 
   const { brands, error } = useAppSelector((state) => state.brands);
+  const { categories } = useAppSelector((state) => state.categories);
 
   useEffect(() => {
     setInitialRender(false);
     dispatch(getAllBrand());
+    dispatch(getAllCategory());
   }, [dispatch]);
 
   //set active modal
@@ -65,7 +71,8 @@ const Brand = (props: Props) => {
   // form
   type FieldType = {
     name?: string;
-    description?: string;
+    categoryId: string;
+    pic?: string;
   };
 
   const [createForm] = Form.useForm<FieldType>();
@@ -73,17 +80,17 @@ const Brand = (props: Props) => {
 
   useEffect(() => {
     if (!initialRender) {
-      if (error) {
+      if (error.message !== "") {
         if (!param.id) {
-          onShowMessage("Tạo danh mục không thành công", "error");
+          onShowMessage(`${error.errors?.name}`, "error");
         } else {
-          onShowMessage("Cập nhật danh mục không thành công", "error");
+          onShowMessage(`${error.errors?.name}`, "error");
         }
       } else {
         if (!param.id) {
-          onShowMessage("Tạo danh mục thành công", "success");
+          onShowMessage("Tạo thương hiệu thành công", "success");
         } else {
-          onShowMessage("Cập nhật danh mục thành công", "success");
+          onShowMessage("Cập nhật thương hiệu thành công", "success");
           navigate(-1);
           setSelectedBrand(false);
         }
@@ -94,28 +101,67 @@ const Brand = (props: Props) => {
   }, [isActive]);
 
   const onFinish = async (values: any) => {
-    await dispatch(createBrand(values));
+    console.log("««««« values »»»»»", values);
+    await dispatch(createBrand({ ...values, pic: pic }));
+    setPic("");
     // setInitialRender(false);
     setIsActive(!isActive);
   };
 
   // update brand modal
-
   const onUpdate = async (values: any) => {
-    await dispatch(updateBrand({ id: selectedBrand, values: values }));
+    await dispatch(
+      updateBrand({ id: selectedBrand, values: { ...values, pic: picDetail } })
+    );
+    setPicDetail("");
     setIsActive(!isActive);
   };
 
   const onDelete = async (values: any) => {
     await dispatch(deleteBrand(values));
     dispatch(getAllBrand());
-    onShowMessage("Xoá danh mục thành công");
+    onShowMessage("Xoá thương hiệu thành công");
   };
 
-  // console.log("««««« brand »»»»»", brand);
-  // console.log("««««« brands »»»»»", brands);
-  // console.log("««««« error »»»»»", error);
   console.log("««««« initialRender »»»»»", initialRender);
+
+  // upload image
+  const [picDetail, setPicDetail] = useState<string>();
+  const [pic, setPic] = useState<string>();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const postDetails = (pics: any, infor: string) => {
+    if (pics === undefined) {
+      return;
+    }
+    if (pics.type === "image/jpeg" || pics.type === "image/png") {
+      setIsLoading(false);
+      const data = new FormData();
+      data.append("file", pics);
+      data.append("upload_preset", "pbl3_chatbot");
+      data.append("cloud_name", "drqphlfn6");
+      fetch("https://api.cloudinary.com/v1_1/drqphlfn6/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setIsLoading(true);
+          if (infor === "create") {
+            setPic(data.url.toString());
+            createForm.setFieldValue("pic", data.url.toString());
+          } else {
+            setPicDetail(data.url.toString());
+          }
+          console.log(data.url.toString());
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      return;
+    }
+    console.log("««««« pic »»»»»", pic);
+  };
 
   // table
   const columns = [
@@ -129,14 +175,30 @@ const Brand = (props: Props) => {
       },
     },
     {
+      title: "Category",
+      dataIndex: "categoryId",
+      key: "categoryId",
+      render: (text: string, record: any) => {
+        return <Space>{record.category.name}</Space>;
+      },
+    },
+    {
       title: "Name",
       dataIndex: "name",
       key: "name",
     },
+
     {
-      title: "Description",
-      dataIndex: "description",
-      key: "description",
+      title: "Image",
+      dataIndex: "pic",
+      key: "pic",
+      render: (text: string, record: any) => {
+        return (
+          <Image height={60} width={60} src={text}>
+            {record.category.name}
+          </Image>
+        );
+      },
     },
     {
       title: "Actions",
@@ -153,13 +215,14 @@ const Brand = (props: Props) => {
                 onClick={() => {
                   setSelectedBrand(record._id);
                   updateForm.setFieldsValue(record);
+                  setPicDetail(record.pic);
                 }}
               ></Button>
             </Link>
 
             <Popconfirm
-              title="Xoá danh mục"
-              description="Bạn có chắc xoá danh mục này không?"
+              title="Xoá thương hiệu"
+              description="Bạn có chắc xoá thương hiệu này không?"
               onConfirm={() => {
                 onDelete(record._id);
               }}
@@ -174,7 +237,7 @@ const Brand = (props: Props) => {
   return (
     <div>
       {contextHolder}
-      <Card title="Tạo danh mục mới" style={{ width: "100%" }}>
+      <Card title="Tạo thương hiệu mới" style={{ width: "100%" }}>
         <Form
           form={createForm}
           name="basic"
@@ -185,44 +248,81 @@ const Brand = (props: Props) => {
           autoComplete="off"
         >
           <Form.Item<FieldType>
-            label="Tên danh mục"
+            label="Tên thương hiệu"
             name="name"
             rules={[
-              { required: true, message: "Vui lòng điền tên danh mục!" },
+              { required: true, message: "Vui lòng điền tên thương hiệu!" },
               {
                 min: 2,
-                message: "Tên danh mục phải lớn hơn 2 kí tự",
+                message: "Tên thương hiệu phải lớn hơn 2 kí tự",
               },
-              {},
             ]}
             hasFeedback
           >
             <Input />
           </Form.Item>
-          <Form.Item<FieldType> label="Mô  tả" name="description">
-            <Input.TextArea rows={3} />
+
+          <Form.Item<FieldType>
+            label="Danh mục"
+            name="categoryId"
+            rules={[{ required: true, message: "Vui lòng chọn danh mục!" }]}
+            hasFeedback
+          >
+            <Select
+              options={categories.map((item: any) => {
+                return {
+                  label: item.name,
+                  value: item._id,
+                };
+              })}
+            />
           </Form.Item>
+
+          <Form.Item<FieldType>
+            rules={[{ required: true, message: "Vui lòng chọn hình ảnh!" }]}
+            name="pic"
+            label="Hình ảnh"
+          >
+            {pic ? <Image height={100} src={pic}></Image> : <Space></Space>}
+            {/* <Space>{pic}</Space> */}
+            <Input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const selectedFile = e.target.files && e.target.files[0];
+                if (selectedFile) {
+                  postDetails(selectedFile, "create");
+                }
+              }}
+            ></Input>
+          </Form.Item>
+
           <Form.Item wrapperCol={{ offset: 6 }}>
-            <Button type="primary" htmlType="submit">
-              Thêm danh mục
-            </Button>
+            {isLoading ? (
+              <Button type="primary" htmlType="submit">
+                Thêm thương hiệu
+              </Button>
+            ) : (
+              <Spin />
+            )}
           </Form.Item>
         </Form>
       </Card>
-      <Card title="Danh sách các danh mục">
+      <Card title="Danh sách các thương hiệu">
         <Table dataSource={brands} columns={columns} />
       </Card>
 
       {/* form edit và delete */}
       <Modal
         centered
-        title="Chỉnh sửa danh mục"
+        title="Chỉnh sửa thương hiệu"
         onCancel={() => {
           navigate(-1);
           setSelectedBrand(false);
         }}
         open={selectedBrand}
-        okText="Save changes"
+        confirmLoading={!isLoading}
+        okText="Lưu"
         onOk={() => {
           updateForm.submit();
         }}
@@ -238,17 +338,44 @@ const Brand = (props: Props) => {
             autoComplete="off"
           >
             <Form.Item<FieldType>
-              label="Sửa danh mục"
+              label="Sửa thương hiệu"
               name="name"
               rules={[
-                { required: true, message: "Vui lòng điền tên danh mục!" },
-                { min: 2, message: "Tên danh mục phải có ít nhất 2 ký tự!" },
+                { required: true, message: "Vui lòng điền tên thương hiệu!" },
+                { min: 2, message: "Tên thương hiệu phải có ít nhất 2 ký tự!" },
               ]}
             >
               <Input />
             </Form.Item>
-            <Form.Item<FieldType> label="Mô tả" name="description">
-              <Input.TextArea rows={3} />
+
+            <Form.Item<FieldType>
+              label="Danh mục"
+              name="categoryId"
+              rules={[{ required: true, message: "Vui lòng chọn danh mục!" }]}
+              hasFeedback
+            >
+              <Select
+                options={categories.map((item: any) => {
+                  return {
+                    label: item.name,
+                    value: item._id,
+                  };
+                })}
+              />
+            </Form.Item>
+
+            <Form.Item<FieldType> name="pic" label="Hình ảnh">
+              <Image height={100} src={picDetail}></Image>
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const selectedFile = e.target.files && e.target.files[0];
+                  if (selectedFile) {
+                    postDetails(selectedFile, "update");
+                  }
+                }}
+              ></Input>
             </Form.Item>
           </Form>
         </Card>

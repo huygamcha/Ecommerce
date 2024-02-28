@@ -3,7 +3,9 @@ const { Brand } = require("../../models");
 module.exports = {
   getAllBrand: async (req, res, next) => {
     try {
-      const result = await Brand.find();
+      const result = await Brand.find()
+        .populate("category")
+        .sort({ createdAt: -1 });
       return res.send(200, {
         message: "Lấy thông tin thương hiệu thành công",
         payload: result,
@@ -39,16 +41,16 @@ module.exports = {
 
   createBrand: async (req, res, next) => {
     try {
-      const { name, categoryId } = req.body;
+      const { name, categoryId, pic } = req.body;
 
       const errors = {};
 
       const exitName = await Brand.findOne({
         name: name,
       });
-      if (exitName) error.name = "Tên thương hiệu đã tồn tại";
+      if (exitName) errors.name = "Tên thương hiệu đã tồn tại";
 
-      if (Object.keys(error).length > 0) {
+      if (Object.keys(errors).length > 0) {
         return res.send(400, {
           message: "Tạo không thành công",
           errors: errors,
@@ -58,8 +60,8 @@ module.exports = {
       const newBrand = new Brand({
         name,
         categoryId,
+        pic,
       });
-
       const payload = await newBrand.save();
 
       return res.send(200, {
@@ -67,6 +69,7 @@ module.exports = {
         payload: payload,
       });
     } catch (error) {
+      console.log("««««« error »»»»»", error);
       return res.send(400, {
         message: "Tạo thương hiệu không thành công",
       });
@@ -99,7 +102,7 @@ module.exports = {
   updateBrand: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const { name, categoryId } = req.body;
+      const { name, categoryId, pic } = req.body;
       const payload = await Brand.findById(id);
 
       const errors = {};
@@ -125,6 +128,7 @@ module.exports = {
         {
           name: name || this.name,
           categoryId: categoryId || this.categoryId,
+          pic: pic || this.pic,
         },
         {
           new: true,

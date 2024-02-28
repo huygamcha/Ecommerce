@@ -1,7 +1,9 @@
 const yup = require("yup");
+const ObjectId = require("mongodb").ObjectId;
 
 const checkCreateBrand = yup.object({
   body: yup.object({
+    pic: yup.string(),
     name: yup
       .string()
       .test({
@@ -37,6 +39,7 @@ const checkUpdateBrand = yup.object({
       .string()
       .max(50, "Tên thương hiệu không được dài hơn 50 kí tự")
       .min(2, "Tên thương hiệu không được nhỏ hơn 2 kí tự"),
+    pic: yup.string(),
     categoryId: yup
       .string()
       .test(
