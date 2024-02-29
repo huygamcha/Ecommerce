@@ -73,10 +73,24 @@ const checkCreateProduct = yup.object({
           }
           return true;
         }
-      )
+      ),
+    // .test({
+    //   name: "required",
+    //   message: "SupplierId không được bỏ trống",
+    //   test: (value) => value !== undefined && value !== null && value !== "",
+    // }),
+
+    brandId: yup
+      .string()
+      .test("Validate ObjectID", "BrandId không phải là id hợp lệ", (value) => {
+        if (value !== undefined && value !== null && value !== "") {
+          return ObjectId.isValid(value);
+        }
+        return true;
+      })
       .test({
         name: "required",
-        message: "SupplierId không được bỏ trống",
+        message: "BrandId không được bỏ trống",
         test: (value) => value !== undefined && value !== null && value !== "",
       }),
     //future
@@ -166,6 +180,14 @@ const checkUpdateProduct = yup.object({
     //     ),
     //   })
     // ),
+    brandId: yup
+      .string()
+      .test("Validate ObjectID", "BrandId không phải là id hợp lệ", (value) => {
+        if (value !== undefined && value !== null && value !== "") {
+          return ObjectId.isValid(value);
+        }
+        return true;
+      }),
 
     description: yup.string(),
     slug: yup.string(),

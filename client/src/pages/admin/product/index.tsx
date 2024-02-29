@@ -30,6 +30,7 @@ import { getAllSupplier } from "../../../slices/supplierSlice";
 import { getAllCategory } from "../../../slices/categorySlice";
 import numeral from "numeral";
 import { getAllTag } from "../../../slices/tagSlice";
+import { getAllBrand } from "../../../slices/brandSlice";
 
 type Props = {};
 
@@ -45,6 +46,7 @@ const Product = (props: Props) => {
   const { products, error } = useAppSelector((state) => state.products);
   const { suppliers } = useAppSelector((state) => state.suppliers);
   const { categories } = useAppSelector((state) => state.categories);
+  const { brands } = useAppSelector((state) => state.brands);
   const { tags } = useAppSelector((state) => state.tags);
 
   useEffect(() => {
@@ -86,12 +88,15 @@ const Product = (props: Props) => {
     discount: number;
     categoryId: string;
     supplierId: string;
+    brandId: string;
     pic: string;
     tagList: Array<string>;
   };
 
   const [createForm] = Form.useForm<FieldType>();
   const [updateForm] = Form.useForm<FieldType>();
+  const categoryFormCreate = Form.useWatch("categoryId", createForm);
+  const categoryFormUpdate = Form.useWatch("categoryId", updateForm);
 
   useEffect(() => {
     if (!initialRender) {
@@ -121,7 +126,6 @@ const Product = (props: Props) => {
   };
 
   // update product modal
-
   const onUpdate = async (values: any) => {
     await dispatch(
       updateProduct({ id: selectedProduct, values: { ...values, pic: pic } })
@@ -134,6 +138,16 @@ const Product = (props: Props) => {
     dispatch(getAllProduct({}));
     onShowMessage("Xoá sản phẩm thành công");
   };
+
+  // change when select category -> select brand
+
+  useEffect(() => {
+    dispatch(getAllBrand(categoryFormCreate));
+  }, [categoryFormCreate]);
+
+  useEffect(() => {
+    dispatch(getAllBrand(categoryFormUpdate));
+  }, [categoryFormUpdate]);
 
   // table
   const columns = [
@@ -178,9 +192,7 @@ const Product = (props: Props) => {
       key: "price",
       width: "1%",
       render: (text: string, record: any, index: number) => (
-        <div style={{ textAlign: "right" }}>
-          {numeral(text).format("$0,0.0")}
-        </div>
+        <div style={{ textAlign: "right" }}>{numeral(text).format("$0,0")}</div>
       ),
     },
 
@@ -198,7 +210,7 @@ const Product = (props: Props) => {
 
         return (
           <div style={{ textAlign: "right", color: color }}>
-            {numeral(text).format("0,0.0")}%
+            {numeral(text).format("0,0")}%
           </div>
         );
       },
@@ -209,9 +221,7 @@ const Product = (props: Props) => {
       key: "total",
       width: "1%",
       render: (text: string, record: any, index: number) => (
-        <div style={{ textAlign: "right" }}>
-          {numeral(text).format("$0,0.0")}
-        </div>
+        <div style={{ textAlign: "right" }}>{numeral(text).format("$0,0")}</div>
       ),
     },
     {
@@ -343,6 +353,24 @@ const Product = (props: Props) => {
               />
             </Form.Item>
 
+            <Form.Item<FieldType>
+              label="Thương hiệu"
+              name="brandId"
+              rules={[
+                { required: true, message: "Vui lòng chọn thương hiệu!" },
+              ]}
+              hasFeedback
+            >
+              <Select
+                options={brands.map((item: any) => {
+                  return {
+                    label: item.name,
+                    value: item._id,
+                  };
+                })}
+              />
+            </Form.Item>
+
             <Form.Item<FieldType> label="Tag" name="tagList">
               <Select
                 mode="multiple"
@@ -356,7 +384,7 @@ const Product = (props: Props) => {
               />
             </Form.Item>
 
-            <Form.Item<FieldType>
+            {/* <Form.Item<FieldType>
               label="Nhà cung cấp"
               name="supplierId"
               rules={[
@@ -372,7 +400,7 @@ const Product = (props: Props) => {
                   };
                 })}
               />
-            </Form.Item>
+            </Form.Item> */}
 
             <Form.Item<FieldType>
               label="Giá sản phẩm"
@@ -484,15 +512,15 @@ const Product = (props: Props) => {
               </Form.Item>
 
               <Form.Item<FieldType>
-                label="Nhà cung cấp"
-                name="supplierId"
+                label="Thương hiệu"
+                name="brandId"
                 rules={[
-                  { required: true, message: "Vui lòng chọn nhà cung cấp!" },
+                  { required: true, message: "Vui lòng chọn thương hiệu!" },
                 ]}
                 hasFeedback
               >
                 <Select
-                  options={suppliers.map((item: any) => {
+                  options={brands.map((item: any) => {
                     return {
                       label: item.name,
                       value: item._id,

@@ -21,6 +21,7 @@ interface ProductSearchType {
   pageSize?: number;
   searchTag?: string;
   categoryId?: string;
+  brandId?: string;
   priceFrom?: number;
   priceTo?: number;
   ageFrom?: number;
@@ -102,7 +103,7 @@ const getAllProductSearch = createAsyncThunk<ProductsType[], ProductSearchType>(
       ? JSON.parse(localStorage.getItem("searchAge")!)
       : undefined;
 
-    let { searchTag, priceFrom, priceTo, ageFrom, ageTo , categoryId } = arg;
+    let { searchTag, priceFrom, priceTo, ageFrom, ageTo , categoryId, brandId } = arg;
 
     if (!searchTag && filter.searchTag) {
       searchTag = filter.searchTag;
@@ -116,6 +117,13 @@ const getAllProductSearch = createAsyncThunk<ProductsType[], ProductSearchType>(
     }
     else if (!categoryId && !filter.categoryId){
       categoryId = undefined
+    }
+
+    if (!brandId && filter.brandId) {
+      brandId = filter.brandId;
+    }
+    else if (!brandId && !filter.brandId){
+      brandId = undefined
     }
 
     if (!priceFrom && searchPriceInfor && priceFrom !== 0) {
@@ -143,7 +151,7 @@ const getAllProductSearch = createAsyncThunk<ProductsType[], ProductSearchType>(
     }
 
     const response = await axios.get(
-      `${process.env.REACT_APP_BACKEND}/products/search?${categoryId? `categoryId=${categoryId}` : ''}${searchTag? `&searchTag=${searchTag}` : ''}&priceFrom=${priceFrom}&priceTo=${priceTo}&ageFrom=${ageFrom}&ageTo=${ageTo}`
+      `${process.env.REACT_APP_BACKEND}/products/search?${categoryId? `categoryId=${categoryId}` : ''}${searchTag? `&searchTag=${searchTag}` : ''}${brandId? `&brandId=${brandId}` : ''}&priceFrom=${priceFrom}&priceTo=${priceTo}&ageFrom=${ageFrom}&ageTo=${ageTo}`
     );
     console.log("««««« response »»»»»");
     const data: ProductsType[] = response.data.payload;

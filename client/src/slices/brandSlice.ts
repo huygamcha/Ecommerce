@@ -36,13 +36,10 @@ const initialState: InitialType = {
   brands: [],
 };
 
-const getAllBrand = createAsyncThunk<BrandsType[]>("brand/getAll", async () => {
-
-  // trả về response rồi lấy ra, để tránh lỗi A non-serializable value was detected in an action, in the path: `payload.headers`
-  //https://chat.openai.com/c/48f823af-3e96-48aa-8df3-fe6e306aef10
-  const response = await axios.get(`${process.env.REACT_APP_BACKEND}/brands`);
+const getAllBrand = createAsyncThunk<BrandsType[], string | undefined>("brand/getAll",  async (categoryId) => {
+  const response = await axios.get(`${process.env.REACT_APP_BACKEND}/brands${categoryId ? `?categoryId=${categoryId}` : `` }`);
   const data: BrandsType[] = response.data.payload;
-  return data; // Assuming brands are in the `data` property of the response
+  return data; 
 });
 
 // tham số thứ 2 là tham số truyền vào gửi từ client

@@ -20,8 +20,8 @@ module.exports = {
       const result = await Product.find({ slug: fuzzySearch(search) })
         .populate("category")
         .populate("supplier")
-        .limit(limit)
-        .skip(skip)
+        // .limit(limit)
+        // .skip(skip)
         .sort({ createdAt: -1 })
         .lean({ virtuals: true });
       if (result.length > 0) {
@@ -53,10 +53,17 @@ module.exports = {
       const skip = limit * (page - 1) || 0;
 
       // search theo tag
-      let { searchTag, priceFrom, priceTo, ageFrom, ageTo, categoryId } =
-        req.query;
+      let {
+        searchTag,
+        priceFrom,
+        priceTo,
+        ageFrom,
+        ageTo,
+        categoryId,
+        brandId,
+      } = req.query;
 
-      console.log("««««« searchTag »»»»»", categoryId);
+      console.log("««««« brandId »»»»»", brandId);
 
       priceFrom = parseInt(priceFrom);
       priceTo = parseInt(priceTo);
@@ -79,11 +86,11 @@ module.exports = {
         })
           .populate("category")
           .populate("supplier")
-          .limit(limit)
-          .skip(skip)
+          // .limit(limit)
+          // .skip(skip)
           .sort({ createdAt: -1 })
           .lean({ virtuals: true });
-      } else if (categoryId) {
+      } else if (categoryId && !brandId) {
         // khi lọc theo danh mục
         result = await Product.find({
           categoryId: categoryId,
@@ -92,12 +99,26 @@ module.exports = {
         })
           .populate("category")
           .populate("supplier")
-          .limit(limit)
-          .skip(skip)
+          // .limit(limit)
+          // .skip(skip)
           .sort({ createdAt: -1 })
           .lean({ virtuals: true });
       }
       // khi lọc theo danh mục và brand
+      else if (categoryId && brandId) {
+        result = await Product.find({
+          categoryId: categoryId,
+          brandId: brandId,
+          price: { $gte: priceFrom, $lte: priceTo },
+          age: { $gte: ageFrom, $lte: ageTo },
+        })
+          .populate("category")
+          .populate("supplier")
+          // .limit(limit)
+          // .skip(skip)
+          .sort({ createdAt: -1 })
+          .lean({ virtuals: true });
+      }
 
       if (result.length > 0) {
         return res.send(200, {

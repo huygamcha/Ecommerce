@@ -3,9 +3,19 @@ const { Brand } = require("../../models");
 module.exports = {
   getAllBrand: async (req, res, next) => {
     try {
-      const result = await Brand.find()
-        .populate("category")
-        .sort({ createdAt: -1 });
+      const { categoryId } = req.query;
+      let result;
+      if (categoryId) {
+        result = await Brand.find({ categoryId: categoryId })
+          .populate("category")
+          .sort({ createdAt: -1 });
+      } else {
+        return res.send(200, {
+          message: "Lấy thông tin thương hiệu thành công",
+          payload: [],
+        });
+      }
+
       return res.send(200, {
         message: "Lấy thông tin thương hiệu thành công",
         payload: result,

@@ -62,7 +62,7 @@ const productSchema = new Schema(
     supplierId: {
       type: Schema.Types.ObjectId,
       ref: "supplier",
-      required: true,
+      // required: true,
     },
 
     tagList: [
@@ -124,17 +124,11 @@ productSchema.pre("save", function (next) {
 
 // Pre-findOneAndUpdate hook
 productSchema.pre("findOneAndUpdate", function (next) {
-  console.log(
-    "««««« this.getUpdate(), this.getQuery() »»»»»",
-    this.getUpdate()
-  );
-
-  if (this.getQuery().name) {
+  if (this._update.name) {
     const update = this.getUpdate();
     update.slug = slugify(update.name, { lower: true });
   }
   // Chuyển đổi name thành slug bất kể name có được thay đổi hay không
-
   next();
 });
 

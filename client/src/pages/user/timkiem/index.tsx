@@ -13,10 +13,15 @@ import {
 } from "../../../slices/productSlice";
 import { CheckOutlined, DownOutlined, UpOutlined } from "@ant-design/icons";
 import { getAllCategory } from "../../../slices/categorySlice";
+import { getAllBrand } from "../../../slices/brandSlice";
 
 function Timkiem() {
+  const filter = localStorage.getItem("filter")
+    ? JSON.parse(localStorage.getItem("filter")!)
+    : undefined;
   const { productsSearch } = useAppSelector((state) => state.products);
   const { categories } = useAppSelector((state) => state.categories);
+  const { brands } = useAppSelector((state) => state.brands);
   const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
@@ -25,12 +30,18 @@ function Timkiem() {
   // set active search
   const [activePrice, setActivePrice] = useState<number>(0);
   const [activeAge, setActiveAge] = useState<number>(0);
-  const [activeCategory, setActiveCategory] = useState<string>("");
+  const [activeCategory, setActiveCategory] = useState<string>(
+    filter ? filter.categoryId : ""
+  );
+  const [activeBrand, setActiveBrand] = useState<string>(
+    filter ? filter.brandId : ""
+  );
 
   // set dropdown
   const [dropPrice, setDropPrice] = useState<boolean>(true);
   const [dropAge, setDropAge] = useState<boolean>(true);
   const [dropCategory, setDropCategory] = useState<boolean>(true);
+  const [dropBrand, setDropBrand] = useState<boolean>(true);
 
   const handleDetail = (value: string) => {
     dispatch(getProductById(value));
@@ -38,21 +49,41 @@ function Timkiem() {
 
   useEffect(() => {
     dispatch(getAllCategory());
+    dispatch(getAllBrand(filter.categoryId ? filter.categoryId : ""));
   }, []);
 
   useEffect(() => {
     localStorage.removeItem("searchPrice");
     localStorage.removeItem("searchAge");
     dispatch(getAllProductSearch({ searchTag: "" }));
+    if (filter.searchTag) {
+      setActiveCategory("");
+      dispatch(getAllBrand());
+    }
   }, [location]);
 
   //search category
   const handleSearchCategory = (id: string, name: string) => {
     dispatch(getAllProductSearch({ categoryId: id }));
     setActiveCategory(id);
-
+    dispatch(getAllBrand(id));
+    setDropBrand(true);
     localStorage.setItem("filter", JSON.stringify({ categoryId: id }));
     navigate(`/timkiem?s=${name}`);
+  };
+
+  //search brand
+  const handleSearchBrand = (id: string, name: string) => {
+    setActiveBrand(id);
+    dispatch(getAllProductSearch({ brandId: id }));
+    const filter = localStorage.getItem
+      ? JSON.parse(localStorage.getItem("filter")!)
+      : {};
+    if (filter) {
+      filter["brandId"] = id;
+    }
+    localStorage.setItem("filter", JSON.stringify(filter));
+    // navigate(`/timkiem?s=${name}`);
   };
 
   // search price
@@ -120,6 +151,52 @@ function Timkiem() {
                       <Space
                         className={clsx(
                           category._id === activeCategory
+                            ? style.filter_label
+                            : { display: "none" }
+                        )}
+                      >
+                        <div style={{ display: "none" }}>1</div>
+                      </Space>
+                    </Button>
+                  ))}
+                </Flex>
+              </Flex>
+            </Space>
+
+            <Space className={clsx(style.navbar)}>
+              <Flex vertical>
+                <Flex
+                  onClick={() => setDropBrand(!dropBrand)}
+                  justify="space-between"
+                  align="center"
+                  className={clsx(style.filter_name, style.dropdown_main)}
+                >
+                  Thương hiệu
+                  {dropBrand ? <DownOutlined /> : <UpOutlined />}
+                </Flex>
+
+                <Flex
+                  vertical
+                  className={clsx(
+                    style.dropdown_item,
+                    dropBrand ? style.active : ""
+                  )}
+                >
+                  {brands.map((brand) => (
+                    <Button
+                      style={{
+                        boxShadow:
+                          brand._id === activeBrand
+                            ? "inset 0 0 0 1px #1250dc"
+                            : "none",
+                      }}
+                      onClick={() => handleSearchBrand(brand._id, brand.name)}
+                      className={clsx(style.filter_select)}
+                    >
+                      {brand.name}
+                      <Space
+                        className={clsx(
+                          brand._id === activeBrand
                             ? style.filter_label
                             : { display: "none" }
                         )}
