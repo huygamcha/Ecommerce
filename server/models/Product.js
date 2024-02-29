@@ -9,7 +9,7 @@ const productSchema = new Schema(
       type: String,
       require: [true, "Tên sản phẩm không được bỏ trống"],
       maxLength: [50, "Tên sản phẩm không được quá 50 kí tự"],
-      unique: [true, "Tên sản phẩm không được trùng"],
+      // unique: [true, "Tên sản phẩm không được trùng"],
     },
 
     price: {

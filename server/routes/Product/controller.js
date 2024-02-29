@@ -238,46 +238,46 @@ module.exports = {
         age,
       } = req.body;
 
-      const errors = {};
-      const errorsTagList = {};
-      if (tagList)
-        await asyncForEach(tagList, async (item, index) => {
-          const error = await Tag.findOne({ _id: item });
-          if (!error) {
-            errorsTagList[`tag ${index + 1}`] = `Không tìm thấy tag thứ ${
-              index + 1
-            }`;
-          }
-        });
+      // const errors = {};
+      // const errorsTagList = {};
+      // if (tagList)
+      //   await asyncForEach(tagList, async (item, index) => {
+      //     const error = await Tag.findOne({ _id: item });
+      //     if (!error) {
+      //       errorsTagList[`tag ${index + 1}`] = `Không tìm thấy tag thứ ${
+      //         index + 1
+      //       }`;
+      //     }
+      //   });
 
-      if (Object.keys(errorsTagList).length > 0) {
-        errors.errorsTagList = errorsTagList;
-      }
+      // if (Object.keys(errorsTagList).length > 0) {
+      //   errors.errorsTagList = errorsTagList;
+      // }
 
-      const exitName = Product.findOne({ name });
-      const exitCategoryId = Category.findOne({ _id: categoryId });
-      const exitSupplierId = Supplier.findOne({ _id: supplierId });
-      // const exitTagId = Tag.findOne({ _id: tagId });
+      // const exitName = Product.findOne({ name });
+      // const exitCategoryId = Category.findOne({ _id: categoryId });
+      // const exitSupplierId = Supplier.findOne({ _id: supplierId });
+      // // const exitTagId = Tag.findOne({ _id: tagId });
 
-      const [checkName, checkCategoryId, checkSupplierId] = await Promise.all([
-        exitName,
-        exitCategoryId,
-        exitSupplierId,
-        // exitTagId,
-      ]);
-      if (checkName) {
-        errors.name = "Sản phẩm này đã tồn tại";
-      }
-      if (!checkCategoryId) errors.categoryId = "Không có danh mục này";
-      if (!checkSupplierId) errors.supplierId = "Không có nhà cung cấp này";
-      // if (!checkSupplierId) errors.tagId = "Không có tag cấp này";
+      // const [checkName, checkCategoryId, checkSupplierId] = await Promise.all([
+      //   exitName,
+      //   exitCategoryId,
+      //   exitSupplierId,
+      //   // exitTagId,
+      // ]);
+      // if (checkName) {
+      //   errors.name = "Sản phẩm này đã tồn tại";
+      // }
+      // if (!checkCategoryId) errors.categoryId = "Không có danh mục này";
+      // if (!checkSupplierId) errors.supplierId = "Không có nhà cung cấp này";
+      // // if (!checkSupplierId) errors.tagId = "Không có tag cấp này";
 
-      if (Object.keys(errors).length > 0) {
-        return res.send(400, {
-          message: "Tạo sản phẩm không thành công",
-          errors: errors,
-        });
-      }
+      // if (Object.keys(errors).length > 0) {
+      //   return res.send(400, {
+      //     message: "Tạo sản phẩm không thành công",
+      //     errors: errors,
+      //   });
+      // }
 
       const newProduct = new Product({
         name,

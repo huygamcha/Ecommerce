@@ -24,7 +24,7 @@ import {
   updateProduct,
 } from "../../../slices/productSlice";
 import { useAppSelector, useAppDispatch } from "../../../store";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { CopyOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { getAllSupplier } from "../../../slices/supplierSlice";
 import { getAllCategory } from "../../../slices/categorySlice";
@@ -140,7 +140,6 @@ const Product = (props: Props) => {
   };
 
   // change when select category -> select brand
-
   useEffect(() => {
     dispatch(getAllBrand(categoryFormCreate));
   }, [categoryFormCreate]);
@@ -241,6 +240,11 @@ const Product = (props: Props) => {
       render: (text: any, record: any) => {
         return (
           <Space size="small">
+            <Button
+              onClick={() => handleCopy(record)}
+              icon={<CopyOutlined />}
+            ></Button>
+
             <Link to={`/admin/products/${record._id}`}>
               <Button
                 type="primary"
@@ -302,6 +306,13 @@ const Product = (props: Props) => {
       return;
     }
     console.log("««««« pic »»»»»", pic);
+  };
+
+  //copy
+  const handleCopy = async (values: any) => {
+    console.log("««««« values copy »»»»»", values);
+    await dispatch(createProduct({ ...values, name: `${values.name} (copy)` }));
+    setIsActive(!isActive);
   };
 
   return (
