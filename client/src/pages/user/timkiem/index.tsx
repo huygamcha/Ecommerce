@@ -64,11 +64,11 @@ function Timkiem() {
 
   //search category
   const handleSearchCategory = (id: string, name: string) => {
+    localStorage.setItem("filter", JSON.stringify({ categoryId: id }));
     dispatch(getAllProductSearch({ categoryId: id }));
     setActiveCategory(id);
     dispatch(getAllBrand(id));
     setDropBrand(true);
-    localStorage.setItem("filter", JSON.stringify({ categoryId: id }));
     navigate(`/timkiem?s=${name}`);
   };
 

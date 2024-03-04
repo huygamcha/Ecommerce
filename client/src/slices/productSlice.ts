@@ -5,7 +5,6 @@ interface ProductsType {
   _id: string;
   name: string;
   description: string;
-  supplierId: string;
   categoryId: string;
   price: number;
   discount: number;
@@ -13,6 +12,16 @@ interface ProductsType {
   total: number;
   pic: string;
   slug: string;
+  category: any;
+  brand: any;
+  fromBrand: string;
+  supplierHome: string;
+  country: string;
+  ingredient: string;
+  detail: string;
+  specifications: string;
+  unit: string;
+
 }
 
 interface ProductSearchType {
@@ -44,17 +53,25 @@ const initialState: InitialType = {
   success: false,
   error: { message: "", errors: { name: "" } },
   product: {
+    brand: {},
+    category: {},
     slug: "",
     _id: "",
     name: "",
     description: "",
-    supplierId: "",
     categoryId: "",
     price: 0,
     discount: 0,
     stock: 0,
     total: 0,
     pic: "",
+    fromBrand: '',
+    supplierHome: '',
+    country: '',
+    ingredient: '',
+    detail: '',
+    specifications: '',
+    unit: ''
   },
   loading: false,
   deleted: false,

@@ -1,4 +1,4 @@
-const { Product, Category, Supplier, Tag } = require("../../models");
+const { Product, Category, Supplier, Tag, Brand } = require("../../models");
 const { fuzzySearch, asyncForEach } = require("../../utils");
 const unidecode = require("unidecode");
 
@@ -85,7 +85,7 @@ module.exports = {
           age: { $gte: ageFrom, $lte: ageTo },
         })
           .populate("category")
-          .populate("supplier")
+          .populate("brand")
           // .limit(limit)
           // .skip(skip)
           .sort({ createdAt: -1 })
@@ -98,7 +98,8 @@ module.exports = {
           age: { $gte: ageFrom, $lte: ageTo },
         })
           .populate("category")
-          .populate("supplier")
+          .populate("brand")
+
           // .limit(limit)
           // .skip(skip)
           .sort({ createdAt: -1 })
@@ -113,7 +114,8 @@ module.exports = {
           age: { $gte: ageFrom, $lte: ageTo },
         })
           .populate("category")
-          .populate("supplier")
+          .populate("brand")
+
           // .limit(limit)
           // .skip(skip)
           .sort({ createdAt: -1 })
@@ -145,7 +147,7 @@ module.exports = {
       const payload = await Product.findById(id)
         .populate("category")
         .populate("tag")
-        .populate("supplier")
+        .populate("brand")
         .lean({ virtuals: true });
       if (!payload) {
         return res.send(404, {
@@ -236,48 +238,55 @@ module.exports = {
         brandId,
         pic,
         age,
+        fromBrand,
+        supplierHome,
+        country,
+        ingredient,
+        detail,
+        specifications,
+        unit,
       } = req.body;
 
-      // const errors = {};
-      // const errorsTagList = {};
-      // if (tagList)
-      //   await asyncForEach(tagList, async (item, index) => {
-      //     const error = await Tag.findOne({ _id: item });
-      //     if (!error) {
-      //       errorsTagList[`tag ${index + 1}`] = `Không tìm thấy tag thứ ${
-      //         index + 1
-      //       }`;
-      //     }
-      //   });
+      const errors = {};
+      const errorsTagList = {};
+      if (tagList)
+        await asyncForEach(tagList, async (item, index) => {
+          const error = await Tag.findOne({ _id: item });
+          if (!error) {
+            errorsTagList[`tag ${index + 1}`] = `Không tìm thấy tag thứ ${
+              index + 1
+            }`;
+          }
+        });
 
-      // if (Object.keys(errorsTagList).length > 0) {
-      //   errors.errorsTagList = errorsTagList;
-      // }
+      if (Object.keys(errorsTagList).length > 0) {
+        errors.errorsTagList = errorsTagList;
+      }
 
-      // const exitName = Product.findOne({ name });
-      // const exitCategoryId = Category.findOne({ _id: categoryId });
-      // const exitSupplierId = Supplier.findOne({ _id: supplierId });
-      // // const exitTagId = Tag.findOne({ _id: tagId });
+      const exitName = Product.findOne({ name });
+      const exitCategoryId = Category.findOne({ _id: categoryId });
+      const exitBrandId = Brand.findOne({ _id: brandId });
+      // const exitTagId = Tag.findOne({ _id: tagId });
 
-      // const [checkName, checkCategoryId, checkSupplierId] = await Promise.all([
-      //   exitName,
-      //   exitCategoryId,
-      //   exitSupplierId,
-      //   // exitTagId,
-      // ]);
-      // if (checkName) {
-      //   errors.name = "Sản phẩm này đã tồn tại";
-      // }
-      // if (!checkCategoryId) errors.categoryId = "Không có danh mục này";
-      // if (!checkSupplierId) errors.supplierId = "Không có nhà cung cấp này";
-      // // if (!checkSupplierId) errors.tagId = "Không có tag cấp này";
+      const [checkName, checkCategoryId, checkBrandId] = await Promise.all([
+        exitName,
+        exitCategoryId,
+        exitBrandId,
+        // exitTagId,
+      ]);
+      if (checkName) {
+        errors.name = "Sản phẩm này đã tồn tại";
+      }
+      if (!checkCategoryId) errors.categoryId = "Không có danh mục này";
+      if (!checkBrandId) errors.brandId = "Không có thương hiệu này";
+      // if (!checkSupplierId) errors.tagId = "Không có tag cấp này";
 
-      // if (Object.keys(errors).length > 0) {
-      //   return res.send(400, {
-      //     message: "Tạo sản phẩm không thành công",
-      //     errors: errors,
-      //   });
-      // }
+      if (Object.keys(errors).length > 0) {
+        return res.send(400, {
+          message: "Tạo sản phẩm không thành công",
+          errors: errors,
+        });
+      }
 
       const newProduct = new Product({
         name,
@@ -291,6 +300,13 @@ module.exports = {
         brandId,
         pic,
         age,
+        fromBrand,
+        supplierHome,
+        country,
+        ingredient,
+        specifications,
+        unit,
+        detail,
       });
 
       const payload = await newProduct.save();
@@ -344,6 +360,13 @@ module.exports = {
         pic,
         brandId,
         age,
+        fromBrand,
+        supplierHome,
+        country,
+        ingredient,
+        detail,
+        specifications,
+        unit,
       } = req.body;
 
       const errors = {};
@@ -412,6 +435,13 @@ module.exports = {
           slug: this.slug,
           age: age || this.age,
           brandId: brandId || this.brandId,
+          fromBrand: fromBrand || this.fromBrand,
+          supplierHome: supplierHome || this.supplierHome,
+          country: country || this.country,
+          ingredient: ingredient || this.ingredient,
+          detail: detail || this.detail,
+          specifications: specifications || this.specifications,
+          unit: unit || this.unit,
         },
         {
           new: true,

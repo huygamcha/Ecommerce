@@ -91,6 +91,13 @@ const Product = (props: Props) => {
     brandId: string;
     pic: string;
     tagList: Array<string>;
+    fromBrand: string;
+    supplierHome: string;
+    country: string;
+    ingredient: string;
+    detail: string;
+    specifications: string;
+    unit: string;
   };
 
   const [createForm] = Form.useForm<FieldType>();
@@ -165,12 +172,7 @@ const Product = (props: Props) => {
       key: "category.name",
       render: (text: any, record: any) => record.category.name, // Render nested data
     },
-    {
-      title: "Nhà cung cấp",
-      dataIndex: "supplier", // Access nested property
-      key: "supplier.name",
-      render: (text: any, record: any) => record.supplier.name, // Render nested data
-    },
+
     {
       title: "Tên sản phẩm",
       dataIndex: "name",
@@ -320,8 +322,11 @@ const Product = (props: Props) => {
       <ConfigProvider
         theme={{
           components: {
+            Input: {
+              controlHeight: 40,
+            },
             InputNumber: {
-              controlWidth: 300,
+              controlHeight: 40,
             },
           },
         }}
@@ -382,19 +387,6 @@ const Product = (props: Props) => {
               />
             </Form.Item>
 
-            <Form.Item<FieldType> label="Tag" name="tagList">
-              <Select
-                mode="multiple"
-                style={{ width: "100%" }}
-                options={tags.map((tag) => {
-                  return {
-                    label: tag.name,
-                    value: tag._id,
-                  };
-                })}
-              />
-            </Form.Item>
-
             {/* <Form.Item<FieldType>
               label="Nhà cung cấp"
               name="supplierId"
@@ -420,7 +412,7 @@ const Product = (props: Props) => {
                 { required: true, message: "Vui lòng nhập giá sản phẩm!" },
               ]}
             >
-              <InputNumber defaultValue={0} min={0} />
+              <InputNumber style={{ width: "100%" }} defaultValue={0} min={0} />
             </Form.Item>
 
             <Form.Item<FieldType>
@@ -430,7 +422,12 @@ const Product = (props: Props) => {
               label="Giảm giá"
               name="discount"
             >
-              <InputNumber defaultValue={0} min={0} max={75} />
+              <InputNumber
+                style={{ width: "100%" }}
+                defaultValue={0}
+                min={0}
+                max={75}
+              />
             </Form.Item>
 
             <Form.Item<FieldType>
@@ -440,11 +437,54 @@ const Product = (props: Props) => {
               label="Số lượng sản phẩm"
               name="stock"
             >
-              <InputNumber defaultValue={0} min={0} />
+              <InputNumber style={{ width: "100%" }} defaultValue={0} min={0} />
             </Form.Item>
 
-            <Form.Item<FieldType> label="Mô tả" name="description">
-              <Input.TextArea rows={3} />
+            <Form.Item<FieldType> label="Đơn vị" name="unit">
+              <Input.TextArea placeholder="Hộp" rows={1} />
+            </Form.Item>
+
+            <Form.Item<FieldType> label="Quy cách" name="specifications">
+              <Input.TextArea placeholder="1 hộp 500ml bột" rows={1} />
+            </Form.Item>
+
+            <Form.Item<FieldType> label="Xuất xứ thương hiệu" name="fromBrand">
+              <Input.TextArea placeholder="Việt Nam" rows={1} />
+            </Form.Item>
+
+            <Form.Item<FieldType> label="Nhà sản xuất" name="supplierHome">
+              <Input.TextArea placeholder="Việt Nam" rows={1} />
+            </Form.Item>
+
+            <Form.Item<FieldType> label="Nước sản xuất" name="country">
+              <Input.TextArea placeholder="Việt Nam" rows={1} />
+            </Form.Item>
+
+            <Form.Item<FieldType> label="Thành phần" name="ingredient">
+              <Input.TextArea
+                placeholder="sữa bò tươi (97%), đường tinh luyện (2,8)"
+                rows={3}
+              />
+            </Form.Item>
+
+            <Form.Item<FieldType> label="Mô tả ngắn" name="description">
+              <Input.TextArea
+                placeholder="thơm ngon từ lúa mạch, cung cấp đạm và canxi cho cơ thể. Milo từ lâu luôn là thương hiệu sữa uống lúa mạch được các bé yêu thích."
+                rows={3}
+              />
+            </Form.Item>
+
+            <Form.Item<FieldType> label="Tag" name="tagList">
+              <Select
+                mode="multiple"
+                style={{ width: "100%" }}
+                options={tags.map((tag) => {
+                  return {
+                    label: tag.name,
+                    value: tag._id,
+                  };
+                })}
+              />
             </Form.Item>
 
             <Form.Item<FieldType> label="Chọn ảnh" name="pic">

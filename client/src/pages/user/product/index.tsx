@@ -35,36 +35,8 @@ function ProductScreen() {
 
   const handleDetail = (value: string) => {
     dispatch(getProductById(value));
+    localStorage.setItem("productId", JSON.stringify(value));
   };
-
-  const categoryItems: MenuProps["items"] = [];
-  const supplierItems: MenuProps["items"] = [];
-  categories.map((category) =>
-    categoryItems?.push({
-      key: category.name,
-      label: (
-        <Link
-          to={`/sanpham/search/${category.name}`}
-          onClick={(e) => dispatch(getProductByCategories(category._id))}
-        >
-          {category.name}
-        </Link>
-      ),
-    })
-  );
-  suppliers.map((supplier) =>
-    supplierItems?.push({
-      key: supplier.name,
-      label: (
-        <Link
-          to={`/sanpham/search/${supplier.name}`}
-          onClick={(e) => dispatch(getProductBySuppliers(supplier._id))}
-        >
-          {supplier.name}
-        </Link>
-      ),
-    })
-  );
 
   return (
     <div className={clsx(style.wrapper_global, style.top_sale)}>

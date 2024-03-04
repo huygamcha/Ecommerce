@@ -9,7 +9,7 @@ const productSchema = new Schema(
       type: String,
       require: [true, "Tên sản phẩm không được bỏ trống"],
       maxLength: [50, "Tên sản phẩm không được quá 50 kí tự"],
-      // unique: [true, "Tên sản phẩm không được trùng"],
+      unique: [true, "Tên sản phẩm không được trùng"],
     },
 
     price: {
@@ -43,8 +43,28 @@ const productSchema = new Schema(
 
     description: {
       type: String,
-      // require: [true, "Mô tả sản phẩm không được bỏ trống"],
-      maxLength: [3000, "Mô tả sản phẩm không được quá 3000 kí tự"],
+    },
+    specifications: {
+      type: String,
+    },
+    unit: {
+      type: String,
+    },
+    fromBrand: {
+      type: String,
+    },
+    supplierHome: {
+      type: String,
+    },
+    country: {
+      type: String,
+    },
+    ingredient: {
+      type: String,
+    },
+
+    detail: {
+      type: String,
     },
 
     categoryId: {
@@ -59,11 +79,11 @@ const productSchema = new Schema(
       required: true,
     },
 
-    supplierId: {
-      type: Schema.Types.ObjectId,
-      ref: "supplier",
-      // required: true,
-    },
+    // supplierId: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: "supplier",
+    //   // required: true,
+    // },
 
     tagList: [
       {
@@ -105,6 +125,13 @@ productSchema.virtual("supplier", {
 productSchema.virtual("tag", {
   ref: "tag",
   localField: "tagTd",
+  foreignField: "_id",
+  justOne: true,
+});
+
+productSchema.virtual("brand", {
+  ref: "brand",
+  localField: "brandId",
   foreignField: "_id",
   justOne: true,
 });

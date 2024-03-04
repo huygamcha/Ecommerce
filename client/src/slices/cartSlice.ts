@@ -124,13 +124,12 @@ const cartSlice = createSlice({
     },
 
     addToCart: (state, action) => {
-      console.log("««««« action »»»»»", action);
       // kiểm tra nếu sản phẩm giống nhau thì tăng số lượng
       const specificItem = state.carts.find(
         (cart) => cart.id === action.payload.id
       );
       if (specificItem) {
-        specificItem.quantity++;
+        specificItem.quantity += action.payload.quantity;
       } else {
         state.carts.push(action.payload);
       }
