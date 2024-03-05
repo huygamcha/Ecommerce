@@ -55,6 +55,7 @@ const Product = (props: Props) => {
     dispatch(getAllSupplier());
     dispatch(getAllCategory());
     dispatch(getAllTag());
+    dispatch(getAllBrand());
   }, [dispatch]);
 
   //set active modal
@@ -148,11 +149,19 @@ const Product = (props: Props) => {
 
   // change when select category -> select brand
   useEffect(() => {
-    dispatch(getAllBrand(categoryFormCreate));
+    createForm.setFieldValue("brandId", "");
   }, [categoryFormCreate]);
 
   useEffect(() => {
-    dispatch(getAllBrand(categoryFormUpdate));
+    // kiểm tra xem nếu category bị thay đổi thì brand sẽ set là rỗng
+    const matchBrand = brands
+      .filter(
+        (brand) => brand.categoryId === updateForm.getFieldValue("categoryId")
+      )
+      .find((brand) => brand._id === updateForm.getFieldValue("brandId"));
+    if (!matchBrand) {
+      updateForm.setFieldValue("brandId", "");
+    }
   }, [categoryFormUpdate]);
 
   // table
@@ -378,12 +387,12 @@ const Product = (props: Props) => {
               hasFeedback
             >
               <Select
-                options={brands.map((item: any) => {
-                  return {
+                options={brands
+                  .filter((item) => item.categoryId === categoryFormCreate)
+                  .map((item: any) => ({
                     label: item.name,
                     value: item._id,
-                  };
-                })}
+                  }))}
               />
             </Form.Item>
 
@@ -571,12 +580,12 @@ const Product = (props: Props) => {
                 hasFeedback
               >
                 <Select
-                  options={brands.map((item: any) => {
-                    return {
-                      label: item.name,
+                  options={brands
+                    .filter((item) => item.categoryId === categoryFormUpdate)
+                    .map((item) => ({
                       value: item._id,
-                    };
-                  })}
+                      label: item.name,
+                    }))}
                 />
               </Form.Item>
 

@@ -3,23 +3,27 @@ const { Brand } = require("../../models");
 module.exports = {
   getAllBrand: async (req, res, next) => {
     try {
-      const { categoryId } = req.query;
-      let result;
-      if (categoryId) {
-        result = await Brand.find({ categoryId: categoryId })
-          .populate("category")
-          .sort({ createdAt: -1 });
-      } else {
+      // const { categoryId } = req.query;
+      // let result;
+      // if (categoryId) {
+      //   result = await Brand.find({ categoryId: categoryId })
+      //     .populate("category")
+      //     .sort({ createdAt: -1 });
+      // } else {
+      //   return res.send(200, {
+      //     message: "Lấy thông tin thương hiệu thành công",
+      //     payload: [],
+      //   });
+      // }
+
+      const result = await Brand.find()
+        .populate("category")
+        .sort({ createdAt: -1 });
+      if (result)
         return res.send(200, {
           message: "Lấy thông tin thương hiệu thành công",
-          payload: [],
+          payload: result,
         });
-      }
-
-      return res.send(200, {
-        message: "Lấy thông tin thương hiệu thành công",
-        payload: result,
-      });
     } catch (error) {
       return res.send(400, {
         message: "Lấy thông tin thương hiệu không thành công",

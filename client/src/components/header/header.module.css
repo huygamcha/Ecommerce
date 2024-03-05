@@ -63,7 +63,7 @@
 }
 
 /*  */
-
+.wrapper_try_tag,
 .wrapper_try {
     cursor: pointer;
     font-size: 25px;
@@ -77,12 +77,11 @@
     width: 100%;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 12px;
 }
-.wrapper_try_tag {
+.wrapper_try_brand {
     cursor: pointer;
     font-size: 25px;
     align-items: center;
-    padding: 40px 100px;
-    background-color: #3f85ea;
+    background-color: #fff;
     position: relative;
     display: flex;
     justify-content: space-between;
@@ -94,9 +93,7 @@
 .wrapper_try_tag_display{
     position: absolute;
     top: 0;
-    left: 0;
     /* width: 100%; */
-
 }
 
 .header_text {
@@ -237,6 +234,21 @@
     padding: 0px 10px;
     margin-top: 10px;
 }
+.brand_item{
+    color: #000;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    padding-right: 30px;
+    cursor: pointer;
+}
+.brand_item:hover{
+    color: #000;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    padding-right: 30px;
+}
 
 
 /* Thiết lập padding cho xs */
@@ -279,5 +291,8 @@
     }
     .wrapper_try_tag {
         padding: 0px 100px 60px 100px;
+    }
+    .wrapper_try_brand{
+        padding: 20px 100px;
     }
 }

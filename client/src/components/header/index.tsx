@@ -24,6 +24,7 @@ import {
   resetCartNotification,
 } from "../../slices/cartSlice";
 import { getAllTag } from "../../slices/tagSlice";
+import { getAllBrand } from "../../slices/brandSlice";
 
 function HeaderScreen() {
   const currentUser = localStorage.getItem("userInfor")
@@ -39,6 +40,7 @@ function HeaderScreen() {
   const dispatch = useAppDispatch();
   const { products } = useAppSelector((state) => state.products);
   const { categories } = useAppSelector((state) => state.categories);
+  const { brands } = useAppSelector((state) => state.brands);
   const { add } = useAppSelector((state) => state.carts);
   const { tags } = useAppSelector((state) => state.tags);
 
@@ -82,7 +84,11 @@ function HeaderScreen() {
     setSearch("");
   };
 
-  console.log("««««« add day »»»»»", categories);
+  // brand
+  const handleBrand = (value: string) => {
+    dispatch(getAllBrand());
+  };
+
   return (
     <>
       {tags ? (
@@ -290,8 +296,8 @@ function HeaderScreen() {
             </Space>
           </Row>
           <Row className={clsx(style.wrapper_try_tag)}>
-            <Col offset={2}>
-              <Flex className={clsx(style.wrapper_try_tag_display)}>
+            <Col offset={2} className={clsx(style.wrapper_try_tag_display)}>
+              <Flex>
                 {tags ? (
                   tags.map((tag) => (
                     <Link
@@ -308,16 +314,23 @@ function HeaderScreen() {
               </Flex>
             </Col>
           </Row>
-          <Row>
+          <Row className={clsx(style.wrapper_try_brand)}>
             <Col>
               {categories ? (
                 categories.map((category) => (
                   <Link
-                    onClick={() => handleSearchTag(category._id)}
-                    className={clsx(style.category_item)}
+                    onMouseEnter={() => handleBrand(category._id)}
+                    className={clsx(style.brand_item)}
                     to={`/timkiem?s=${category.name}`}
                   >
                     {category.name}
+                    <Link to={`/timkiem?s=${category.name}`}>
+                      {brands ? (
+                        brands.map((brand) => <Space>{brand.name}</Space>)
+                      ) : (
+                        <></>
+                      )}
+                    </Link>
                   </Link>
                 ))
               ) : (

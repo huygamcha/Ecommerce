@@ -4,10 +4,10 @@ import axios from "axios";
 const currentUser =  localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
 
 interface BrandsType {
-  name: string;
-  _id: string;
-  pic: string;
-  categoryId: string
+  name?: string;
+  _id?: string;
+  pic?: string;
+  categoryId?: string
 }
 
 
@@ -36,8 +36,8 @@ const initialState: InitialType = {
   brands: [],
 };
 
-const getAllBrand = createAsyncThunk<BrandsType[], string | undefined>("brand/getAll",  async (categoryId) => {
-  const response = await axios.get(`${process.env.REACT_APP_BACKEND}/brands${categoryId ? `?categoryId=${categoryId}` : `` }`);
+const getAllBrand = createAsyncThunk<BrandsType[]>("brand/getAll",  async () => {
+  const response = await axios.get(`${process.env.REACT_APP_BACKEND}/brands`);
   const data: BrandsType[] = response.data.payload;
   return data; 
 });
@@ -45,7 +45,6 @@ const getAllBrand = createAsyncThunk<BrandsType[], string | undefined>("brand/ge
 // tham số thứ 2 là tham số truyền vào gửi từ client
 const createBrand = createAsyncThunk<BrandsType, BrandsType>("brand/createBrand", async (value, { rejectWithValue }) => {
   try {
-    console.log('««««« value abc »»»»»', value);
     const response = await axios.post(`${process.env.REACT_APP_BACKEND}/brands`, value);
     const data: BrandsType = response.data;
     return data;
