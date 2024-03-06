@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import {
   Button,
   Form,
@@ -16,6 +16,8 @@ import {
   Spin,
 } from "antd";
 import { useEffect } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import {
   createProduct,
   getAllProduct,
@@ -41,6 +43,53 @@ const Product = (props: Props) => {
   const [isActive, setIsActive] = useState<boolean>(false);
   // get from database
   const dispatch = useAppDispatch();
+
+  // quill text editor
+  const [value, setValue] = useState("");
+  const reactQuillRef = useRef<ReactQuill>(null);
+  const imageHandler = useCallback(() => {
+    console.log("««««« 3223232 »»»»»", 3223232);
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+    input.click();
+    input.onchange = async () => {
+      if (input !== null && input.files !== null) {
+        const file = input.files[0];
+        const url = await uploadToCloudinary(file);
+        const quill = reactQuillRef.current;
+        if (quill) {
+          const range = quill.getEditorSelection();
+          range && quill.getEditor().insertEmbed(range.index, "image", url);
+        }
+      }
+    };
+  }, []);
+
+  const uploadToCloudinary = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "pbl3_chatbot");
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/drqphlfn6/image/upload",
+      {
+        method: "post",
+        body: formData,
+      }
+    );
+    const data = await res.json();
+    const url = data.url;
+    return url;
+
+    // const data = new FormData();
+    // data.append("file", album[1]);
+    // data.append("upload_preset", "pbl3_chatbot");
+    // data.append("cloud_name", "drqphlfn6");
+    // fetch("https://api.cloudinary.com/v1_1/drqphlfn6/image/upload", {
+    //   method: "post",
+    //   body: data,
+    // })
+  };
 
   const { products, error } = useAppSelector((state) => state.products);
   const { suppliers } = useAppSelector((state) => state.suppliers);
@@ -130,6 +179,7 @@ const Product = (props: Props) => {
 
   const onFinish = async (values: any) => {
     console.log("««««« albumCreate »»»»»", albumCreate);
+    console.log("««««« values »»»»»", values);
     // await dispatch(createProduct({ ...values, pic: pic }));
     setIsActive(!isActive);
   };
@@ -577,6 +627,57 @@ const Product = (props: Props) => {
                   }
                 }}
               ></Input>
+            </Form.Item>
+
+            <Form.Item<FieldType> label="Mô tả chi tiết" name="detail">
+              <ReactQuill
+                ref={reactQuillRef}
+                theme="snow"
+                placeholder="Start writing..."
+                modules={{
+                  toolbar: {
+                    container: [
+                      [{ header: "1" }, { header: "2" }, { font: [] }],
+                      [{ size: [] }],
+                      ["bold", "italic", "underline", "strike", "blockquote"],
+                      [
+                        { list: "ordered" },
+                        { list: "bullet" },
+                        { indent: "-1" },
+                        { indent: "+1" },
+                      ],
+                      ["link", "image", "video"],
+                      ["code-block"],
+                      ["clean"],
+                    ],
+                    handlers: {
+                      image: imageHandler, // <-
+                    },
+                  },
+                  clipboard: {
+                    matchVisual: false,
+                  },
+                }}
+                formats={[
+                  "header",
+                  "font",
+                  "size",
+                  "bold",
+                  "italic",
+                  "underline",
+                  "strike",
+                  "blockquote",
+                  "list",
+                  "bullet",
+                  "indent",
+                  "link",
+                  "image",
+                  "video",
+                  "code-block",
+                ]}
+                value={value}
+                // onChange={onChange}
+              />
             </Form.Item>
 
             <Form.Item wrapperCol={{ offset: 6 }}>
