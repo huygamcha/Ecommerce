@@ -13,8 +13,7 @@ import {
   Select,
   Image,
   ConfigProvider,
-  Tag,
-  SelectProps,
+  Spin,
 } from "antd";
 import { useEffect } from "react";
 import {
@@ -99,6 +98,7 @@ const Product = (props: Props) => {
     detail: string;
     specifications: string;
     unit: string;
+    album: Array<string>;
   };
 
   const [createForm] = Form.useForm<FieldType>();
@@ -129,15 +129,21 @@ const Product = (props: Props) => {
   }, [isActive]);
 
   const onFinish = async (values: any) => {
-    await dispatch(createProduct({ ...values, pic: pic }));
+    console.log("««««« albumCreate »»»»»", albumCreate);
+    // await dispatch(createProduct({ ...values, pic: pic }));
     setIsActive(!isActive);
   };
 
   // update product modal
   const onUpdate = async (values: any) => {
     await dispatch(
-      updateProduct({ id: selectedProduct, values: { ...values, pic: pic } })
+      updateProduct({
+        id: selectedProduct,
+        values: { ...values, pic: picDetail },
+      })
     );
+    setPicDetail("");
+
     setIsActive(!isActive);
   };
 
@@ -263,6 +269,7 @@ const Product = (props: Props) => {
                 onClick={() => {
                   setSelectedProduct(record._id);
                   updateForm.setFieldsValue(record);
+                  setPicDetail(record.pic);
                 }}
               ></Button>
             </Link>
@@ -282,13 +289,21 @@ const Product = (props: Props) => {
     },
   ];
 
-  // upload image
+  // upload image with create
   const [pic, setPic] = useState<string>();
-  const postDetails = (pics: any) => {
+  // image screen with update
+  const [picDetail, setPicDetail] = useState<string>();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  // image album
+  const [albumCreate, setAlbumCreate] = useState<Array<string>>([]);
+
+  // upload screen image
+  const postDetails = (pics: any, infor: string) => {
     if (pics === undefined) {
       return;
     }
     if (pics.type === "image/jpeg" || pics.type === "image/png") {
+      setIsLoading(false);
       const data = new FormData();
       data.append("file", pics);
       data.append("upload_preset", "pbl3_chatbot");
@@ -299,33 +314,72 @@ const Product = (props: Props) => {
       })
         .then((res) => res.json())
         .then((data) => {
-          setPic(data.url.toString());
-          console.log(data.url.toString());
+          if (infor === "create") {
+            setPic(data.url.toString());
+            createForm.setFieldValue("pic", data.url.toString());
+          } else {
+            setPicDetail(data.url.toString());
+          }
+          setIsLoading(true);
         })
         .catch((err) => {
           console.log(err);
         });
     } else {
-      // toast({
-      //   title: "Please Select an Image!",
-      //   status: "warning",
-      //   duration: 5000,
-      //   isClosable: true,
-      //   position: "bottom",
-      // });
-      // setPicLoading(false);
       return;
     }
     console.log("««««« pic »»»»»", pic);
   };
 
+  // upload album
+  const handleUploadAlbum = async (albums: any, infor: string) => {
+    if (albums === undefined) {
+      return;
+    }
+    // chuyển object sang array
+    const asArrayAlbum = Object.entries(albums);
+    const resultAlbum: string[] = [];
+    await Promise.all(
+      asArrayAlbum.map((album: any, index: number) => {
+        setIsLoading(false);
+        if (album[1].type === "image/jpeg" || album[1].type === "image/png") {
+          setIsLoading(false);
+          const data = new FormData();
+          data.append("file", album[1]);
+          data.append("upload_preset", "pbl3_chatbot");
+          data.append("cloud_name", "drqphlfn6");
+          fetch("https://api.cloudinary.com/v1_1/drqphlfn6/image/upload", {
+            method: "post",
+            body: data,
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              if (infor === "create") {
+                resultAlbum.push(data.url.toString());
+                if (index === asArrayAlbum.length - 1) {
+                  setAlbumCreate(resultAlbum);
+                }
+              } else {
+                setPicDetail(data.url.toString());
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        } else {
+          return;
+        }
+      })
+    );
+
+    setIsLoading(true);
+  };
+
   //copy
   const handleCopy = async (values: any) => {
-    console.log("««««« values copy »»»»»", values);
     await dispatch(createProduct({ ...values, name: `${values.name} (copy)` }));
     setIsActive(!isActive);
   };
-
   return (
     <div>
       <ConfigProvider
@@ -496,23 +550,43 @@ const Product = (props: Props) => {
               />
             </Form.Item>
 
-            <Form.Item<FieldType> label="Chọn ảnh" name="pic">
+            <Form.Item<FieldType> label="Chọn ảnh hiển thị" name="pic">
+              {pic ? <Image height={100} src={pic}></Image> : <Space></Space>}
               <Input
                 type="file"
                 accept="image/*"
                 onChange={(e) => {
                   const selectedFile = e.target.files && e.target.files[0];
                   if (selectedFile) {
-                    postDetails(selectedFile);
+                    postDetails(selectedFile, "create");
+                  }
+                }}
+              ></Input>
+            </Form.Item>
+
+            <Form.Item<FieldType> label="Album ảnh" name="album">
+              {/* {pic ? <Image height={100} src={pic}></Image> : <Space></Space>} */}
+              <Input
+                type="file"
+                multiple={true}
+                accept="image/*"
+                onChange={(e) => {
+                  const albumProduct = e.target.files;
+                  if (albumProduct) {
+                    handleUploadAlbum(albumProduct, "create");
                   }
                 }}
               ></Input>
             </Form.Item>
 
             <Form.Item wrapperCol={{ offset: 6 }}>
-              <Button type="primary" htmlType="submit">
-                Thêm sản phẩm
-              </Button>
+              {isLoading ? (
+                <Button type="primary" htmlType="submit">
+                  Thêm sản phẩm
+                </Button>
+              ) : (
+                <Spin />
+              )}
             </Form.Item>
           </Form>
         </Card>
@@ -529,7 +603,8 @@ const Product = (props: Props) => {
             setSelectedProduct(false);
           }}
           open={selectedProduct}
-          okText="Save changes"
+          okText="Lưu"
+          confirmLoading={!isLoading}
           onOk={() => {
             updateForm.submit();
           }}
@@ -635,13 +710,14 @@ const Product = (props: Props) => {
               </Form.Item>
 
               <Form.Item<FieldType> label="Chọn ảnh" name="pic">
+                <Image height={100} src={picDetail}></Image>
                 <Input
-                  // type="file"
+                  type="file"
                   accept="image/*"
                   onChange={(e) => {
                     const selectedFile = e.target.files && e.target.files[0];
                     if (selectedFile) {
-                      postDetails(selectedFile);
+                      postDetails(selectedFile, "update");
                     }
                   }}
                 ></Input>

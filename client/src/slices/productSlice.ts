@@ -21,7 +21,7 @@ interface ProductsType {
   detail: string;
   specifications: string;
   unit: string;
-
+  album: Array<string>;
 }
 
 interface ProductSearchType {
@@ -53,6 +53,7 @@ const initialState: InitialType = {
   success: false,
   error: { message: "", errors: { name: "" } },
   product: {
+    album: [''],
     brand: {},
     category: {},
     slug: "",
@@ -211,11 +212,9 @@ const getProductBySuppliers = createAsyncThunk<
 const getProductById = createAsyncThunk<ProductsType, string | undefined>(
   "product/getProductById",
   async (id) => {
-    console.log('««««« id  32»»»»»', id);
     const response = await axios.get(
       `${process.env.REACT_APP_BACKEND}/products/${id}`
       );
-      console.log('««««« id »»»»»', id);
     const data: ProductsType = response.data.payload;
     return data; // Assuming products are in the `data` property of the response
   }

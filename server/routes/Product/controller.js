@@ -245,6 +245,7 @@ module.exports = {
         detail,
         specifications,
         unit,
+        album,
       } = req.body;
 
       const errors = {};
@@ -307,6 +308,7 @@ module.exports = {
         specifications,
         unit,
         detail,
+        album,
       });
 
       const payload = await newProduct.save();
@@ -367,6 +369,7 @@ module.exports = {
         detail,
         specifications,
         unit,
+        album,
       } = req.body;
 
       const errors = {};
@@ -442,6 +445,7 @@ module.exports = {
           detail: detail || this.detail,
           specifications: specifications || this.specifications,
           unit: unit || this.unit,
+          album: album || this.album,
         },
         {
           new: true,

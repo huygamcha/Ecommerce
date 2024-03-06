@@ -79,11 +79,11 @@ const productSchema = new Schema(
       required: true,
     },
 
-    // supplierId: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "supplier",
-    //   // required: true,
-    // },
+    album: [
+      {
+        type: String,
+      },
+    ],
 
     tagList: [
       {

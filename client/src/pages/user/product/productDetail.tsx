@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../store";
-import { useDispatch } from "react-redux";
 import {
   getAllProductSearch,
   getProductById,
 } from "../../../slices/productSlice";
-import { Col, Row, Space, Image, Flex, Button } from "antd";
+import { Col, Row, Space, Image, Flex } from "antd";
 import numeral from "numeral";
 import style from "./product.module.css";
 import clsx from "clsx";
-import Discount from "../../../components/discount/index";
 import { addToCart } from "../../../slices/cartSlice";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
 
 function ProductDetail() {
   const param = useParams();
@@ -57,18 +57,39 @@ function ProductDetail() {
     dispatch(getAllProductSearch({ brandId: id, categoryId: categoryId }));
   };
 
+  // carousel
+  const contentStyle: React.CSSProperties = {
+    margin: 0,
+    height: "160px",
+    width: "100px",
+    textAlign: "center",
+    background: "#364d79",
+  };
+
   return (
     <div className={clsx(style.wrapper_global, style.product_background)}>
       <div className={clsx(style.product_wrapper)}>
         <Row gutter={24}>
           <Col span={8}>
-            <Flex justify="center">
+            <Flex vertical justify="center">
               <Image
                 style={{ padding: "50px" }}
                 width="400px"
                 height="335px"
                 src={product?.pic}
               ></Image>
+              <Swiper
+                style={{ width: "100%" }}
+                spaceBetween={0}
+                slidesPerView={3}
+              >
+                {product?.album &&
+                  product?.album.map((item) => (
+                    <SwiperSlide>
+                      <Image src={item}>{item}</Image>
+                    </SwiperSlide>
+                  ))}
+              </Swiper>
             </Flex>
           </Col>
           <Col span={16}>
