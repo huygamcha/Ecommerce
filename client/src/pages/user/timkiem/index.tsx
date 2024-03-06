@@ -91,19 +91,20 @@ function Timkiem() {
     navigate(`/timkiem?s=${name}`);
   };
 
-  // //search brand
-  // const handleSearchBrand = (id: string, name: string) => {
-  //   setActiveBrand(id);
-  //   dispatch(getAllProductSearch({ brandId: id }));
-  //   const filter = localStorage.getItem
-  //     ? JSON.parse(localStorage.getItem("filter")!)
-  //     : {};
-  //   if (filter) {
-  //     filter["brandId"] = id;
-  //   }
-  //   localStorage.setItem("filter", JSON.stringify(filter));
-  //   // navigate(`/timkiem?s=${name}`);
-  // };
+  //search brand
+  const handleSearchBrand = (id: string, name: string) => {
+    const filter = localStorage.getItem("filter")
+      ? JSON.parse(localStorage.getItem("filter")!)
+      : {};
+    if (filter) {
+      filter["brandId"] = id;
+    }
+    localStorage.setItem("filter", JSON.stringify(filter));
+    setActiveBrand(id);
+    dispatch(getAllProductSearch({ brandId: id }));
+
+    // navigate(`/timkiem?s=${name}`);
+  };
 
   // search price
   const handleSearchPrice = (
@@ -210,7 +211,9 @@ function Timkiem() {
                                 ? "inset 0 0 0 1px #1250dc"
                                 : "none",
                           }}
-                          // onClick={() => handleSearchBrand(brand._id, brand.name)}
+                          onClick={() =>
+                            handleSearchBrand(brand._id, brand.name)
+                          }
                           className={clsx(style.filter_select)}
                         >
                           {brand.name}
