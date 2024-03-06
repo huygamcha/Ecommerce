@@ -80,15 +80,6 @@ const Product = (props: Props) => {
     const data = await res.json();
     const url = data.url;
     return url;
-
-    // const data = new FormData();
-    // data.append("file", album[1]);
-    // data.append("upload_preset", "pbl3_chatbot");
-    // data.append("cloud_name", "drqphlfn6");
-    // fetch("https://api.cloudinary.com/v1_1/drqphlfn6/image/upload", {
-    //   method: "post",
-    //   body: data,
-    // })
   };
 
   const { products, error } = useAppSelector((state) => state.products);
@@ -178,9 +169,9 @@ const Product = (props: Props) => {
   }, [isActive]);
 
   const onFinish = async (values: any) => {
-    console.log("««««« albumCreate »»»»»", albumCreate);
-    console.log("««««« values »»»»»", values);
-    // await dispatch(createProduct({ ...values, pic: pic }));
+    // console.log("««««« albumCreate »»»»»", albumCreate);
+    // console.log("««««« values »»»»»", values);
+    await dispatch(createProduct({ ...values, album: albumCreate }));
     setIsActive(!isActive);
   };
 
@@ -408,6 +399,7 @@ const Product = (props: Props) => {
                 resultAlbum.push(data.url.toString());
                 if (index === asArrayAlbum.length - 1) {
                   setAlbumCreate(resultAlbum);
+                  setIsLoading(true);
                 }
               } else {
                 setPicDetail(data.url.toString());
@@ -421,8 +413,6 @@ const Product = (props: Props) => {
         }
       })
     );
-
-    setIsLoading(true);
   };
 
   //copy
@@ -637,7 +627,7 @@ const Product = (props: Props) => {
                 modules={{
                   toolbar: {
                     container: [
-                      [{ header: "1" }, { header: "2" }, { font: [] }],
+                      [{ header: "1" }, { header: "2" }, { font: [""] }],
                       [{ size: [] }],
                       ["bold", "italic", "underline", "strike", "blockquote"],
                       [
@@ -646,8 +636,10 @@ const Product = (props: Props) => {
                         { indent: "-1" },
                         { indent: "+1" },
                       ],
-                      ["link", "image", "video"],
-                      ["code-block"],
+                      [{ align: [] }],
+
+                      [{ color: [] }, { background: [] }],
+                      ["link", "image"],
                       ["clean"],
                     ],
                     handlers: {
