@@ -28,7 +28,7 @@ interface ProductSearchType {
   search?: string;
   page?: number;
   pageSize?: number;
-  searchTag?: string;
+  searchTag?: string ;
   categoryId?: string;
   brandId?: string;
   priceFrom?: number;
@@ -121,14 +121,15 @@ const getAllProductSearch = createAsyncThunk<ProductsType[], ProductSearchType>(
       : undefined;
 
     let { searchTag, priceFrom, priceTo, ageFrom, ageTo , categoryId, brandId } = arg;
-
-    if (!searchTag && filter.searchTag) {
+    console.log('««««« arg »»»»»', arg);
+    
+    if (!searchTag) {
+      searchTag = ''
+    }
+    if (filter && filter.searchTag) {
       searchTag = filter.searchTag;
     }
-    else if (!searchTag && !filter.searchTag){
-      searchTag = undefined
-    }
-
+  
     if (!categoryId && filter.categoryId) {
       categoryId = filter.categoryId;
     }
@@ -166,7 +167,6 @@ const getAllProductSearch = createAsyncThunk<ProductsType[], ProductSearchType>(
     } else if (!ageTo && !searchAgeInfor) {
       ageTo = 100;
     }
-
     const response = await axios.get(
       `${process.env.REACT_APP_BACKEND}/products/search?${categoryId? `categoryId=${categoryId}` : ''}${searchTag? `&searchTag=${searchTag}` : ''}${brandId? `&brandId=${brandId}` : ''}&priceFrom=${priceFrom}&priceTo=${priceTo}&ageFrom=${ageFrom}&ageTo=${ageTo}`
     );
@@ -211,10 +211,11 @@ const getProductBySuppliers = createAsyncThunk<
 const getProductById = createAsyncThunk<ProductsType, string | undefined>(
   "product/getProductById",
   async (id) => {
-  
+    console.log('««««« id  32»»»»»', id);
     const response = await axios.get(
       `${process.env.REACT_APP_BACKEND}/products/${id}`
-    );
+      );
+      console.log('««««« id »»»»»', id);
     const data: ProductsType = response.data.payload;
     return data; // Assuming products are in the `data` property of the response
   }

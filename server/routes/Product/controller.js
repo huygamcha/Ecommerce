@@ -90,7 +90,7 @@ module.exports = {
           // .skip(skip)
           .sort({ createdAt: -1 })
           .lean({ virtuals: true });
-      } else if (categoryId && !brandId) {
+      } else if (categoryId && !brandId && !searchTag) {
         // khi lọc theo danh mục
         result = await Product.find({
           categoryId: categoryId,
@@ -106,7 +106,7 @@ module.exports = {
           .lean({ virtuals: true });
       }
       // khi lọc theo danh mục và brand
-      else if (categoryId && brandId) {
+      else if (categoryId && brandId && !searchTag) {
         result = await Product.find({
           categoryId: categoryId,
           brandId: brandId,

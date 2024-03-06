@@ -15,6 +15,7 @@ function Payment() {
   useEffect(() => {
     dispatch(getAllCart());
   }, []);
+
   useEffect(() => {
     if (!success) {
       const intervalId = setInterval(() => {

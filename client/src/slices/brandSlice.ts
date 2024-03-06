@@ -4,10 +4,10 @@ import axios from "axios";
 const currentUser =  localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
 
 interface BrandsType {
-  name?: string;
-  _id?: string;
-  pic?: string;
-  categoryId?: string
+  name: string;
+  _id: string;
+  pic: string;
+  categoryId: string
 }
 
 

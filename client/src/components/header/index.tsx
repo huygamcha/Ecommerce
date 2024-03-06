@@ -4,6 +4,7 @@ import { Col, Flex, Input, Row, Space, Image, Badge } from "antd";
 import clsx from "clsx";
 import style from "./header.module.css";
 import {
+  DownOutlined,
   LogoutOutlined,
   MenuUnfoldOutlined,
   SearchOutlined,
@@ -30,15 +31,23 @@ function HeaderScreen() {
   const currentUser = localStorage.getItem("userInfor")
     ? JSON.parse(localStorage.getItem("userInfor")!)
     : undefined;
+
+  const filter = localStorage.getItem("filter")
+    ? JSON.parse(localStorage.getItem("filter")!)
+    : undefined;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [search, setSearch] = useState<string>();
+  // xác định phần tử con nào được liệt kê
+  const [categoryActive, setCategoryActive] = useState<string>("");
   const navigate = useNavigate();
   // notifications
   const [show, setShow] = useState(false);
 
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const { products } = useAppSelector((state) => state.products);
+  const { products, productsSearch } = useAppSelector(
+    (state) => state.products
+  );
   const { categories } = useAppSelector((state) => state.categories);
   const { brands } = useAppSelector((state) => state.brands);
   const { add } = useAppSelector((state) => state.carts);
@@ -51,8 +60,8 @@ function HeaderScreen() {
 
   // search
   const handleSearchTag = (e: string) => {
-    dispatch(getAllProductSearch({ searchTag: e }));
     localStorage.setItem("filter", JSON.stringify({ searchTag: e }));
+    dispatch(getAllProductSearch({ searchTag: e }));
   };
 
   // logout
@@ -76,6 +85,7 @@ function HeaderScreen() {
 
   useEffect(() => {
     dispatch(getAllTag());
+    dispatch(getAllBrand());
   }, []);
 
   //click
@@ -84,9 +94,14 @@ function HeaderScreen() {
     setSearch("");
   };
 
-  // brand
-  const handleBrand = (value: string) => {
-    dispatch(getAllBrand());
+  //search category and brand
+  const handleSearchMenu = (categoryId: string, brandId: string) => {
+    console.log("««««« brandId »»»»»", brandId);
+    console.log("««««« location.search »»»»»", location.search.split("&b")[1]);
+    localStorage.setItem(
+      "filter",
+      JSON.stringify({ categoryId: categoryId, brandId: brandId })
+    );
   };
 
   return (
@@ -315,23 +330,50 @@ function HeaderScreen() {
             </Col>
           </Row>
           <Row className={clsx(style.wrapper_try_brand)}>
-            <Col>
+            <Col className={clsx(style.menu_sub)}>
               {categories ? (
                 categories.map((category) => (
-                  <Link
-                    onMouseEnter={() => handleBrand(category._id)}
-                    className={clsx(style.brand_item)}
-                    to={`/timkiem?s=${category.name}`}
-                  >
-                    {category.name}
-                    <Link to={`/timkiem?s=${category.name}`}>
-                      {brands ? (
-                        brands.map((brand) => <Space>{brand.name}</Space>)
-                      ) : (
-                        <></>
-                      )}
+                  <>
+                    <Link
+                      onMouseEnter={() => setCategoryActive(category._id)}
+                      onMouseLeave={() => setCategoryActive("")}
+                      onClick={(e) => {
+                        handleSearchMenu(category._id, "");
+                      }}
+                      to={`/timkiem?s=${category.name}`}
+                    >
+                      <Space className={clsx(style.brand_item)}>
+                        {category.name}
+                        <DownOutlined />
+                      </Space>
+
+                      <Flex vertical className={clsx(style.brand_list)}>
+                        {brands.map((brand) => {
+                          if (
+                            brand.categoryId === category._id &&
+                            brand.categoryId === categoryActive
+                          ) {
+                            return (
+                              <Link
+                                to={`/timkiem?s=${category.name}&b=${brand.name}`}
+                              >
+                                <Flex
+                                  onClick={(e) => {
+                                    // ngăn chặn việc gọi lên handleSearchMenu ở hàm, đánh đổi reload lại trang
+                                    e.stopPropagation();
+                                    handleSearchMenu(category._id, brand._id);
+                                  }}
+                                  className={clsx(style.brand_list_item)}
+                                >
+                                  {brand.name}
+                                </Flex>
+                              </Link>
+                            );
+                          }
+                        })}
+                      </Flex>
                     </Link>
-                  </Link>
+                  </>
                 ))
               ) : (
                 <></>

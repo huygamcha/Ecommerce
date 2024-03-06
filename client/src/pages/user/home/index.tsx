@@ -8,8 +8,9 @@ function HomeScreen() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getAllProduct({}));
+    // dispatch(getAllProduct({}));
   }, []);
+
   const contentStyle: React.CSSProperties = {
     color: "red",
     lineHeight: "300px",

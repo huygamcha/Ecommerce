@@ -26,7 +26,10 @@ function ProductDetail() {
     const id = localStorage.getItem("productId")
       ? JSON.parse(localStorage.getItem("productId")!)
       : undefined;
-    if (id) dispatch(getProductById(id));
+    // chỉ dispatch khi load lại trang
+    if (id && product?.name === "") {
+      dispatch(getProductById(id));
+    }
   }, []);
 
   // add to cart
@@ -47,16 +50,11 @@ function ProductDetail() {
 
   //search brand
   const handleSearchBrand = (id: string, name: string, categoryId: string) => {
-    dispatch(getAllProductSearch({ brandId: id }));
-    dispatch(getAllProductSearch({ categoryId: id }));
-    const filter = localStorage.getItem
-      ? JSON.parse(localStorage.getItem("filter")!)
-      : {};
-    if (filter) {
-      filter["brandId"] = id;
-      filter["categoryId"] = categoryId;
-    }
-    localStorage.setItem("filter", JSON.stringify(filter));
+    localStorage.setItem(
+      "filter",
+      JSON.stringify({ brandId: id, categoryId: categoryId })
+    );
+    dispatch(getAllProductSearch({ brandId: id, categoryId: categoryId }));
   };
 
   return (
@@ -89,7 +87,7 @@ function ProductDetail() {
                       )
                     }
                   >
-                    {product?.category.name}
+                    {product?.brand.name}
                   </Link>
                 </div>
               </Space>

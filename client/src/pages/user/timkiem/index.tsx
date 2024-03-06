@@ -30,6 +30,7 @@ function Timkiem() {
   // set active search
   const [activePrice, setActivePrice] = useState<number>(0);
   const [activeAge, setActiveAge] = useState<number>(0);
+
   const [activeCategory, setActiveCategory] = useState<string>(
     filter ? filter.categoryId : ""
   );
@@ -44,31 +45,48 @@ function Timkiem() {
   const [dropBrand, setDropBrand] = useState<boolean>(true);
 
   const handleDetail = (value: string) => {
-    dispatch(getProductById(value));
     localStorage.setItem("productId", JSON.stringify(value));
+    dispatch(getProductById(value));
   };
 
   useEffect(() => {
+    // window.location.reload();
     dispatch(getAllCategory());
+    dispatch(getAllBrand());
     // dispatch(getAllBrand(filter.categoryId ? filter.categoryId : ""));
   }, []);
 
   useEffect(() => {
     localStorage.removeItem("searchPrice");
     localStorage.removeItem("searchAge");
-    dispatch(getAllProductSearch({ searchTag: "" }));
-    if (filter.searchTag) {
-      setActiveCategory("");
-      dispatch(getAllBrand());
+    // dispatch(getAllProductSearch({ searchTag: "" }));
+    if (filter.categoryId && !filter.searchTag) {
+      setActiveCategory(filter.categoryId);
+      setActiveBrand(filter.brandId);
+      dispatch(
+        getAllProductSearch({
+          categoryId: filter.categoryId,
+          brandId: filter.brandId,
+        })
+      );
+    } else if (filter.searchTag) {
+      dispatch(
+        getAllProductSearch({
+          searchTag: filter.searchTag,
+        })
+      );
     }
-  }, [location]);
+    // nêu là lịch sử search là SearchTag thì
+    if (filter && filter.searchTag) {
+      setActiveCategory("");
+    }
+  }, [location.search]);
 
   //search category
   const handleSearchCategory = (id: string, name: string) => {
     localStorage.setItem("filter", JSON.stringify({ categoryId: id }));
     dispatch(getAllProductSearch({ categoryId: id }));
     setActiveCategory(id);
-    // dispatch(getAllBrand(id));
     setDropBrand(true);
     navigate(`/timkiem?s=${name}`);
   };
@@ -93,24 +111,23 @@ function Timkiem() {
     priceTo: number,
     no: number
   ) => {
-    dispatch(getAllProductSearch({ priceFrom: priceFrom, priceTo: priceTo }));
-    setActivePrice(no);
     localStorage.setItem(
       "searchPrice",
       JSON.stringify({ priceFrom: priceFrom, priceTo: priceTo })
     );
+    dispatch(getAllProductSearch({ priceFrom: priceFrom, priceTo: priceTo }));
+    setActivePrice(no);
   };
 
   //search age
   const handleSearchAge = (ageFrom: number, ageTo: number, no: number) => {
-    dispatch(getAllProductSearch({ ageFrom: ageFrom, ageTo: ageTo }));
-    setActiveAge(no);
     localStorage.setItem(
       "searchAge",
       JSON.stringify({ ageFrom: ageFrom, ageTo: ageTo })
     );
+    setActiveAge(no);
+    dispatch(getAllProductSearch({ ageFrom: ageFrom, ageTo: ageTo }));
   };
-
   return (
     <>
       <Row gutter={12} className={clsx(style.wrapper_global)}>
@@ -183,29 +200,33 @@ function Timkiem() {
                     dropBrand ? style.active : ""
                   )}
                 >
-                  {brands.map((brand) => (
-                    <Button
-                      style={{
-                        boxShadow:
-                          brand._id === activeBrand
-                            ? "inset 0 0 0 1px #1250dc"
-                            : "none",
-                      }}
-                      // onClick={() => handleSearchBrand(brand._id, brand.name)}
-                      className={clsx(style.filter_select)}
-                    >
-                      {brand.name}
-                      <Space
-                        className={clsx(
-                          brand._id === activeBrand
-                            ? style.filter_label
-                            : { display: "none" }
-                        )}
-                      >
-                        <div style={{ display: "none" }}>1</div>
-                      </Space>
-                    </Button>
-                  ))}
+                  {brands.map((brand) => {
+                    if (brand.categoryId === activeCategory) {
+                      return (
+                        <Button
+                          style={{
+                            boxShadow:
+                              brand._id === activeBrand
+                                ? "inset 0 0 0 1px #1250dc"
+                                : "none",
+                          }}
+                          // onClick={() => handleSearchBrand(brand._id, brand.name)}
+                          className={clsx(style.filter_select)}
+                        >
+                          {brand.name}
+                          <Space
+                            className={clsx(
+                              brand._id === activeBrand
+                                ? style.filter_label
+                                : { display: "none" }
+                            )}
+                          >
+                            <div style={{ display: "none" }}>1</div>
+                          </Space>
+                        </Button>
+                      );
+                    }
+                  })}
                 </Flex>
               </Flex>
             </Space>
