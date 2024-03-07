@@ -1,0 +1,19 @@
+.customButton {
+    border-radius: 50%;
+    background-color: #fff;
+    color: #1250dc;
+    border: none;
+    height: 38px;
+    width: 38px;
+    cursor: pointer;
+    box-shadow: rgba(0, 39, 102, 0.1) 0px 0px 8px -2px, rgba(0, 39, 102, 0.06) 0px 0px 4px -2px;
+
+}
+
+.customButton:hover {
+    border: 1px solid #1250dc;
+}
+
+.customButton>span {
+    font-size: 24px;
+}

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import {
   getAllProductSearch,
   getProductById,
 } from "../../../slices/productSlice";
-import { Col, Row, Space, Image, Flex } from "antd";
+import { Col, Row, Space, Image, Flex, Empty } from "antd";
 import numeral from "numeral";
 import style from "./product.module.css";
 import clsx from "clsx";
@@ -25,24 +25,36 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import Discount from "../../../components/discount";
+import SlideNextButton from "../../../components/buttonNavigation";
+import ButtonNavigation from "../../../components/buttonNavigation";
 
 function ProductDetail() {
   const param = useParams();
 
-  const { product, error } = useAppSelector((state) => state.products);
+  const { product, productsSearch } = useAppSelector((state) => state.products);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const [quantity, setQuantity] = useState<number>(1);
   const [showMore, setShowMore] = useState<boolean>(false);
 
+  const productCurrent = localStorage.getItem("productId")
+    ? JSON.parse(localStorage.getItem("productId")!)
+    : undefined;
+
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0 });
+  }, [location]);
+
+  useEffect(() => {
     const id = localStorage.getItem("productId")
       ? JSON.parse(localStorage.getItem("productId")!)
       : undefined;
     // chỉ dispatch khi load lại trang
     if (id && product?.name === "") {
       dispatch(getProductById(id));
+      dispatch(getAllProductSearch({ categoryId: product.categoryId }));
     }
   }, []);
 
@@ -74,14 +86,27 @@ function ProductDetail() {
   const handleShowMore = () => {
     setShowMore(!showMore);
   };
+
+  // go to detail
+  const handleDetail = (value: string, categoryId: string) => {
+    localStorage.setItem("filter", JSON.stringify({ categoryId: categoryId }));
+    localStorage.setItem("productId", JSON.stringify(value));
+    dispatch(getProductById(value));
+    dispatch(getAllProductSearch({ categoryId: categoryId }));
+  };
   return (
     <>
       <div className={clsx(style.wrapper_global, style.product_background)}>
         <div className={clsx(style.product_wrapper)}>
           <Row gutter={24}>
             <Col span={10}>
-              <Flex style={{ margin: "50px" }} vertical justify="center">
-                <Image width="400px" height="335px" src={product?.pic}></Image>
+              <Flex style={{ margin: "16px" }} vertical justify="center">
+                <Image
+                  style={{ borderRadius: "10px" }}
+                  width="100%"
+                  height="335px"
+                  src={product?.pic}
+                ></Image>
                 <Swiper
                   modules={[Navigation, Pagination, Scrollbar, A11y]}
                   style={{ width: "100%", marginTop: "50px" }}
@@ -89,8 +114,6 @@ function ProductDetail() {
                   slidesPerView={3}
                   pagination={{ clickable: true }}
                   className={clsx(style.pagination)}
-                  // scrollbar={{ draggable: true }}
-                  // navigation
                 >
                   {product?.album &&
                     product?.album.map((item) => (
@@ -98,7 +121,8 @@ function ProductDetail() {
                         <Image
                           style={{
                             height: "80px",
-                            width: `130px`,
+                            width: `150px`,
+                            borderRadius: "10px",
                           }}
                           src={item}
                         >
@@ -109,8 +133,8 @@ function ProductDetail() {
                 </Swiper>
               </Flex>
             </Col>
-            <Col span={12}>
-              <Flex style={{ padding: "50px" }} vertical>
+            <Col span={14}>
+              <Flex style={{ padding: "16px" }} vertical>
                 <Space>
                   <div>
                     Thương hiệu:
@@ -282,42 +306,163 @@ function ProductDetail() {
           </Row>
         </div>
       </div>
-      <div className={clsx(style.wrapper_global, style.product_background)}>
-        <div className={clsx(style.product_wrapper)}>
-          <Row>
-            <Col className={clsx(style.product_detail_header)}>
-              Mô tả sản phẩm
-            </Col>
-            <Col
-              className={clsx(style.product_detail, {
-                [style.show]: showMore,
-              })}
-              dangerouslySetInnerHTML={{ __html: product?.detail as string }}
-            ></Col>
-            {!showMore ? (
-              <Col
-                onClick={handleShowMore}
-                className={clsx(style.product_detail_show)}
-              >
-                <Space>
-                  <DownOutlined />
-                </Space>
-                <Space style={{ marginLeft: "5px" }}>Xem thêm</Space>
+      {product && product.detail ? (
+        <div className={clsx(style.wrapper_global, style.product_background)}>
+          <div className={clsx(style.product_wrapper)}>
+            <Row>
+              <Col className={clsx(style.product_detail_header)}>
+                Mô tả sản phẩm
               </Col>
-            ) : (
               <Col
-                onClick={handleShowMore}
-                className={clsx(style.product_detail_show)}
-              >
-                <Space>
-                  <UpOutlined />
-                </Space>
-                <Space style={{ marginLeft: "5px" }}>Rút gọn</Space>
-              </Col>
-            )}
-          </Row>
+                className={clsx(style.product_detail, {
+                  [style.show]: showMore,
+                })}
+                dangerouslySetInnerHTML={{ __html: product?.detail as string }}
+              ></Col>
+              {!showMore ? (
+                <Col
+                  onClick={handleShowMore}
+                  className={clsx(style.product_detail_show)}
+                >
+                  <Space>
+                    <DownOutlined />
+                  </Space>
+                  <Space style={{ marginLeft: "5px" }}>Xem thêm</Space>
+                </Col>
+              ) : (
+                <Col
+                  onClick={handleShowMore}
+                  className={clsx(style.product_detail_show)}
+                >
+                  <Space>
+                    <UpOutlined />
+                  </Space>
+                  <Space style={{ marginLeft: "5px" }}>Rút gọn</Space>
+                </Col>
+              )}
+            </Row>
+          </div>
         </div>
-      </div>
+      ) : (
+        <></>
+      )}
+
+      {productsSearch ? (
+        <div
+          className={clsx(
+            style.wrapper_global,
+            style.product_background,
+            style.customSwiper_parent
+          )}
+        >
+          <div className={clsx(style.product_wrapper)}>
+            <Row>
+              <Col span={24}>
+                <Swiper
+                  modules={[Navigation, Pagination, Scrollbar, A11y]}
+                  spaceBetween={18}
+                  slidesPerView={6}
+                  style={{ backgroundColor: "#edf0f3" }}
+                >
+                  <Flex
+                    justify="space-between"
+                    className={clsx(style.customSwiper_child)}
+                  >
+                    <ButtonNavigation />
+                  </Flex>
+
+                  {productsSearch ? (
+                    productsSearch.map((product) => {
+                      if (product._id !== productCurrent)
+                        return (
+                          <>
+                            <SwiperSlide>
+                              <Link
+                                onClick={() =>
+                                  handleDetail(product._id, product.categoryId)
+                                }
+                                to={`/sanpham/${product.slug}`}
+                                className={clsx(style.wrapper)}
+                              >
+                                <Flex className={clsx(style.content)} vertical>
+                                  <Space
+                                    className={clsx(style.content_discount)}
+                                  >
+                                    <Discount
+                                      discount={product.discount}
+                                    ></Discount>
+                                  </Space>
+
+                                  <Flex justify="center">
+                                    <img
+                                      src={product.pic}
+                                      className={clsx(style.content_img)}
+                                      alt=""
+                                    />
+                                  </Flex>
+                                  <Flex
+                                    vertical
+                                    justify="space-between"
+                                    style={{ padding: "20px" }}
+                                  >
+                                    <Space className={clsx(style.header_text)}>
+                                      {product.name}
+                                    </Space>
+                                    <Space
+                                      className={clsx(style.header_discount)}
+                                    >
+                                      {product && product?.discount > 0 ? (
+                                        <>
+                                          <Space>
+                                            {numeral(product?.total).format(
+                                              "0,0$"
+                                            )}
+                                            &#47;
+                                            {product.unit}
+                                          </Space>
+                                          <Space>
+                                            {/* <del>
+                                        {numeral(product?.price).format("$0,0")}
+                                      </del> */}
+                                          </Space>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <Space>
+                                            {numeral(product?.price).format(
+                                              "0,0$"
+                                            )}
+                                            &#47;
+                                            {product?.unit}
+                                          </Space>
+                                        </>
+                                      )}
+                                    </Space>
+                                    <del className={clsx(style.header_price)}>
+                                      {numeral(product.price).format("$0,0")}
+                                    </del>
+                                  </Flex>
+                                </Flex>
+                              </Link>
+                            </SwiperSlide>
+                          </>
+                        );
+                    })
+                  ) : (
+                    <SwiperSlide>
+                      <Col xs={24} sm={24} style={{ marginBottom: "25px" }}>
+                        <Empty />
+                      </Col>
+                    </SwiperSlide>
+                  )}
+                </Swiper>
+              </Col>
+            </Row>
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
     </>
   );
 }

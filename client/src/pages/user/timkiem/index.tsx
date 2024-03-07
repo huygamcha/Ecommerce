@@ -44,15 +44,18 @@ function Timkiem() {
   const [dropCategory, setDropCategory] = useState<boolean>(true);
   const [dropBrand, setDropBrand] = useState<boolean>(true);
 
-  const handleDetail = (value: string) => {
+  // go to detail
+  const handleDetail = (value: string, categoryId: string) => {
+    localStorage.setItem("filter", JSON.stringify({ categoryId: categoryId }));
     localStorage.setItem("productId", JSON.stringify(value));
     dispatch(getProductById(value));
+    dispatch(getAllProductSearch({ categoryId: categoryId }));
   };
 
   useEffect(() => {
     // window.location.reload();
-    dispatch(getAllCategory());
-    dispatch(getAllBrand());
+    if (categories.length === 0) dispatch(getAllCategory());
+    if (brands.length === 0) dispatch(getAllBrand());
     // dispatch(getAllBrand(filter.categoryId ? filter.categoryId : ""));
   }, []);
 
@@ -499,7 +502,9 @@ function Timkiem() {
                       }}
                     >
                       <Link
-                        onClick={() => handleDetail(product._id)}
+                        onClick={() =>
+                          handleDetail(product._id, product.categoryId)
+                        }
                         to={`/sanpham/${product.slug}`}
                         className={clsx(style.wrapper)}
                       >

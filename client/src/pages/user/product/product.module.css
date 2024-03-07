@@ -11,7 +11,7 @@
   background: #fff;
   border-radius: 10px;
   padding: 14px 0px;
-  height: 250px;
+  height: 260px;
   position: relative;
   border: 1px solid #fff;
 }
@@ -42,6 +42,7 @@
   font-size: 14px;
   font-weight: 600;
   line-height: 16px;
+  height: 32px;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -209,7 +210,7 @@
   width: 100%;
 }
 .product_detail.show {
-height: auto !important;
+  height: auto !important;
 }
 
 .product_detail > p > img {
@@ -221,6 +222,22 @@ height: auto !important;
 .product_detail > p:has(img) {
   display: flex;
   justify-content: center;
+}
+
+.customSwiper_parent {
+  position: relative;
+}
+.customSwiper_child {
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 0;
+  z-index: 9;
+}
+.customSwiper_child > div {
+  width: 100%;
+  /* background-color: red; */
 }
 
 /* Thiết lập padding cho xs */

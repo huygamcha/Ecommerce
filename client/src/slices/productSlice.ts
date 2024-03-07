@@ -141,7 +141,7 @@ const getAllProductSearch = createAsyncThunk<ProductsType[], ProductSearchType>(
     if (!brandId && filter.brandId) {
       brandId = filter.brandId;
     }
-    else if (!brandId && !filter.brandId){
+    else if (!brandId &&  !filter.brandId){
       brandId = undefined
     }
 

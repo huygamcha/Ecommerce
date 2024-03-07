@@ -4,6 +4,7 @@ import { Col, Flex, Row, Space, MenuProps, Empty, Pagination } from "antd";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import {
   getAllProduct,
+  getAllProductSearch,
   getProductByCategories,
   getProductById,
   getProductBySuppliers,
@@ -28,14 +29,16 @@ function ProductScreen() {
   // };
 
   useEffect(() => {
-    dispatch(getAllProduct({}));
-    dispatch(getAllCategory());
-    dispatch(getAllSupplier());
-  }, [dispatch]);
+    if (products.length === 0) dispatch(getAllProduct({}));
+    if (categories.length === 0) dispatch(getAllCategory());
+    if (suppliers.length === 0) dispatch(getAllSupplier());
+  }, []);
 
-  const handleDetail = (value: string) => {
-    dispatch(getProductById(value));
+  const handleDetail = (value: string, categoryId: string) => {
+    localStorage.setItem("filter", JSON.stringify({ categoryId: categoryId }));
     localStorage.setItem("productId", JSON.stringify(value));
+    dispatch(getProductById(value));
+    dispatch(getAllProductSearch({ categoryId: categoryId }));
   };
 
   return (
@@ -54,7 +57,9 @@ function ProductScreen() {
                   }}
                 >
                   <Link
-                    onClick={() => handleDetail(product._id)}
+                    onClick={() =>
+                      handleDetail(product._id, product.categoryId)
+                    }
                     to={`/sanpham/${product.slug}`}
                     className={clsx(style.wrapper)}
                   >

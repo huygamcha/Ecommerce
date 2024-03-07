@@ -39,11 +39,11 @@ function HeaderScreen() {
   const [search, setSearch] = useState<string>();
   // xác định phần tử con nào được liệt kê
   const [categoryActive, setCategoryActive] = useState<string>("");
-  const navigate = useNavigate();
   // notifications
   const [show, setShow] = useState(false);
 
   const location = useLocation();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { products, productsSearch } = useAppSelector(
     (state) => state.products
@@ -61,7 +61,6 @@ function HeaderScreen() {
   // search
   const handleSearchTag = (e: string) => {
     localStorage.setItem("filter", JSON.stringify({ searchTag: e }));
-    dispatch(getAllProductSearch({ searchTag: e }));
   };
 
   // logout
@@ -84,8 +83,8 @@ function HeaderScreen() {
   }, [add]);
 
   useEffect(() => {
-    dispatch(getAllTag());
-    dispatch(getAllBrand());
+    if (tags.length === 0) dispatch(getAllTag());
+    if (brands.length === 0) dispatch(getAllBrand());
   }, []);
 
   //click
@@ -96,8 +95,6 @@ function HeaderScreen() {
 
   //search category and brand
   const handleSearchMenu = (categoryId: string, brandId: string) => {
-    console.log("««««« brandId »»»»»", brandId);
-    console.log("««««« location.search »»»»»", location.search.split("&b")[1]);
     localStorage.setItem(
       "filter",
       JSON.stringify({ categoryId: categoryId, brandId: brandId })

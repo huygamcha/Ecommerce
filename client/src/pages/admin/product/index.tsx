@@ -95,7 +95,7 @@ const Product = (props: Props) => {
     dispatch(getAllCategory());
     dispatch(getAllTag());
     dispatch(getAllBrand());
-  }, [dispatch]);
+  }, []);
 
   //set active modal
   const [selectedProduct, setSelectedProduct] = useState<any>(); // boolean or record._id
