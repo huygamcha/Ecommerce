@@ -1,16 +1,28 @@
 .wrapper {
-    padding:  15px 0px;
-    margin-bottom: 5px;
-    border: 2px solid #f5f5f5;
-    border-radius: 6px;
+    background-color: #edf0f3;
+    border-radius: 10px;
 }
-.flex_center  {
+
+.wrapper_content {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 8px 16px;
+}
+
+
+.wrapper_detail {
+    padding: 16px 0px;
+    border-bottom: 1px solid #e4e8ed;
+}
+
+
+.flex_center {
     justify-content: end;
     display: flex;
     align-items: center;
 }
 
-.flex_center > span {
+.flex_center>span {
     display: flex;
     align-items: center;
     font-size: 20px;
@@ -18,24 +30,174 @@
     cursor: pointer;
 }
 
+/* image  */
+.wrapper_img {
+    box-shadow: 0 0 0 1px #e4e8ed;
+    border-radius: 1px solid #e4e8ed;
+    padding: 3px;
+}
+
+.product_name {
+    margin-left: 10px;
+    max-width: 272px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #020b27;
+    flex: 1;
+    word-break: break-word;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+.product_name::first-letter {
+    text-transform: uppercase;
+}
+
+.product_price_discount {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+    color: #1250dc;
+    word-break: break-word;
+}
+.product_price_original {
+    display: flex;
+    justify-content: end;
+    margin-left: 4px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    word-break: break-word;
+}
+
+/* quantity */
+.quantity_detail_wrapper {
+    border: 1px solid #e4e8ed;
+    border-radius: 20px;
+    display: flex;
+    justify-content: start;
+  }
+  .quantity_detail {
+    border-right: 1px solid #e4e8ed;
+    padding: 8px 14px;
+    border-left: 1px solid #e4e8ed;
+    margin: 0px -10px;
+    width: 40px;
+    display: flex;
+    justify-content: center;
+  }
+  .quantity_icon_detail_disabled {
+    pointer-events: none;
+    opacity: 0.3;
+    padding: 8px;
+  }
+  .quantity_icon_detail {
+    cursor: pointer;
+    padding: 8px;
+  }
+
+  .product_unit {
+    border: 1px solid #e4e8ed;
+    /* width: 100%; */
+    padding: 8px 18px;
+    color: #334155;
+    cursor: pointer;
+    transition: all .3s ease;
+    font-weight: 400;
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    background-color: #fff;
+    border-radius: 50px;
+  }
+
 /* payment */
+
+.payment_header {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #4a4f63;
+}
+.payment_prePayment{
+    padding-top:  16px;
+    border-top: 1px solid #e4e8ed;
+}
+.payment_prePayment_name{
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 24px;
+    color: #020b27;
+}
+.payment_prePayment_price{
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 28px;
+    color: #1250dc;
+    letter-spacing: .005em;
+}
 
 .payment_wrapper {
     border: 2px solid #f5f5f5;
     padding: 10px;
-    margin-top:20px;
+    margin-top: 20px;
 }
 
-.button_payment{
+.button_payment {
+    margin-top: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 12px;
+    color: #fff;
+    outline: none;
+    border: none;
+    background: linear-gradient(315deg, #1250dc 14.64%, #306de4 85.36%);
+    border-radius: 42px;
     cursor: pointer;
-    padding: 10px;
-    color: #fff;
-    text-align: center;
-    background-color: #ff189b;
+    font-family: inherit;
+    font-size: 18px;
+}   
+.button_payment.disable {
+    background:#edf0f3;
+    color: #728091;
+    pointer-events: none;
 }
 
-.button_payment :hover {
-    color: #fff;
-    text-align: end;
-    background-color: #ff189b;
+
+/* Thiết lập padding cho sm */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .wrapper_global {
+        background-color: #edf0f3;
+        padding: 20px;
+    }
+}
+
+/* Thiết lập padding cho md */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .wrapper_global {
+        background-color: #edf0f3;
+        padding: 30px;
+    }
+}
+
+/* Thiết lập padding cho lg */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .wrapper_global {
+        background-color: #edf0f3;
+        padding: 40px;
+    }
+}
+
+/* Thiết lập padding cho xl */
+@media (min-width: 1200px) {
+    .wrapper_global {
+        background-color: #edf0f3;
+        padding: 30px 100px;
+    }
 }

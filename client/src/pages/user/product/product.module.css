@@ -39,6 +39,7 @@
   border-top-right-radius: 5px;
 }
 .header_text {
+  max-width: 140px;
   font-size: 14px;
   font-weight: 600;
   line-height: 16px;
@@ -113,7 +114,11 @@
 .header_brand:hover {
   color: #1250dc;
 }
-
+.title_brand{
+  font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+}
 .name_detail {
   font-size: 30px;
   line-height: 36px;
@@ -129,8 +134,8 @@
 
 .brief_detail_wrapper {
   display: flex;
-  align-items: start;
-  margin-bottom: 16px;
+  align-items: center;
+  padding: 8px 0px;
 }
 
 .brief_detail {
@@ -173,6 +178,82 @@
 }
 .swiper-pagination {
   position: unset !important;
+}
+
+/*  attractive */
+.attractive_img {
+  width: 20px;
+  height: 20px;
+}
+.attractive_header{
+  font-size: 14px;
+    line-height: 20px;
+    font-weight: 600;
+    color: #dc6803;
+}
+.attractive_content {
+  font-size: 14px;
+    line-height: 20px;
+    color: #000;
+}
+
+/* promotion */
+.promotion_wrapper {
+  display: flex;
+  width: 100%;
+  border: 1px solid rgb(228, 232, 237);
+  border-radius: 8px;
+  margin-bottom: 35px;
+}
+.promotion_header_wrapper  {
+  padding: 8px 16px;
+ background-color: #fff3e1;
+}
+.promotion_header{
+  font-size: 14px;
+    line-height: 20px;
+    font-weight: 600;
+  color: #f79009;
+}
+
+.promotion_img {
+  width: 20px;
+  height: 20px;
+  color: #f79009;
+}
+.promotion_content_wrapper  {
+  padding:  16px;
+}
+.promotion_content_img_wrapper {
+  background-color: #eaeffa;
+  padding: 8px;
+  border-radius: 10px;
+}
+.promotion_content_img {
+  width: 24px;
+  height: 24px;
+}
+
+/* policies */
+.policy_wrapper {
+  margin-top: 16px;
+  padding-top: 16px;
+    border-top: 1px solid rgb(228, 232, 237);
+}
+.policy_img {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+.policy_main_header{
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
+}
+.policy_sub_header {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
 }
 
 /* tab detail  */
@@ -239,11 +320,18 @@
   width: 100%;
   /* background-color: red; */
 }
+.title_product_relate{
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
 
 /* Thiết lập padding cho xs */
 @media (max-width: 575.98px) {
   .wrapper_global {
     padding: 10px;
+
   }
 }
 
@@ -273,6 +361,7 @@
   .wrapper_global {
     padding: 30px 100px;
   }
+
   .top_sale {
     background-color: #fcf3e9;
     width: 100%;
@@ -283,5 +372,15 @@
   .product_wrapper {
     background-color: #fff;
     border-radius: 20px;
+  }
+
+  /* list tìm kiếm liên quan */
+  .wrapper_product {
+    padding: 30px 70px;
+  }
+  .wrapper_product_content{
+    padding: 0px 30px;
+    background-color: #edf0f3;
+
   }
 }

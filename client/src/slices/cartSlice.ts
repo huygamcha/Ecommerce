@@ -11,6 +11,8 @@ interface CartType {
   stock: number;
   total: number;
   discount: number;
+  unit: string;
+  check: boolean;
 }
 
 interface InitialType {
@@ -21,7 +23,10 @@ interface InitialType {
   deleted: boolean;
   updated: boolean;
   totalPrice: number;
-  add: number,
+  totalOriginal: number;
+  add: number;
+  checkAll: boolean;
+  totalCheck: number;
 
 }
 
@@ -33,12 +38,15 @@ const initialState: InitialType = {
   deleted: false,
   updated: false,
   totalPrice: 0,
+  totalOriginal: 0,
   add: 0,
+  checkAll: false,
+  totalCheck: 0
 };
 
 const getCartFromCustomer = createAsyncThunk<CartType[]>(
   "cart/getCartFromCustomer",
-  async ( _ ,{ rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
       const config = {
         headers: {
@@ -67,7 +75,7 @@ const getCartFromCustomer = createAsyncThunk<CartType[]>(
 
 const createCartFromCustomer = createAsyncThunk<CartType[]>(
   "cart/createCartFromCustomer",
-  async ( _ ,{ rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
       const config = {
         headers: {
@@ -79,11 +87,11 @@ const createCartFromCustomer = createAsyncThunk<CartType[]>(
         : undefined;
 
       const allCarts = localStorage.getItem("carts")
-      ? JSON.parse(localStorage.getItem("carts")!)
-      : [];
+        ? JSON.parse(localStorage.getItem("carts")!)
+        : [];
 
       const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND}/carts`,{userId: currentUser.id, cartList: allCarts},
+        `${process.env.REACT_APP_BACKEND}/carts`, { userId: currentUser.id, cartList: allCarts },
         config
       );
       const data: CartType[] = response.data;
@@ -107,10 +115,13 @@ const cartSlice = createSlice({
         ? JSON.parse(localStorage.getItem("carts")!)
         : [];
       state.carts = allCarts;
-      state.totalPrice = state.carts.reduce((total, cart) => {
-        return total + cart.total * cart.quantity;
-      }, 0);
-
+      state.totalPrice = 0;
+      state.totalOriginal = 0;
+      state.totalCheck = 0;
+      state.carts.map((cart) => cart.check ? ( state.totalCheck++ ,state.totalPrice = state.totalPrice + cart.quantity * cart.total, state.totalOriginal = state.totalOriginal + cart.quantity * cart.price) : (state.totalPrice, state.totalOriginal))
+      if (state.totalCheck === state.carts.length) {
+        state.checkAll = true
+      }
     },
 
     changeQuantityCart: (state, action) => {
@@ -119,6 +130,26 @@ const cartSlice = createSlice({
       );
       if (specificItem) {
         specificItem.quantity = action.payload.quantity;
+      }
+      localStorage.setItem("carts", JSON.stringify(state.carts));
+    },
+
+    checkProduct: (state, action) => {
+      if (action.payload.id === 'all') {
+        state.checkAll = !state.checkAll
+        if (state.checkAll) {
+          state.carts.map((cart) => cart.check = true)
+        }
+        else {
+          state.carts.map((cart) => cart.check = false)
+        }
+      }
+      else {
+        state.checkAll = false
+        const specificItem = state.carts.find((item => item.id === action.payload.id))
+        if (specificItem) {
+          specificItem.check = !specificItem.check;
+        }
       }
       localStorage.setItem("carts", JSON.stringify(state.carts));
     },
@@ -144,13 +175,13 @@ const cartSlice = createSlice({
     },
 
     resetCartNotification: (state) => {
-        state.add = 0
+      state.add = 0
     }
   },
-  
+
   extraReducers(builder) {
-     //get all
-     builder.addCase(getCartFromCustomer.pending, (state) => {
+    //get all
+    builder.addCase(getCartFromCustomer.pending, (state) => {
       state.loading = true;
     });
 
@@ -186,7 +217,7 @@ const cartSlice = createSlice({
     builder.addCase(
       createCartFromCustomer.rejected,
       (state, action) => {
-      
+
         const customErrors = action.payload as { message?: string, errors?: any }
         state.loading = false;
         state.error = customErrors.message || 'Có lỗi xảy ra ở cartSlice'; // Ensure a default message or fallback if action.error is undefined
@@ -196,15 +227,15 @@ const cartSlice = createSlice({
   },
 
   //create
-  
+
 });
 
 const { reducer, actions } = cartSlice;
 
 export default reducer;
-export   {
+export {
   getCartFromCustomer,
   createCartFromCustomer
 }
-export const { addToCart, getAllCart, changeQuantityCart, deleteCart ,resetCartNotification} =
+export const { addToCart, getAllCart, changeQuantityCart, checkProduct, deleteCart, resetCartNotification } =
   actions;

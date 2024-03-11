@@ -43,19 +43,12 @@ function ProductScreen() {
 
   return (
     <div className={clsx(style.wrapper_global, style.top_sale)}>
-      <Row gutter={24}>
+      <Row>
         <Col xs={24} sm={24}>
-          <Row gutter={[14, 2]}>
+          <Row gutter={[14, 14]}>
             {products && error.message === "" ? (
               products.map((product) => (
-                <Col
-                  xs={12}
-                  md={12}
-                  lg={4}
-                  style={{
-                    paddingBottom: "10px",
-                  }}
-                >
+                <Col xs={12} md={12} lg={4} style={{}}>
                   <Link
                     onClick={() =>
                       handleDetail(product._id, product.categoryId)
