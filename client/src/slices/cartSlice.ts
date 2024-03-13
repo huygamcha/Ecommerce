@@ -165,6 +165,7 @@ const cartSlice = createSlice({
         state.carts.push(action.payload);
       }
       state.add++;
+      state.checkAll = false
       localStorage.setItem("carts", JSON.stringify(state.carts));
     },
 

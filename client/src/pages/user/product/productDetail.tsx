@@ -78,7 +78,7 @@ function ProductDetail() {
         total: product?.total,
         discount: product?.discount,
         unit: product?.unit,
-        check: false,
+        check: true,  
       })
     );
   };
