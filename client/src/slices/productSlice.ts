@@ -22,6 +22,8 @@ interface ProductsType {
   specifications: string;
   unit: string;
   album: Array<string>;
+  age: number;
+  tagList: Array<string>;
 }
 
 interface ProductSearchType {
@@ -53,6 +55,7 @@ const initialState: InitialType = {
   success: false,
   error: { message: "", errors: { name: "" } },
   product: {
+    tagList: [],
     album: [''],
     brand: {},
     category: {},
@@ -72,7 +75,8 @@ const initialState: InitialType = {
     ingredient: '',
     detail: '',
     specifications: '',
-    unit: ''
+    unit: '',
+    age: 0
   },
   loading: false,
   deleted: false,

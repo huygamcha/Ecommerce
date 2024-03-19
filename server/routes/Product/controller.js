@@ -22,7 +22,7 @@ module.exports = {
         .populate("supplier")
         // .limit(limit)
         // .skip(skip)
-        .sort({ createdAt: -1 })
+        .sort({ sold: -1, createdAt: -1 })
         .lean({ virtuals: true });
       if (result.length > 0) {
         return res.send(200, {
@@ -62,8 +62,6 @@ module.exports = {
         categoryId,
         brandId,
       } = req.query;
-
-      console.log("««««« brandId »»»»»", brandId);
 
       priceFrom = parseInt(priceFrom);
       priceTo = parseInt(priceTo);
@@ -112,6 +110,18 @@ module.exports = {
           brandId: brandId,
           price: { $gte: priceFrom, $lte: priceTo },
           age: { $gte: ageFrom, $lte: ageTo },
+        })
+          .populate("category")
+          .populate("brand")
+
+          // .limit(limit)
+          // .skip(skip)
+          .sort({ createdAt: -1 })
+          .lean({ virtuals: true });
+      } else if (!searchTag && !categoryId && !brandId) {
+        result = await Product.find({
+          age: { $gte: ageFrom, $lte: ageTo },
+          price: { $gte: priceFrom, $lte: priceTo },
         })
           .populate("category")
           .populate("brand")

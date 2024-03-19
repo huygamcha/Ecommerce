@@ -13,10 +13,9 @@ const categorySchema = new Schema(
       type: String,
       maxLength: [500, "Mô tả danh mục không được vượt quá 500 kí tự"],
     },
-    isDeleted: {
-      type: Boolean,
-      required: true,
-      default: false,
+
+    pic: {
+      type: String,
     },
   },
   {

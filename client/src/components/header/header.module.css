@@ -212,7 +212,7 @@
 
 .tag_item {
   color: #fff;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 14px;
   line-height: 20px;
   padding: 0px 10px;
@@ -256,7 +256,7 @@
   cursor: pointer;
   font-size: 14px;
   line-height: 20px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .brand_list {

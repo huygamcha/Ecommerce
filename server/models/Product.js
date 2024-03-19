@@ -101,6 +101,10 @@ const productSchema = new Schema(
       default:
         "http://res.cloudinary.com/drqphlfn6/image/upload/v1708647316/ws1meb2jitqwlqcwara3.jpg",
     },
+    sold: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,

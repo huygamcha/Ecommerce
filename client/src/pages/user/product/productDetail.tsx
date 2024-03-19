@@ -78,7 +78,7 @@ function ProductDetail() {
         total: product?.total,
         discount: product?.discount,
         unit: product?.unit,
-        check: true,  
+        check: true,
       })
     );
   };
@@ -176,8 +176,11 @@ function ProductDetail() {
                     {product && product?.discount > 0 ? (
                       <>
                         <Space className={clsx(style.price_detail)}>
-                          {numeral(product?.total).format("0,0$")}&#47;
-                          {product.unit}
+                          <div>
+                            {numeral(product?.total).format("0,0$")}
+                            <span style={{ margin: " 0 4px" }}>&#47;</span>
+                            {product.unit}
+                          </div>
                         </Space>
                         <Space className={clsx(style.price_total)}>
                           <del>{numeral(product?.price).format("$0,0")}</del>
@@ -186,8 +189,11 @@ function ProductDetail() {
                     ) : (
                       <>
                         <Space className={clsx(style.price_detail)}>
-                          {numeral(product?.price).format("0,0$")}&#47;
-                          {product?.unit}
+                          <div>
+                            {numeral(product?.price).format("0,0$")}
+                            <span style={{ margin: "0 4px" }}>&#47;</span>
+                            {product?.unit}
+                          </div>
                         </Space>
                       </>
                     )}
@@ -682,11 +688,15 @@ function ProductDetail() {
                                       {product && product?.discount > 0 ? (
                                         <>
                                           <Space>
-                                            {numeral(product?.total).format(
-                                              "0,0$"
-                                            )}
-                                            &#47;
-                                            {product.unit}
+                                            <div>
+                                              {numeral(product?.total).format(
+                                                "0,0$"
+                                              )}
+                                              <span style={{ margin: "0 4px" }}>
+                                                &#47;
+                                              </span>
+                                              {product.unit}
+                                            </div>
                                           </Space>
                                           <Space>
                                             {/* <del>
@@ -697,11 +707,15 @@ function ProductDetail() {
                                       ) : (
                                         <>
                                           <Space>
-                                            {numeral(product?.price).format(
-                                              "0,0$"
-                                            )}
-                                            &#47;
-                                            {product?.unit}
+                                            <div>
+                                              {numeral(product?.price).format(
+                                                "0,0$"
+                                              )}
+                                              <span style={{ margin: "0 4px" }}>
+                                                &#47;
+                                              </span>
+                                              {product?.unit}
+                                            </div>
                                           </Space>
                                         </>
                                       )}

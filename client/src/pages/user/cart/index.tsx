@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import {
   changeQuantityCart,
@@ -114,6 +114,19 @@ function CartScreen() {
   const onFinish = async (values: FieldType) => {
     console.log("««««« values »»»»»", values);
   };
+
+  // position
+  // const [offset, setOffset] = useState(0);
+
+  // useEffect(() => {
+  //   const onScroll = () => setOffset(window.scrollY);
+  //   // clean up code
+  //   window.removeEventListener("scroll", onScroll);
+  //   window.addEventListener("scroll", onScroll, { passive: true });
+  //   return () => window.removeEventListener("scroll", onScroll);
+  // }, []);
+
+  // console.log(offset);
 
   return (
     <div className={clsx(style.wrapper_global)}>
@@ -274,10 +287,10 @@ function CartScreen() {
                 </div>
               </Col>
               <Col
-                style={{ position: "fixed", zIndex: 999 }}
+                // style={{ position: "fixed", zIndex: 999 }}
                 className={clsx(style.wrapper)}
                 span={8}
-                offset={14}
+                // offset={14}
               >
                 <div className={clsx(style.wrapper_content)}>
                   <Row justify="end" gutter={[0, 10]}>
@@ -564,10 +577,20 @@ function CartScreen() {
                     </div>
                   </Col>
                   <Col
-                    style={{ position: "fixed", zIndex: 999 }}
+                    // style={
+                    //   offset > 245
+                    //     ? {
+                    //         position: "fixed",
+                    //         zIndex: 999,
+                    //         top: 0,
+                    //         left: 0,
+                    //       }
+                    //     : {}
+                    // }
                     className={clsx(style.wrapper)}
                     span={8}
-                    offset={14}
+                    // offset={offset > 245 ? 14 : 0}
+                    // offset={14}
                   >
                     <div className={clsx(style.wrapper_content)}>
                       <Row justify="end" gutter={[0, 10]}>
@@ -746,7 +769,7 @@ function CartScreen() {
                             </Flex>
                           </Col>
                           <Col span={24}>
-                            <Row gutter={[8, 10]}>
+                            <Row gutter={8}>
                               <Col span={12}>
                                 <Form.Item<FieldType>
                                   rules={[
@@ -820,7 +843,7 @@ function CartScreen() {
                               </Flex>
                             </Col>
                             <Col span={24}>
-                              <Row gutter={[8, 10]}>
+                              <Row gutter={[8, 0]}>
                                 <Col span={12}>
                                   <Form.Item<FieldType>
                                     rules={[
