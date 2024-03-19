@@ -58,7 +58,7 @@ function Timkiem() {
     if (brands.length === 0) dispatch(getAllBrand());
     window.scrollTo({ top: 0, left: 0 });
 
-    // dispatch(getAllBrand(filter.categoryId ? filter.categoryId : ""));
+    // dispatch(getAllBrand(filter.categoryId ? filter.categoryId : "'"));
   }, []);
 
   useEffect(() => {
