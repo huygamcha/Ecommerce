@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Col, Flex, Row, Space, MenuProps, Empty, Image, Input } from "antd";
+import { Col, Flex, Row, Space, Empty } from "antd";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import {
   getAllProduct,
   getAllProductSearch,
-  getProductByCategories,
   getProductById,
-  getProductBySuppliers,
 } from "../../../slices/productSlice";
 import numeral from "numeral";
 import { getAllCategory } from "../../../slices/categorySlice";
@@ -37,15 +35,15 @@ function ProductScreen() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  // const handlePagination = (e: number) => {
-  //   dispatch(getAllProduct({ page: e }));
-  //   navigate(`/product?page=${e}`);
-  // };
-
   const [searchAge, setSearchAge] = useState<Number>(1);
   const [searchTag, setSearchTag] = useState<string>(
     "65d8b631214ed285ba4bc016"
   );
+
+  // lưu vào lịch sử
+  const histories = localStorage.getItem("histories")
+    ? JSON.parse(localStorage.getItem("histories")!)
+    : [];
 
   useEffect(() => {
     if (products.length === 0) dispatch(getAllProduct({}));
@@ -56,16 +54,40 @@ function ProductScreen() {
   const handleDetail = (value: string, categoryId: string) => {
     localStorage.setItem("filter", JSON.stringify({ categoryId: categoryId }));
     localStorage.setItem("productId", JSON.stringify(value));
+
+    if (histories.length > 0) {
+      const hasItem = histories.findIndex((item: string) => item === value);
+      if (hasItem === -1) {
+        histories.unshift(value);
+      } else {
+        histories.splice(hasItem, 1);
+        histories.unshift(value);
+      }
+      localStorage.setItem("histories", JSON.stringify(histories));
+    } else {
+      localStorage.setItem("histories", JSON.stringify([value]));
+    }
     dispatch(getProductById(value));
     dispatch(getAllProductSearch({ categoryId: categoryId }));
+  };
+
+  //search category and brand
+  const handleSearchMenu = (categoryId: string, brandId: string) => {
+    localStorage.setItem(
+      "filter",
+      JSON.stringify({ categoryId: categoryId, brandId: brandId })
+    );
   };
 
   return (
     <>
       <div className={clsx(style.wrapper_global, style.top_sale)}>
+        {/* sản phẩm bán tốt nhất */}
         <Row>
-          Sản phẩm bán chạy
           <Col xs={24} sm={24}>
+            <Space className={clsx(style.title_product_relate)}>
+              Sản phẩm bán chạy
+            </Space>
             <Row gutter={[14, 14]}>
               {products && error.message === "" ? (
                 products.map((product, index) => {
@@ -126,22 +148,27 @@ function ProductScreen() {
       <div
         style={{
           background:
-            "linear-gradient(180deg, rgba(252,243,233,1) 4%, rgba(255,255,255,1) 11%)",
+            "linear-gradient(180deg, rgba(255,243,233,1) 0%, rgba(255,255,255,1) 34%)",
         }}
         className={clsx(style.wrapper_global, style.top_sale)}
       >
         {/* thương hiệu */}
         <Row>
           <Col span={24}>
-            <Space className={clsx(style.title_product_relate)}>
-              Thương hiệu yêu thích
-            </Space>
+            <Flex align="center" className={clsx(style.title_product_relate)}>
+              <img
+                style={{ width: "28px", height: "28px" }}
+                src="https://cdn.nhathuoclongchau.com.vn/unsafe/64x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/smalls/thuong_hieu_yeu_thich_e0c23dded6.png"
+                alt=""
+              />
+              <Space>Thương hiệu yêu thích</Space>
+            </Flex>
 
             <Swiper
               modules={[Navigation, Pagination, Scrollbar, A11y]}
               spaceBetween={18}
               slidesPerView={5}
-              style={{ backgroundColor: "#ffffff" }}
+              style={{ backgroundColor: "transparent", marginBottom: "60px" }}
             >
               <Flex
                 justify="space-between"
@@ -155,10 +182,10 @@ function ProductScreen() {
                   <>
                     <SwiperSlide>
                       <Link
-                        onClick={() =>
-                          handleDetail(brand._id, brand.categoryId)
-                        }
-                        to={`/sanpham/${brand.name}`}
+                        onClick={(e) => {
+                          handleSearchMenu(brand.categoryId, brand._id);
+                        }}
+                        to={`/timkiem?s=${brand.name}`}
                         className={clsx(style.wrapper)}
                       >
                         <Flex className={clsx(style.content_brand)} vertical>
@@ -193,57 +220,43 @@ function ProductScreen() {
             </Swiper>
           </Col>
         </Row>
+
         {/* danh mục */}
         <Row>
-          Danh mục nổi bật
           <Col xs={24} sm={24}>
-            <Row></Row>
+            <Flex align="center" className={clsx(style.title_product_relate)}>
+              <img
+                style={{ height: "28px", width: "28px" }}
+                src="https://cdn.nhathuoclongchau.com.vn/unsafe/28x28/https://cms-prod.s3-sgn09.fptcloud.com/smalls/danh_muc_noi_bat_d03496597a.png"
+                alt=""
+              />
+              Danh mục nổi bật
+            </Flex>
             <Row gutter={[14, 14]}>
               {categories && error.message === "" ? (
                 categories.map((category, index) => (
                   <Col xs={12} md={12} lg={4} style={{}}>
                     <Link
-                      // onClick={() =>
-                      //   handleDetail(category._id, category.categoryId)
-                      // }
-                      to={`/sanpham/${category.name}`}
+                      onClick={(e) => {
+                        handleSearchMenu(category._id, "");
+                      }}
+                      to={`/timkiem?s=${category.name}`}
                       className={clsx(style.wrapper)}
                     >
-                      <Flex
-                        className={clsx(style.content, style.content_category)}
-                        vertical
-                      >
-                        {/* <Space className={clsx(style.content_discount)}>
-                    <Discount discount={category.discount}></Discount>
-                  </Space> */}
-
-                        {/* <Flex justify="center">
-                    <img
-                      src={category.pic}
-                      className={clsx(style.content_img)}
-                      alt=""
-                    />
-                  </Flex> */}
+                      <Flex className={clsx(style.content_category)} vertical>
                         <Flex
                           vertical
                           justify="space-between"
                           style={{ padding: "20px" }}
                         >
-                          <Space className={clsx(style.header_text)}>
+                          <Space
+                            className={clsx(
+                              style.header_text,
+                              style.header_text_category
+                            )}
+                          >
                             {category.name}
                           </Space>
-
-                          <Space className={clsx(style.header_text)}>
-                            {category.name}
-                          </Space>
-                          {/* <Space className={clsx(style.header_discount)}>
-                      {numeral(
-                        (category.price * (100 - category.discount)) / 100
-                      ).format("$0,0")}
-                    </Space>
-                    <del className={clsx(style.header_price)}>
-                      {numeral(category.price).format("$0,0")}
-                    </del> */}
                         </Flex>
                       </Flex>
                     </Link>
@@ -262,15 +275,20 @@ function ProductScreen() {
       <div
         style={{
           background:
-            " linear-gradient(0deg, rgba(226,236,255,1) 71%, rgba(255,255,255,1) 95%)",
+            "linear-gradient(0deg, rgba(184,208,255,1) 3%, rgba(236,243,255,1) 71%, rgba(255,255,255,1) 90%)",
         }}
         className={clsx(style.wrapper_global, style.top_sale)}
       >
+        {/* theo độ tuổi */}
         <Row>
           <Col span={24}>
-            <Space className={clsx(style.title_product_relate)}>
+            <Flex align="center" className={clsx(style.title_product_relate)}>
+              <img
+                src="https://cdn.nhathuoclongchau.com.vn/unsafe/28x28/https://cms-prod.s3-sgn09.fptcloud.com/smalls/san_pham_theo_doi_tuong_d7e7ffa80f.png"
+                alt=""
+              />
               Sản phẩm theo độ tuổi
-            </Space>
+            </Flex>
           </Col>
           <Col span={24}>
             <Flex className={clsx(style.filter_select_wrapper)}>
@@ -361,6 +379,7 @@ function ProductScreen() {
                 backgroundColor: "#2f6de5",
                 padding: "10px",
                 borderRadius: "10px",
+                marginBottom: "60px",
               }}
             >
               <Flex
@@ -467,20 +486,18 @@ function ProductScreen() {
             </Swiper>
           </Col>
         </Row>
-      </div>
 
-      {/* gợi ý hôm nay */}
-      <div
-        style={{
-          background: "#e2ecff",
-        }}
-        className={clsx(style.wrapper_global, style.top_sale)}
-      >
+        {/* gợi ý hôm nay */}
         <Row>
           <Col span={24}>
-            <Space className={clsx(style.title_product_relate)}>
+            <Flex align="center" className={clsx(style.title_product_relate)}>
+              <img
+                style={{ height: "28px", width: "28px" }}
+                src="https://cdn.nhathuoclongchau.com.vn/unsafe/28x28/https://cms-prod.s3-sgn09.fptcloud.com/smalls/icon_goi_y_hom_nay_c96e303244.png"
+                alt=""
+              />
               Gợi ý hôm nay
-            </Space>
+            </Flex>
           </Col>
           <Col span={24}>
             <Flex
@@ -575,6 +592,130 @@ function ProductScreen() {
                 </Col>
               )}
             </Row>
+          </Col>
+        </Row>
+      </div>
+
+      <div
+        style={{
+          background: "#eaeffa",
+        }}
+        className={clsx(style.wrapper_global, style.top_sale)}
+      >
+        {/* sản phẩm vừa xem  */}
+        <Row>
+          <Col span={24}>
+            <Flex align="center" className={clsx(style.title_product_relate)}>
+              <img
+                src="https://nhathuoclongchau.com.vn/estore-images/icon-service/recently-product-watched-icon.svg"
+                alt=""
+              />
+              Sản phẩm vừa xem
+            </Flex>
+
+            <Swiper
+              modules={[Navigation, Pagination, Scrollbar, A11y]}
+              spaceBetween={18}
+              slidesPerView={6}
+              style={{ backgroundColor: "#eaeffa" }}
+            >
+              <Flex
+                justify="space-between"
+                className={clsx(style.customSwiper_child)}
+              >
+                <ButtonNavigation />
+              </Flex>
+
+              {products ? (
+                products.map((product) => {
+                  if (histories.includes(product._id)) {
+                    return (
+                      <>
+                        <SwiperSlide>
+                          <Link
+                            onClick={() =>
+                              handleDetail(product._id, product.categoryId)
+                            }
+                            to={`/sanpham/${product.slug}`}
+                            className={clsx(style.wrapper)}
+                          >
+                            <Flex className={clsx(style.content)} vertical>
+                              <Space className={clsx(style.content_discount)}>
+                                <Discount
+                                  discount={product.discount}
+                                ></Discount>
+                              </Space>
+
+                              <Flex justify="center">
+                                <img
+                                  src={product.pic}
+                                  className={clsx(style.content_img)}
+                                  alt=""
+                                />
+                              </Flex>
+                              <Flex
+                                vertical
+                                justify="space-between"
+                                style={{ padding: "20px" }}
+                              >
+                                <Space className={clsx(style.header_text)}>
+                                  {product.name}
+                                </Space>
+                                <Space className={clsx(style.header_discount)}>
+                                  {product && product?.discount > 0 ? (
+                                    <>
+                                      <Space>
+                                        <div>
+                                          {numeral(product?.total).format(
+                                            "0,0$"
+                                          )}
+                                          <span style={{ margin: "0 2px" }}>
+                                            &#47;
+                                          </span>
+                                          {product.unit}
+                                        </div>
+                                      </Space>
+                                      <Space>
+                                        {/* <del>
+                            {numeral(product?.price).format("$0,0")}
+                          </del> */}
+                                      </Space>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Space>
+                                        <div>
+                                          {numeral(product?.price).format(
+                                            "0,0$"
+                                          )}
+                                          <span style={{ margin: "0 2px" }}>
+                                            &#47;
+                                          </span>
+                                          {product?.unit}
+                                        </div>
+                                      </Space>
+                                    </>
+                                  )}
+                                </Space>
+                                <del className={clsx(style.header_price)}>
+                                  {numeral(product.price).format("$0,0")}
+                                </del>
+                              </Flex>
+                            </Flex>
+                          </Link>
+                        </SwiperSlide>
+                      </>
+                    );
+                  }
+                })
+              ) : (
+                <SwiperSlide>
+                  <Col xs={24} sm={24} style={{ marginBottom: "25px" }}>
+                    <Empty />
+                  </Col>
+                </SwiperSlide>
+              )}
+            </Swiper>
           </Col>
         </Row>
       </div>

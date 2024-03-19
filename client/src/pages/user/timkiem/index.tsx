@@ -56,6 +56,8 @@ function Timkiem() {
     // window.location.reload();
     if (categories.length === 0) dispatch(getAllCategory());
     if (brands.length === 0) dispatch(getAllBrand());
+    window.scrollTo({ top: 0, left: 0 });
+
     // dispatch(getAllBrand(filter.categoryId ? filter.categoryId : ""));
   }, []);
 

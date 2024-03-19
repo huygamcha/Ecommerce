@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import {
@@ -26,7 +26,6 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import Discount from "../../../components/discount";
-import SlideNextButton from "../../../components/buttonNavigation";
 import ButtonNavigation from "../../../components/buttonNavigation";
 
 function ProductDetail() {
@@ -49,6 +48,11 @@ function ProductDetail() {
   const productCurrent = localStorage.getItem("productId")
     ? JSON.parse(localStorage.getItem("productId")!)
     : undefined;
+
+  //  lưu vào lịch sử
+  const histories = localStorage.getItem("histories")
+    ? JSON.parse(localStorage.getItem("histories")!)
+    : [];
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0 });
@@ -100,6 +104,20 @@ function ProductDetail() {
   const handleDetail = (value: string, categoryId: string) => {
     localStorage.setItem("filter", JSON.stringify({ categoryId: categoryId }));
     localStorage.setItem("productId", JSON.stringify(value));
+
+    if (histories.length > 0) {
+      const hasItem = histories.findIndex((item: string) => item === value);
+      if (hasItem === -1) {
+        histories.unshift(value);
+      } else {
+        histories.splice(hasItem, 1);
+        histories.unshift(value);
+      }
+      localStorage.setItem("histories", JSON.stringify(histories));
+    } else {
+      localStorage.setItem("histories", JSON.stringify([value]));
+    }
+
     dispatch(getProductById(value));
     dispatch(getAllProductSearch({ categoryId: categoryId }));
   };

@@ -48,7 +48,7 @@ interface InitialType {
   updated: boolean;
   products: ProductsType[];
   productsSearch: ProductsType[];
-  tagId: string;
+  productsHistory: ProductsType[];
 }
 
 const initialState: InitialType = {
@@ -83,7 +83,7 @@ const initialState: InitialType = {
   updated: false,
   products: [],
   productsSearch: [],
-  tagId: "",
+  productsHistory: []
 };
 
 const getAllProduct = createAsyncThunk<ProductsType[], ProductSearchType>(
@@ -300,7 +300,14 @@ const updateProduct = createAsyncThunk<
 const productSlice = createSlice({
   name: "product",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    // addToHistory: (state, action) => {
+    //   const specificItem = state.productsHistory.find(item => item._id === action.payload.id)
+    //   if (!specificItem) {
+    //     state.productsHistory.push(action.payload.id)
+    //   }
+    // }
+  },
   extraReducers(builder) {
     //get all
     builder.addCase(getAllProduct.pending, (state) => {
@@ -455,7 +462,7 @@ const productSlice = createSlice({
   },
 });
 
-const { reducer } = productSlice;
+const { reducer, actions } = productSlice;
 
 export default reducer;
 export {
@@ -468,3 +475,5 @@ export {
   getProductById,
   getAllProductSearch,
 };
+
+// export const { addToHistory } = actions
