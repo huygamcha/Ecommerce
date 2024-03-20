@@ -351,9 +351,7 @@ function HeaderScreen() {
                             brand.categoryId === categoryActive
                           ) {
                             return (
-                              <Link
-                                to={`/timkiem?s=${category.name}&b=${brand.name}`}
-                              >
+                              <Link to={`/timkiem?s=${category.name}`}>
                                 <Flex
                                   onClick={(e) => {
                                     // ngăn chặn việc gọi lên handleSearchMenu ở hàm, đánh đổi reload lại trang
