@@ -54,7 +54,7 @@ function HeaderScreen() {
   const { tags } = useAppSelector((state) => state.tags);
 
   const handleSearch = (e: any) => {
-    dispatch(getAllProduct({ search: e.target.value }));
+    dispatch(getAllProductSearch({ search: e.target.value }));
     setSearch(e.target.value);
   };
 

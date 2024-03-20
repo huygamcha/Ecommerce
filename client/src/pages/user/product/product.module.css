@@ -68,6 +68,13 @@
   border-top-right-radius: 5px;
 }
 
+.content_img_banner {
+  height: 300PX;
+  width: 100%;
+  border-radius: 10px;
+}
+
+
 .header_text {
   max-width: 140px;
   font-size: 14px;
@@ -414,10 +421,15 @@
   margin-right: 10px;
 }
 
+.filter_select_wrapper_recommend>div {
+  margin-left: 10px;
+}
+
 .filter_select__tag_wrapper{
   background-color: #fff;
   border-radius: 10px;
   margin-bottom: 10px;
+  padding: 6px 0px
 
 }
 .filter_select {
@@ -471,8 +483,8 @@
 .filter_label_tag{
   position: absolute;
   border-top-right-radius: 24px;
-  border-top: 18px solid #1250dc;
-  border-left: 22px solid transparent;
+  border-top: 16px solid #1250dc;
+  border-left: 26px solid transparent;
   top: 0;
   right: 0;
   width: 10%;
@@ -482,6 +494,10 @@
   display: flex;
   justify-content: end;
   align-items: center;
+}
+
+.icon_header {
+  margin-right: 8px;
 }
 
 /* Thiết lập padding cho xs */

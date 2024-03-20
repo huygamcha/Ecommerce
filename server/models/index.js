@@ -8,6 +8,7 @@ const Cart = require("./Cart");
 const Footer = require("./Footer");
 const Tag = require("./Tag");
 const Brand = require("./Brand");
+const Banner = require("./Banner");
 module.exports = {
   Category,
   Customer,
@@ -19,4 +20,5 @@ module.exports = {
   Footer,
   Tag,
   Brand,
+  Banner,
 };

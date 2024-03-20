@@ -38,6 +38,7 @@ import FooterAdmin from "./pages/admin/footer";
 import Tag from "./pages/admin/tag";
 import Timkiem from "./pages/user/timkiem";
 import Brand from "./pages/admin/brand";
+import BannerAdmin from "./pages/admin/banner";
 const { Sider, Content } = Layout;
 numeral.locale("vi");
 
@@ -127,6 +128,16 @@ const router = createBrowserRouter([
           {
             path: "/admin/brands/:id",
             element: <Brand />,
+          },
+        ],
+      },
+      {
+        path: "/admin/banners",
+        element: <BannerAdmin />,
+        children: [
+          {
+            path: "/admin/banners/:id",
+            element: <BannerAdmin />,
           },
         ],
       },
@@ -235,6 +246,12 @@ function AdminRouter() {
               key: "/admin/footers",
               icon: <UploadOutlined />,
               label: "Footer",
+            },
+
+            {
+              key: "/admin/banners",
+              icon: <UploadOutlined />,
+              label: "Banner",
             },
           ]}
         />

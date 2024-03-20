@@ -25,6 +25,7 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import ButtonNavigation from "../../../components/buttonNavigation";
 import { Button } from "antd/es/radio";
+import { getAllBanner } from "../../../slices/bannerSlice";
 
 function ProductScreen() {
   const { products, error } = useAppSelector((state) => state.products);
@@ -32,6 +33,7 @@ function ProductScreen() {
   const { suppliers } = useAppSelector((state) => state.suppliers);
   const { brands } = useAppSelector((state) => state.brands);
   const { tags } = useAppSelector((state) => state.tags);
+  const { banners } = useAppSelector((state) => state.banners);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -49,6 +51,7 @@ function ProductScreen() {
     if (products.length === 0) dispatch(getAllProduct({}));
     if (categories.length === 0) dispatch(getAllCategory());
     if (suppliers.length === 0) dispatch(getAllSupplier());
+    if (banners.length === 0) dispatch(getAllBanner());
   }, []);
 
   const handleDetail = (value: string, categoryId: string) => {
@@ -81,6 +84,59 @@ function ProductScreen() {
 
   return (
     <>
+      {/* banner */}
+      <div
+        style={{ background: "#f7f8fc" }}
+        className={clsx(style.wrapper_global, style.top_sale)}
+      >
+        <Row>
+          <Col span={24}>
+            <Swiper
+              modules={[Navigation, Pagination, Scrollbar, A11y]}
+              spaceBetween={18}
+              slidesPerView={1}
+              pagination={{ clickable: true }}
+              style={{ backgroundColor: "transparent", borderRadius: "20px" }}
+            >
+              <Flex
+                justify="space-between"
+                className={clsx(style.customSwiper_child)}
+              >
+                <ButtonNavigation />
+              </Flex>
+
+              {banners ? (
+                banners.map((banner) => (
+                  <>
+                    <SwiperSlide>
+                      <Link
+                        // onClick={(e) => {
+                        //   handleSearchMenu(brand.categoryId, brand._id);
+                        // }}
+                        to={`/`}
+                        className={clsx(style.wrapper)}
+                      >
+                        <img
+                          src={banner.pic}
+                          className={clsx(style.content_img_banner)}
+                          alt=""
+                        />
+                      </Link>
+                    </SwiperSlide>
+                  </>
+                ))
+              ) : (
+                <SwiperSlide>
+                  <Col xs={24} sm={24} style={{ marginBottom: "25px" }}>
+                    <Empty />
+                  </Col>
+                </SwiperSlide>
+              )}
+            </Swiper>
+          </Col>
+        </Row>
+      </div>
+
       <div className={clsx(style.wrapper_global, style.top_sale)}>
         {/* sản phẩm bán tốt nhất */}
         <Row>
@@ -157,6 +213,7 @@ function ProductScreen() {
           <Col span={24}>
             <Flex align="center" className={clsx(style.title_product_relate)}>
               <img
+                className={clsx(style.icon_header)}
                 style={{ width: "28px", height: "28px" }}
                 src="https://cdn.nhathuoclongchau.com.vn/unsafe/64x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/smalls/thuong_hieu_yeu_thich_e0c23dded6.png"
                 alt=""
@@ -226,6 +283,7 @@ function ProductScreen() {
           <Col xs={24} sm={24}>
             <Flex align="center" className={clsx(style.title_product_relate)}>
               <img
+                className={clsx(style.icon_header)}
                 style={{ height: "28px", width: "28px" }}
                 src="https://cdn.nhathuoclongchau.com.vn/unsafe/28x28/https://cms-prod.s3-sgn09.fptcloud.com/smalls/danh_muc_noi_bat_d03496597a.png"
                 alt=""
@@ -284,6 +342,7 @@ function ProductScreen() {
           <Col span={24}>
             <Flex align="center" className={clsx(style.title_product_relate)}>
               <img
+                className={clsx(style.icon_header)}
                 src="https://cdn.nhathuoclongchau.com.vn/unsafe/28x28/https://cms-prod.s3-sgn09.fptcloud.com/smalls/san_pham_theo_doi_tuong_d7e7ffa80f.png"
                 alt=""
               />
@@ -295,8 +354,8 @@ function ProductScreen() {
               <Space>
                 <Button
                   style={{
-                    boxShadow:
-                      searchAge === 1 ? "inset 0 0 0 1px #1250dc" : "none",
+                    borderColor: searchAge === 1 ? " #1250dc" : "#a9b2be",
+                    color: searchAge === 1 ? "#1250dc" : "#4a4f63",
                   }}
                   onClick={() => setSearchAge(1)}
                   className={clsx(style.filter_select)}
@@ -311,11 +370,12 @@ function ProductScreen() {
                   </Space>
                 </Button>
               </Space>
+
               <Space>
                 <Button
                   style={{
-                    boxShadow:
-                      searchAge === 2 ? "inset 0 0 0 1px #1250dc" : "none",
+                    borderColor: searchAge === 2 ? " #1250dc" : "#a9b2be",
+                    color: searchAge === 2 ? "#1250dc" : "#4a4f63",
                   }}
                   onClick={() => setSearchAge(2)}
                   className={clsx(style.filter_select)}
@@ -330,11 +390,12 @@ function ProductScreen() {
                   </Space>
                 </Button>
               </Space>
+
               <Space>
                 <Button
                   style={{
-                    boxShadow:
-                      searchAge === 3 ? "inset 0 0 0 1px #1250dc" : "none",
+                    borderColor: searchAge === 3 ? " #1250dc" : "#a9b2be",
+                    color: searchAge === 3 ? "#1250dc" : "#4a4f63",
                   }}
                   onClick={() => setSearchAge(3)}
                   className={clsx(style.filter_select)}
@@ -349,11 +410,12 @@ function ProductScreen() {
                   </Space>
                 </Button>
               </Space>
+
               <Space>
                 <Button
                   style={{
-                    boxShadow:
-                      searchAge === 4 ? "inset 0 0 0 1px #1250dc" : "none",
+                    borderColor: searchAge === 4 ? " #1250dc" : "#a9b2be",
+                    color: searchAge === 4 ? "#1250dc" : "#4a4f63",
                   }}
                   onClick={() => setSearchAge(4)}
                   className={clsx(style.filter_select)}
@@ -492,6 +554,7 @@ function ProductScreen() {
           <Col span={24}>
             <Flex align="center" className={clsx(style.title_product_relate)}>
               <img
+                className={clsx(style.icon_header)}
                 style={{ height: "28px", width: "28px" }}
                 src="https://cdn.nhathuoclongchau.com.vn/unsafe/28x28/https://cms-prod.s3-sgn09.fptcloud.com/smalls/icon_goi_y_hom_nay_c96e303244.png"
                 alt=""
@@ -502,7 +565,7 @@ function ProductScreen() {
           <Col span={24}>
             <Flex
               className={clsx(
-                style.filter_select_wrapper,
+                style.filter_select_wrapper_recommend,
                 style.filter_select__tag_wrapper
               )}
             >
@@ -511,10 +574,9 @@ function ProductScreen() {
                   <Space>
                     <Button
                       style={{
-                        boxShadow:
-                          searchTag === tag._id
-                            ? "inset 0 0 0 1px #1250dc"
-                            : "none",
+                        borderColor:
+                          searchTag === tag._id ? " #1250dc" : "#a9b2be",
+                        color: searchTag === tag._id ? "#1250dc" : "#4a4f63",
                       }}
                       onClick={() => setSearchTag(tag._id)}
                       className={clsx(style.filter_select_tag)}
@@ -607,6 +669,7 @@ function ProductScreen() {
           <Col span={24}>
             <Flex align="center" className={clsx(style.title_product_relate)}>
               <img
+                className={clsx(style.icon_header)}
                 src="https://nhathuoclongchau.com.vn/estore-images/icon-service/recently-product-watched-icon.svg"
                 alt=""
               />
