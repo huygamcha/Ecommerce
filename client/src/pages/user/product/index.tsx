@@ -223,7 +223,7 @@ function ProductScreen() {
 
             <Swiper
               modules={[Navigation, Pagination, Scrollbar, A11y]}
-              spaceBetween={18}
+              spaceBetween={0}
               slidesPerView={5}
               style={{ backgroundColor: "transparent", marginBottom: "60px" }}
             >

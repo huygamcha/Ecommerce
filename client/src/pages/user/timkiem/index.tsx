@@ -11,10 +11,10 @@ import {
   getProductByCategories,
   getProductById,
 } from "../../../slices/productSlice";
-import { CheckOutlined, DownOutlined, UpOutlined } from "@ant-design/icons";
+import { CheckOutlined } from "@ant-design/icons";
 import { getAllCategory } from "../../../slices/categorySlice";
 import { getAllBrand } from "../../../slices/brandSlice";
-
+import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 function Timkiem() {
   const filter = localStorage.getItem("filter")
     ? JSON.parse(localStorage.getItem("filter")!)
@@ -39,10 +39,10 @@ function Timkiem() {
   );
 
   // set dropdown
-  const [dropPrice, setDropPrice] = useState<boolean>(true);
-  const [dropAge, setDropAge] = useState<boolean>(true);
   const [dropCategory, setDropCategory] = useState<boolean>(true);
-  const [dropBrand, setDropBrand] = useState<boolean>(true);
+  const [dropPrice, setDropPrice] = useState<boolean>(false);
+  const [dropAge, setDropAge] = useState<boolean>(false);
+  const [dropBrand, setDropBrand] = useState<boolean>(false);
 
   // go to detail
   const handleDetail = (value: string, categoryId: string) => {
@@ -148,7 +148,7 @@ function Timkiem() {
                   className={clsx(style.filter_name, style.dropdown_main)}
                 >
                   Danh mục
-                  {dropCategory ? <DownOutlined /> : <UpOutlined />}
+                  {dropCategory ? <FiChevronDown /> : <FiChevronUp />}
                 </Flex>
 
                 <Flex
@@ -196,7 +196,7 @@ function Timkiem() {
                   className={clsx(style.filter_name, style.dropdown_main)}
                 >
                   Thương hiệu
-                  {dropBrand ? <DownOutlined /> : <UpOutlined />}
+                  {dropBrand ? <FiChevronDown /> : <FiChevronUp />}
                 </Flex>
 
                 <Flex
@@ -248,7 +248,7 @@ function Timkiem() {
                   className={clsx(style.filter_name, style.dropdown_main)}
                 >
                   Giá bán
-                  {dropPrice ? <DownOutlined /> : <UpOutlined />}
+                  {dropPrice ? <FiChevronDown /> : <FiChevronUp />}
                 </Flex>
                 <Flex
                   className={clsx(
@@ -372,7 +372,7 @@ function Timkiem() {
                   className={clsx(style.filter_name, style.dropdown_main)}
                 >
                   Độ tuổi
-                  {dropAge ? <DownOutlined /> : <UpOutlined />}
+                  {dropAge ? <FiChevronDown /> : <FiChevronUp />}
                 </Flex>
 
                 <Flex

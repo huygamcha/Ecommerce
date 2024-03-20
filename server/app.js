@@ -54,6 +54,10 @@ app.use("/tags", tagRouter);
 app.use("/brands", brandRouter);
 app.use("/banners", bannerRouter);
 app.use("/", authRouter);
+app.use("/tesst", (req, res) => {
+  res.send("123");
+});
+
 // app.use("/users", usersRouter);
 
 // catch 404 and forward to error handler
