@@ -1,17 +1,15 @@
-import { Button, Col, Empty, Flex, Row, Space, Spin } from "antd";
-import React, { useEffect, useState } from "react";
+import { Button, Col, Empty, Flex, Row, Space } from "antd";
+import { useEffect, useState } from "react";
 import style from "./timkiem.module.css";
 import clsx from "clsx";
-import { Link, useLocation, Navigate, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Discount from "../../../components/discount";
 import numeral from "numeral";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import {
   getAllProductSearch,
-  getProductByCategories,
   getProductById,
 } from "../../../slices/productSlice";
-import { CheckOutlined } from "@ant-design/icons";
 import { getAllCategory } from "../../../slices/categorySlice";
 import { getAllBrand } from "../../../slices/brandSlice";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
