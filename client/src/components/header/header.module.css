@@ -62,19 +62,22 @@
 }
 
 /*  */
-.wrapper_try_tag,
 .wrapper_try {
   cursor: pointer;
   font-size: 25px;
   align-items: center;
   padding: 40px 100px;
-  background-color: #3f85ea;
+  background-color: #256cdf;
   position: relative;
   display: flex;
   justify-content: space-between;
   z-index: 9999;
   width: 100%;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 12px;
+}
+.wrapper_try_tag{
+  position: relative;
+  height: 40px;
 }
 .wrapper_try_brand {
   font-size: 25px;
@@ -220,9 +223,11 @@
 }
 .tag_item:hover {
   color: #fff;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 14px;
   line-height: 20px;
+  padding: 0px 10px;
+  margin-top: 10px;
 }
 
 .category_item {
@@ -339,11 +344,9 @@
 /* Thiết lập padding cho xl */
 @media (min-width: 1200px) {
   .wrapper_try {
-    padding: 30px 100px 0px 100px;
+    padding: 20px 100px 0px 100px;
   }
-  .wrapper_try_tag {
-    padding: 0px 100px 60px 100px;
-  }
+
   .wrapper_try_brand {
     padding: 10px 100px 20px 100px;
   }

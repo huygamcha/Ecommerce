@@ -48,6 +48,8 @@ function ProductScreen() {
     : [];
 
   useEffect(() => {
+    window.scrollTo({ top: 0, left: 0 });
+
     if (products.length === 0) dispatch(getAllProduct({}));
     if (categories.length === 0) dispatch(getAllCategory());
     if (suppliers.length === 0) dispatch(getAllSupplier());
@@ -86,7 +88,7 @@ function ProductScreen() {
     <>
       {/* banner */}
       <div
-        style={{ background: "#f7f8fc" }}
+        style={{ background: "#f7f8fc", paddingTop: "20px" }}
         className={clsx(style.wrapper_global, style.top_sale)}
       >
         <Row>
@@ -137,12 +139,24 @@ function ProductScreen() {
         </Row>
       </div>
 
-      <div className={clsx(style.wrapper_global, style.top_sale)}>
+      <div
+        style={{ paddingTop: "50px" }}
+        className={clsx(style.wrapper_global, style.top_sale)}
+      >
         {/* sản phẩm bán tốt nhất */}
         <Row>
           <Col xs={24} sm={24}>
-            <Space className={clsx(style.title_product_relate)}>
-              Sản phẩm bán chạy
+            <Space className={clsx(style.topsale_banner)}>
+              <Space className={clsx(style.topsale_banner_img)}>
+                <img
+                  style={{ width: "320px", height: "41px" }}
+                  src="https://cdn.nhathuoclongchau.com.vn/unsafe/640x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/smalls/san_pham_ban_chay_reponsive_282x36_3x_5b96131326.png"
+                  alt=""
+                />
+                <Space className={clsx(style.topsale_banner_text)}>
+                  Sản phẩm bán chạy
+                </Space>
+              </Space>
             </Space>
             <Row gutter={[14, 14]}>
               {products && error.message === "" ? (

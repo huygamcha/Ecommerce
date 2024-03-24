@@ -106,12 +106,15 @@ function HeaderScreen() {
       {tags ? (
         <>
           <Row justify="end" className={clsx(style.wrapper_try)}>
-            <Col xs={4} sm={2} md={2} lg={2}>
+            <Col xs={5} sm={2} md={2} lg={5}>
               <Link to="/" className={clsx(style.header_text)}>
-                Pam
+                <img
+                  src="https://cms-prod.s3-sgn09.fptcloud.com/smalls/Logo_LC_Default_2e36f42b6b.svg"
+                  alt=""
+                />
               </Link>
             </Col>
-            <Col xs={17} sm={14} md={13} lg={16}>
+            <Col xs={16} sm={14} md={13} lg={13}>
               <Flex>
                 <Input
                   value={search}
@@ -157,7 +160,6 @@ function HeaderScreen() {
                     <></>
                   )}
                 </Space>
-
                 <div className={clsx(style.header_search_icon)}>
                   <SearchOutlined />
                 </div>
@@ -307,9 +309,22 @@ function HeaderScreen() {
               )}
             </Space>
           </Row>
-          <Row className={clsx(style.wrapper_try_tag)}>
-            <Col offset={2} className={clsx(style.wrapper_try_tag_display)}>
-              <Flex>
+
+          {/* tag */}
+          <Row
+            style={{ paddingTop: "0px" }}
+            justify="end"
+            className={clsx(style.wrapper_try)}
+          >
+            <Col xs={5} sm={2} md={2} lg={5}></Col>
+            <Col
+              xs={16}
+              sm={14}
+              md={13}
+              lg={13}
+              className={clsx(style.wrapper_try_tag)}
+            >
+              <Flex className={clsx(style.wrapper_try_tag_display)}>
                 {tags ? (
                   tags.map((tag) => (
                     <Link
@@ -325,7 +340,11 @@ function HeaderScreen() {
                 )}
               </Flex>
             </Col>
+            <Col xs={0} sm={8} md={9} lg={6}></Col>
+            <Col xs={3} sm={0}></Col>
           </Row>
+
+          {/* danh mục và thương hiệu */}
           <Row className={clsx(style.wrapper_try_brand)}>
             <Col className={clsx(style.menu_sub)}>
               {categories ? (

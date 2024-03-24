@@ -30,10 +30,14 @@
   /* height: 260px; */
   position: relative;
   border: 1px solid rgb(193, 200, 209);
+  border-right: 0.5px solid rgb(193, 200, 209);
+  border-left: 0.5px solid rgb(193, 200, 209)
 }
 
 .content_brand:hover {
   border: 1px solid #1250dc;
+  border-left: 0.5px solid #1250dc;
+  border-right: 0.5px solid #1250dc;
   transition: 0.2s linear;
 }
 
@@ -392,12 +396,13 @@
 .customSwiper_child {
   width: 100%;
   position: absolute;
-  top: 50%;
+  top: 43%;
   transform: translateY(-50%);
   right: 0;
   z-index: 9;
-  height: 0;
-  /* height: 1px; */
+  /* height: 0; */
+  padding: 0px 5px;
+  height: 1px;
 }
 .customSwiper_child:hover .content_brand  {
   border: 1px solid #1250dc;
@@ -498,6 +503,30 @@
 
 .icon_header {
   margin-right: 8px;
+}
+
+/* banner top sale */
+.topsale_banner {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  z-index: 1;
+  position: absolute;
+  top: -60px;
+}
+
+.topsale_banner_img {
+  position: relative;
+}
+
+.topsale_banner_text {
+  font-size: 18px;
+  color: #fff;
+  font-weight: 600;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 /* Thiết lập padding cho xs */

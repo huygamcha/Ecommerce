@@ -1,7 +1,7 @@
 .customButton {
     border-radius: 50%;
-    background-color: #fff;
-    color: #1250dc;
+    background-color: rgba(2, 11, 39, .4);
+    color: #fff;
     border: none;
     height: 38px;
     width: 38px;
@@ -11,7 +11,7 @@
 }
 
 .customButton:hover {
-    border: 1px solid #1250dc;
+    border: 1px solid rgba(2, 11, 39, .4);
 }
 
 .customButton>span {
