@@ -125,8 +125,12 @@ const getAllProductSearch = createAsyncThunk<ProductsType[], ProductSearchType>(
       ? JSON.parse(localStorage.getItem("searchAge")!)
       : undefined;
 
-    let { searchTag, priceFrom, priceTo, ageFrom, ageTo , categoryId, brandId } = arg;
+    let { searchTag, priceFrom, priceTo, ageFrom, ageTo , categoryId, brandId, search } = arg;
     console.log('««««« arg »»»»»', arg);
+
+    if (!search) {
+      search= ''
+    }
     
     if (!searchTag) {
       searchTag = ''
@@ -135,18 +139,12 @@ const getAllProductSearch = createAsyncThunk<ProductsType[], ProductSearchType>(
       searchTag = filter.searchTag;
     }
   
-    if (!categoryId && filter.categoryId) {
-      categoryId = filter.categoryId;
-    }
-    else if (!categoryId && !filter.categoryId){
-      categoryId = undefined
+    if (!categoryId) {
+      categoryId = filter?.categoryId; // Use optional chaining to safely access filter.categoryId
     }
 
-    if (!brandId && filter.brandId) {
-      brandId = filter.brandId;
-    }
-    else if (!brandId &&  !filter.brandId){
-      brandId = undefined
+    if (!brandId) {
+      brandId = filter?.brandId; // Use optional chaining to safely access filter.brandId
     }
 
     if (!priceFrom && searchPriceInfor && priceFrom !== 0) {
@@ -173,9 +171,8 @@ const getAllProductSearch = createAsyncThunk<ProductsType[], ProductSearchType>(
       ageTo = 100;
     }
     const response = await axios.get(
-      `${process.env.REACT_APP_BACKEND}/products/search?${categoryId? `categoryId=${categoryId}` : ''}${searchTag? `&searchTag=${searchTag}` : ''}${brandId? `&brandId=${brandId}` : ''}&priceFrom=${priceFrom}&priceTo=${priceTo}&ageFrom=${ageFrom}&ageTo=${ageTo}`
+      `${process.env.REACT_APP_BACKEND}/products/search?${categoryId? `categoryId=${categoryId}` : ''}${searchTag? `&searchTag=${searchTag}` : ''}${brandId? `&brandId=${brandId}` : ''}&priceFrom=${priceFrom}&priceTo=${priceTo}&ageFrom=${ageFrom}&ageTo=${ageTo}&search=${search}`
     );
-    console.log("««««« response »»»»»");
     const data: ProductsType[] = response.data.payload;
     return data; // Assuming products are in the `data` property of the response
   }

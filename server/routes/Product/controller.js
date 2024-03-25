@@ -53,6 +53,7 @@ module.exports = {
       const skip = limit * (page - 1) || 0;
 
       // search theo tag
+
       let {
         searchTag,
         priceFrom,
@@ -61,6 +62,7 @@ module.exports = {
         ageTo,
         categoryId,
         brandId,
+        search,
       } = req.query;
 
       priceFrom = parseInt(priceFrom);
@@ -72,64 +74,68 @@ module.exports = {
       if (!priceTo) priceTo = 1000000000;
       if (!ageFrom) ageFrom = 0;
       if (!ageTo) ageTo = 100;
-
-      // console.log("««««« searchTag »»»»»", searchTag);
-      let result;
-      // khi lọc theo tag
-      if (searchTag) {
-        result = await Product.find({
-          tagList: { $in: [searchTag] },
-          price: { $gte: priceFrom, $lte: priceTo },
-          age: { $gte: ageFrom, $lte: ageTo },
-        })
-          .populate("category")
-          .populate("brand")
-          // .limit(limit)
-          // .skip(skip)
-          .sort({ createdAt: -1 })
-          .lean({ virtuals: true });
-      } else if (categoryId && !brandId && !searchTag) {
-        // khi lọc theo danh mục
-        result = await Product.find({
-          categoryId: categoryId,
-          price: { $gte: priceFrom, $lte: priceTo },
-          age: { $gte: ageFrom, $lte: ageTo },
-        })
-          .populate("category")
-          .populate("brand")
-
-          // .limit(limit)
-          // .skip(skip)
-          .sort({ createdAt: -1 })
-          .lean({ virtuals: true });
+      if (!search) {
+        search = "";
       }
-      // khi lọc theo danh mục và brand
-      else if (categoryId && brandId && !searchTag) {
-        result = await Product.find({
-          categoryId: categoryId,
-          brandId: brandId,
-          price: { $gte: priceFrom, $lte: priceTo },
-          age: { $gte: ageFrom, $lte: ageTo },
-        })
-          .populate("category")
-          .populate("brand")
 
-          // .limit(limit)
-          // .skip(skip)
-          .sort({ createdAt: -1 })
-          .lean({ virtuals: true });
-      } else if (!searchTag && !categoryId && !brandId) {
+      let result;
+
+      // tìm kiểm ở header
+      if (search) {
         result = await Product.find({
           age: { $gte: ageFrom, $lte: ageTo },
           price: { $gte: priceFrom, $lte: priceTo },
+          slug: fuzzySearch(search),
         })
           .populate("category")
           .populate("brand")
-
-          // .limit(limit)
-          // .skip(skip)
           .sort({ createdAt: -1 })
           .lean({ virtuals: true });
+      } else if (search === "") {
+        // khi lọc theo tag
+        if (searchTag) {
+          result = await Product.find({
+            tagList: { $in: [searchTag] },
+            price: { $gte: priceFrom, $lte: priceTo },
+            age: { $gte: ageFrom, $lte: ageTo },
+          })
+            .populate("category")
+            .populate("brand")
+            // .limit(limit)
+            // .skip(skip)
+            .sort({ createdAt: -1 })
+            .lean({ virtuals: true });
+        } else if (categoryId && !brandId && !searchTag) {
+          // khi lọc theo danh mục
+          result = await Product.find({
+            categoryId: categoryId,
+            price: { $gte: priceFrom, $lte: priceTo },
+            age: { $gte: ageFrom, $lte: ageTo },
+          })
+            .populate("category")
+            .populate("brand")
+
+            // .limit(limit)
+            // .skip(skip)
+            .sort({ createdAt: -1 })
+            .lean({ virtuals: true });
+        }
+        // khi lọc theo danh mục và brand
+        else if (categoryId && brandId && !searchTag) {
+          result = await Product.find({
+            categoryId: categoryId,
+            brandId: brandId,
+            price: { $gte: priceFrom, $lte: priceTo },
+            age: { $gte: ageFrom, $lte: ageTo },
+          })
+            .populate("category")
+            .populate("brand")
+
+            // .limit(limit)
+            // .skip(skip)
+            .sort({ createdAt: -1 })
+            .lean({ virtuals: true });
+        }
       }
 
       if (result.length > 0) {

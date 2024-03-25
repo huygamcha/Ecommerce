@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { Ref, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Col, Flex, Input, Row, Space, Image, Badge } from "antd";
 import clsx from "clsx";
 import style from "./header.module.css";
 import {
+  CloseCircleOutlined,
   DownOutlined,
   LogoutOutlined,
   MenuUnfoldOutlined,
@@ -11,6 +12,7 @@ import {
   ShoppingCartOutlined,
   UserDeleteOutlined,
 } from "@ant-design/icons";
+import { TiDelete } from "react-icons/ti";
 import { useAppDispatch, useAppSelector } from "../../store";
 import {
   getAllProduct,
@@ -26,6 +28,8 @@ import {
 } from "../../slices/cartSlice";
 import { getAllTag } from "../../slices/tagSlice";
 import { getAllBrand } from "../../slices/brandSlice";
+import { getAllCategory } from "../../slices/categorySlice";
+import { useOutsideClick } from "../OutsideClick/index";
 
 function HeaderScreen() {
   const currentUser = localStorage.getItem("userInfor")
@@ -35,12 +39,21 @@ function HeaderScreen() {
   const filter = localStorage.getItem("filter")
     ? JSON.parse(localStorage.getItem("filter")!)
     : undefined;
+  // mở tabmobile
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  // hiển thị danh sách tìm kiém
+  const [isList, setIsList] = useState<boolean>(false);
+  // tìm kiếm
   const [search, setSearch] = useState<string>();
   // xác định phần tử con nào được liệt kê
   const [categoryActive, setCategoryActive] = useState<string>("");
-  // notifications
+  // thông báo về mua sản phẩm
   const [show, setShow] = useState(false);
+
+  //  ẩn hiện thi click ra ngoài
+  const ref = useOutsideClick(() => {
+    console.log("Clicked outside of MyComponent");
+  });
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -55,7 +68,11 @@ function HeaderScreen() {
 
   const handleSearch = (e: any) => {
     dispatch(getAllProductSearch({ search: e.target.value }));
+    setIsList(true);
     setSearch(e.target.value);
+    if (e.target.value === "") {
+      setIsList(false);
+    }
   };
 
   // search
@@ -83,14 +100,20 @@ function HeaderScreen() {
   }, [add]);
 
   useEffect(() => {
+    setIsList(false);
+  }, [location]);
+
+  useEffect(() => {
     if (tags.length === 0) dispatch(getAllTag());
     if (brands.length === 0) dispatch(getAllBrand());
+    if (categories.length === 0) dispatch(getAllCategory());
   }, []);
 
   //click
   const handleDetail = (value: string) => {
     dispatch(getProductById(value));
-    setSearch("");
+    localStorage.setItem("productId", JSON.stringify(value));
+    // setSearch("");
   };
 
   //search category and brand
@@ -101,6 +124,26 @@ function HeaderScreen() {
     );
   };
 
+  // useREF
+  function useOutsideAlerter(ref: React.RefObject<any>) {
+    useEffect(() => {
+      function handleClickOutside(event: MouseEvent) {
+        //  kiểm tra DOM cả 2 nếu khác nhau thì đã click ở ngoài
+        // console.log("««««« ref »»»»»", ref.current.input);
+        // console.log("««««« event »»»»»", event.target);
+        if (ref.current.input !== event.target) {
+          setIsList(false);
+        }
+      }
+
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [ref]);
+  }
+  const wrapperRef = useRef(null);
+  useOutsideAlerter(wrapperRef);
   return (
     <>
       {tags ? (
@@ -117,40 +160,58 @@ function HeaderScreen() {
             <Col xs={16} sm={14} md={13} lg={13}>
               <Flex>
                 <Input
+                  // ref={inputRef}
+                  ref={wrapperRef}
+                  type="text"
                   value={search}
                   onChange={handleSearch}
                   className={clsx(style.header_search_input)}
                   placeholder="Tìm kiếm sản phẩm"
+                  onFocus={handleSearch}
                 ></Input>
-                <Space className={clsx(style.header_search_result)}>
-                  {search && products ? (
-                    products.map((product) => (
+
+                <div className={clsx(style.header_search_icon_search)}>
+                  <SearchOutlined />
+                </div>
+                <div
+                  onClick={() => {
+                    setSearch("");
+                    setIsList(false);
+                  }}
+                  className={clsx(style.header_search_icon_delete)}
+                >
+                  {search ? <TiDelete /> : <></>}
+                </div>
+                {/* search result */}
+                <Space
+                  className={clsx(style.header_search_result, style.active)}
+                >
+                  {isList && productsSearch ? (
+                    productsSearch.map((product) => (
                       <Link
                         className={clsx(style.header_search_items)}
                         to={`/sanpham/${product.slug}`}
-                        // onClick={() => setSearch("")}
                         onClick={() => handleDetail(product._id)}
                       >
                         <Flex>
                           <Space style={{ marginRight: "10px" }}>
                             <Image
-                              width="40px"
-                              height="40px"
+                              className={clsx(style.header_search_items_img)}
                               src={product?.pic}
                             ></Image>
                           </Space>
                           <Flex vertical>
-                            <Space style={{ fontSize: "16px" }}>
+                            <Space
+                              style={{ fontSize: "16px", lineHeight: "24px" }}
+                            >
                               {product.name}
                             </Space>
                             <Space style={{ fontWeight: "bold" }}>
-                              {numeral(product.total).format("$0,0.0")}
-                              <Space>
-                                <Discount
-                                  font={9}
-                                  discount={product.discount}
-                                ></Discount>
-                              </Space>
+                              <div>
+                                {" "}
+                                {numeral(product.total).format("$0,0")} /{" "}
+                                {product.unit}
+                              </div>
                             </Space>
                           </Flex>
                         </Flex>
@@ -160,9 +221,6 @@ function HeaderScreen() {
                     <></>
                   )}
                 </Space>
-                <div className={clsx(style.header_search_icon)}>
-                  <SearchOutlined />
-                </div>
               </Flex>
             </Col>
             <Col xs={0} sm={8} md={9} lg={6}>
@@ -312,7 +370,7 @@ function HeaderScreen() {
 
           {/* tag */}
           <Row
-            style={{ paddingTop: "0px" }}
+            style={{ paddingTop: "0px", zIndex: 1 }}
             justify="end"
             className={clsx(style.wrapper_try)}
           >
