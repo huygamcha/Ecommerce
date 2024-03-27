@@ -88,17 +88,29 @@ function ProductScreen() {
     <>
       {/* banner */}
       <div
-        style={{ background: "#f7f8fc", paddingTop: "20px" }}
-        className={clsx(style.wrapper_global, style.top_sale)}
+        className={clsx(
+          style.wrapper_global,
+          style.top_sale,
+          style.wrapper_global_banner,
+          style.customPT20
+        )}
       >
         <Row>
           <Col span={24}>
             <Swiper
               modules={[Navigation, Pagination, Scrollbar, A11y]}
-              spaceBetween={18}
-              slidesPerView={1}
+              breakpoints={{
+                1200: {
+                  spaceBetween: 18,
+                  slidesPerView: 1,
+                },
+                0: {
+                  spaceBetween: 0,
+                  slidesPerView: 1,
+                },
+              }}
               pagination={{ clickable: true }}
-              style={{ backgroundColor: "transparent", borderRadius: "20px" }}
+              className={clsx(style.background_banner)}
             >
               <Flex
                 justify="space-between"
@@ -192,14 +204,39 @@ function ProductScreen() {
                                 {product.name}
                               </Space>
                               <Space className={clsx(style.header_discount)}>
-                                {numeral(
-                                  (product.price * (100 - product.discount)) /
-                                    100
-                                ).format("$0,0")}
+                                {product && product?.discount > 0 ? (
+                                  <>
+                                    <Space>
+                                      <div>
+                                        {numeral(product?.total).format("0,0$")}
+                                        <span style={{ margin: "0 2px" }}>
+                                          &#47;
+                                        </span>
+                                        {product.unit}
+                                      </div>
+                                    </Space>
+                                  </>
+                                ) : (
+                                  <>
+                                    <Space>
+                                      <div>
+                                        {numeral(product?.price).format("0,0$")}
+                                        <span style={{ margin: "0 2px" }}>
+                                          &#47;
+                                        </span>
+                                        {product?.unit}
+                                      </div>
+                                    </Space>
+                                  </>
+                                )}
                               </Space>
-                              <del className={clsx(style.header_price)}>
-                                {numeral(product.price).format("$0,0")}
-                              </del>
+                              {product && product?.discount > 0 ? (
+                                <del className={clsx(style.header_price)}>
+                                  {numeral(product.price).format("$0,0")}
+                                </del>
+                              ) : (
+                                <></>
+                              )}
                             </Flex>
                           </Flex>
                         </Link>
@@ -240,6 +277,16 @@ function ProductScreen() {
               spaceBetween={0}
               slidesPerView={5}
               style={{ backgroundColor: "transparent", marginBottom: "60px" }}
+              breakpoints={{
+                1200: {
+                  spaceBetween: 0,
+                  slidesPerView: 5,
+                },
+                0: {
+                  spaceBetween: 0,
+                  slidesPerView: 2,
+                },
+              }}
             >
               <Flex
                 justify="space-between"
@@ -449,8 +496,16 @@ function ProductScreen() {
           <Col span={24}>
             <Swiper
               modules={[Navigation, Pagination, Scrollbar, A11y]}
-              spaceBetween={18}
-              slidesPerView={6}
+              breakpoints={{
+                1200: {
+                  spaceBetween: 18,
+                  slidesPerView: 6,
+                },
+                0: {
+                  spaceBetween: 18,
+                  slidesPerView: 2,
+                },
+              }}
               style={{
                 backgroundColor: "#2f6de5",
                 padding: "10px",
@@ -519,11 +574,6 @@ function ProductScreen() {
                                           {product.unit}
                                         </div>
                                       </Space>
-                                      <Space>
-                                        {/* <del>
-                            {numeral(product?.price).format("$0,0")}
-                          </del> */}
-                                      </Space>
                                     </>
                                   ) : (
                                     <>
@@ -541,9 +591,13 @@ function ProductScreen() {
                                     </>
                                   )}
                                 </Space>
-                                <del className={clsx(style.header_price)}>
-                                  {numeral(product.price).format("$0,0")}
-                                </del>
+                                {product && product?.discount > 0 ? (
+                                  <del className={clsx(style.header_price)}>
+                                    {numeral(product.price).format("$0,0")}
+                                  </del>
+                                ) : (
+                                  <></>
+                                )}
                               </Flex>
                             </Flex>
                           </Link>
@@ -653,9 +707,13 @@ function ProductScreen() {
                                     100
                                 ).format("$0,0")}
                               </Space>
-                              <del className={clsx(style.header_price)}>
-                                {numeral(product.price).format("$0,0")}
-                              </del>
+                              {product && product?.discount > 0 ? (
+                                <del className={clsx(style.header_price)}>
+                                  {numeral(product.price).format("$0,0")}
+                                </del>
+                              ) : (
+                                <></>
+                              )}
                             </Flex>
                           </Flex>
                         </Link>
@@ -692,8 +750,16 @@ function ProductScreen() {
 
             <Swiper
               modules={[Navigation, Pagination, Scrollbar, A11y]}
-              spaceBetween={18}
-              slidesPerView={6}
+              breakpoints={{
+                1200: {
+                  spaceBetween: 18,
+                  slidesPerView: 6,
+                },
+                0: {
+                  spaceBetween: 18,
+                  slidesPerView: 2,
+                },
+              }}
               style={{ backgroundColor: "#eaeffa" }}
             >
               <Flex
@@ -774,9 +840,13 @@ function ProductScreen() {
                                     </>
                                   )}
                                 </Space>
-                                <del className={clsx(style.header_price)}>
-                                  {numeral(product.price).format("$0,0")}
-                                </del>
+                                {product && product?.discount > 0 ? (
+                                  <del className={clsx(style.header_price)}>
+                                    {numeral(product.price).format("$0,0")}
+                                  </del>
+                                ) : (
+                                  <></>
+                                )}
                               </Flex>
                             </Flex>
                           </Link>

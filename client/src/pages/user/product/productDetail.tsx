@@ -16,6 +16,7 @@ import {
   PlusOutlined,
   UpOutlined,
 } from "@ant-design/icons";
+import { FaFacebookMessenger } from "react-icons/fa6";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 import "swiper/css";
@@ -86,7 +87,24 @@ function ProductDetail() {
       })
     );
   };
-
+  //  buy quickly
+  const handleAddToCartNow = () => {
+    dispatch(
+      addToCart({
+        id: product?._id,
+        name: product?.name,
+        quantity: quantity,
+        pic: product?.pic,
+        price: product?.price,
+        stock: product?.stock,
+        total: product?.total,
+        discount: product?.discount,
+        unit: product?.unit,
+        check: true,
+      })
+    );
+    navigate("/cart");
+  };
   //search brand
   const handleSearchBrand = (id: string, name: string, categoryId: string) => {
     localStorage.setItem(
@@ -126,8 +144,8 @@ function ProductDetail() {
       <div className={clsx(style.wrapper_global, style.product_background)}>
         <div className={clsx(style.product_wrapper)}>
           <Row gutter={24}>
-            <Col span={10}>
-              <Flex style={{ margin: "16px" }} vertical justify="center">
+            <Col xs={24} sm={10}>
+              <Flex className={clsx(style.customP16)} vertical justify="center">
                 <Image
                   style={{ borderRadius: "10px" }}
                   width="100%"
@@ -136,15 +154,10 @@ function ProductDetail() {
                 ></Image>
                 <Swiper
                   modules={[Navigation, Pagination, Scrollbar, A11y]}
-                  style={{
-                    width: "100%",
-                    marginTop: "50px",
-                    borderRadius: "10px",
-                  }}
                   spaceBetween={10}
                   slidesPerView={4}
                   pagination={{ clickable: true }}
-                  className={clsx(style.pagination)}
+                  className={clsx(style.pagination, style.album_wrapper)}
                 >
                   {product?.album &&
                     product?.album.map((item) => (
@@ -164,8 +177,8 @@ function ProductDetail() {
                 </Swiper>
               </Flex>
             </Col>
-            <Col span={14}>
-              <Flex style={{ padding: "16px 0px 16px 16px" }} vertical>
+            <Col xs={24} sm={14}>
+              <Flex className={clsx(style.customP16)} vertical>
                 <Space>
                   <div className={clsx(style.title_brand)}>
                     Thương hiệu:
@@ -190,7 +203,7 @@ function ProductDetail() {
                   </Space>
                 </Space>
                 <Space>
-                  <Flex style={{ marginBottom: "20px" }} vertical>
+                  <Flex vertical>
                     {product && product?.discount > 0 ? (
                       <>
                         <Space className={clsx(style.price_detail)}>
@@ -201,7 +214,7 @@ function ProductDetail() {
                           </div>
                         </Space>
                         <Space className={clsx(style.price_total)}>
-                          <del>{numeral(product?.price).format("$0,0")}</del>
+                          <del>{numeral(product?.price).format("0,0$")}</del>
                         </Space>
                       </>
                     ) : (
@@ -367,7 +380,11 @@ function ProductDetail() {
                   </Space>
                 </Space>
 
-                <Flex justify="space-between">
+                {/* buy */}
+                <Flex
+                  className={clsx(style.buy_wrapper)}
+                  justify="space-between"
+                >
                   <Space
                     onClick={handleAddToCart}
                     className={clsx(style.add_to_cart)}
@@ -375,7 +392,7 @@ function ProductDetail() {
                     Thêm vào giỏ hàng
                   </Space>
                   <Space
-                    onClick={handleAddToCart}
+                    onClick={handleAddToCartNow}
                     className={clsx(style.buy_now)}
                   >
                     Chọn mua
@@ -589,6 +606,7 @@ function ProductDetail() {
           </Row>
         </div>
       </div>
+
       {product && product.detail ? (
         <div className={clsx(style.wrapper_global, style.product_background)}>
           <div className={clsx(style.product_wrapper)}>
@@ -632,18 +650,12 @@ function ProductDetail() {
 
       {productsSearch ? (
         <div
-          className={clsx(
-            style.wrapper_product,
-            style.product_background,
-            style.customSwiper_parent
-          )}
+          style={{
+            background: "#eaeffa",
+          }}
+          className={clsx(style.wrapper_global, style.top_sale)}
         >
-          <div
-            className={clsx(
-              style.product_wrapper,
-              style.wrapper_product_content
-            )}
-          >
+          <div>
             <Row>
               <Col span={24}>
                 <Space className={clsx(style.title_product_relate)}>
@@ -652,8 +664,16 @@ function ProductDetail() {
 
                 <Swiper
                   modules={[Navigation, Pagination, Scrollbar, A11y]}
-                  spaceBetween={18}
-                  slidesPerView={6}
+                  breakpoints={{
+                    1200: {
+                      spaceBetween: 18,
+                      slidesPerView: 6,
+                    },
+                    0: {
+                      spaceBetween: 18,
+                      slidesPerView: 2,
+                    },
+                  }}
                   style={{ backgroundColor: "#edf0f3" }}
                 >
                   <Flex
@@ -738,9 +758,13 @@ function ProductDetail() {
                                         </>
                                       )}
                                     </Space>
-                                    <del className={clsx(style.header_price)}>
-                                      {numeral(product.price).format("$0,0")}
-                                    </del>
+                                    {product && product?.discount > 0 ? (
+                                      <del className={clsx(style.header_price)}>
+                                        {numeral(product.price).format("$0,0")}
+                                      </del>
+                                    ) : (
+                                      <></>
+                                    )}
                                   </Flex>
                                 </Flex>
                               </Link>
@@ -763,6 +787,19 @@ function ProductDetail() {
       ) : (
         <></>
       )}
+
+      {/* buy */}
+      <Flex className={clsx(style.buy_wrapper_mobile)} justify="space-between">
+        <Space>
+          <FaFacebookMessenger style={{ color: "#1250dc", fontSize: "30px" }} />
+        </Space>
+        <Space onClick={handleAddToCart} className={clsx(style.add_to_cart)}>
+          Chọn mua
+        </Space>
+        <Space onClick={handleAddToCartNow} className={clsx(style.buy_now)}>
+          Mua ngay
+        </Space>
+      </Flex>
     </>
   );
 }

@@ -145,317 +145,306 @@ function HeaderScreen() {
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef);
   return (
+    // 5 16 0 3
     <>
-      {tags ? (
-        <>
-          <Row justify="end" className={clsx(style.wrapper_try)}>
-            <Col xs={5} sm={2} md={2} lg={5}>
-              <Link to="/" className={clsx(style.header_text)}>
-                <img
-                  src="https://cms-prod.s3-sgn09.fptcloud.com/smalls/Logo_LC_Default_2e36f42b6b.svg"
-                  alt=""
-                />
-              </Link>
-            </Col>
-            <Col xs={16} sm={14} md={13} lg={13}>
-              <Flex>
-                <Input
-                  // ref={inputRef}
-                  ref={wrapperRef}
-                  type="text"
-                  value={search}
-                  onChange={handleSearch}
-                  className={clsx(style.header_search_input)}
-                  placeholder="Tìm kiếm sản phẩm"
-                  onFocus={handleSearch}
-                ></Input>
+      <>
+        <Row justify="end" className={clsx(style.wrapper_try)}>
+          <Col xs={0} sm={2} md={2} lg={5}>
+            <Link to="/" className={clsx(style.header_text)}>
+              <img
+                src="https://cms-prod.s3-sgn09.fptcloud.com/smalls/Logo_LC_Default_2e36f42b6b.svg"
+                alt=""
+              />
+            </Link>
+          </Col>
+          <Col xs={24} sm={14} md={13} lg={13}>
+            <Flex>
+              <Input
+                // ref={inputRef}
+                ref={wrapperRef}
+                type="text"
+                value={search}
+                onChange={handleSearch}
+                className={clsx(style.header_search_input)}
+                placeholder="Tìm kiếm sản phẩm"
+                onFocus={handleSearch}
+              ></Input>
 
-                <div className={clsx(style.header_search_icon_search)}>
-                  <SearchOutlined />
-                </div>
-                <div
-                  onClick={() => {
-                    setSearch("");
-                    setIsList(false);
-                  }}
-                  className={clsx(style.header_search_icon_delete)}
-                >
-                  {search ? <TiDelete /> : <></>}
-                </div>
-                {/* search result */}
-                <Space
-                  className={clsx(style.header_search_result, style.active)}
-                >
-                  {isList && productsSearch ? (
-                    productsSearch.map((product) => (
-                      <Link
-                        className={clsx(style.header_search_items)}
-                        to={`/sanpham/${product.slug}`}
-                        onClick={() => handleDetail(product._id)}
-                      >
-                        <Flex>
-                          <Space style={{ marginRight: "10px" }}>
-                            <Image
-                              className={clsx(style.header_search_items_img)}
-                              src={product?.pic}
-                            ></Image>
+              <div className={clsx(style.header_search_icon_search)}>
+                <SearchOutlined />
+              </div>
+              <div
+                onClick={() => {
+                  setSearch("");
+                  setIsList(false);
+                }}
+                className={clsx(style.header_search_icon_delete)}
+              >
+                {search ? <TiDelete /> : <></>}
+              </div>
+              {/* search result */}
+              <Space className={clsx(style.header_search_result, style.active)}>
+                {isList && productsSearch ? (
+                  productsSearch.map((product) => (
+                    <Link
+                      className={clsx(style.header_search_items)}
+                      to={`/sanpham/${product.slug}`}
+                      onClick={() => handleDetail(product._id)}
+                    >
+                      <Flex>
+                        <Space style={{ marginRight: "10px" }}>
+                          <Image
+                            className={clsx(style.header_search_items_img)}
+                            src={product?.pic}
+                          ></Image>
+                        </Space>
+                        <Flex vertical>
+                          <Space
+                            style={{ fontSize: "16px", lineHeight: "24px" }}
+                          >
+                            {product.name}
                           </Space>
-                          <Flex vertical>
-                            <Space
-                              style={{ fontSize: "16px", lineHeight: "24px" }}
-                            >
-                              {product.name}
-                            </Space>
-                            <Space style={{ fontWeight: "bold" }}>
-                              <div>
-                                {" "}
-                                {numeral(product.total).format("$0,0")} /{" "}
-                                {product.unit}
-                              </div>
-                            </Space>
-                          </Flex>
+                          <Space style={{ fontWeight: "bold" }}>
+                            <div>
+                              {" "}
+                              {numeral(product.total).format("$0,0")} /{" "}
+                              {product.unit}
+                            </div>
+                          </Space>
                         </Flex>
-                      </Link>
-                    ))
-                  ) : (
-                    <></>
-                  )}
-                </Space>
-              </Flex>
-            </Col>
-            <Col xs={0} sm={8} md={9} lg={6}>
-              <Flex justify="end">
-                {currentUser ? (
-                  <Space className={clsx(style.profile_detail)}>
-                    <Space
-                      style={{ marginRight: "14px" }}
-                      className={`${style.button_header}`}
-                    >
-                      <Link
-                        className={clsx(style.button_header_text)}
-                        to="/profile"
-                      >
-                        <UserDeleteOutlined
-                          className={clsx(style.button_icon)}
-                        />
-                        <Space>{currentUser.name}</Space>
-                      </Link>
-                    </Space>
-
-                    <Flex className={clsx(style.profile_detail_child)}>
-                      <Space>
-                        <Link
-                          style={{ color: "#000", fontWeight: "normal" }}
-                          to="/profile"
-                        >
-                          <UserDeleteOutlined />
-                          <Space style={{ marginLeft: "5px" }}>
-                            Thông tin cá nhân
-                          </Space>
-                        </Link>
-                      </Space>
-                      <Space
-                        onClick={handleLogout}
-                        style={{ color: "#000", fontWeight: "normal" }}
-                      >
-                        <LogoutOutlined />
-                        <Space>Đăng xuất</Space>
-                      </Space>
-                    </Flex>
-                  </Space>
-                ) : (
-                  <>
-                    <Space
-                      style={{ marginRight: "14px" }}
-                      className={clsx(style.button_header)}
-                    >
-                      <Link
-                        className={clsx(style.button_header_text)}
-                        to="/auth/login"
-                      >
-                        <UserDeleteOutlined
-                          className={clsx(style.button_icon)}
-                        />
-                        Đăng nhập
-                      </Link>
-                    </Space>
-                  </>
-                )}
-
-                <Space
-                  className={clsx(style.button_header, style.button_background)}
-                >
-                  <Link
-                    onClick={handleCart}
-                    className={clsx(style.button_header_text)}
-                    to="/cart"
-                  >
-                    <Badge dot={show} status="warning">
-                      <ShoppingCartOutlined
-                        className={clsx(style.button_icon)}
-                      />
-                    </Badge>
-                    Giỏ hàng
-                  </Link>
-                </Space>
-              </Flex>
-            </Col>
-            <Col xs={3} sm={0}>
-              <Flex justify="end">
-                <Space
-                  className={clsx(
-                    style.button_header,
-                    style.button_background_mobile
-                  )}
-                >
-                  <Link className={clsx(style.button_header_text)} to="/cart">
-                    <MenuUnfoldOutlined
-                      onClick={() => setIsOpen(!isOpen)}
-                      className={clsx(style.button_icon_mobile)}
-                    />
-                  </Link>
-                </Space>
-              </Flex>
-            </Col>
-            <Space>
-              {isOpen ? (
-                <Flex className={clsx(style.menu_mobile)} vertical>
-                  <Link to="/product">
-                    <div style={{ fontSize: "35px" }}>Pam</div>
-                  </Link>
-                  <div>
-                    <Link
-                      className={clsx(style.menu_mobile_child)}
-                      onClick={() => setIsOpen(false)}
-                      to="/cart"
-                    >
-                      <Space>Giỏ hàng</Space>
-                    </Link>
-                  </div>
-                  <div>
-                    <Link
-                      className={clsx(style.menu_mobile_child)}
-                      onClick={() => setIsOpen(false)}
-                      to="/product"
-                    >
-                      <Space>Sản phẩm</Space>
-                    </Link>
-                  </div>
-                  <div>
-                    <Link
-                      className={clsx(style.menu_mobile_child)}
-                      onClick={() => setIsOpen(false)}
-                      to="/profile"
-                    >
-                      <Space>
-                        {currentUser ? currentUser.name : "Đăng nhập"}
-                      </Space>
-                    </Link>
-                  </div>
-                  <div>
-                    <Link
-                      className={clsx(style.menu_mobile_child)}
-                      onClick={() => setIsOpen(false)}
-                      to="/cart"
-                    >
-                      <Space></Space>
-                    </Link>
-                  </div>
-                </Flex>
-              ) : (
-                <></>
-              )}
-            </Space>
-          </Row>
-
-          {/* tag */}
-          <Row
-            style={{ paddingTop: "0px", zIndex: 1 }}
-            justify="end"
-            className={clsx(style.wrapper_try)}
-          >
-            <Col xs={5} sm={2} md={2} lg={5}></Col>
-            <Col
-              xs={16}
-              sm={14}
-              md={13}
-              lg={13}
-              className={clsx(style.wrapper_try_tag)}
-            >
-              <Flex className={clsx(style.wrapper_try_tag_display)}>
-                {tags ? (
-                  tags.map((tag) => (
-                    <Link
-                      onClick={() => handleSearchTag(tag._id)}
-                      className={clsx(style.tag_item)}
-                      to={`/timkiem?s=${tag.name}`}
-                    >
-                      {tag.name}
+                      </Flex>
                     </Link>
                   ))
                 ) : (
                   <></>
                 )}
-              </Flex>
-            </Col>
-            <Col xs={0} sm={8} md={9} lg={6}></Col>
-            <Col xs={3} sm={0}></Col>
-          </Row>
-
-          {/* danh mục và thương hiệu */}
-          <Row className={clsx(style.wrapper_try_brand)}>
-            <Col className={clsx(style.menu_sub)}>
-              {categories ? (
-                categories.map((category) => (
-                  <>
+              </Space>
+            </Flex>
+          </Col>
+          <Col xs={0} sm={8} md={9} lg={6}>
+            <Flex justify="end">
+              {currentUser ? (
+                <Space className={clsx(style.profile_detail)}>
+                  <Space
+                    style={{ marginRight: "14px" }}
+                    className={`${style.button_header}`}
+                  >
                     <Link
-                      onMouseEnter={() => setCategoryActive(category._id)}
-                      onMouseLeave={() => setCategoryActive("")}
-                      onClick={(e) => {
-                        handleSearchMenu(category._id, "");
-                      }}
-                      to={`/timkiem?s=${category.name}`}
+                      className={clsx(style.button_header_text)}
+                      to="/profile"
                     >
-                      <Space className={clsx(style.brand_item)}>
-                        {category.name}
-                        <DownOutlined />
-                      </Space>
-
-                      <Flex vertical className={clsx(style.brand_list)}>
-                        {brands.map((brand) => {
-                          if (
-                            brand.categoryId === category._id &&
-                            brand.categoryId === categoryActive
-                          ) {
-                            return (
-                              <Link to={`/timkiem?s=${category.name}`}>
-                                <Flex
-                                  onClick={(e) => {
-                                    // ngăn chặn việc gọi lên handleSearchMenu ở hàm, đánh đổi reload lại trang
-                                    e.stopPropagation();
-                                    handleSearchMenu(category._id, brand._id);
-                                  }}
-                                  className={clsx(style.brand_list_item)}
-                                >
-                                  {brand.name}
-                                </Flex>
-                              </Link>
-                            );
-                          }
-                        })}
-                      </Flex>
+                      <UserDeleteOutlined className={clsx(style.button_icon)} />
+                      <Space>{currentUser.name}</Space>
                     </Link>
-                  </>
+                  </Space>
+
+                  <Flex className={clsx(style.profile_detail_child)}>
+                    <Space>
+                      <Link
+                        style={{ color: "#000", fontWeight: "normal" }}
+                        to="/profile"
+                      >
+                        <UserDeleteOutlined />
+                        <Space style={{ marginLeft: "5px" }}>
+                          Thông tin cá nhân
+                        </Space>
+                      </Link>
+                    </Space>
+                    <Space
+                      onClick={handleLogout}
+                      style={{ color: "#000", fontWeight: "normal" }}
+                    >
+                      <LogoutOutlined />
+                      <Space>Đăng xuất</Space>
+                    </Space>
+                  </Flex>
+                </Space>
+              ) : (
+                <>
+                  <Space
+                    style={{ marginRight: "14px" }}
+                    className={clsx(style.button_header)}
+                  >
+                    <Link
+                      className={clsx(style.button_header_text)}
+                      to="/auth/login"
+                    >
+                      <UserDeleteOutlined className={clsx(style.button_icon)} />
+                      Đăng nhập
+                    </Link>
+                  </Space>
+                </>
+              )}
+
+              <Space
+                className={clsx(style.button_header, style.button_background)}
+              >
+                <Link
+                  onClick={handleCart}
+                  className={clsx(style.button_header_text)}
+                  to="/cart"
+                >
+                  <Badge dot={show} status="warning">
+                    <ShoppingCartOutlined className={clsx(style.button_icon)} />
+                  </Badge>
+                  Giỏ hàng
+                </Link>
+              </Space>
+            </Flex>
+          </Col>
+          <Col xs={0} sm={0}>
+            <Flex justify="end">
+              <Space
+                className={clsx(
+                  style.button_header,
+                  style.button_background_mobile
+                )}
+              >
+                <Link className={clsx(style.button_header_text)} to="/cart">
+                  <MenuUnfoldOutlined
+                    onClick={() => setIsOpen(!isOpen)}
+                    className={clsx(style.button_icon_mobile)}
+                  />
+                </Link>
+              </Space>
+            </Flex>
+          </Col>
+          <Space>
+            {isOpen ? (
+              <Flex className={clsx(style.menu_mobile)} vertical>
+                <Link to="/product">
+                  <div style={{ fontSize: "35px" }}>Pam</div>
+                </Link>
+                <div>
+                  <Link
+                    className={clsx(style.menu_mobile_child)}
+                    onClick={() => setIsOpen(false)}
+                    to="/cart"
+                  >
+                    <Space>Giỏ hàng</Space>
+                  </Link>
+                </div>
+                <div>
+                  <Link
+                    className={clsx(style.menu_mobile_child)}
+                    onClick={() => setIsOpen(false)}
+                    to="/product"
+                  >
+                    <Space>Sản phẩm</Space>
+                  </Link>
+                </div>
+                <div>
+                  <Link
+                    className={clsx(style.menu_mobile_child)}
+                    onClick={() => setIsOpen(false)}
+                    to="/profile"
+                  >
+                    <Space>
+                      {currentUser ? currentUser.name : "Đăng nhập"}
+                    </Space>
+                  </Link>
+                </div>
+                <div>
+                  <Link
+                    className={clsx(style.menu_mobile_child)}
+                    onClick={() => setIsOpen(false)}
+                    to="/cart"
+                  >
+                    <Space></Space>
+                  </Link>
+                </div>
+              </Flex>
+            ) : (
+              <></>
+            )}
+          </Space>
+        </Row>
+
+        {/* tag */}
+        <Row
+          style={{ paddingTop: "0px", zIndex: 1 }}
+          justify="end"
+          className={clsx(style.wrapper_try)}
+        >
+          <Col xs={5} sm={2} md={2} lg={5}></Col>
+          <Col
+            xs={16}
+            sm={14}
+            md={13}
+            lg={13}
+            className={clsx(style.wrapper_try_tag)}
+          >
+            <Flex className={clsx(style.wrapper_try_tag_display)}>
+              {tags ? (
+                tags.map((tag) => (
+                  <Link
+                    onClick={() => handleSearchTag(tag._id)}
+                    className={clsx(style.tag_item)}
+                    to={`/timkiem?s=${tag.name}`}
+                  >
+                    {tag.name}
+                  </Link>
                 ))
               ) : (
                 <></>
               )}
-            </Col>
-          </Row>
-        </>
-      ) : (
-        <></>
-      )}
+            </Flex>
+          </Col>
+          <Col xs={0} sm={8} md={9} lg={6}></Col>
+          <Col xs={3} sm={0}></Col>
+        </Row>
+
+        {/* danh mục và thương hiệu */}
+        <Row className={clsx(style.wrapper_try_brand)}>
+          <Col className={clsx(style.menu_sub)}>
+            {categories ? (
+              categories.map((category) => (
+                <>
+                  <Link
+                    onMouseEnter={() => setCategoryActive(category._id)}
+                    onMouseLeave={() => setCategoryActive("")}
+                    onClick={(e) => {
+                      handleSearchMenu(category._id, "");
+                    }}
+                    to={`/timkiem?s=${category.name}`}
+                  >
+                    <Space className={clsx(style.brand_item)}>
+                      {category.name}
+                      <DownOutlined />
+                    </Space>
+
+                    <Flex vertical className={clsx(style.brand_list)}>
+                      {brands.map((brand) => {
+                        if (
+                          brand.categoryId === category._id &&
+                          brand.categoryId === categoryActive
+                        ) {
+                          return (
+                            <Link to={`/timkiem?s=${category.name}`}>
+                              <Flex
+                                onClick={(e) => {
+                                  // ngăn chặn việc gọi lên handleSearchMenu ở hàm, đánh đổi reload lại trang
+                                  e.stopPropagation();
+                                  handleSearchMenu(category._id, brand._id);
+                                }}
+                                className={clsx(style.brand_list_item)}
+                              >
+                                {brand.name}
+                              </Flex>
+                            </Link>
+                          );
+                        }
+                      })}
+                    </Flex>
+                  </Link>
+                </>
+              ))
+            ) : (
+              <></>
+            )}
+          </Col>
+        </Row>
+      </>
     </>
   );
 }

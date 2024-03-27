@@ -352,14 +352,26 @@
   font-weight: bold;
 }
 
+
 /* Thiết lập padding cho xs */
 @media (max-width: 575.98px) {
+  .wrapper_try_tag_display {
+    display: none;
+  }
+  
+  .wrapper_try_tag{
+    position: relative;
+    height: 0px;
+  }
   .wrapper_try {
     padding: 10px;
   }
 
   .button_background_mobile {
     background-color: none;
+  }
+  .wrapper_try_brand{
+    display: none;
   }
 }
 

@@ -115,19 +115,6 @@ function CartScreen() {
     console.log("««««« values »»»»»", values);
   };
 
-  // position
-  // const [offset, setOffset] = useState(0);
-
-  // useEffect(() => {
-  //   const onScroll = () => setOffset(window.scrollY);
-  //   // clean up code
-  //   window.removeEventListener("scroll", onScroll);
-  //   window.addEventListener("scroll", onScroll, { passive: true });
-  //   return () => window.removeEventListener("scroll", onScroll);
-  // }, []);
-
-  // console.log(offset);
-
   return (
     <div className={clsx(style.wrapper_global)}>
       {!buy ? (
@@ -286,12 +273,7 @@ function CartScreen() {
                   </Row>
                 </div>
               </Col>
-              <Col
-                // style={{ position: "fixed", zIndex: 999 }}
-                className={clsx(style.wrapper)}
-                span={8}
-                // offset={14}
-              >
+              <Col className={clsx(style.wrapper)} span={8}>
                 <div className={clsx(style.wrapper_content)}>
                   <Row justify="end" gutter={[0, 10]}>
                     <Col span={24}>
@@ -575,23 +557,404 @@ function CartScreen() {
                         )}
                       </Row>
                     </div>
+                    {/* thông tin người mua */}
+                    <Row>
+                      <ConfigProvider
+                        theme={{
+                          components: {
+                            Input: {
+                              paddingBlock: 14,
+                              inputFontSize: 16,
+                              borderRadius: 15,
+                            },
+                            Select: {
+                              controlHeight: 47,
+                              fontSize: 16,
+                              borderRadius: 15,
+                            },
+                          },
+                        }}
+                      >
+                        <Col span={24}>
+                          <Flex
+                            justify="space-between"
+                            style={{
+                              margin: "20px 5px 2px 0px",
+                              fontSize: "14px",
+                              fontWeight: "600",
+                            }}
+                          >
+                            <Space> Chọn hình thức nhận hàng</Space>
+                            <Flex>
+                              <Space
+                                onClick={() => setWhereBuy(true)}
+                                className={clsx(
+                                  style.where_payment,
+                                  whereBuy ? style.selected : ""
+                                )}
+                              >
+                                Giao hàng tận nơi
+                              </Space>
+                              <Space
+                                onClick={() => setWhereBuy(false)}
+                                className={clsx(
+                                  style.where_payment,
+                                  !whereBuy ? style.selected : ""
+                                )}
+                              >
+                                Nhận tại nhà thuốc
+                              </Space>
+                            </Flex>
+                          </Flex>
+                        </Col>
+
+                        <Col xs={24} sm={24}>
+                          <Row gutter={14}>
+                            <Col span={24} className={clsx(style.wrapper)}>
+                              <div className={clsx(style.wrapper_content)}>
+                                <Row>
+                                  <Col span={24}>
+                                    <Flex
+                                      style={{ marginBottom: "10px" }}
+                                      align="center"
+                                    >
+                                      <img
+                                        style={{
+                                          width: "24px",
+                                          height: "24px",
+                                        }}
+                                        src="https://nhathuoclongchau.com.vn/estore-images/user.png"
+                                        alt=""
+                                      />
+                                      <Space
+                                        className={clsx(
+                                          style.typePayment_header
+                                        )}
+                                      >
+                                        Thông tin người đặt
+                                      </Space>
+                                    </Flex>
+                                  </Col>
+                                  <Col span={24}>
+                                    <Row gutter={8}>
+                                      <Col span={12}>
+                                        <Form.Item<FieldType>
+                                          rules={[
+                                            {
+                                              required: true,
+                                              message: (
+                                                <span
+                                                  className={clsx(
+                                                    style.typePayment_error
+                                                  )}
+                                                >
+                                                  <InfoCircleOutlined /> Thông
+                                                  tin bắt buộc
+                                                </span>
+                                              ),
+                                            },
+                                          ]}
+                                          name="nameOrder"
+                                        >
+                                          <Input placeholder="Họ và tên" />
+                                        </Form.Item>
+                                      </Col>
+                                      <Col span={12}>
+                                        <Form.Item<FieldType>
+                                          rules={[
+                                            {
+                                              min: 2,
+                                              type: "number",
+                                              message: (
+                                                <span
+                                                  className={clsx(
+                                                    style.typePayment_error
+                                                  )}
+                                                >
+                                                  <InfoCircleOutlined /> Số điện
+                                                  thoại không hợp lệ
+                                                </span>
+                                              ),
+                                              transform(value) {
+                                                return Number(value);
+                                              },
+                                            },
+                                          ]}
+                                          name="phoneOrder"
+                                        >
+                                          <Input placeholder="Số điện thoại" />
+                                        </Form.Item>
+                                      </Col>
+                                      <Col span={24}>
+                                        <Form.Item<FieldType> name="email">
+                                          <Input placeholder="Email (không bắt buộc)" />
+                                        </Form.Item>
+                                      </Col>
+                                    </Row>
+                                  </Col>
+                                </Row>
+                                {whereBuy ? (
+                                  <Row>
+                                    <Col
+                                      style={{ marginBottom: "10px" }}
+                                      span={24}
+                                    >
+                                      <Flex align="center">
+                                        <img
+                                          style={{
+                                            width: "24px",
+                                            height: "24px",
+                                          }}
+                                          src="https://nhathuoclongchau.com.vn/estore-images/pin.png"
+                                          alt=""
+                                        />
+                                        <Space
+                                          className={clsx(
+                                            style.typePayment_header
+                                          )}
+                                        >
+                                          Địa chỉ nhận hàng
+                                        </Space>
+                                      </Flex>
+                                    </Col>
+                                    <Col span={24}>
+                                      <Row gutter={[8, 0]}>
+                                        <Col span={12}>
+                                          <Form.Item<FieldType>
+                                            rules={[
+                                              {
+                                                required: true,
+                                                message: (
+                                                  <span
+                                                    className={clsx(
+                                                      style.typePayment_error
+                                                    )}
+                                                  >
+                                                    <InfoCircleOutlined /> Thông
+                                                    tin bắt buộc
+                                                  </span>
+                                                ),
+                                              },
+                                            ]}
+                                            name="name"
+                                          >
+                                            <Input placeholder="Họ và tên người nhận" />
+                                          </Form.Item>
+                                        </Col>
+                                        <Col span={12}>
+                                          <Form.Item<FieldType>
+                                            rules={[
+                                              {
+                                                min: 2,
+                                                type: "number",
+                                                message: (
+                                                  <span
+                                                    className={clsx(
+                                                      style.typePayment_error
+                                                    )}
+                                                  >
+                                                    <InfoCircleOutlined /> Số
+                                                    điện thoại không hợp lệ
+                                                  </span>
+                                                ),
+                                                transform(value) {
+                                                  return Number(value);
+                                                },
+                                              },
+                                            ]}
+                                            name="phone"
+                                          >
+                                            <Input placeholder="Số điện thoại" />
+                                          </Form.Item>
+                                        </Col>
+                                        <Col span={12}>
+                                          <Form.Item<FieldType>
+                                            rules={[
+                                              {
+                                                required: true,
+                                                message: (
+                                                  <span
+                                                    className={clsx(
+                                                      style.typePayment_error
+                                                    )}
+                                                  >
+                                                    <InfoCircleOutlined /> Thông
+                                                    tin bắt buộc
+                                                  </span>
+                                                ),
+                                              },
+                                            ]}
+                                            name="province"
+                                          >
+                                            <Select
+                                              placeholder="Chọn tỉnh / thành phố"
+                                              options={province.map(
+                                                (item: any) => {
+                                                  return {
+                                                    label: item.name,
+                                                    value: item.code,
+                                                  };
+                                                }
+                                              )}
+                                              onChange={(e) => {
+                                                const data: any =
+                                                  province.filter(
+                                                    (item: any) =>
+                                                      item.code === e
+                                                  );
+
+                                                if (data) {
+                                                  cartForm.setFieldValue(
+                                                    "province",
+                                                    data[0].name
+                                                  );
+                                                }
+                                                handleDistrict(e);
+                                              }}
+                                            />
+                                          </Form.Item>
+                                        </Col>
+                                        <Col span={12}>
+                                          <Form.Item<FieldType>
+                                            rules={[
+                                              {
+                                                required: true,
+                                                message: (
+                                                  <span
+                                                    className={clsx(
+                                                      style.typePayment_error
+                                                    )}
+                                                  >
+                                                    <InfoCircleOutlined /> Thông
+                                                    tin bắt buộc
+                                                  </span>
+                                                ),
+                                              },
+                                            ]}
+                                            name="district"
+                                          >
+                                            <Select
+                                              placeholder="Chọn quận / huyện"
+                                              options={
+                                                district &&
+                                                district.map((item: any) => {
+                                                  return {
+                                                    label: item.name,
+                                                    value: item.code,
+                                                  };
+                                                })
+                                              }
+                                              onChange={(e) => {
+                                                const data: any =
+                                                  district.filter(
+                                                    (item: any) =>
+                                                      item.code === e
+                                                  );
+
+                                                if (data) {
+                                                  cartForm.setFieldValue(
+                                                    "district",
+                                                    data[0].name
+                                                  );
+                                                }
+                                                handleCommune(e);
+                                              }}
+                                            />
+                                          </Form.Item>
+                                        </Col>
+                                        <Col span={24}>
+                                          <Form.Item<FieldType>
+                                            rules={[
+                                              {
+                                                required: true,
+                                                message: (
+                                                  <span
+                                                    className={clsx(
+                                                      style.typePayment_error
+                                                    )}
+                                                  >
+                                                    <InfoCircleOutlined /> Thông
+                                                    tin bắt buộc
+                                                  </span>
+                                                ),
+                                              },
+                                            ]}
+                                            name="commune"
+                                          >
+                                            <Select
+                                              placeholder="Chọn phường / xã"
+                                              options={
+                                                commune &&
+                                                commune.map((item: any) => {
+                                                  return {
+                                                    label: item.name,
+                                                    value: item.code,
+                                                  };
+                                                })
+                                              }
+                                              onChange={(e) => {
+                                                const data: any =
+                                                  commune.filter(
+                                                    (item: any) =>
+                                                      item.code === e
+                                                  );
+
+                                                if (data) {
+                                                  cartForm.setFieldValue(
+                                                    "commune",
+                                                    data[0].name
+                                                  );
+                                                }
+                                              }}
+                                            />
+                                          </Form.Item>
+                                        </Col>
+                                        <Col span={24}>
+                                          <Form.Item<FieldType>
+                                            rules={[
+                                              {
+                                                required: true,
+                                                message: (
+                                                  <span
+                                                    className={clsx(
+                                                      style.typePayment_error
+                                                    )}
+                                                  >
+                                                    <InfoCircleOutlined /> Thông
+                                                    tin bắt buộc
+                                                  </span>
+                                                ),
+                                              },
+                                            ]}
+                                            name="addressDetail"
+                                          >
+                                            <Input placeholder="Nhập địa chỉ cụ thể" />
+                                          </Form.Item>
+                                        </Col>
+                                        <Col span={24}>
+                                          <Form.Item<FieldType> name="notice">
+                                            <Input.TextArea
+                                              rows={3}
+                                              placeholder="Thêm ghi chú (ví dụ: Hãy gọi trước khi giao)"
+                                            />
+                                          </Form.Item>
+                                        </Col>
+                                      </Row>
+                                    </Col>
+                                  </Row>
+                                ) : (
+                                  <></>
+                                )}
+                              </div>
+                            </Col>
+                          </Row>
+                        </Col>
+                      </ConfigProvider>
+                    </Row>
                   </Col>
-                  <Col
-                    // style={
-                    //   offset > 245
-                    //     ? {
-                    //         position: "fixed",
-                    //         zIndex: 999,
-                    //         top: 0,
-                    //         left: 0,
-                    //       }
-                    //     : {}
-                    // }
-                    className={clsx(style.wrapper)}
-                    span={8}
-                    // offset={offset > 245 ? 14 : 0}
-                    // offset={14}
-                  >
+
+                  {/* phần hoàn tất */}
+                  <Col className={clsx(style.wrapper)} span={8}>
                     <div className={clsx(style.wrapper_content)}>
                       <Row justify="end" gutter={[0, 10]}>
                         <Col span={24}>
@@ -697,377 +1060,7 @@ function CartScreen() {
                 </Row>
               </Col>
             </Row>
-            {/* thông tin người mua */}
-            <Row>
-              <ConfigProvider
-                theme={{
-                  components: {
-                    Input: {
-                      paddingBlock: 14,
-                      inputFontSize: 16,
-                      borderRadius: 15,
-                    },
-                    Select: {
-                      controlHeight: 47,
-                      fontSize: 16,
-                      borderRadius: 15,
-                    },
-                  },
-                }}
-              >
-                <Col span={16}>
-                  <Flex
-                    justify="space-between"
-                    style={{
-                      margin: "20px 5px 2px 0px",
-                      fontSize: "14px",
-                      fontWeight: "600",
-                    }}
-                  >
-                    <Space> Chọn hình thức nhận hàng</Space>
-                    <Flex>
-                      <Space
-                        onClick={() => setWhereBuy(true)}
-                        className={clsx(
-                          style.where_payment,
-                          whereBuy ? style.selected : ""
-                        )}
-                      >
-                        Giao hàng tận nơi
-                      </Space>
-                      <Space
-                        onClick={() => setWhereBuy(false)}
-                        className={clsx(
-                          style.where_payment,
-                          !whereBuy ? style.selected : ""
-                        )}
-                      >
-                        Nhận tại nhà thuốc
-                      </Space>
-                    </Flex>
-                  </Flex>
-                </Col>
 
-                <Col xs={24} sm={24}>
-                  <Row gutter={14}>
-                    <Col span={16} className={clsx(style.wrapper)}>
-                      <div className={clsx(style.wrapper_content)}>
-                        <Row>
-                          <Col span={24}>
-                            <Flex
-                              style={{ marginBottom: "10px" }}
-                              align="center"
-                            >
-                              <img
-                                style={{ width: "24px", height: "24px" }}
-                                src="https://nhathuoclongchau.com.vn/estore-images/user.png"
-                                alt=""
-                              />
-                              <Space className={clsx(style.typePayment_header)}>
-                                Thông tin người đặt
-                              </Space>
-                            </Flex>
-                          </Col>
-                          <Col span={24}>
-                            <Row gutter={8}>
-                              <Col span={12}>
-                                <Form.Item<FieldType>
-                                  rules={[
-                                    {
-                                      required: true,
-                                      message: (
-                                        <span
-                                          className={clsx(
-                                            style.typePayment_error
-                                          )}
-                                        >
-                                          <InfoCircleOutlined /> Thông tin bắt
-                                          buộc
-                                        </span>
-                                      ),
-                                    },
-                                  ]}
-                                  name="nameOrder"
-                                >
-                                  <Input placeholder="Họ và tên" />
-                                </Form.Item>
-                              </Col>
-                              <Col span={12}>
-                                <Form.Item<FieldType>
-                                  rules={[
-                                    {
-                                      min: 2,
-                                      type: "number",
-                                      message: (
-                                        <span
-                                          className={clsx(
-                                            style.typePayment_error
-                                          )}
-                                        >
-                                          <InfoCircleOutlined /> Số điện thoại
-                                          không hợp lệ
-                                        </span>
-                                      ),
-                                      transform(value) {
-                                        return Number(value);
-                                      },
-                                    },
-                                  ]}
-                                  name="phoneOrder"
-                                >
-                                  <Input placeholder="Số điện thoại" />
-                                </Form.Item>
-                              </Col>
-                              <Col span={24}>
-                                <Form.Item<FieldType> name="email">
-                                  <Input placeholder="Email (không bắt buộc)" />
-                                </Form.Item>
-                              </Col>
-                            </Row>
-                          </Col>
-                        </Row>
-                        {whereBuy ? (
-                          <Row>
-                            <Col style={{ marginBottom: "10px" }} span={24}>
-                              <Flex align="center">
-                                <img
-                                  style={{ width: "24px", height: "24px" }}
-                                  src="https://nhathuoclongchau.com.vn/estore-images/pin.png"
-                                  alt=""
-                                />
-                                <Space
-                                  className={clsx(style.typePayment_header)}
-                                >
-                                  Địa chỉ nhận hàng
-                                </Space>
-                              </Flex>
-                            </Col>
-                            <Col span={24}>
-                              <Row gutter={[8, 0]}>
-                                <Col span={12}>
-                                  <Form.Item<FieldType>
-                                    rules={[
-                                      {
-                                        required: true,
-                                        message: (
-                                          <span
-                                            className={clsx(
-                                              style.typePayment_error
-                                            )}
-                                          >
-                                            <InfoCircleOutlined /> Thông tin bắt
-                                            buộc
-                                          </span>
-                                        ),
-                                      },
-                                    ]}
-                                    name="name"
-                                  >
-                                    <Input placeholder="Họ và tên người nhận" />
-                                  </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                  <Form.Item<FieldType>
-                                    rules={[
-                                      {
-                                        min: 2,
-                                        type: "number",
-                                        message: (
-                                          <span
-                                            className={clsx(
-                                              style.typePayment_error
-                                            )}
-                                          >
-                                            <InfoCircleOutlined /> Số điện thoại
-                                            không hợp lệ
-                                          </span>
-                                        ),
-                                        transform(value) {
-                                          return Number(value);
-                                        },
-                                      },
-                                    ]}
-                                    name="phone"
-                                  >
-                                    <Input placeholder="Số điện thoại" />
-                                  </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                  <Form.Item<FieldType>
-                                    rules={[
-                                      {
-                                        required: true,
-                                        message: (
-                                          <span
-                                            className={clsx(
-                                              style.typePayment_error
-                                            )}
-                                          >
-                                            <InfoCircleOutlined /> Thông tin bắt
-                                            buộc
-                                          </span>
-                                        ),
-                                      },
-                                    ]}
-                                    name="province"
-                                  >
-                                    <Select
-                                      placeholder="Chọn tỉnh / thành phố"
-                                      options={province.map((item: any) => {
-                                        return {
-                                          label: item.name,
-                                          value: item.code,
-                                        };
-                                      })}
-                                      onChange={(e) => {
-                                        const data: any = province.filter(
-                                          (item: any) => item.code === e
-                                        );
-
-                                        if (data) {
-                                          cartForm.setFieldValue(
-                                            "province",
-                                            data[0].name
-                                          );
-                                        }
-                                        handleDistrict(e);
-                                      }}
-                                    />
-                                  </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                  <Form.Item<FieldType>
-                                    rules={[
-                                      {
-                                        required: true,
-                                        message: (
-                                          <span
-                                            className={clsx(
-                                              style.typePayment_error
-                                            )}
-                                          >
-                                            <InfoCircleOutlined /> Thông tin bắt
-                                            buộc
-                                          </span>
-                                        ),
-                                      },
-                                    ]}
-                                    name="district"
-                                  >
-                                    <Select
-                                      placeholder="Chọn quận / huyện"
-                                      options={
-                                        district &&
-                                        district.map((item: any) => {
-                                          return {
-                                            label: item.name,
-                                            value: item.code,
-                                          };
-                                        })
-                                      }
-                                      onChange={(e) => {
-                                        const data: any = district.filter(
-                                          (item: any) => item.code === e
-                                        );
-
-                                        if (data) {
-                                          cartForm.setFieldValue(
-                                            "district",
-                                            data[0].name
-                                          );
-                                        }
-                                        handleCommune(e);
-                                      }}
-                                    />
-                                  </Form.Item>
-                                </Col>
-                                <Col span={24}>
-                                  <Form.Item<FieldType>
-                                    rules={[
-                                      {
-                                        required: true,
-                                        message: (
-                                          <span
-                                            className={clsx(
-                                              style.typePayment_error
-                                            )}
-                                          >
-                                            <InfoCircleOutlined /> Thông tin bắt
-                                            buộc
-                                          </span>
-                                        ),
-                                      },
-                                    ]}
-                                    name="commune"
-                                  >
-                                    <Select
-                                      placeholder="Chọn phường / xã"
-                                      options={
-                                        commune &&
-                                        commune.map((item: any) => {
-                                          return {
-                                            label: item.name,
-                                            value: item.code,
-                                          };
-                                        })
-                                      }
-                                      onChange={(e) => {
-                                        const data: any = commune.filter(
-                                          (item: any) => item.code === e
-                                        );
-
-                                        if (data) {
-                                          cartForm.setFieldValue(
-                                            "commune",
-                                            data[0].name
-                                          );
-                                        }
-                                      }}
-                                    />
-                                  </Form.Item>
-                                </Col>
-                                <Col span={24}>
-                                  <Form.Item<FieldType>
-                                    rules={[
-                                      {
-                                        required: true,
-                                        message: (
-                                          <span
-                                            className={clsx(
-                                              style.typePayment_error
-                                            )}
-                                          >
-                                            <InfoCircleOutlined /> Thông tin bắt
-                                            buộc
-                                          </span>
-                                        ),
-                                      },
-                                    ]}
-                                    name="addressDetail"
-                                  >
-                                    <Input placeholder="Nhập địa chỉ cụ thể" />
-                                  </Form.Item>
-                                </Col>
-                                <Col span={24}>
-                                  <Form.Item<FieldType> name="notice">
-                                    <Input.TextArea
-                                      rows={3}
-                                      placeholder="Thêm ghi chú (ví dụ: Hãy gọi trước khi giao)"
-                                    />
-                                  </Form.Item>
-                                </Col>
-                              </Row>
-                            </Col>
-                          </Row>
-                        ) : (
-                          <></>
-                        )}
-                      </div>
-                    </Col>
-                  </Row>
-                </Col>
-              </ConfigProvider>
-            </Row>
             {/* hình thức mua hàng */}
             <Row>
               <ConfigProvider
