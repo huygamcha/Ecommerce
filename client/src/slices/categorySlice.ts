@@ -7,6 +7,7 @@ interface CategoriesType {
   name: string;
   description: string;
   _id: string;
+  productCount: number;
 }
 
 
@@ -26,7 +27,8 @@ const initialState: InitialType = {
   category: {
     _id: '',
     name: "",
-    description: ""
+    description: "",
+    productCount: 0
   },
   loading: false,
   deleted: false,

@@ -368,14 +368,26 @@ function ProductScreen() {
                           justify="space-between"
                           style={{ padding: "20px" }}
                         >
-                          <Space
+                          <Flex
                             className={clsx(
                               style.header_text,
                               style.header_text_category
                             )}
+                            vertical
+                            justify="center"
+                            align="center"
                           >
-                            {category.name}
-                          </Space>
+                            <Space>{category.name}</Space>
+                            <div
+                              style={{
+                                color: "#657384",
+                                fontSize: "13px",
+                                marginTop: "5px",
+                              }}
+                            >
+                              {category.productCount} sản phẩm
+                            </div>
+                          </Flex>
                         </Flex>
                       </Flex>
                     </Link>

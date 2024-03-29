@@ -3,7 +3,29 @@ const { Category } = require("../../models");
 module.exports = {
   getAllCategory: async (req, res, next) => {
     try {
-      const result = await Category.find({ isDeleted: false });
+      const result = await Category.aggregate([
+        {
+          $match: {
+            isDeleted: false, // Filter only brands where isDeleted is false
+          },
+        },
+        {
+          $lookup: {
+            from: "products", // Collection name of Product schema
+            localField: "_id",
+            foreignField: "categoryId",
+            as: "products",
+          },
+        },
+        {
+          $project: {
+            _id: 1,
+            name: 1,
+            productCount: { $size: "$products" },
+          },
+        },
+      ]);
+
       return res.send(200, {
         message: "Lấy thông tin danh mục thành công",
         payload: result,
