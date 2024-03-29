@@ -75,7 +75,7 @@
   width: 100%;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 12px;
 }
-.wrapper_try_tag{
+.wrapper_try_tag {
   position: relative;
   height: 40px;
 }
@@ -160,9 +160,11 @@
 }
 .header_search_input:hover,
 .header_search_input:focus {
- background-color: #fff;
- border-color: #d9d9d9;
+  background-color: #fff;
+  border-color: #d9d9d9;
 }
+
+
 
 /* không là element con nên phải dùng + */
 .header_search_input:focus + .header_search_icon_search {
@@ -173,7 +175,6 @@
   background-color: #1d5adf;
   color: #fff;
 }
-
 
 .header_search_result {
   display: block;
@@ -188,9 +189,9 @@
   z-index: 99999;
   border-radius: 20px;
   box-shadow: 1px 0 3px rgba(155, 155, 155, 0.6);
-   /* Tùy chỉnh thanh cuộn cho Chrome và Safari */
-   scrollbar-width: thin; /* Cho Firefox */
-   scrollbar-color: rgba(155, 155, 155, 0.6) transparent; /* Cho Firefox */
+  /* Tùy chỉnh thanh cuộn cho Chrome và Safari */
+  scrollbar-width: thin; /* Cho Firefox */
+  scrollbar-color: rgba(155, 155, 155, 0.6) transparent; /* Cho Firefox */
 }
 /* .header_search_input:focus + .header_search_result,
 .header_search_input:target + .header_search_result {
@@ -202,21 +203,20 @@
   display: block;
   padding: 16px;
   border-bottom: 1px solid #e4e8ed;
-
 }
 
 .header_search_items:hover {
   border-radius: 5px;
   color: #000;
-  background-color: #e4e8ed; 
+  background-color: #e4e8ed;
 }
 
-.header_search_items_img  {
+.header_search_items_img {
   width: 100px !important;
   height: 100px !important;
   border-radius: 10px !important;
 }
-.header_search_items_img + div  {
+.header_search_items_img + div {
   border-radius: 10px !important;
 }
 
@@ -246,7 +246,6 @@
   cursor: pointer;
   font-size: 21px;
 }
-
 
 .drawer_mobile .ant-drawer-content {
   z-index: 99999999 !important;
@@ -292,11 +291,10 @@
 }
 
 /* danh sách search cuối cùng nằm bên trái */
-.menu_sub  > a:last-child .brand_list{
+.menu_sub > a:last-child .brand_list {
   position: absolute;
   right: 0;
 }
-
 
 .brand_item {
   display: flex;
@@ -321,7 +319,7 @@
 
 .brand_list::after {
   position: absolute;
-  content: '';
+  content: "";
   display: block;
   top: -20px;
   width: 100%;
@@ -352,14 +350,13 @@
   font-weight: bold;
 }
 
-
 /* Thiết lập padding cho xs */
 @media (max-width: 575.98px) {
   .wrapper_try_tag_display {
     display: none;
   }
-  
-  .wrapper_try_tag{
+
+  .wrapper_try_tag {
     position: relative;
     height: 0px;
   }
@@ -370,8 +367,11 @@
   .button_background_mobile {
     background-color: none;
   }
-  .wrapper_try_brand{
+  .wrapper_try_brand {
     display: none;
+  }
+  .header_search_icon_delete{
+    right: 14%;
   }
 }
 

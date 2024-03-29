@@ -34,14 +34,20 @@ import {
   PlusOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+import { FiChevronDown, FiChevronUp, FiChevronLeft } from "react-icons/fi";
+
 import axios from "axios";
 
 function CartScreen() {
   const currentUser = localStorage.getItem("userInfor")
     ? JSON.parse(localStorage.getItem("userInfor")!)
     : undefined;
+
   const [buy, setBuy] = useState<boolean>(false);
   const [whereBuy, setWhereBuy] = useState<boolean>(true);
+
+  // mobile mở đóng giá chi tiết mua hàng
+  const [mobileOpen, setMobileOpen] = useState<boolean>(false);
   const { carts, totalPrice, checkAll, totalOriginal, totalCheck } =
     useAppSelector((state) => state.carts);
   const dispatch = useAppDispatch();
@@ -121,7 +127,7 @@ function CartScreen() {
         <Row>
           <Col xs={24} sm={24}>
             <Row gutter={14}>
-              <Col span={16} className={clsx(style.wrapper)}>
+              <Col xs={24} sm={16} className={clsx(style.wrapper)}>
                 <div className={clsx(style.wrapper_content)}>
                   <Row>
                     <Col span={10}>
@@ -136,17 +142,17 @@ function CartScreen() {
                         </Checkbox>
                       </Flex>
                     </Col>
-                    <Col span={4}>
+                    <Col xs={0} sm={4}>
                       <Flex justify="end">
                         <Space>Giá thành</Space>
                       </Flex>
                     </Col>
-                    <Col span={4}>
+                    <Col xs={0} sm={4}>
                       <Flex justify="center" style={{ marginLeft: "30px" }}>
                         <Space>Số lượng</Space>
                       </Flex>
                     </Col>
-                    <Col span={4}>
+                    <Col xs={0} sm={4}>
                       <Flex justify="center" style={{ marginLeft: "40px" }}>
                         <Space>Đơn vị</Space>
                       </Flex>
@@ -157,8 +163,12 @@ function CartScreen() {
                     {carts.map((cart) => (
                       <>
                         <Col span={24}>
-                          <Row className={clsx(style.wrapper_detail)}>
-                            <Col span={10}>
+                          <Row
+                            gutter={[0, 14]}
+                            className={clsx(style.wrapper_detail)}
+                          >
+                            {/* hình ảnh */}
+                            <Col xs={18} sm={10}>
                               <Flex>
                                 <Checkbox
                                   checked={cart.check}
@@ -180,8 +190,12 @@ function CartScreen() {
                                 </Flex>
                               </Flex>
                             </Col>
-
-                            <Col className={clsx(style.flex_center)} span={4}>
+                            {/* tên */}
+                            <Col
+                              className={clsx(style.flex_center)}
+                              xs={6}
+                              sm={4}
+                            >
                               <Flex vertical>
                                 <Space
                                   className={clsx(style.product_price_discount)}
@@ -193,16 +207,32 @@ function CartScreen() {
                                 <Space
                                   className={clsx(style.product_price_original)}
                                 >
-                                  <del>
+                                  {/* <del>
                                     {numeral(cart.price * cart.quantity).format(
                                       "0,0$"
                                     )}
-                                  </del>
+                                  </del> */}
+                                  {cart && cart?.discount > 0 ? (
+                                    <del className={clsx(style.header_price)}>
+                                      {numeral(
+                                        cart.price * cart.quantity
+                                      ).format("$0,0")}
+                                    </del>
+                                  ) : (
+                                    <></>
+                                  )}
                                 </Space>
                               </Flex>
                             </Col>
-
-                            <Col className={clsx(style.flex_center)} span={4}>
+                            {/* số lượng */}
+                            <Col
+                              className={clsx(
+                                style.flex_center,
+                                style.flex_start
+                              )}
+                              xs={8}
+                              sm={4}
+                            >
                               <Space
                                 className={clsx(style.quantity_detail_wrapper)}
                               >
@@ -211,7 +241,7 @@ function CartScreen() {
                                     handleQuantity(cart.id, cart.quantity - 1)
                                   }
                                   className={clsx(
-                                    cart.quantity === 0
+                                    cart.quantity === 1
                                       ? style.quantity_icon_detail_disabled
                                       : style.quantity_icon_detail
                                   )}
@@ -236,8 +266,12 @@ function CartScreen() {
                                 </Space>
                               </Space>
                             </Col>
-
-                            <Col className={clsx(style.flex_center)} span={4}>
+                            {/* đơn vị */}
+                            <Col
+                              className={clsx(style.flex_center)}
+                              xs={8}
+                              sm={4}
+                            >
                               <Space className={clsx(style.product_unit)}>
                                 {cart.unit}
                                 <DownOutlined />
@@ -255,7 +289,11 @@ function CartScreen() {
                               </Space>
                             </Col>
 
-                            <Col className={clsx(style.flex_center)} span={2}>
+                            <Col
+                              className={clsx(style.flex_center)}
+                              xs={8}
+                              sm={2}
+                            >
                               <Popconfirm
                                 title="Xoá sản phẩm"
                                 description="Bạn có chắc xoá sản phẩm này không?"
@@ -273,21 +311,36 @@ function CartScreen() {
                   </Row>
                 </div>
               </Col>
-              <Col className={clsx(style.wrapper)} span={8}>
-                <div className={clsx(style.wrapper_content)}>
-                  <Row justify="end" gutter={[0, 10]}>
+
+              {/* tổng tiền */}
+              <Col
+                className={clsx(style.wrapper, style.mobile_total_price)}
+                xs={24}
+                sm={8}
+              >
+                <div
+                  className={clsx(
+                    style.wrapper_content,
+                    style.wrapper_content_mobile_preBuy
+                  )}
+                >
+                  <Row justify="end">
                     <Col span={24}>
                       <Flex
-                        className={clsx(style.payment_header)}
+                        className={clsx(style.payment_header, style.active)}
                         justify="space-between"
                       >
                         <Space>Tổng tiền</Space>
                         <Space> {numeral(totalOriginal).format("0,0$")}</Space>
                       </Flex>
                     </Col>
+
                     <Col span={24}>
                       <Flex
-                        className={clsx(style.payment_header)}
+                        className={clsx(
+                          style.payment_header,
+                          mobileOpen ? style.active : ""
+                        )}
                         justify="space-between"
                       >
                         <Space>Giảm giá trực tiếp</Space>
@@ -297,18 +350,26 @@ function CartScreen() {
                         </Space>
                       </Flex>
                     </Col>
+
                     <Col span={24}>
                       <Flex
                         justify="space-between"
-                        className={clsx(style.payment_header)}
+                        className={clsx(
+                          style.payment_header,
+                          mobileOpen ? style.active : ""
+                        )}
                       >
                         <Space>Giảm giá voucher</Space>
                         <Space> {numeral(0).format("0,0$")}</Space>
                       </Flex>
                     </Col>
+
                     <Col span={24}>
                       <Flex
-                        className={clsx(style.payment_header)}
+                        className={clsx(
+                          style.payment_header,
+                          mobileOpen ? style.active : ""
+                        )}
                         justify="space-between"
                       >
                         <Space>Tiết kiệm được</Space>
@@ -323,15 +384,20 @@ function CartScreen() {
                       <Flex
                         className={clsx(style.payment_prePayment)}
                         justify="space-between"
+                        onClick={() => setMobileOpen(!mobileOpen)}
                       >
                         <Space className={clsx(style.payment_prePayment_name)}>
                           Tạm tính
+                          <Flex>
+                            {mobileOpen ? <FiChevronUp /> : <FiChevronDown />}
+                          </Flex>
                         </Space>
                         <Space className={clsx(style.payment_prePayment_price)}>
                           {numeral(totalPrice).format("0,0$")}
                         </Space>
                       </Flex>
                     </Col>
+
                     <Col span={24}>
                       <button
                         onClick={() => setBuy(true)}
@@ -342,19 +408,9 @@ function CartScreen() {
                       >
                         Mua hàng {totalCheck ? `(${totalCheck})` : ""}
                       </button>
-                      {/* {currentUser ? (
-                      <Link to="/payment">
-                        <h3 className={clsx(style.button_payment)}>
-                          Thanh toán
-                        </h3>
-                      </Link>
-                    ) : (
-                      <Link to="/auth/login">
-                        <h3 className={clsx(style.button_payment)}>Mua hàng</h3>
-                      </Link>
-                    )} */}
                     </Col>
-                    <Col span={24}>
+
+                    <Col xs={0} sm={24}>
                       <div className="ml-[auto]">
                         <svg
                           width="384"
@@ -381,6 +437,23 @@ function CartScreen() {
       ) : (
         <>
           <Form onFinish={onFinish} form={cartForm}>
+            <Row>
+              <Flex
+                style={{
+                  margin: "10px 0px",
+                  fontSize: "14px",
+                  fontWeight: "500",
+                  lineHeight: "20px",
+                  color: "#1250dc",
+                  cursor: "pointer",
+                }}
+                onClick={() => setBuy(false)}
+              >
+                <FiChevronLeft style={{ fontSize: "20px" }} />
+                Quay lại giỏ hàng
+              </Flex>
+            </Row>
+
             {/* danh sách mua hàng */}
             <Row>
               <Flex
@@ -389,14 +462,13 @@ function CartScreen() {
                   fontSize: "14px",
                   fontWeight: "600",
                 }}
-                onClick={() => setBuy(false)}
               >
                 Danh sách sản phẩm{" "}
                 <div style={{ marginLeft: "5px" }}> ({totalCheck})</div>
               </Flex>
               <Col xs={24} sm={24}>
                 <Row gutter={14}>
-                  <Col span={16} className={clsx(style.wrapper)}>
+                  <Col xs={24} sm={16} className={clsx(style.wrapper)}>
                     <div className={clsx(style.wrapper_content)}>
                       <Row>
                         {carts.map((cart) =>
@@ -404,32 +476,35 @@ function CartScreen() {
                             <>
                               <Col span={24}>
                                 <Row className={clsx(style.wrapper_detail)}>
-                                  <Col span={14}>
+                                  <Col xs={4} sm={2}>
                                     <Flex>
-                                      <Flex style={{ marginLeft: "10px" }}>
-                                        <Space
-                                          className={clsx(style.wrapper_img)}
-                                        >
-                                          <Image
-                                            width="52px"
-                                            height="52px"
-                                            src={cart?.pic}
-                                          ></Image>
-                                        </Space>
-                                        <Flex vertical>
-                                          <Flex
-                                            className={clsx(style.product_name)}
-                                          >
-                                            {cart.name}
-                                          </Flex>
-                                        </Flex>
+                                      <Flex className={clsx(style.wrapper_img)}>
+                                        <Image
+                                          width="52px"
+                                          height="52px"
+                                          src={cart?.pic}
+                                        ></Image>
+                                      </Flex>
+                                    </Flex>
+                                  </Col>
+
+                                  <Col xs={20} sm={12}>
+                                    <Flex vertical>
+                                      <Flex
+                                        className={clsx(style.product_name)}
+                                      >
+                                        {cart.name}
                                       </Flex>
                                     </Flex>
                                   </Col>
 
                                   <Col
-                                    className={clsx(style.flex_center)}
-                                    span={6}
+                                    className={clsx(
+                                      style.flex_center,
+                                      style.flex_center_price
+                                    )}
+                                    xs={21}
+                                    sm={6}
                                   >
                                     <Flex>
                                       {cart.discount ? (
@@ -461,7 +536,8 @@ function CartScreen() {
 
                                   <Col
                                     className={clsx(style.flex_center)}
-                                    span={4}
+                                    xs={3}
+                                    sm={4}
                                   >
                                     <div>
                                       x{cart.quantity} {cart.unit}
@@ -469,10 +545,7 @@ function CartScreen() {
                                   </Col>
 
                                   <Col
-                                    style={{
-                                      paddingLeft: "108px",
-                                      marginTop: "12px",
-                                    }}
+                                    className={clsx(style.cusPL108)}
                                     span={24}
                                   >
                                     {/* promotion */}
@@ -540,7 +613,14 @@ function CartScreen() {
                                                 dụng đến 14/03
                                               </div>
                                             </Space>
-                                            <div>x{cart.quantity} Cái</div>
+                                            <div
+                                              style={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                              }}
+                                            >
+                                              x{cart.quantity} Cái
+                                            </div>
                                           </Flex>
                                         </Space>
                                       </Flex>
@@ -577,6 +657,10 @@ function CartScreen() {
                       >
                         <Col span={24}>
                           <Flex
+                            className={clsx(
+                              style.customColumn,
+                              style.customPL16
+                            )}
                             justify="space-between"
                             style={{
                               margin: "20px 5px 2px 0px",
@@ -637,7 +721,7 @@ function CartScreen() {
                                   </Col>
                                   <Col span={24}>
                                     <Row gutter={8}>
-                                      <Col span={12}>
+                                      <Col xs={24} sm={12}>
                                         <Form.Item<FieldType>
                                           rules={[
                                             {
@@ -659,7 +743,7 @@ function CartScreen() {
                                           <Input placeholder="Họ và tên" />
                                         </Form.Item>
                                       </Col>
-                                      <Col span={12}>
+                                      <Col xs={24} sm={12}>
                                         <Form.Item<FieldType>
                                           rules={[
                                             {
@@ -719,7 +803,7 @@ function CartScreen() {
                                     </Col>
                                     <Col span={24}>
                                       <Row gutter={[8, 0]}>
-                                        <Col span={12}>
+                                        <Col xs={24} sm={12}>
                                           <Form.Item<FieldType>
                                             rules={[
                                               {
@@ -741,7 +825,7 @@ function CartScreen() {
                                             <Input placeholder="Họ và tên người nhận" />
                                           </Form.Item>
                                         </Col>
-                                        <Col span={12}>
+                                        <Col xs={24} sm={12}>
                                           <Form.Item<FieldType>
                                             rules={[
                                               {
@@ -767,7 +851,7 @@ function CartScreen() {
                                             <Input placeholder="Số điện thoại" />
                                           </Form.Item>
                                         </Col>
-                                        <Col span={12}>
+                                        <Col xs={24} sm={12}>
                                           <Form.Item<FieldType>
                                             rules={[
                                               {
@@ -814,7 +898,7 @@ function CartScreen() {
                                             />
                                           </Form.Item>
                                         </Col>
-                                        <Col span={12}>
+                                        <Col xs={24} sm={12}>
                                           <Form.Item<FieldType>
                                             rules={[
                                               {
@@ -954,12 +1038,21 @@ function CartScreen() {
                   </Col>
 
                   {/* phần hoàn tất */}
-                  <Col className={clsx(style.wrapper)} span={8}>
-                    <div className={clsx(style.wrapper_content)}>
-                      <Row justify="end" gutter={[0, 10]}>
+                  <Col
+                    className={clsx(style.wrapper, style.mobile_total_price)}
+                    xs={24}
+                    sm={8}
+                  >
+                    <div
+                      className={clsx(
+                        style.wrapper_content,
+                        style.wrapper_content_mobile_preBuy
+                      )}
+                    >
+                      <Row justify="end">
                         <Col span={24}>
                           <Flex
-                            className={clsx(style.payment_header)}
+                            className={clsx(style.payment_header, style.active)}
                             justify="space-between"
                           >
                             <Space>Tổng tiền</Space>
@@ -971,7 +1064,10 @@ function CartScreen() {
                         </Col>
                         <Col span={24}>
                           <Flex
-                            className={clsx(style.payment_header)}
+                            className={clsx(
+                              style.payment_header,
+                              mobileOpen ? style.active : ""
+                            )}
                             justify="space-between"
                           >
                             <Space>Giảm giá trực tiếp</Space>
@@ -986,7 +1082,10 @@ function CartScreen() {
                         <Col span={24}>
                           <Flex
                             justify="space-between"
-                            className={clsx(style.payment_header)}
+                            className={clsx(
+                              style.payment_header,
+                              mobileOpen ? style.active : ""
+                            )}
                           >
                             <Space>Giảm giá voucher</Space>
                             <Space> {numeral(0).format("0,0$")}</Space>
@@ -994,7 +1093,10 @@ function CartScreen() {
                         </Col>
                         <Col span={24}>
                           <Flex
-                            className={clsx(style.payment_header)}
+                            className={clsx(
+                              style.payment_header,
+                              mobileOpen ? style.active : ""
+                            )}
                             justify="space-between"
                           >
                             <Space>Tiết kiệm được</Space>
@@ -1013,9 +1115,17 @@ function CartScreen() {
                             justify="space-between"
                           >
                             <Space
+                              onClick={() => setMobileOpen(!mobileOpen)}
                               className={clsx(style.payment_prePayment_name)}
                             >
                               Tạm tính
+                              <Flex>
+                                {mobileOpen ? (
+                                  <FiChevronUp />
+                                ) : (
+                                  <FiChevronDown />
+                                )}
+                              </Flex>
                             </Space>
                             <Space
                               className={clsx(style.payment_prePayment_price)}
@@ -1036,7 +1146,7 @@ function CartScreen() {
                             Hoàn tất {totalCheck ? `(${totalCheck})` : ""}
                           </button>
                         </Col>
-                        <Col span={24}>
+                        <Col xs={0} sm={24}>
                           <div className="ml-[auto]">
                             <svg
                               width="384"
@@ -1074,6 +1184,7 @@ function CartScreen() {
                 }}
               >
                 <Flex
+                  className={clsx(style.customPL16)}
                   style={{
                     margin: "20px 0px 10px 0px",
                     fontSize: "14px",
@@ -1084,7 +1195,7 @@ function CartScreen() {
                 </Flex>
                 <Col xs={24} sm={24}>
                   <Row gutter={14}>
-                    <Col span={16} className={clsx(style.wrapper)}>
+                    <Col xs={24} sm={16} className={clsx(style.wrapper)}>
                       <div className={clsx(style.wrapper_content)}>
                         <Row>
                           <Form.Item<FieldType>

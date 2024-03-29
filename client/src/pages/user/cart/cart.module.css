@@ -9,6 +9,7 @@
   padding: 8px 16px;
 }
 
+
 .wrapper_detail {
   padding: 16px 0px;
   border-bottom: 1px solid #e4e8ed;
@@ -149,6 +150,7 @@
   font-size: 16px;
   line-height: 24px;
   color: #4a4f63;
+  margin-bottom: 10px;
 }
 
 .payment_prePayment {
@@ -288,6 +290,70 @@
   width: 24px;
   height: 24px;
 }
+.cusPL108 {
+  padding-left: 108px;
+  margin-top: 12px;
+}
+.customPL16 {
+  padding-left: 16px;
+}
+
+
+
+@media (max-width: 575.98px) {
+
+.flex_center_price {
+  justify-content: start;
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+  .customColumn {
+    flex-direction: column;
+    margin-bottom: 10px !important;
+  }
+  .cusPL108{
+    padding-left: 0;
+  }
+  .mobile_total_price{
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    padding-right: 0px !important;
+    z-index: 99;
+  }
+  .button_payment{
+    margin-bottom: 20px;
+  }
+  .wrapper_content_mobile_preBuy {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 8px 16px;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+    box-shadow: rgba(0, 39, 102, 0.3) 0px 0px 16px -4px, rgba(0, 39, 102, 0.3) 0px 0px 6px -2px;
+  }
+  .flex_start {
+    justify-content: start;
+    display: flex;
+  }
+  .payment_header {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #4a4f63;
+    display: none;
+
+  }
+  .payment_header.active {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #4a4f63;
+    display: flex;
+  }
+}
+
 
 /* Thiết lập padding cho sm */
 @media (min-width: 576px) and (max-width: 767.98px) {
@@ -295,6 +361,7 @@
     background-color: #edf0f3;
     padding: 20px;
   }
+
 }
 
 /* Thiết lập padding cho md */

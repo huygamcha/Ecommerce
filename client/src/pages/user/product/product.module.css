@@ -616,6 +616,7 @@
     font-size: 16px;
     line-height: 24px;
     font-weight: 700;
+    text-align: start;
   }
   .price_detail {
     font-weight: 800;

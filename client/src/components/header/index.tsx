@@ -1,25 +1,20 @@
-import { Ref, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Col, Flex, Input, Row, Space, Image, Badge } from "antd";
 import clsx from "clsx";
 import style from "./header.module.css";
 import {
-  CloseCircleOutlined,
-  DownOutlined,
   LogoutOutlined,
   MenuUnfoldOutlined,
   SearchOutlined,
-  ShoppingCartOutlined,
   UserDeleteOutlined,
 } from "@ant-design/icons";
+import { FiChevronDown } from "react-icons/fi";
+import { FaCartShopping, FaBars } from "react-icons/fa6";
+
 import { TiDelete } from "react-icons/ti";
 import { useAppDispatch, useAppSelector } from "../../store";
-import {
-  getAllProduct,
-  getAllProductSearch,
-  getProductById,
-} from "../../slices/productSlice";
-import Discount from "../discount";
+import { getAllProductSearch, getProductById } from "../../slices/productSlice";
 import numeral from "numeral";
 import { logout } from "../../slices/authSlice";
 import {
@@ -130,8 +125,9 @@ function HeaderScreen() {
       function handleClickOutside(event: MouseEvent) {
         //  kiểm tra DOM cả 2 nếu khác nhau thì đã click ở ngoài
         // console.log("««««« ref »»»»»", ref.current.input);
-        // console.log("««««« event »»»»»", event.target);;\
-        if (ref.current.input !== event.target) {
+        console.log("««««« ref.current »»»»»", ref.current);
+        console.log("««««« event »»»»»", event.target);
+        if (ref.current && !ref.current.contains(event.target)) {
           setIsList(false);
         }
       }
@@ -149,6 +145,11 @@ function HeaderScreen() {
     <>
       <>
         <Row justify="end" className={clsx(style.wrapper_try)}>
+          <Col xs={2} sm={0}>
+            <Link to="/" className={clsx(style.header_text)}>
+              <FaBars className={clsx(style.button_icon)} />
+            </Link>
+          </Col>
           <Col xs={0} sm={2} md={2} lg={5}>
             <Link to="/" className={clsx(style.header_text)}>
               <img
@@ -157,11 +158,11 @@ function HeaderScreen() {
               />
             </Link>
           </Col>
-          <Col xs={24} sm={14} md={13} lg={13}>
+          <Col xs={20} sm={14} md={13} lg={13}>
             <Flex>
               <Input
                 // ref={inputRef}
-                ref={wrapperRef}
+                // ref={wrapperRef}
                 type="text"
                 value={search}
                 onChange={handleSearch}
@@ -183,7 +184,10 @@ function HeaderScreen() {
                 {search ? <TiDelete /> : <></>}
               </div>
               {/* search result */}
-              <Space className={clsx(style.header_search_result, style.active)}>
+              <Space
+                ref={wrapperRef}
+                className={clsx(style.header_search_result, style.active)}
+              >
                 {isList && productsSearch ? (
                   productsSearch.map((product) => (
                     <Link
@@ -285,12 +289,24 @@ function HeaderScreen() {
                   to="/cart"
                 >
                   <Badge dot={show} status="warning">
-                    <ShoppingCartOutlined className={clsx(style.button_icon)} />
+                    <FaCartShopping className={clsx(style.button_icon)} />
                   </Badge>
                   Giỏ hàng
                 </Link>
               </Space>
             </Flex>
+          </Col>
+
+          <Col xs={2} sm={0}>
+            <Link
+              onClick={handleCart}
+              className={clsx(style.button_header_text)}
+              to="/cart"
+            >
+              <Flex justify="end">
+                <FaCartShopping className={clsx(style.button_icon)} />
+              </Flex>
+            </Link>
           </Col>
           <Col xs={0} sm={0}>
             <Flex justify="end">
@@ -410,7 +426,9 @@ function HeaderScreen() {
                   >
                     <Space className={clsx(style.brand_item)}>
                       {category.name}
-                      <DownOutlined />
+                      <Flex align="center">
+                        <FiChevronDown />
+                      </Flex>
                     </Space>
 
                     <Flex vertical className={clsx(style.brand_list)}>
