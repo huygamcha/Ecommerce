@@ -48,7 +48,7 @@
   background: #fff;
   border-radius: 10px;
   padding: 14px 0px;
-  height: 250px;
+  height: 260px;
   position: relative;
   border: 1px solid #fff;
 }
@@ -200,6 +200,7 @@
 @media (min-width: 1200px) {
   .wrapper_global {
     background-color: #edf0f3;
-    padding: 30px 100px;
+    padding: 30px 0px;
+    max-width: 1236px;
   }
 }

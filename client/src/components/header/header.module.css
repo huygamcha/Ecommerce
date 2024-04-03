@@ -66,7 +66,7 @@
   cursor: pointer;
   font-size: 25px;
   align-items: center;
-  padding: 40px 100px;
+  /* padding: 40px 100px; */
   background-color: #256cdf;
   position: relative;
   display: flex;
@@ -124,7 +124,13 @@
 
 .button_header_text {
   color: #fff;
+  display: flex;;
 }
+
+.button_header_text > a {
+  display: flex;
+} 
+
 
 .button_header_text:hover {
   color: #fff;
@@ -350,6 +356,11 @@
   font-weight: bold;
 }
 
+.customFA{
+  display: flex !important;
+  align-items: center !important;
+}
+
 /* Thiết lập padding cho xs */
 @media (max-width: 575.98px) {
   .wrapper_try_tag_display {
@@ -361,7 +372,8 @@
     height: 0px;
   }
   .wrapper_try {
-    padding: 10px;
+    padding: 8px 16px;
+    position: fixed;
   }
 
   .button_background_mobile {
@@ -370,8 +382,31 @@
   .wrapper_try_brand {
     display: none;
   }
+  .header_search_input {
+    font-size: 13px;
+    border-radius: 30px;
+    padding: 6px;
+    position: relative;
+    font-weight: 500;
+    color: #525e6e;
+  }
   .header_search_icon_delete{
-    right: 14%;
+    right: 8%;
+    font-size: 17px;
+  }
+  .header_search_icon_search {
+    padding: 4px;
+    font-size: 14px;
+  }
+  .header_search_result{
+    top: 35px;
+  }
+}
+
+/* Thiết lập cho mobile */
+@media (max-width: 575px) {
+  .wrapper_try_tag{
+    display: none;
   }
 }
 
@@ -380,6 +415,7 @@
   .wrapper_try {
     padding: 20px;
   }
+  
 }
 
 /* Thiết lập padding cho md */
@@ -399,10 +435,12 @@
 /* Thiết lập padding cho xl */
 @media (min-width: 1200px) {
   .wrapper_try {
-    padding: 20px 100px 0px 100px;
+    padding-top: 20px;
+    max-width: 1236px;
   }
 
   .wrapper_try_brand {
-    padding: 10px 100px 20px 100px;
+    padding: 10px 0px 20px 0px;
+    max-width: 1236px;
   }
 }

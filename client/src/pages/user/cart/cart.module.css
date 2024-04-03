@@ -292,7 +292,7 @@
 }
 .cusPL108 {
   padding-left: 108px;
-  margin-top: 12px;
+  margin-top: 20px;
 }
 .customPL16 {
   padding-left: 16px;
@@ -301,7 +301,9 @@
 
 
 @media (max-width: 575.98px) {
-
+.product_name.buy{
+  margin-left: 0px;
+}
 .flex_center_price {
   justify-content: start;
   display: flex;
@@ -384,6 +386,8 @@
 @media (min-width: 1200px) {
   .wrapper_global {
     background-color: #edf0f3;
-    padding: 30px 100px;
+    padding: 30px 0px;
+    max-width: 1236px;
+
   }
 }

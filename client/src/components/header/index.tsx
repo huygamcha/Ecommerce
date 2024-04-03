@@ -140,10 +140,18 @@ function HeaderScreen() {
   }
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef);
+
   return (
     // 5 16 0 3
+
     <>
-      <>
+      <div
+        style={{
+          background: "#256cdf",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
         <Row justify="end" className={clsx(style.wrapper_try)}>
           <Col xs={2} sm={0}>
             <Link to="/" className={clsx(style.header_text)}>
@@ -288,10 +296,14 @@ function HeaderScreen() {
                   className={clsx(style.button_header_text)}
                   to="/cart"
                 >
-                  <Badge dot={show} status="warning">
+                  <Badge
+                    className={clsx(style.customFA)}
+                    dot={show}
+                    status="warning"
+                  >
                     <FaCartShopping className={clsx(style.button_icon)} />
                   </Badge>
-                  Giỏ hàng
+                  <Space>Giỏ hàng</Space>
                 </Link>
               </Space>
             </Flex>
@@ -302,12 +314,18 @@ function HeaderScreen() {
               onClick={handleCart}
               className={clsx(style.button_header_text)}
               to="/cart"
+              style={{ display: "flex", justifyContent: "end" }}
             >
-              <Flex justify="end">
+              <Badge
+                className={clsx(style.customFA)}
+                dot={show}
+                status="warning"
+              >
                 <FaCartShopping className={clsx(style.button_icon)} />
-              </Flex>
+              </Badge>
             </Link>
           </Col>
+
           <Col xs={0} sm={0}>
             <Flex justify="end">
               <Space
@@ -336,6 +354,7 @@ function HeaderScreen() {
                     className={clsx(style.menu_mobile_child)}
                     onClick={() => setIsOpen(false)}
                     to="/cart"
+                    style={{ display: "flex" }}
                   >
                     <Space>Giỏ hàng</Space>
                   </Link>
@@ -375,16 +394,23 @@ function HeaderScreen() {
             )}
           </Space>
         </Row>
-
+      </div>
+      <div
+        style={{
+          background: "#256cdf",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
         {/* tag */}
         <Row
           style={{ paddingTop: "0px", zIndex: 1 }}
           justify="end"
-          className={clsx(style.wrapper_try)}
+          className={clsx(style.wrapper_try, style.wrapper_try_tag)}
         >
-          <Col xs={5} sm={2} md={2} lg={5}></Col>
+          <Col xs={0} sm={2} md={2} lg={5}></Col>
           <Col
-            xs={16}
+            xs={0}
             sm={14}
             md={13}
             lg={13}
@@ -407,10 +433,18 @@ function HeaderScreen() {
             </Flex>
           </Col>
           <Col xs={0} sm={8} md={9} lg={6}></Col>
-          <Col xs={3} sm={0}></Col>
+          <Col xs={0} sm={0}></Col>
         </Row>
+      </div>
 
-        {/* danh mục và thương hiệu */}
+      {/* danh mục và thương hiệu */}
+      <div
+        style={{
+          background: "#fff",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
         <Row className={clsx(style.wrapper_try_brand)}>
           <Col className={clsx(style.menu_sub)}>
             {categories ? (
@@ -462,7 +496,7 @@ function HeaderScreen() {
             )}
           </Col>
         </Row>
-      </>
+      </div>
     </>
   );
 }

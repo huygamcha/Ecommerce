@@ -135,9 +135,19 @@ function Timkiem() {
     dispatch(getAllProductSearch({ ageFrom: ageFrom, ageTo: ageTo }));
   };
   return (
-    <>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        background: "#edf0f3",
+      }}
+    >
       <Row gutter={12} className={clsx(style.wrapper_global)}>
-        <Col xs={activeFillter ? 24 : 0} sm={6}>
+        <Col
+          xs={activeFillter ? 24 : 0}
+          style={{ padding: activeFillter ? "0px 6px" : "0px 6px 0px 0px" }}
+          sm={6}
+        >
           <Flex className={clsx(style.navbar_wrapper)} vertical>
             <Flex
               style={{
@@ -425,7 +435,6 @@ function Timkiem() {
                 >
                   <Row gutter={12}>
                     <Col xs={12} sm={24}>
-                      {" "}
                       <Button
                         style={{
                           boxShadow:
@@ -449,7 +458,6 @@ function Timkiem() {
                       </Button>
                     </Col>
                     <Col xs={12} sm={24}>
-                      {" "}
                       <Button
                         style={{
                           boxShadow:
@@ -497,7 +505,6 @@ function Timkiem() {
                       </Button>
                     </Col>
                     <Col xs={12} sm={24}>
-                      {" "}
                       <Button
                         style={{
                           boxShadow:
@@ -527,6 +534,7 @@ function Timkiem() {
             </Space>
           </Flex>
         </Col>
+
         {/* mobile */}
         <Col xs={24} sm={0}>
           <Flex
@@ -565,7 +573,7 @@ function Timkiem() {
               </Space>
             </Col>
             <Col xs={24} sm={24}>
-              <Row gutter={[18, 2]}>
+              <Row gutter={[12, 2]}>
                 {productsSearch ? (
                   productsSearch.map((product) => (
                     <Col
@@ -631,7 +639,7 @@ function Timkiem() {
           </Row>
         </Col>
       </Row>
-    </>
+    </div>
   );
 }
 

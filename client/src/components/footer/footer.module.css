@@ -1,66 +1,113 @@
 .text_center {
-    text-align: center;
+  text-align: center;
 }
 
-.items > a {
-    padding: 0 5px;
+.items>a {
+  padding: 0 5px;
 }
 
 .text_heading {
-    color: #657384;
-    font-weight: 700;
-    font-size: 12px;
-    line-height: 16px;
-    margin-bottom: 8px;
+  color: #657384;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 16px;
+  margin-bottom: 8px;
 }
 
 .text_item {
-    font-size: 14px;
-    line-height: 20px;
-    color: #1250dc;
-    margin: 5px 0px;
+  font-size: 14px;
+  line-height: 20px;
+  color: #1250dc;
+  margin: 5px 0px;
 }
 
 .text_item:hover {
-    color: #1250dc;
+  color: #1250dc;
 }
 
-/* Thiết lập padding cho xs */
+
+/* mobile */
 @media (max-width: 575.98px) {
-    .global_wrapper {
-      padding: 10px;
-      text-align: center;
-    }
-    .items{
-      display: flex ;
-      justify-content: center;
-    }
+  .wrapper_mobile{
+    border-bottom: 1px solid #e4e8ed;
+    padding-bottom: 16px;
   }
-  
-  /* Thiết lập padding cho sm */
-  @media (min-width: 576px) and (max-width: 767.98px) {
-    .global_wrapper {
-      padding: 20px;
-    }
+  .text_heading_mobile {
+    padding-top: 16px;
+    margin: 0;
+    padding-right: 0;
+    padding-left: 0;
+    width: 100%;
+    font-weight: 800;
+    font-size: 14px;
+    line-height: 20px;
+    color: #4a4f63;
   }
-  
-  /* Thiết lập padding cho md */
-  @media (min-width: 768px) and (max-width: 991.98px) {
-    .global_wrapper {
-      padding: 30px;
-    }
+
+  .global_wrapper {
+    padding: 16px;
+    margin-bottom: 160px;
   }
-  
-  /* Thiết lập padding cho lg */
-  @media (min-width: 992px) and (max-width: 1199.98px) {
-    .global_wrapper {
-      padding: 40px;
-    }
+
+  .items {
+    display: flex;
+    justify-content: center;
   }
-  
-  /* Thiết lập padding cho xl */
-  @media (min-width: 1200px) {
-    .global_wrapper {
-      padding: 0px 100px 100px 100px;
-    }
+
+  .text_item_mobile {
+    font-size: 14px;
+    line-height: 20px;
+    color: rgb(101, 115, 132);
+    margin: 5px 0px;
   }
+
+  .text_item_mobile:hover {
+    color: rgb(101, 115, 132);
+  }
+
+  .dropdown_item {
+    display: none;
+    overflow: hidden;
+    transition: max-height 0.3s linear;
+  }
+  .dropdown_item_social.active > a {
+    margin-left: 8px;
+    border-radius: 10px;
+  }
+  .dropdown_item.active {
+    display: flex;
+  }
+
+}
+
+/* Thiết lập padding cho sm */
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .global_wrapper {
+    padding: 20px;
+  }
+}
+
+/* Thiết lập padding cho md */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .global_wrapper {
+    padding: 30px;
+  }
+}
+
+/* Thiết lập padding cho lg */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .global_wrapper {
+    padding: 40px;
+  }
+}
+
+/* Thiết lập padding cho xl */
+@media (min-width: 1200px) {
+  .global_wrapper {
+    /* padding: 0px 100px 100px 100px; */
+    max-width: 1236px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+  }
+}
