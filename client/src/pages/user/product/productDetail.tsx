@@ -791,7 +791,7 @@ function ProductDetail() {
                                           className={clsx(style.header_price)}
                                         >
                                           {numeral(product.price).format(
-                                            "$0,0"
+                                            "0,0$"
                                           )}
                                         </del>
                                       ) : (

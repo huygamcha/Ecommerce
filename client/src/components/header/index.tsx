@@ -5,14 +5,15 @@ import clsx from "clsx";
 import style from "./header.module.css";
 import {
   LogoutOutlined,
-  MenuUnfoldOutlined,
   SearchOutlined,
   UserDeleteOutlined,
 } from "@ant-design/icons";
-import { FiChevronDown } from "react-icons/fi";
+import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { FaCartShopping, FaBars } from "react-icons/fa6";
+import { HiOutlineXMark } from "react-icons/hi2";
 
 import { TiDelete } from "react-icons/ti";
+import { FaPhoneAlt } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { getAllProductSearch, getProductById } from "../../slices/productSlice";
 import numeral from "numeral";
@@ -25,6 +26,61 @@ import { getAllTag } from "../../slices/tagSlice";
 import { getAllBrand } from "../../slices/brandSlice";
 import { getAllCategory } from "../../slices/categorySlice";
 import { useOutsideClick } from "../OutsideClick/index";
+
+const ListItemBrand = ({
+  categoryId,
+  categoryName,
+  onClickBrand,
+}: {
+  categoryId: string;
+  categoryName: string;
+  categoryActive: string;
+  onClickBrand: (categoryId: string, brandId: string) => void;
+}) => {
+  const { brands } = useAppSelector((state) => state.brands);
+  const [isShow, setIsShow] = useState<boolean>(false);
+  return (
+    <>
+      <Flex
+        className={clsx(style.brand_item_icon)}
+        onClick={() => setIsShow(!isShow)}
+        align="center"
+      >
+        {!isShow ? (
+          <FiChevronDown style={{ fontSize: "20px" }} />
+        ) : (
+          <FiChevronUp style={{ fontSize: "20px" }} />
+        )}
+      </Flex>
+      <Flex
+        style={{
+          background: "#eaeffa",
+          borderRadius: "10px",
+        }}
+        vertical
+      >
+        {brands.map((brand) => {
+          if (brand.categoryId === categoryId && isShow) {
+            return (
+              <Link to={`/timkiem?s=${categoryName}`}>
+                <Flex
+                  onClick={(e) => {
+                    // ngăn chặn việc gọi lên handleSearchMenu ở hàm, đánh đổi reload lại trang
+                    e.stopPropagation();
+                    onClickBrand(categoryId, brand._id);
+                  }}
+                  className={clsx(style.brand_list_item)}
+                >
+                  {brand.name}
+                </Flex>
+              </Link>
+            );
+          }
+        })}
+      </Flex>
+    </>
+  );
+};
 
 function HeaderScreen() {
   const currentUser = localStorage.getItem("userInfor")
@@ -129,6 +185,7 @@ function HeaderScreen() {
         console.log("««««« event »»»»»", event.target);
         if (ref.current && !ref.current.contains(event.target)) {
           setIsList(false);
+          setIsOpen(false);
         }
       }
 
@@ -139,11 +196,12 @@ function HeaderScreen() {
     }, [ref]);
   }
   const wrapperRef = useRef(null);
+  const menuMobileRef = useRef(null);
   useOutsideAlerter(wrapperRef);
+  useOutsideAlerter(menuMobileRef);
 
   return (
     // 5 16 0 3
-
     <>
       <div
         style={{
@@ -153,10 +211,14 @@ function HeaderScreen() {
         }}
       >
         <Row justify="end" className={clsx(style.wrapper_try)}>
+          {/* mobile */}
           <Col xs={2} sm={0}>
-            <Link to="/" className={clsx(style.header_text)}>
-              <FaBars className={clsx(style.button_icon)} />
-            </Link>
+            <Space>
+              <FaBars
+                onClick={() => setIsOpen(!isOpen)}
+                className={clsx(style.button_icon)}
+              />
+            </Space>
           </Col>
           <Col xs={0} sm={2} md={2} lg={5}>
             <Link to="/" className={clsx(style.header_text)}>
@@ -169,8 +231,6 @@ function HeaderScreen() {
           <Col xs={20} sm={14} md={13} lg={13}>
             <Flex>
               <Input
-                // ref={inputRef}
-                // ref={wrapperRef}
                 type="text"
                 value={search}
                 onChange={handleSearch}
@@ -219,7 +279,7 @@ function HeaderScreen() {
                           <Space style={{ fontWeight: "bold" }}>
                             <div>
                               {" "}
-                              {numeral(product.total).format("$0,0")} /{" "}
+                              {numeral(product.total).format("0,0$")} /{" "}
                               {product.unit}
                             </div>
                           </Space>
@@ -326,75 +386,119 @@ function HeaderScreen() {
             </Link>
           </Col>
 
-          <Col xs={0} sm={0}>
-            <Flex justify="end">
-              <Space
-                className={clsx(
-                  style.button_header,
-                  style.button_background_mobile
-                )}
-              >
-                <Link className={clsx(style.button_header_text)} to="/cart">
-                  <MenuUnfoldOutlined
-                    onClick={() => setIsOpen(!isOpen)}
-                    className={clsx(style.button_icon_mobile)}
-                  />
-                </Link>
-              </Space>
-            </Flex>
-          </Col>
+          {/* open mobile */}
           <Space>
             {isOpen ? (
-              <Flex className={clsx(style.menu_mobile)} vertical>
-                <Link to="/product">
-                  <div style={{ fontSize: "35px" }}>Pam</div>
-                </Link>
-                <div>
-                  <Link
-                    className={clsx(style.menu_mobile_child)}
-                    onClick={() => setIsOpen(false)}
-                    to="/cart"
-                    style={{ display: "flex" }}
-                  >
-                    <Space>Giỏ hàng</Space>
-                  </Link>
-                </div>
-                <div>
-                  <Link
-                    className={clsx(style.menu_mobile_child)}
-                    onClick={() => setIsOpen(false)}
-                    to="/product"
-                  >
-                    <Space>Sản phẩm</Space>
-                  </Link>
-                </div>
-                <div>
-                  <Link
-                    className={clsx(style.menu_mobile_child)}
-                    onClick={() => setIsOpen(false)}
-                    to="/profile"
-                  >
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className={clsx(style.menu_mobile_wrapper)}
+              >
+                <Flex
+                  ref={menuMobileRef}
+                  className={clsx(style.menu_mobile)}
+                  vertical
+                >
+                  <Flex justify="space-between">
+                    <Link
+                      onClick={() => setIsOpen(false)}
+                      to="/"
+                      className={clsx(style.header_text)}
+                    >
+                      <img
+                        src="https://cms-prod.s3-sgn09.fptcloud.com/smalls/Logo_LC_Default_2e36f42b6b.svg"
+                        alt=""
+                      />
+                    </Link>
                     <Space>
-                      {currentUser ? currentUser.name : "Đăng nhập"}
+                      <HiOutlineXMark
+                        onClick={() => setIsOpen(false)}
+                        style={{ fontSize: "24px" }}
+                      />
                     </Space>
-                  </Link>
-                </div>
-                <div>
-                  <Link
-                    className={clsx(style.menu_mobile_child)}
-                    onClick={() => setIsOpen(false)}
-                    to="/cart"
-                  >
-                    <Space></Space>
-                  </Link>
-                </div>
-              </Flex>
+                  </Flex>
+
+                  {/* danh mục và thương hiệu */}
+                  <Row>
+                    <Col span={24}>
+                      <Flex
+                        className={clsx(style.auth_wrapper_mobile)}
+                        vertical
+                      >
+                        <Space className={clsx(style.auth_wrapper_mobile_text)}>
+                          Đăng nhập để hưởng những đặc quyền dành riêng cho hội
+                          viên
+                        </Space>
+                        <Flex justify="space-between">
+                          <Space className={clsx(style.add_to_cart)}>
+                            Đăng nhập
+                          </Space>
+                          <Space className={clsx(style.buy_now)}>Đăng kí</Space>
+                        </Flex>
+                      </Flex>
+                    </Col>
+                    <Col span={24}>
+                      {categories ? (
+                        categories.map((category) => (
+                          <div>
+                            <Flex
+                              vertical
+                              justify="space-between"
+                              className={clsx(style.brand_item)}
+                            >
+                              <Link
+                                onClick={(e) => {
+                                  handleSearchMenu(category._id, "");
+                                }}
+                                to={`/timkiem?s=${category.name}`}
+                              >
+                                <div
+                                  style={{ width: "70%" }}
+                                  onClick={() => setIsOpen(false)}
+                                >
+                                  {category.name}
+                                </div>
+                              </Link>
+
+                              <ListItemBrand
+                                // config mobile arrow function callback from component children
+                                onClickBrand={handleSearchMenu}
+                                categoryId={category._id}
+                                categoryName={category.name}
+                                categoryActive={category._id}
+                              />
+                            </Flex>
+                          </div>
+                        ))
+                      ) : (
+                        <></>
+                      )}
+                    </Col>
+                  </Row>
+
+                  <Flex className={clsx(style.contactNowMobile_wrapper)}>
+                    <Flex className={clsx(style.contactNowMobile)}>
+                      <Space>
+                        <FaPhoneAlt
+                          className={clsx(style.contactNowMobile_phone_icon)}
+                        />
+                      </Space>
+                      <Space
+                        className={clsx(style.contactNowMobile_phone_text)}
+                      >
+                        Tư vấn: 1800 6928 (Miễn phí)
+                      </Space>
+                    </Flex>
+                  </Flex>
+                </Flex>
+              </div>
             ) : (
               <></>
             )}
           </Space>
         </Row>
       </div>
+
+      {/* tag */}
       <div
         style={{
           background: "#256cdf",
@@ -402,7 +506,6 @@ function HeaderScreen() {
           justifyContent: "center",
         }}
       >
-        {/* tag */}
         <Row
           style={{ paddingTop: "0px", zIndex: 1 }}
           justify="end"

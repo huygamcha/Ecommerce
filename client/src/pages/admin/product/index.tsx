@@ -249,7 +249,7 @@ const Product = (props: Props) => {
       key: "price",
       width: "1%",
       render: (text: string, record: any, index: number) => (
-        <div style={{ textAlign: "right" }}>{numeral(text).format("$0,0")}</div>
+        <div style={{ textAlign: "right" }}>{numeral(text).format("0,0$")}</div>
       ),
     },
 
@@ -278,7 +278,7 @@ const Product = (props: Props) => {
       key: "total",
       width: "1%",
       render: (text: string, record: any, index: number) => (
-        <div style={{ textAlign: "right" }}>{numeral(text).format("$0,0")}</div>
+        <div style={{ textAlign: "right" }}>{numeral(text).format("0,0$")}</div>
       ),
     },
     {

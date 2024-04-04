@@ -169,6 +169,7 @@
   .wrapper_global {
     background-color: #edf0f3;
     padding: 10px;
+    margin: 0px !important;
   }
 }
 

@@ -1,23 +1,39 @@
 /* responsive */
+.menu_mobile_wrapper {
+  z-index: 9998;
+  width: 100%;
+  height: 100vh;
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  font-size: 20px;
+  padding: 16px;
+  overflow-y: auto;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.45);
+  pointer-events: auto;
+}
 
 .menu_mobile {
-  z-index: 9;
-  width: 80%;
-  height: 1200px;
-  opacity: 0.95;
+  z-index: 9999;
+  width: 70%;
+  height: 90vh;
   background-color: #fff;
   display: block;
   position: absolute;
   left: 0;
   color: #000;
   top: 0;
+  bottom: 0;
   font-size: 20px;
-  padding: 25px;
+  padding: 16px;
+  overflow-y: auto;
 }
 
-.menu_mobile > div {
-  padding: 5px;
-}
+
 
 .menu_mobile_child {
   color: #000;
@@ -51,12 +67,12 @@
   box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 12px;
 }
 
-.profile_detail_child > div {
+.profile_detail_child>div {
   padding: 16px;
   border-radius: 4px;
 }
 
-.profile_detail_child > div:hover {
+.profile_detail_child>div:hover {
   background-color: #fff4fc;
   width: 200px;
 }
@@ -75,10 +91,12 @@
   width: 100%;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 12px;
 }
+
 .wrapper_try_tag {
   position: relative;
   height: 40px;
 }
+
 .wrapper_try_brand {
   font-size: 25px;
   align-items: center;
@@ -87,7 +105,7 @@
   box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 12px;
 }
 
-.wrapper_try_brand > div {
+.wrapper_try_brand>div {
   width: 100%;
   height: 10px;
 }
@@ -115,7 +133,7 @@
   color: #fff;
 }
 
-.button_header > div {
+.button_header>div {
   font-weight: 500;
   font-size: 18px;
   line-height: 24px;
@@ -124,12 +142,13 @@
 
 .button_header_text {
   color: #fff;
-  display: flex;;
+  display: flex;
+  ;
 }
 
-.button_header_text > a {
+.button_header_text>a {
   display: flex;
-} 
+}
 
 
 .button_header_text:hover {
@@ -164,6 +183,7 @@
   padding: 14px;
   position: relative;
 }
+
 .header_search_input:hover,
 .header_search_input:focus {
   background-color: #fff;
@@ -173,11 +193,12 @@
 
 
 /* không là element con nên phải dùng + */
-.header_search_input:focus + .header_search_icon_search {
+.header_search_input:focus+.header_search_icon_search {
   background-color: #1d5adf;
   color: #fff;
 }
-.header_search_input:target + .header_search_icon_search {
+
+.header_search_input:target+.header_search_icon_search {
   background-color: #1d5adf;
   color: #fff;
 }
@@ -196,9 +217,12 @@
   border-radius: 20px;
   box-shadow: 1px 0 3px rgba(155, 155, 155, 0.6);
   /* Tùy chỉnh thanh cuộn cho Chrome và Safari */
-  scrollbar-width: thin; /* Cho Firefox */
-  scrollbar-color: rgba(155, 155, 155, 0.6) transparent; /* Cho Firefox */
+  scrollbar-width: thin;
+  /* Cho Firefox */
+  scrollbar-color: rgba(155, 155, 155, 0.6) transparent;
+  /* Cho Firefox */
 }
+
 /* .header_search_input:focus + .header_search_result,
 .header_search_input:target + .header_search_result {
  
@@ -222,7 +246,8 @@
   height: 100px !important;
   border-radius: 10px !important;
 }
-.header_search_items_img + div {
+
+.header_search_items_img+div {
   border-radius: 10px !important;
 }
 
@@ -258,8 +283,7 @@
 }
 
 /* search for tag */
-.tag_wrapper {
-}
+.tag_wrapper {}
 
 .tag_item {
   color: #fff;
@@ -269,6 +293,7 @@
   padding: 0px 10px;
   margin-top: 10px;
 }
+
 .tag_item:hover {
   color: #fff;
   font-weight: 500;
@@ -297,7 +322,7 @@
 }
 
 /* danh sách search cuối cùng nằm bên trái */
-.menu_sub > a:last-child .brand_list {
+.menu_sub>a:last-child .brand_list {
   position: absolute;
   right: 0;
 }
@@ -341,28 +366,59 @@
   font-weight: 500;
   margin: 0px 10px;
   color: #020b27;
+
 }
+
 .brand_list_item:first-child {
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
 }
+
 .brand_list_item:last-child {
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 10px;
 }
 
 .brand_list_item:hover {
-  background-color: #edf0f3;
+  background-color: #eaeffa;
   font-weight: bold;
 }
 
-.customFA{
+.customFA {
   display: flex !important;
   align-items: center !important;
 }
 
 /* Thiết lập padding cho xs */
 @media (max-width: 575.98px) {
+  .brand_item>a {
+    color: #020b27 !important;
+    position: relative;
+    margin-bottom: 12px;
+
+  }
+
+  .brand_item_icon {
+    position: absolute;
+    right: 0;
+  }
+
+  .brand_list {
+    display: flex;
+    position: initial;  
+  }
+
+  .brand_list_item {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 500;
+    color: #020b27;
+    margin: 0px;
+    background-color: #eaeffa;
+  }
+
   .wrapper_try_tag_display {
     display: none;
   }
@@ -371,6 +427,7 @@
     position: relative;
     height: 0px;
   }
+
   .wrapper_try {
     padding: 8px 16px;
     position: fixed;
@@ -379,9 +436,11 @@
   .button_background_mobile {
     background-color: none;
   }
+
   .wrapper_try_brand {
     display: none;
   }
+
   .header_search_input {
     font-size: 13px;
     border-radius: 30px;
@@ -390,22 +449,123 @@
     font-weight: 500;
     color: #525e6e;
   }
-  .header_search_icon_delete{
+
+  .header_search_icon_delete {
     right: 8%;
     font-size: 17px;
   }
+
   .header_search_icon_search {
     padding: 4px;
     font-size: 14px;
   }
-  .header_search_result{
+
+  .header_search_result {
     top: 35px;
   }
+
+  .brand_item {
+    padding: 12px 0px;
+    display: flex;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 600;
+    padding-bottom: 0px;
+  }
+
+  .brand_item>a {
+    color: #020b27 !important;
+  }
+
+  .wrapper_brand_item {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .contactNowMobile_wrapper {
+    background: #fff;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 70%;
+    padding: 16px;
+  }
+
+  .contactNowMobile {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    width: 100%;
+    margin-top: 12px;
+    background: #eaeffa;
+    border-radius: 20px;
+  }
+
+  .contactNowMobile_phone_icon {
+    font-size: 14px;
+    color: #1250dc;
+  }
+
+  .contactNowMobile_phone_text {
+    font-size: 14px;
+    color: #1250dc;
+    font-weight: 600;
+  }
+
+  .auth_wrapper_mobile {
+    background: #3a73e4;
+    margin: 0px -16px;
+    padding: 8px 16px;
+  }
+
+  .auth_wrapper_mobile_text {
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 18px;
+    color: #fff;
+  }
+
+  .add_to_cart {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    font-size: 14px;
+    height: 30px;
+    line-height: 30px;
+    margin-top: 20px;
+    padding: 12px;
+    width: 49%;
+    background-color: #1958de;
+    color: #fff;
+    border-radius: 30px;
+    font-weight: 500;
+  }
+
+  .buy_now {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    font-size: 14px;
+    height: 30px;
+    line-height: 30px;
+    margin-top: 20px;
+    padding: 12px;
+    width: 49%;
+    background-color: #eaeffa;
+    color: #1958de;
+    border-radius: 30px;
+    font-weight: 500;
+  }
+
 }
 
 /* Thiết lập cho mobile */
 @media (max-width: 575px) {
-  .wrapper_try_tag{
+  .wrapper_try_tag {
     display: none;
   }
 }
@@ -415,7 +575,7 @@
   .wrapper_try {
     padding: 20px;
   }
-  
+
 }
 
 /* Thiết lập padding cho md */

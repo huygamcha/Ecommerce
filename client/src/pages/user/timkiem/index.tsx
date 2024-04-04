@@ -14,6 +14,7 @@ import { getAllCategory } from "../../../slices/categorySlice";
 import { getAllBrand } from "../../../slices/brandSlice";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { LuAlignCenter } from "react-icons/lu";
+import MenuFooter from "../../../components/MenuFooter";
 function Timkiem() {
   const filter = localStorage.getItem("filter")
     ? JSON.parse(localStorage.getItem("filter")!)
@@ -135,71 +136,174 @@ function Timkiem() {
     dispatch(getAllProductSearch({ ageFrom: ageFrom, ageTo: ageTo }));
   };
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        background: "#edf0f3",
-      }}
-    >
-      <Row gutter={12} className={clsx(style.wrapper_global)}>
-        <Col
-          xs={activeFillter ? 24 : 0}
-          style={{ padding: activeFillter ? "0px 6px" : "0px 6px 0px 0px" }}
-          sm={6}
-        >
-          <Flex className={clsx(style.navbar_wrapper)} vertical>
-            <Flex
-              style={{
-                fontSize: "16px",
-                lineHeight: "24px",
-                fontWeight: "600",
-                padding: "10px ",
-                borderBottom: "1px solid #e4e8ed",
-              }}
-              align="center"
-            >
-              <LuAlignCenter />
-              <Space style={{ marginLeft: "5px" }}> Bộ lọc nâng cao</Space>
-            </Flex>
-            <Space className={clsx(style.navbar)}>
-              <Flex vertical>
-                <Flex
-                  onClick={() => setDropCategory(!dropCategory)}
-                  justify="space-between"
-                  align="center"
-                  className={clsx(style.filter_name, style.dropdown_main)}
-                >
-                  Danh mục
-                  {dropCategory ? <FiChevronDown /> : <FiChevronUp />}
-                </Flex>
+    <>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          background: "#edf0f3",
+        }}
+      >
+        <Row gutter={12} className={clsx(style.wrapper_global)}>
+          <Col
+            xs={activeFillter ? 24 : 0}
+            style={{ padding: activeFillter ? "0px 6px" : "0px 6px 0px 0px" }}
+            sm={6}
+          >
+            <Flex className={clsx(style.navbar_wrapper)} vertical>
+              <Flex
+                style={{
+                  fontSize: "16px",
+                  lineHeight: "24px",
+                  fontWeight: "600",
+                  padding: "10px ",
+                  borderBottom: "1px solid #e4e8ed",
+                }}
+                align="center"
+              >
+                <LuAlignCenter />
+                <Space style={{ marginLeft: "5px" }}> Bộ lọc nâng cao</Space>
+              </Flex>
+              <Space className={clsx(style.navbar)}>
+                <Flex vertical>
+                  <Flex
+                    onClick={() => setDropCategory(!dropCategory)}
+                    justify="space-between"
+                    align="center"
+                    className={clsx(style.filter_name, style.dropdown_main)}
+                  >
+                    Danh mục
+                    {dropCategory ? <FiChevronDown /> : <FiChevronUp />}
+                  </Flex>
 
-                <Flex
-                  vertical
-                  className={clsx(
-                    style.dropdown_item,
-                    dropCategory ? style.active : ""
-                  )}
-                >
-                  <Row gutter={12}>
-                    {categories.map((category) => (
+                  <Flex
+                    vertical
+                    className={clsx(
+                      style.dropdown_item,
+                      dropCategory ? style.active : ""
+                    )}
+                  >
+                    <Row gutter={12}>
+                      {categories.map((category) => (
+                        <Col xs={12} sm={24}>
+                          <Button
+                            style={{
+                              boxShadow:
+                                category._id === activeCategory
+                                  ? "inset 0 0 0 1px #1250dc"
+                                  : "none",
+                            }}
+                            onClick={() =>
+                              handleSearchCategory(category._id, category.name)
+                            }
+                            className={clsx(style.filter_select)}
+                          >
+                            {category.name}
+                            <Space
+                              className={clsx(
+                                category._id === activeCategory
+                                  ? style.filter_label
+                                  : { display: "none" }
+                              )}
+                            >
+                              <div style={{ display: "none" }}>1</div>
+                            </Space>
+                          </Button>
+                        </Col>
+                      ))}
+                    </Row>
+                  </Flex>
+                </Flex>
+              </Space>
+              <Space className={clsx(style.navbar)}>
+                <Flex vertical>
+                  <Flex
+                    onClick={() => setDropBrand(!dropBrand)}
+                    justify="space-between"
+                    align="center"
+                    className={clsx(style.filter_name, style.dropdown_main)}
+                  >
+                    Thương hiệu
+                    {dropBrand ? <FiChevronDown /> : <FiChevronUp />}
+                  </Flex>
+
+                  <Flex
+                    vertical
+                    className={clsx(
+                      style.dropdown_item,
+                      dropBrand ? style.active : ""
+                    )}
+                  >
+                    <Row gutter={12}>
+                      {brands.map((brand) => {
+                        if (brand.categoryId === activeCategory) {
+                          return (
+                            <Col xs={12} sm={24}>
+                              <Button
+                                style={{
+                                  boxShadow:
+                                    brand._id === activeBrand
+                                      ? "inset 0 0 0 1px #1250dc"
+                                      : "none",
+                                }}
+                                onClick={() =>
+                                  handleSearchBrand(brand._id, brand.name)
+                                }
+                                className={clsx(style.filter_select)}
+                              >
+                                {brand.name}
+                                <Space
+                                  className={clsx(
+                                    brand._id === activeBrand
+                                      ? style.filter_label
+                                      : { display: "none" }
+                                  )}
+                                >
+                                  <div style={{ display: "none" }}>1</div>
+                                </Space>
+                              </Button>
+                            </Col>
+                          );
+                        }
+                      })}
+                    </Row>
+                  </Flex>
+                </Flex>
+              </Space>
+              <Space className={clsx(style.navbar)}>
+                <Flex vertical>
+                  <Flex
+                    onClick={() => setDropPrice(!dropPrice)}
+                    justify="space-between"
+                    align="center"
+                    className={clsx(style.filter_name, style.dropdown_main)}
+                  >
+                    Giá bán
+                    {dropPrice ? <FiChevronDown /> : <FiChevronUp />}
+                  </Flex>
+                  <Flex
+                    className={clsx(
+                      style.dropdown_item,
+                      dropPrice ? style.active : ""
+                    )}
+                    vertical
+                  >
+                    <Row gutter={12}>
                       <Col xs={12} sm={24}>
                         <Button
                           style={{
                             boxShadow:
-                              category._id === activeCategory
+                              0 === activePrice
                                 ? "inset 0 0 0 1px #1250dc"
                                 : "none",
                           }}
-                          onClick={() =>
-                            handleSearchCategory(category._id, category.name)
-                          }
+                          onClick={() => handleSearchPrice(0, 1000000000, 0)}
                           className={clsx(style.filter_select)}
                         >
-                          {category.name}
+                          Tất cả
                           <Space
                             className={clsx(
-                              category._id === activeCategory
+                              0 === activePrice
                                 ? style.filter_label
                                 : { display: "none" }
                             )}
@@ -208,438 +312,343 @@ function Timkiem() {
                           </Space>
                         </Button>
                       </Col>
-                    ))}
-                  </Row>
-                </Flex>
-              </Flex>
-            </Space>
-            <Space className={clsx(style.navbar)}>
-              <Flex vertical>
-                <Flex
-                  onClick={() => setDropBrand(!dropBrand)}
-                  justify="space-between"
-                  align="center"
-                  className={clsx(style.filter_name, style.dropdown_main)}
-                >
-                  Thương hiệu
-                  {dropBrand ? <FiChevronDown /> : <FiChevronUp />}
-                </Flex>
 
-                <Flex
-                  vertical
-                  className={clsx(
-                    style.dropdown_item,
-                    dropBrand ? style.active : ""
-                  )}
-                >
-                  <Row gutter={12}>
-                    {brands.map((brand) => {
-                      if (brand.categoryId === activeCategory) {
-                        return (
-                          <Col xs={12} sm={24}>
-                            <Button
-                              style={{
-                                boxShadow:
-                                  brand._id === activeBrand
-                                    ? "inset 0 0 0 1px #1250dc"
-                                    : "none",
-                              }}
-                              onClick={() =>
-                                handleSearchBrand(brand._id, brand.name)
-                              }
-                              className={clsx(style.filter_select)}
-                            >
-                              {brand.name}
-                              <Space
-                                className={clsx(
-                                  brand._id === activeBrand
-                                    ? style.filter_label
-                                    : { display: "none" }
-                                )}
-                              >
-                                <div style={{ display: "none" }}>1</div>
-                              </Space>
-                            </Button>
-                          </Col>
-                        );
-                      }
-                    })}
-                  </Row>
-                </Flex>
-              </Flex>
-            </Space>
-            <Space className={clsx(style.navbar)}>
-              <Flex vertical>
-                <Flex
-                  onClick={() => setDropPrice(!dropPrice)}
-                  justify="space-between"
-                  align="center"
-                  className={clsx(style.filter_name, style.dropdown_main)}
-                >
-                  Giá bán
-                  {dropPrice ? <FiChevronDown /> : <FiChevronUp />}
-                </Flex>
-                <Flex
-                  className={clsx(
-                    style.dropdown_item,
-                    dropPrice ? style.active : ""
-                  )}
-                  vertical
-                >
-                  <Row gutter={12}>
-                    <Col xs={12} sm={24}>
-                      <Button
-                        style={{
-                          boxShadow:
-                            0 === activePrice
-                              ? "inset 0 0 0 1px #1250dc"
-                              : "none",
-                        }}
-                        onClick={() => handleSearchPrice(0, 1000000000, 0)}
-                        className={clsx(style.filter_select)}
-                      >
-                        Tất cả
-                        <Space
-                          className={clsx(
-                            0 === activePrice
-                              ? style.filter_label
-                              : { display: "none" }
-                          )}
+                      <Col xs={12} sm={24}>
+                        {" "}
+                        <Button
+                          style={{
+                            boxShadow:
+                              1 === activePrice
+                                ? "inset 0 0 0 1px #1250dc"
+                                : "none",
+                          }}
+                          onClick={() => handleSearchPrice(0, 100000, 1)}
+                          className={clsx(style.filter_select)}
                         >
-                          <div style={{ display: "none" }}>1</div>
-                        </Space>
-                      </Button>
-                    </Col>
-
-                    <Col xs={12} sm={24}>
-                      {" "}
-                      <Button
-                        style={{
-                          boxShadow:
-                            1 === activePrice
-                              ? "inset 0 0 0 1px #1250dc"
-                              : "none",
-                        }}
-                        onClick={() => handleSearchPrice(0, 100000, 1)}
-                        className={clsx(style.filter_select)}
-                      >
-                        Dưới đ100.000
-                        <Space
-                          className={clsx(
-                            1 === activePrice
-                              ? style.filter_label
-                              : { display: "none" }
-                          )}
-                        >
-                          <div style={{ display: "none" }}>1</div>
-                        </Space>
-                      </Button>
-                    </Col>
-
-                    <Col xs={12} sm={24}>
-                      <Button
-                        style={{
-                          boxShadow:
-                            2 === activePrice
-                              ? "inset 0 0 0 1px #1250dc"
-                              : "none",
-                        }}
-                        value={2}
-                        onClick={() => handleSearchPrice(100000, 300000, 2)}
-                        className={clsx(style.filter_select)}
-                      >
-                        đ100.000 đến đ300.000
-                        <Space
-                          className={clsx(
-                            2 === activePrice
-                              ? style.filter_label
-                              : { display: "none" }
-                          )}
-                        >
-                          <div style={{ display: "none" }}>2</div>
-                        </Space>
-                      </Button>
-                    </Col>
-
-                    <Col xs={12} sm={24}>
-                      <Button
-                        style={{
-                          boxShadow:
-                            3 === activePrice
-                              ? "inset 0 0 0 1px #1250dc"
-                              : "none",
-                        }}
-                        value={3}
-                        onClick={() => handleSearchPrice(300000, 500000, 3)}
-                        className={clsx(style.filter_select)}
-                      >
-                        300.000đ đến đ500.000
-                        <Space
-                          className={clsx(
-                            3 === activePrice
-                              ? style.filter_label
-                              : { display: "none" }
-                          )}
-                        >
-                          <div style={{ display: "none" }}>2</div>
-                        </Space>
-                      </Button>
-                    </Col>
-
-                    <Col xs={12} sm={24}>
-                      <Button
-                        style={{
-                          boxShadow:
-                            4 === activePrice
-                              ? "inset 0 0 0 1px #1250dc"
-                              : "none",
-                        }}
-                        value={4}
-                        onClick={() => handleSearchPrice(500000, 100000000, 4)}
-                        className={clsx(style.filter_select)}
-                      >
-                        Trên đ500.000
-                        <Space
-                          className={clsx(
-                            4 === activePrice
-                              ? style.filter_label
-                              : { display: "none" }
-                          )}
-                        >
-                          <div style={{ display: "none" }}>2</div>
-                        </Space>
-                      </Button>
-                    </Col>
-                  </Row>
-                </Flex>
-              </Flex>
-            </Space>
-            <Space className={clsx(style.navbar)}>
-              <Flex vertical>
-                <Flex
-                  onClick={() => setDropAge(!dropAge)}
-                  justify="space-between"
-                  align="center"
-                  className={clsx(style.filter_name, style.dropdown_main)}
-                >
-                  Độ tuổi
-                  {dropAge ? <FiChevronDown /> : <FiChevronUp />}
-                </Flex>
-
-                <Flex
-                  vertical
-                  className={clsx(
-                    style.dropdown_item,
-                    dropAge ? style.active : ""
-                  )}
-                >
-                  <Row gutter={12}>
-                    <Col xs={12} sm={24}>
-                      <Button
-                        style={{
-                          boxShadow:
-                            0 === activeAge
-                              ? "inset 0 0 0 1px #1250dc"
-                              : "none",
-                        }}
-                        onClick={() => handleSearchAge(0, 100, 0)}
-                        className={clsx(style.filter_select)}
-                      >
-                        Tất cả
-                        <Space
-                          className={clsx(
-                            0 === activeAge
-                              ? style.filter_label
-                              : { display: "none" }
-                          )}
-                        >
-                          <div style={{ display: "none" }}>1</div>
-                        </Space>
-                      </Button>
-                    </Col>
-                    <Col xs={12} sm={24}>
-                      <Button
-                        style={{
-                          boxShadow:
-                            1 === activeAge
-                              ? "inset 0 0 0 1px #1250dc"
-                              : "none",
-                        }}
-                        onClick={() => handleSearchAge(0, 1, 1)}
-                        className={clsx(style.filter_select)}
-                      >
-                        Sơ sinh - 1 tuổi
-                        <Space
-                          className={clsx(
-                            1 === activeAge
-                              ? style.filter_label
-                              : { display: "none" }
-                          )}
-                        >
-                          <div style={{ display: "none" }}>1</div>
-                        </Space>
-                      </Button>
-                    </Col>
-                    <Col xs={12} sm={24}>
-                      <Button
-                        style={{
-                          boxShadow:
-                            3 === activeAge
-                              ? "inset 0 0 0 1px #1250dc"
-                              : "none",
-                        }}
-                        value={3}
-                        onClick={() => handleSearchAge(2, 5, 3)}
-                        className={clsx(style.filter_select)}
-                      >
-                        2 tuổi - 5 tuổi
-                        <Space
-                          className={clsx(
-                            3 === activeAge
-                              ? style.filter_label
-                              : { display: "none" }
-                          )}
-                        >
-                          <div style={{ display: "none" }}>2</div>
-                        </Space>
-                      </Button>
-                    </Col>
-                    <Col xs={12} sm={24}>
-                      <Button
-                        style={{
-                          boxShadow:
-                            4 === activeAge
-                              ? "inset 0 0 0 1px #1250dc"
-                              : "none",
-                        }}
-                        value={4}
-                        onClick={() => handleSearchAge(5, 100, 4)}
-                        className={clsx(style.filter_select)}
-                      >
-                        Trên 5 tuổi
-                        <Space
-                          className={clsx(
-                            4 === activeAge
-                              ? style.filter_label
-                              : { display: "none" }
-                          )}
-                        >
-                          <div style={{ display: "none" }}>2</div>
-                        </Space>
-                      </Button>
-                    </Col>
-                  </Row>
-                </Flex>
-              </Flex>
-            </Space>
-          </Flex>
-        </Col>
-
-        {/* mobile */}
-        <Col xs={24} sm={0}>
-          <Flex
-            style={{
-              fontSize: "16px",
-              lineHeight: "24px",
-              fontWeight: "700",
-              margin: "10px 0px",
-            }}
-            justify="space-between"
-          >
-            <Space>Danh sách sản phẩm</Space>
-            <Flex
-              onClick={() => setActiveFillter(!activeFillter)}
-              style={{ fontWeight: "600", cursor: "pointer" }}
-              align="center"
-            >
-              <LuAlignCenter />
-              <Space style={{ marginLeft: "5px" }}>Lọc</Space>
-            </Flex>
-          </Flex>
-        </Col>
-
-        <Col xs={24} sm={18}>
-          <Row gutter={24}>
-            <Col xs={0} sm={24}>
-              <Space
-                style={{
-                  fontSize: "18px",
-                  lineHeight: "24px",
-                  fontWeight: "600",
-                  marginBottom: "16px",
-                }}
-              >
-                Danh sách sản phẩm
-              </Space>
-            </Col>
-            <Col xs={24} sm={24}>
-              <Row gutter={[12, 2]}>
-                {productsSearch ? (
-                  productsSearch.map((product) => (
-                    <Col
-                      xs={12}
-                      md={12}
-                      lg={6}
-                      style={{
-                        paddingBottom: "10px",
-                      }}
-                    >
-                      <Link
-                        onClick={() =>
-                          handleDetail(product._id, product.categoryId)
-                        }
-                        to={`/sanpham/${product.slug}`}
-                        className={clsx(style.wrapper)}
-                      >
-                        <Flex className={clsx(style.content)} vertical>
-                          <Space className={clsx(style.content_discount)}>
-                            <Discount discount={product.discount}></Discount>
-                          </Space>
-
-                          <Flex justify="center">
-                            <img
-                              src={product.pic}
-                              className={clsx(style.content_img)}
-                              alt=""
-                            />
-                          </Flex>
-                          <Flex
-                            vertical
-                            justify="space-between"
-                            style={{ padding: "20px" }}
-                          >
-                            <Space className={clsx(style.header_text)}>
-                              {product.name}
-                            </Space>
-                            <Space className={clsx(style.header_discount)}>
-                              {numeral(
-                                (product.price * (100 - product.discount)) / 100
-                              ).format("$0,0")}
-                            </Space>
-                            {product && product?.discount > 0 ? (
-                              <del className={clsx(style.header_price)}>
-                                {numeral(product.price).format("$0,0")}
-                              </del>
-                            ) : (
-                              <></>
+                          Dưới đ100.000
+                          <Space
+                            className={clsx(
+                              1 === activePrice
+                                ? style.filter_label
+                                : { display: "none" }
                             )}
+                          >
+                            <div style={{ display: "none" }}>1</div>
+                          </Space>
+                        </Button>
+                      </Col>
+
+                      <Col xs={12} sm={24}>
+                        <Button
+                          style={{
+                            boxShadow:
+                              2 === activePrice
+                                ? "inset 0 0 0 1px #1250dc"
+                                : "none",
+                          }}
+                          value={2}
+                          onClick={() => handleSearchPrice(100000, 300000, 2)}
+                          className={clsx(style.filter_select)}
+                        >
+                          đ100.000 đến đ300.000
+                          <Space
+                            className={clsx(
+                              2 === activePrice
+                                ? style.filter_label
+                                : { display: "none" }
+                            )}
+                          >
+                            <div style={{ display: "none" }}>2</div>
+                          </Space>
+                        </Button>
+                      </Col>
+
+                      <Col xs={12} sm={24}>
+                        <Button
+                          style={{
+                            boxShadow:
+                              3 === activePrice
+                                ? "inset 0 0 0 1px #1250dc"
+                                : "none",
+                          }}
+                          value={3}
+                          onClick={() => handleSearchPrice(300000, 500000, 3)}
+                          className={clsx(style.filter_select)}
+                        >
+                          300.000đ đến đ500.000
+                          <Space
+                            className={clsx(
+                              3 === activePrice
+                                ? style.filter_label
+                                : { display: "none" }
+                            )}
+                          >
+                            <div style={{ display: "none" }}>2</div>
+                          </Space>
+                        </Button>
+                      </Col>
+
+                      <Col xs={12} sm={24}>
+                        <Button
+                          style={{
+                            boxShadow:
+                              4 === activePrice
+                                ? "inset 0 0 0 1px #1250dc"
+                                : "none",
+                          }}
+                          value={4}
+                          onClick={() =>
+                            handleSearchPrice(500000, 100000000, 4)
+                          }
+                          className={clsx(style.filter_select)}
+                        >
+                          Trên đ500.000
+                          <Space
+                            className={clsx(
+                              4 === activePrice
+                                ? style.filter_label
+                                : { display: "none" }
+                            )}
+                          >
+                            <div style={{ display: "none" }}>2</div>
+                          </Space>
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Flex>
+                </Flex>
+              </Space>
+              <Space className={clsx(style.navbar)}>
+                <Flex vertical>
+                  <Flex
+                    onClick={() => setDropAge(!dropAge)}
+                    justify="space-between"
+                    align="center"
+                    className={clsx(style.filter_name, style.dropdown_main)}
+                  >
+                    Độ tuổi
+                    {dropAge ? <FiChevronDown /> : <FiChevronUp />}
+                  </Flex>
+
+                  <Flex
+                    vertical
+                    className={clsx(
+                      style.dropdown_item,
+                      dropAge ? style.active : ""
+                    )}
+                  >
+                    <Row gutter={12}>
+                      <Col xs={12} sm={24}>
+                        <Button
+                          style={{
+                            boxShadow:
+                              0 === activeAge
+                                ? "inset 0 0 0 1px #1250dc"
+                                : "none",
+                          }}
+                          onClick={() => handleSearchAge(0, 100, 0)}
+                          className={clsx(style.filter_select)}
+                        >
+                          Tất cả
+                          <Space
+                            className={clsx(
+                              0 === activeAge
+                                ? style.filter_label
+                                : { display: "none" }
+                            )}
+                          >
+                            <div style={{ display: "none" }}>1</div>
+                          </Space>
+                        </Button>
+                      </Col>
+                      <Col xs={12} sm={24}>
+                        <Button
+                          style={{
+                            boxShadow:
+                              1 === activeAge
+                                ? "inset 0 0 0 1px #1250dc"
+                                : "none",
+                          }}
+                          onClick={() => handleSearchAge(0, 1, 1)}
+                          className={clsx(style.filter_select)}
+                        >
+                          Sơ sinh - 1 tuổi
+                          <Space
+                            className={clsx(
+                              1 === activeAge
+                                ? style.filter_label
+                                : { display: "none" }
+                            )}
+                          >
+                            <div style={{ display: "none" }}>1</div>
+                          </Space>
+                        </Button>
+                      </Col>
+                      <Col xs={12} sm={24}>
+                        <Button
+                          style={{
+                            boxShadow:
+                              3 === activeAge
+                                ? "inset 0 0 0 1px #1250dc"
+                                : "none",
+                          }}
+                          value={3}
+                          onClick={() => handleSearchAge(2, 5, 3)}
+                          className={clsx(style.filter_select)}
+                        >
+                          2 tuổi - 5 tuổi
+                          <Space
+                            className={clsx(
+                              3 === activeAge
+                                ? style.filter_label
+                                : { display: "none" }
+                            )}
+                          >
+                            <div style={{ display: "none" }}>2</div>
+                          </Space>
+                        </Button>
+                      </Col>
+                      <Col xs={12} sm={24}>
+                        <Button
+                          style={{
+                            boxShadow:
+                              4 === activeAge
+                                ? "inset 0 0 0 1px #1250dc"
+                                : "none",
+                          }}
+                          value={4}
+                          onClick={() => handleSearchAge(5, 100, 4)}
+                          className={clsx(style.filter_select)}
+                        >
+                          Trên 5 tuổi
+                          <Space
+                            className={clsx(
+                              4 === activeAge
+                                ? style.filter_label
+                                : { display: "none" }
+                            )}
+                          >
+                            <div style={{ display: "none" }}>2</div>
+                          </Space>
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Flex>
+                </Flex>
+              </Space>
+            </Flex>
+          </Col>
+
+          {/* mobile */}
+          <Col xs={24} sm={0}>
+            <Flex
+              style={{
+                fontSize: "16px",
+                lineHeight: "24px",
+                fontWeight: "700",
+                margin: "10px 0px",
+              }}
+              justify="space-between"
+            >
+              <Space>Danh sách sản phẩm</Space>
+              <Flex
+                onClick={() => setActiveFillter(!activeFillter)}
+                style={{ fontWeight: "600", cursor: "pointer" }}
+                align="center"
+              >
+                <LuAlignCenter />
+                <Space style={{ marginLeft: "5px" }}>Lọc</Space>
+              </Flex>
+            </Flex>
+          </Col>
+
+          <Col xs={24} sm={18}>
+            <Row gutter={24}>
+              <Col xs={0} sm={24}>
+                <Space
+                  style={{
+                    fontSize: "18px",
+                    lineHeight: "24px",
+                    fontWeight: "600",
+                    marginBottom: "16px",
+                  }}
+                >
+                  Danh sách sản phẩm
+                </Space>
+              </Col>
+              <Col xs={24} sm={24}>
+                <Row gutter={[12, 2]}>
+                  {productsSearch ? (
+                    productsSearch.map((product) => (
+                      <Col
+                        xs={12}
+                        md={12}
+                        lg={6}
+                        style={{
+                          paddingBottom: "10px",
+                        }}
+                      >
+                        <Link
+                          onClick={() =>
+                            handleDetail(product._id, product.categoryId)
+                          }
+                          to={`/sanpham/${product.slug}`}
+                          className={clsx(style.wrapper)}
+                        >
+                          <Flex className={clsx(style.content)} vertical>
+                            <Space className={clsx(style.content_discount)}>
+                              <Discount discount={product.discount}></Discount>
+                            </Space>
+
+                            <Flex justify="center">
+                              <img
+                                src={product.pic}
+                                className={clsx(style.content_img)}
+                                alt=""
+                              />
+                            </Flex>
+                            <Flex
+                              vertical
+                              justify="space-between"
+                              style={{ padding: "20px" }}
+                            >
+                              <Space className={clsx(style.header_text)}>
+                                {product.name}
+                              </Space>
+                              <Space className={clsx(style.header_discount)}>
+                                {numeral(
+                                  (product.price * (100 - product.discount)) /
+                                    100
+                                ).format("0,0$")}
+                              </Space>
+                              {product && product?.discount > 0 ? (
+                                <del className={clsx(style.header_price)}>
+                                  {numeral(product.price).format("0,0$")}
+                                </del>
+                              ) : (
+                                <></>
+                              )}
+                            </Flex>
                           </Flex>
-                        </Flex>
-                      </Link>
+                        </Link>
+                      </Col>
+                    ))
+                  ) : (
+                    <Col xs={24} sm={24} style={{ marginBottom: "25px" }}>
+                      <Empty />
                     </Col>
-                  ))
-                ) : (
-                  <Col xs={24} sm={24} style={{ marginBottom: "25px" }}>
-                    <Empty />
-                  </Col>
-                )}
-                <Col xs={24}></Col>
-              </Row>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-    </div>
+                  )}
+                  <Col xs={24}></Col>
+                </Row>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </div>
+      <div>
+        <MenuFooter />
+      </div>
+    </>
   );
 }
 

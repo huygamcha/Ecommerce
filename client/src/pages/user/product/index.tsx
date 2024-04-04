@@ -27,6 +27,7 @@ import "swiper/css/scrollbar";
 import ButtonNavigation from "../../../components/buttonNavigation";
 import { Button } from "antd/es/radio";
 import { getAllBanner } from "../../../slices/bannerSlice";
+import MenuFooter from "../../../components/MenuFooter";
 
 function ProductScreen() {
   const { products, error } = useAppSelector((state) => state.products);
@@ -243,7 +244,7 @@ function ProductScreen() {
                                 </Space>
                                 {product && product?.discount > 0 ? (
                                   <del className={clsx(style.header_price)}>
-                                    {numeral(product.price).format("$0,0")}
+                                    {numeral(product.price).format("0,0$")}
                                   </del>
                                 ) : (
                                   <></>
@@ -752,7 +753,7 @@ function ProductScreen() {
                                   </Space>
                                   {product && product?.discount > 0 ? (
                                     <del className={clsx(style.header_price)}>
-                                      {numeral(product.price).format("$0,0")}
+                                      {numeral(product.price).format("0,0$")}
                                     </del>
                                   ) : (
                                     <></>
@@ -865,11 +866,11 @@ function ProductScreen() {
                                   {numeral(
                                     (product.price * (100 - product.discount)) /
                                       100
-                                  ).format("$0,0")}
+                                  ).format("0,0$")}
                                 </Space>
                                 {product && product?.discount > 0 ? (
                                   <del className={clsx(style.header_price)}>
-                                    {numeral(product.price).format("$0,0")}
+                                    {numeral(product.price).format("0,0$")}
                                   </del>
                                 ) : (
                                   <></>
@@ -1006,7 +1007,7 @@ function ProductScreen() {
                                   </Space>
                                   {product && product?.discount > 0 ? (
                                     <del className={clsx(style.header_price)}>
-                                      {numeral(product.price).format("$0,0")}
+                                      {numeral(product.price).format("0,0$")}
                                     </del>
                                   ) : (
                                     <></>
@@ -1031,6 +1032,12 @@ function ProductScreen() {
           </Row>
         </div>
       </div>
+
+      <Row>
+        <Col xs={24} sm={0}>
+          <MenuFooter />
+        </Col>
+      </Row>
     </>
   );
 }
