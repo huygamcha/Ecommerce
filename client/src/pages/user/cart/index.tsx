@@ -20,6 +20,7 @@ import {
   ConfigProvider,
   Select,
   Radio,
+  Empty,
 } from "antd";
 import numeral from "numeral";
 import { Link, useNavigate } from "react-router-dom";
@@ -130,7 +131,7 @@ function CartScreen() {
       }}
     >
       <div className={clsx(style.wrapper_global)}>
-        {!buy ? (
+       {carts.length ? <> {!buy ? (
           <Row>
             <Col xs={24} sm={24}>
               <Row>
@@ -1326,7 +1327,11 @@ function CartScreen() {
               </Row>
             </Form>
           </>
-        )}
+        )}</> : <Row>
+          <Col span={24}>
+            <Empty />
+          </Col>
+          </Row>}
       </div>
     </div>
   );

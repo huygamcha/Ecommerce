@@ -711,7 +711,9 @@
     width: 100%;
     text-align: start;
   }
- 
+  .buy_wrapper_mobile{
+    /* background: #3a73e4; */
+  }
 }
 
 /* Thiết lập padding cho sm */
