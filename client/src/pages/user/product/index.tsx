@@ -15,7 +15,13 @@ import style from "./product.module.css";
 import Discount from "../../../components/discount";
 // swiper
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
+import {
+  Navigation,
+  Pagination,
+  Scrollbar,
+  A11y,
+  Autoplay,
+} from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Virtual } from "swiper/modules";
@@ -24,10 +30,12 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import "swiper/css/autoplay";
 import ButtonNavigation from "../../../components/buttonNavigation";
 import { Button } from "antd/es/radio";
 import { getAllBanner } from "../../../slices/bannerSlice";
 import MenuFooter from "../../../components/MenuFooter";
+import Label from "../../../components/label";
 
 function ProductScreen() {
   const { products, error } = useAppSelector((state) => state.products);
@@ -101,7 +109,10 @@ function ProductScreen() {
           <Row>
             <Col span={24}>
               <Swiper
-                modules={[Navigation, Pagination, Scrollbar, A11y]}
+                autoplay={{
+                  delay: 2000,
+                }}
+                modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
                 breakpoints={{
                   1200: {
                     spaceBetween: 18,
@@ -126,13 +137,7 @@ function ProductScreen() {
                   banners.map((banner) => (
                     <>
                       <SwiperSlide>
-                        <Link
-                          // onClick={(e) => {
-                          //   handleSearchMenu(brand.categoryId, brand._id);
-                          // }}
-                          to={`/`}
-                          className={clsx(style.wrapper)}
-                        >
+                        <Link to={`/`} className={clsx(style.wrapper)}>
                           <img
                             src={banner.pic}
                             className={clsx(style.content_img_banner)}
@@ -206,7 +211,7 @@ function ProductScreen() {
                               <Flex
                                 vertical
                                 justify="space-between"
-                                style={{ padding: "20px" }}
+                                style={{ padding: "50px 20px 20px 20px" }}
                               >
                                 <Space className={clsx(style.header_text)}>
                                   {product.name}
@@ -251,6 +256,9 @@ function ProductScreen() {
                                 )}
                               </Flex>
                             </Flex>
+                            <Space className={clsx(style.label_wrapper)}>
+                              <Label title={product.category.name} />
+                            </Space>
                           </Link>
                         </Col>
                       );
@@ -303,12 +311,16 @@ function ProductScreen() {
                   },
                 }}
               >
-                <Flex
-                  justify="space-between"
-                  className={clsx(style.customSwiper_child)}
-                >
-                  <ButtonNavigation />
-                </Flex>
+                {brands.length > 5 ? (
+                  <Flex
+                    justify="space-between"
+                    className={clsx(style.customSwiper_child)}
+                  >
+                    <ButtonNavigation />
+                  </Flex>
+                ) : (
+                  <></>
+                )}
 
                 {brands ? (
                   brands.map((brand) => (
@@ -520,14 +532,10 @@ function ProductScreen() {
                 autoHeight={true}
                 breakpoints={{
                   1200: {
-                    // freeMode: true,
-                    // grabCursor: true,
                     spaceBetween: 0,
                     slidesPerView: 10,
                   },
                   0: {
-                    // freeMode: true,
-                    // grabCursor: true,
                     spaceBetween: 0,
                     slidesPerView: 3,
                   },
@@ -650,7 +658,7 @@ function ProductScreen() {
                 modules={[Navigation, Pagination, Scrollbar, A11y]}
                 breakpoints={{
                   1200: {
-                    spaceBetween: 18,
+                    spaceBetween: 14,
                     slidesPerView: 6,
                   },
                   0: {
@@ -713,7 +721,7 @@ function ProductScreen() {
                                 <Flex
                                   vertical
                                   justify="space-between"
-                                  style={{ padding: "20px" }}
+                                  style={{ padding: "50px 20px 20px 20px" }}
                                 >
                                   <Space className={clsx(style.header_text)}>
                                     {product.name}
@@ -760,6 +768,9 @@ function ProductScreen() {
                                   )}
                                 </Flex>
                               </Flex>
+                              <Space className={clsx(style.label_wrapper)}>
+                                <Label title={product.category.name} />
+                              </Space>
                             </Link>
                           </SwiperSlide>
                         </>
@@ -857,7 +868,7 @@ function ProductScreen() {
                               <Flex
                                 vertical
                                 justify="space-between"
-                                style={{ padding: "20px" }}
+                                style={{ padding: "50px 20px 20px 20px" }}
                               >
                                 <Space className={clsx(style.header_text)}>
                                   {product.name}
@@ -877,6 +888,9 @@ function ProductScreen() {
                                 )}
                               </Flex>
                             </Flex>
+                            <Space className={clsx(style.label_wrapper)}>
+                              <Label title={product.category.name} />
+                            </Space>
                           </Link>
                         </Col>
                       );
@@ -892,146 +906,161 @@ function ProductScreen() {
         </div>
       </div>
 
-      <div
-        style={{
-          background: "#eaeffa",
-        }}
-      >
-        <div className={clsx(style.wrapper_global)}>
-          {" "}
-          {/* sản phẩm vừa xem  */}
-          <Row>
-            <Col span={24}>
-              <Flex align="center" className={clsx(style.title_product_relate)}>
-                <img
-                  className={clsx(style.icon_header)}
-                  src="https://nhathuoclongchau.com.vn/estore-images/icon-service/recently-product-watched-icon.svg"
-                  alt=""
-                />
-                Sản phẩm vừa xem
-              </Flex>
-
-              <Swiper
-                modules={[Navigation, Pagination, Scrollbar, A11y]}
-                breakpoints={{
-                  1200: {
-                    spaceBetween: 18,
-                    slidesPerView: 6,
-                  },
-                  0: {
-                    spaceBetween: 12,
-                    slidesPerView: 2,
-                  },
-                }}
-                style={{ backgroundColor: "#eaeffa" }}
-              >
+      {/* sản phẩm vừa xem  */}
+      {histories ? (
+        <div
+          style={{
+            background: "#eaeffa",
+          }}
+        >
+          <div className={clsx(style.wrapper_global)}>
+            <Row>
+              <Col span={24}>
                 <Flex
-                  justify="space-between"
-                  className={clsx(style.customSwiper_child)}
+                  align="center"
+                  className={clsx(style.title_product_relate)}
                 >
-                  <ButtonNavigation />
+                  <img
+                    className={clsx(style.icon_header)}
+                    src="https://nhathuoclongchau.com.vn/estore-images/icon-service/recently-product-watched-icon.svg"
+                    alt=""
+                  />
+                  Sản phẩm vừa xem
                 </Flex>
 
-                {products ? (
-                  products.map((product) => {
-                    if (histories.includes(product._id)) {
-                      return (
-                        <>
-                          <SwiperSlide>
-                            <Link
-                              onClick={() =>
-                                handleDetail(product._id, product.categoryId)
-                              }
-                              to={`/sanpham/${product.slug}`}
-                              className={clsx(style.wrapper)}
-                            >
-                              <Flex className={clsx(style.content)} vertical>
-                                <Space className={clsx(style.content_discount)}>
-                                  <Discount
-                                    discount={product.discount}
-                                  ></Discount>
-                                </Space>
+                <Swiper
+                  modules={[Navigation, Pagination, Scrollbar, A11y]}
+                  breakpoints={{
+                    1200: {
+                      spaceBetween: 14,
+                      slidesPerView: 6,
+                    },
+                    0: {
+                      spaceBetween: 12,
+                      slidesPerView: 2,
+                    },
+                  }}
+                  style={{ backgroundColor: "#eaeffa" }}
+                >
+                  {histories.length > 6 ? (
+                    <Flex
+                      justify="space-between"
+                      className={clsx(style.customSwiper_child)}
+                    >
+                      <ButtonNavigation />
+                    </Flex>
+                  ) : (
+                    <></>
+                  )}
 
-                                <Flex justify="center">
-                                  <img
-                                    src={product.pic}
-                                    className={clsx(style.content_img)}
-                                    alt=""
-                                  />
-                                </Flex>
-                                <Flex
-                                  vertical
-                                  justify="space-between"
-                                  style={{ padding: "20px" }}
-                                >
-                                  <Space className={clsx(style.header_text)}>
-                                    {product.name}
-                                  </Space>
+                  {products ? (
+                    products.map((product) => {
+                      if (histories.includes(product._id)) {
+                        return (
+                          <>
+                            <SwiperSlide>
+                              <Link
+                                onClick={() =>
+                                  handleDetail(product._id, product.categoryId)
+                                }
+                                to={`/sanpham/${product.slug}`}
+                                className={clsx(style.wrapper)}
+                              >
+                                <Flex className={clsx(style.content)} vertical>
                                   <Space
-                                    className={clsx(style.header_discount)}
+                                    className={clsx(style.content_discount)}
                                   >
-                                    {product && product?.discount > 0 ? (
-                                      <>
-                                        <Space>
-                                          <div>
-                                            {numeral(product?.total).format(
-                                              "0,0$"
-                                            )}
-                                            <span style={{ margin: "0 2px" }}>
-                                              &#47;
-                                            </span>
-                                            {product.unit}
-                                          </div>
-                                        </Space>
-                                        <Space>
-                                          {/* <del>
+                                    <Discount
+                                      discount={product.discount}
+                                    ></Discount>
+                                  </Space>
+
+                                  <Flex justify="center">
+                                    <img
+                                      src={product.pic}
+                                      className={clsx(style.content_img)}
+                                      alt=""
+                                    />
+                                  </Flex>
+                                  <Flex
+                                    vertical
+                                    justify="space-between"
+                                    style={{ padding: " 50px 20px 20px 20px" }}
+                                  >
+                                    <Space className={clsx(style.header_text)}>
+                                      {product.name}
+                                    </Space>
+                                    <Space
+                                      className={clsx(style.header_discount)}
+                                    >
+                                      {product && product?.discount > 0 ? (
+                                        <>
+                                          <Space>
+                                            <div>
+                                              {numeral(product?.total).format(
+                                                "0,0$"
+                                              )}
+                                              <span style={{ margin: "0 2px" }}>
+                                                &#47;
+                                              </span>
+                                              {product.unit}
+                                            </div>
+                                          </Space>
+                                          <Space>
+                                            {/* <del>
                             {numeral(product?.price).format("$0,0")}
                           </del> */}
-                                        </Space>
-                                      </>
+                                          </Space>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <Space>
+                                            <div>
+                                              {numeral(product?.price).format(
+                                                "0,0$"
+                                              )}
+                                              <span style={{ margin: "0 2px" }}>
+                                                &#47;
+                                              </span>
+                                              {product?.unit}
+                                            </div>
+                                          </Space>
+                                        </>
+                                      )}
+                                    </Space>
+                                    {product && product?.discount > 0 ? (
+                                      <del className={clsx(style.header_price)}>
+                                        {numeral(product.price).format("0,0$")}
+                                      </del>
                                     ) : (
-                                      <>
-                                        <Space>
-                                          <div>
-                                            {numeral(product?.price).format(
-                                              "0,0$"
-                                            )}
-                                            <span style={{ margin: "0 2px" }}>
-                                              &#47;
-                                            </span>
-                                            {product?.unit}
-                                          </div>
-                                        </Space>
-                                      </>
+                                      <></>
                                     )}
-                                  </Space>
-                                  {product && product?.discount > 0 ? (
-                                    <del className={clsx(style.header_price)}>
-                                      {numeral(product.price).format("0,0$")}
-                                    </del>
-                                  ) : (
-                                    <></>
-                                  )}
+                                  </Flex>
                                 </Flex>
-                              </Flex>
-                            </Link>
-                          </SwiperSlide>
-                        </>
-                      );
-                    }
-                  })
-                ) : (
-                  <SwiperSlide>
-                    <Col xs={24} sm={24} style={{ marginBottom: "25px" }}>
-                      <Empty />
-                    </Col>
-                  </SwiperSlide>
-                )}
-              </Swiper>
-            </Col>
-          </Row>
+                                <Space className={clsx(style.label_wrapper)}>
+                                  <Label title={product.category.name} />
+                                </Space>
+                              </Link>
+                            </SwiperSlide>
+                          </>
+                        );
+                      }
+                    })
+                  ) : (
+                    <SwiperSlide>
+                      <Col xs={24} sm={24} style={{ marginBottom: "25px" }}>
+                        <Empty />
+                      </Col>
+                    </SwiperSlide>
+                  )}
+                </Swiper>
+              </Col>
+            </Row>
+          </div>
         </div>
-      </div>
+      ) : (
+        <></>
+      )}
 
       <Row>
         <Col xs={24} sm={0}>

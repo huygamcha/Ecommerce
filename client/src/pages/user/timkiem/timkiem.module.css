@@ -2,6 +2,24 @@
   text-decoration: none;
   color: #000;
 }
+.label_wrapper {
+  position: absolute;
+  top: 57%;
+  left: 3.5%;
+}
+
+.label_wrapper::before {
+  content: '';
+  position: absolute;
+  left: -2%;
+  top: -20%;
+  height: 25px; /* Độ rộng mong muốn của border-left */
+  width:  3px; /* Độ rộng mong muốn của border-left */
+  background-color: #eff0f3; /* Màu sắc của border-left */
+}
+.wrapper:hover .label_wrapper::before{
+  display: none;
+}
 .wrapper:hover {
   text-decoration: none;
   color: #000;
@@ -48,7 +66,7 @@
   background: #fff;
   border-radius: 10px;
   padding: 14px 0px;
-  height: 260px;
+  height: 280px;
   position: relative;
   border: 1px solid #fff;
 }
@@ -88,7 +106,7 @@
 }
 
 .header_discount {
-  margin-top: 14px;
+  margin-top: 8px;
   color: #1250dc;
   font-weight: 600;
   font-size: 14px;
@@ -163,6 +181,10 @@
   transition: max-height 0.3s linear;
 }
 
+.customPB {
+  margin-bottom: 14px;
+}
+
 
 /* Thiết lập padding cho xs */
 @media (max-width: 575.98px) {
@@ -170,6 +192,9 @@
     background-color: #edf0f3;
     padding: 10px;
     margin: 0px !important;
+  }
+  .customPB{
+    margin-bottom: 7px;
   }
 }
 

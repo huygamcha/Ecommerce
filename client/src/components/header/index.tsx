@@ -100,6 +100,8 @@ function HeaderScreen() {
   const [categoryActive, setCategoryActive] = useState<string>("");
   // thông báo về mua sản phẩm
   const [show, setShow] = useState(false);
+  // xác định chiều dài để thu gọn header mobile
+  const [headerShowMobile, setHeaderShowMobile] = useState<boolean>(false);
 
   //  ẩn hiện thi click ra ngoài
   const ref = useOutsideClick(() => {
@@ -195,8 +197,28 @@ function HeaderScreen() {
       };
     }, [ref]);
   }
+
+  // kiểm tra chiều dài để hiển thị header
+  useEffect(() => {
+    function handleScrollHeader() {
+      console.log("««««« window »»»»»", window.scrollY);
+      if (window.scrollY > 200) {
+        setHeaderShowMobile(true);
+      } else {
+        setHeaderShowMobile(false);
+      }
+    }
+
+    document.addEventListener("scroll", handleScrollHeader);
+    return () => {
+      document.removeEventListener("scroll", handleScrollHeader);
+    };
+  });
+  // khi bấm ra ngoài thanh kết quả sẽ tắt
   const wrapperRef = useRef(null);
+  // khi bấm ra ngoài thanh menu phụ sẽ tắt
   const menuMobileRef = useRef(null);
+  // khi scroll
   useOutsideAlerter(wrapperRef);
   useOutsideAlerter(menuMobileRef);
 
@@ -211,15 +233,222 @@ function HeaderScreen() {
         }}
       >
         <Row justify="end" className={clsx(style.wrapper_try)}>
-          {/* mobile */}
-          <Col xs={2} sm={0}>
-            <Space>
-              <FaBars
-                onClick={() => setIsOpen(!isOpen)}
-                className={clsx(style.button_icon)}
-              />
-            </Space>
-          </Col>
+          {!headerShowMobile ? (
+            <Col span={24}>
+              <Row>
+                <Col xs={2} sm={0}>
+                  <Space>
+                    <FaBars
+                      onClick={() => setIsOpen(!isOpen)}
+                      className={clsx(style.button_icon)}
+                    />
+                  </Space>
+                </Col>
+                <Col xs={20} sm={0}>
+                  <Link to="/" className={clsx(style.header_text)}>
+                    <img
+                      src="https://cms-prod.s3-sgn09.fptcloud.com/smalls/Logo_LC_Default_2e36f42b6b.svg"
+                      alt=""
+                    />
+                  </Link>
+                </Col>
+                <Col xs={2} sm={0}>
+                  <Link
+                    onClick={handleCart}
+                    className={clsx(style.button_header_text)}
+                    to="/cart"
+                    style={{ display: "flex", justifyContent: "end" }}
+                  >
+                    <Badge
+                      className={clsx(style.customFA)}
+                      dot={show}
+                      status="warning"
+                    >
+                      <FaCartShopping className={clsx(style.button_icon)} />
+                    </Badge>
+                  </Link>
+                </Col>
+                <Col xs={24} sm={0}>
+                  <Flex>
+                    <Input
+                      type="text"
+                      value={search}
+                      onChange={handleSearch}
+                      className={clsx(style.header_search_input)}
+                      placeholder="Tìm kiếm sản phẩm"
+                      onFocus={handleSearch}
+                    ></Input>
+
+                    <div className={clsx(style.header_search_icon_search)}>
+                      <SearchOutlined />
+                    </div>
+                    <div
+                      onClick={() => {
+                        setSearch("");
+                        setIsList(false);
+                      }}
+                      className={clsx(style.header_search_icon_delete)}
+                    >
+                      {search ? <TiDelete /> : <></>}
+                    </div>
+                    {/* search result */}
+                    <Space
+                      ref={wrapperRef}
+                      className={clsx(style.header_search_result, style.active)}
+                    >
+                      {isList && productsSearch ? (
+                        productsSearch.map((product) => (
+                          <Link
+                            className={clsx(style.header_search_items)}
+                            to={`/sanpham/${product.slug}`}
+                            onClick={() => handleDetail(product._id)}
+                          >
+                            <Flex>
+                              <Space style={{ marginRight: "10px" }}>
+                                <Image
+                                  className={clsx(
+                                    style.header_search_items_img
+                                  )}
+                                  src={product?.pic}
+                                ></Image>
+                              </Space>
+                              <Flex vertical>
+                                <Space
+                                  style={{
+                                    fontSize: "16px",
+                                    lineHeight: "24px",
+                                  }}
+                                >
+                                  {product.name}
+                                </Space>
+                                <Space style={{ fontWeight: "bold" }}>
+                                  <div>
+                                    {" "}
+                                    {numeral(product.total).format(
+                                      "0,0$"
+                                    )} / {product.unit}
+                                  </div>
+                                </Space>
+                              </Flex>
+                            </Flex>
+                          </Link>
+                        ))
+                      ) : (
+                        <></>
+                      )}
+                    </Space>
+                  </Flex>
+                </Col>
+              </Row>
+            </Col>
+          ) : (
+            <Col
+              style={{
+                transition: "1s linear",
+                scrollBehavior: "smooth",
+              }}
+              span={24}
+            >
+              <Row>
+                <Col xs={2} sm={0}>
+                  <Space>
+                    <FaBars
+                      onClick={() => setIsOpen(!isOpen)}
+                      className={clsx(style.button_icon)}
+                    />
+                  </Space>
+                </Col>
+                <Col xs={20} sm={0}>
+                  <Flex>
+                    <Input
+                      type="text"
+                      value={search}
+                      onChange={handleSearch}
+                      className={clsx(style.header_search_input)}
+                      placeholder="Tìm kiếm sản phẩm"
+                      onFocus={handleSearch}
+                    ></Input>
+
+                    <div className={clsx(style.header_search_icon_search)}>
+                      <SearchOutlined />
+                    </div>
+                    <div
+                      onClick={() => {
+                        setSearch("");
+                        setIsList(false);
+                      }}
+                      className={clsx(style.header_search_icon_delete)}
+                    >
+                      {search ? <TiDelete /> : <></>}
+                    </div>
+                    {/* search result */}
+                    <Space
+                      ref={wrapperRef}
+                      className={clsx(style.header_search_result, style.active)}
+                    >
+                      {isList && productsSearch ? (
+                        productsSearch.map((product) => (
+                          <Link
+                            className={clsx(style.header_search_items)}
+                            to={`/sanpham/${product.slug}`}
+                            onClick={() => handleDetail(product._id)}
+                          >
+                            <Flex>
+                              <Space style={{ marginRight: "10px" }}>
+                                <Image
+                                  className={clsx(
+                                    style.header_search_items_img
+                                  )}
+                                  src={product?.pic}
+                                ></Image>
+                              </Space>
+                              <Flex vertical>
+                                <Space
+                                  style={{
+                                    fontSize: "16px",
+                                    lineHeight: "24px",
+                                  }}
+                                >
+                                  {product.name}
+                                </Space>
+                                <Space style={{ fontWeight: "bold" }}>
+                                  <div>
+                                    {" "}
+                                    {numeral(product.total).format(
+                                      "0,0$"
+                                    )} / {product.unit}
+                                  </div>
+                                </Space>
+                              </Flex>
+                            </Flex>
+                          </Link>
+                        ))
+                      ) : (
+                        <></>
+                      )}
+                    </Space>
+                  </Flex>
+                </Col>
+                <Col xs={2} sm={0}>
+                  <Link
+                    onClick={handleCart}
+                    className={clsx(style.button_header_text)}
+                    to="/cart"
+                    style={{ display: "flex", justifyContent: "end" }}
+                  >
+                    <Badge
+                      className={clsx(style.customFA)}
+                      dot={show}
+                      status="warning"
+                    >
+                      <FaCartShopping className={clsx(style.button_icon)} />
+                    </Badge>
+                  </Link>
+                </Col>
+              </Row>
+            </Col>
+          )}
+
           <Col xs={0} sm={2} md={2} lg={5}>
             <Link to="/" className={clsx(style.header_text)}>
               <img
@@ -228,7 +457,7 @@ function HeaderScreen() {
               />
             </Link>
           </Col>
-          <Col xs={20} sm={14} md={13} lg={13}>
+          <Col xs={0} sm={14} md={13} lg={13}>
             <Flex>
               <Input
                 type="text"
@@ -367,23 +596,6 @@ function HeaderScreen() {
                 </Link>
               </Space>
             </Flex>
-          </Col>
-
-          <Col xs={2} sm={0}>
-            <Link
-              onClick={handleCart}
-              className={clsx(style.button_header_text)}
-              to="/cart"
-              style={{ display: "flex", justifyContent: "end" }}
-            >
-              <Badge
-                className={clsx(style.customFA)}
-                dot={show}
-                status="warning"
-              >
-                <FaCartShopping className={clsx(style.button_icon)} />
-              </Badge>
-            </Link>
           </Col>
 
           {/* open mobile */}

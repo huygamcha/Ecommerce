@@ -119,7 +119,7 @@ module.exports = {
   getMe: async (req, res, next) => {
     try {
       res.status(200).json({
-        message: "Layas thoong tin thanfh coong",
+        message: "Lấy thông tin thành công",
         payload: req.user,
       });
     } catch (err) {

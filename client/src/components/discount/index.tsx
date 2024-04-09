@@ -5,10 +5,16 @@ import clsx from "clsx";
 
 function Discount({ discount, font }: any) {
   return (
-    <span style={{ fontSize: `${font}px` }} className={clsx(style.wrapper)}>
-      <span>-{discount}</span>
-      <span>%</span>
-    </span>
+    <>
+      {discount ? (
+        <span style={{ fontSize: `${font}px` }} className={clsx(style.wrapper)}>
+          <span>-{discount}</span>
+          <span>%</span>
+        </span>
+      ) : (
+        <></>
+      )}
+    </>
   );
 }
 

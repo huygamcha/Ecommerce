@@ -15,6 +15,7 @@ import { getAllBrand } from "../../../slices/brandSlice";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { LuAlignCenter } from "react-icons/lu";
 import MenuFooter from "../../../components/MenuFooter";
+import Label from "../../../components/label";
 function Timkiem() {
   const filter = localStorage.getItem("filter")
     ? JSON.parse(localStorage.getItem("filter")!)
@@ -577,16 +578,14 @@ function Timkiem() {
                 </Space>
               </Col>
               <Col xs={24} sm={24}>
-                <Row gutter={[12, 2]}>
+                <Row gutter={{ xs: 7, sm: 14 }}>
                   {productsSearch ? (
                     productsSearch.map((product) => (
                       <Col
                         xs={12}
                         md={12}
                         lg={6}
-                        style={{
-                          paddingBottom: "10px",
-                        }}
+                        className={clsx(style.customPB)}
                       >
                         <Link
                           onClick={() =>
@@ -610,7 +609,7 @@ function Timkiem() {
                             <Flex
                               vertical
                               justify="space-between"
-                              style={{ padding: "20px" }}
+                              style={{ padding: "45px 20px 20px 20px" }}
                             >
                               <Space className={clsx(style.header_text)}>
                                 {product.name}
@@ -630,6 +629,9 @@ function Timkiem() {
                               )}
                             </Flex>
                           </Flex>
+                          <Space className={clsx(style.label_wrapper)}>
+                            <Label title={product.category.name} />
+                          </Space>
                         </Link>
                       </Col>
                     ))
@@ -645,9 +647,12 @@ function Timkiem() {
           </Col>
         </Row>
       </div>
-      <div>
-        <MenuFooter />
-      </div>
+
+      <Row>
+        <Col xs={24} sm={0}>
+          <MenuFooter />
+        </Col>
+      </Row>
     </>
   );
 }

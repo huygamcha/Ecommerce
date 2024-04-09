@@ -8,6 +8,12 @@
   border-radius: 10px;
   padding: 8px 16px;
 }
+.wrapper_right{
+  margin-left: 5px;
+}
+.wrapper_left{
+  margin-right: 5px;
+}
 
 
 .wrapper_detail {
@@ -353,6 +359,15 @@
     line-height: 24px;
     color: #4a4f63;
     display: flex;
+  }
+  .wrapper_global {
+    width: 100%;
+  }
+  .wrapper_right{
+    margin-left: 0px;
+  }
+  .wrapper_left{
+    margin-right: 0px;
   }
 }
 

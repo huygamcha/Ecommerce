@@ -28,6 +28,7 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import Discount from "../../../components/discount";
 import ButtonNavigation from "../../../components/buttonNavigation";
+import Label from "../../../components/label";
 
 function ProductDetail() {
   const param = useParams();
@@ -692,12 +693,16 @@ function ProductDetail() {
                     }}
                     style={{ backgroundColor: "#edf0f3" }}
                   >
-                    <Flex
-                      justify="space-between"
-                      className={clsx(style.customSwiper_child)}
-                    >
-                      <ButtonNavigation />
-                    </Flex>
+                    {productsSearch.length > 6 ? (
+                      <Flex
+                        justify="space-between"
+                        className={clsx(style.customSwiper_child)}
+                      >
+                        <ButtonNavigation />
+                      </Flex>
+                    ) : (
+                      <></>
+                    )}
 
                     {productsSearch ? (
                       productsSearch.map((product) => {
@@ -737,7 +742,7 @@ function ProductDetail() {
                                     <Flex
                                       vertical
                                       justify="space-between"
-                                      style={{ padding: "20px" }}
+                                      style={{ padding: "50px 20px 20px 20px" }}
                                     >
                                       <Space
                                         className={clsx(style.header_text)}
@@ -799,6 +804,9 @@ function ProductDetail() {
                                       )}
                                     </Flex>
                                   </Flex>
+                                  <Space className={clsx(style.label_wrapper)}>
+                                    <Label title={product.category.name} />
+                                  </Space>
                                 </Link>
                               </SwiperSlide>
                             </>

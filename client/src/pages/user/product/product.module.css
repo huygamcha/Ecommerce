@@ -1,6 +1,26 @@
 .wrapper {
   text-decoration: none;
   color: #000;
+  position: relative;
+}
+
+.label_wrapper {
+  position: absolute;
+  top: 60%;
+  left: 0.6%;
+}
+
+.label_wrapper::before {
+  content: '';
+  position: absolute;
+  left: -1.5%;
+  top: -20%;
+  height: 25px; /* Độ rộng mong muốn của border-left */
+  width:  2px; /* Độ rộng mong muốn của border-left */
+  background-color: #eff0f3; /* Màu sắc của border-left */
+}
+.wrapper:hover .label_wrapper::before{
+  display: none;
 }
 
 .wrapper:hover {
@@ -13,7 +33,7 @@
   border-radius: 10px;
   padding: 14px 0px;
   margin-top: 14px;
-  height: 260px;
+  height: 280px;
   position: relative;
   border: 1px solid #fff;
 }
@@ -25,7 +45,7 @@
 
 .content_brand {
   background: #fff;
-  border-radius: 10px;
+  /* border-radius: 10px; */
   padding: 14px 0px;
   /* height: 260px; */
   position: relative;
@@ -50,7 +70,7 @@
   position: absolute;
   content: "";
   display: block;
-  top: 8px;
+  top: 7px;
   width: 50px;
 }
 
@@ -78,7 +98,7 @@
 }
 
 .header_text {
-  max-width: 140px;
+  max-width: 150px;
   font-size: 14px;
   font-weight: 600;
   line-height: 16px;
@@ -713,6 +733,9 @@
   }
   .buy_wrapper_mobile{
     /* background: #3a73e4; */
+  }
+  .content_brand{
+    border-radius: 10px;
   }
 }
 

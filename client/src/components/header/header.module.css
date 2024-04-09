@@ -39,7 +39,6 @@
   color: #000;
   text-decoration: none;
   color: #000;
-
   transition: 0.2s linear;
 }
 
@@ -432,6 +431,13 @@
     padding: 8px 16px;
     position: fixed;
   }
+  /* .wrapper_try_mobile{
+    transition: 5s linear;
+    display: none;
+  }
+  .wrapper_try_mobile.active{
+    display: block;
+  } */
 
   .button_background_mobile {
     background-color: none;
