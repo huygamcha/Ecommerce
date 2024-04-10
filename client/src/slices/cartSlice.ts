@@ -12,7 +12,9 @@ interface CartType {
   total: number;
   discount: number;
   unit: string;
+  slug: string;
   check: boolean;
+  categoryId: string;
 }
 
 interface InitialType {

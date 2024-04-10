@@ -234,8 +234,13 @@ function HeaderScreen() {
       >
         <Row justify="end" className={clsx(style.wrapper_try)}>
           {!headerShowMobile ? (
-            <Col span={24}>
-              <Row>
+            <Col
+              style={{
+                transition: ".3s linear",
+              }}
+              span={24}
+            >
+              <Row style={{ display: "flex", alignItems: "center" }}>
                 <Col xs={2} sm={0}>
                   <Space>
                     <FaBars
@@ -342,108 +347,115 @@ function HeaderScreen() {
               </Row>
             </Col>
           ) : (
-            <Col
-              style={{
-                transition: "1s linear",
-                scrollBehavior: "smooth",
-              }}
-              span={24}
-            >
+            <Col span={24}>
               <Row>
-                <Col xs={2} sm={0}>
-                  <Space>
-                    <FaBars
-                      onClick={() => setIsOpen(!isOpen)}
-                      className={clsx(style.button_icon)}
-                    />
-                  </Space>
-                </Col>
-                <Col xs={20} sm={0}>
-                  <Flex>
-                    <Input
-                      type="text"
-                      value={search}
-                      onChange={handleSearch}
-                      className={clsx(style.header_search_input)}
-                      placeholder="Tìm kiếm sản phẩm"
-                      onFocus={handleSearch}
-                    ></Input>
+                <Col
+                  style={{
+                    transition: ".3s linear",
+                  }}
+                  span={24}
+                >
+                  <Row style={{ display: "flex", alignItems: "center" }}>
+                    <Col xs={2} sm={0}>
+                      <Space>
+                        <FaBars
+                          onClick={() => setIsOpen(!isOpen)}
+                          className={clsx(style.button_icon)}
+                        />
+                      </Space>
+                    </Col>
+                    <Col xs={20} sm={0}>
+                      <Flex>
+                        <Input
+                          type="text"
+                          value={search}
+                          onChange={handleSearch}
+                          className={clsx(style.header_search_input)}
+                          placeholder="Tìm kiếm sản phẩm"
+                          onFocus={handleSearch}
+                        ></Input>
 
-                    <div className={clsx(style.header_search_icon_search)}>
-                      <SearchOutlined />
-                    </div>
-                    <div
-                      onClick={() => {
-                        setSearch("");
-                        setIsList(false);
-                      }}
-                      className={clsx(style.header_search_icon_delete)}
-                    >
-                      {search ? <TiDelete /> : <></>}
-                    </div>
-                    {/* search result */}
-                    <Space
-                      ref={wrapperRef}
-                      className={clsx(style.header_search_result, style.active)}
-                    >
-                      {isList && productsSearch ? (
-                        productsSearch.map((product) => (
-                          <Link
-                            className={clsx(style.header_search_items)}
-                            to={`/sanpham/${product.slug}`}
-                            onClick={() => handleDetail(product._id)}
-                          >
-                            <Flex>
-                              <Space style={{ marginRight: "10px" }}>
-                                <Image
-                                  className={clsx(
-                                    style.header_search_items_img
-                                  )}
-                                  src={product?.pic}
-                                ></Image>
-                              </Space>
-                              <Flex vertical>
-                                <Space
-                                  style={{
-                                    fontSize: "16px",
-                                    lineHeight: "24px",
-                                  }}
-                                >
-                                  {product.name}
-                                </Space>
-                                <Space style={{ fontWeight: "bold" }}>
-                                  <div>
-                                    {" "}
-                                    {numeral(product.total).format(
-                                      "0,0$"
-                                    )} / {product.unit}
-                                  </div>
-                                </Space>
-                              </Flex>
-                            </Flex>
-                          </Link>
-                        ))
-                      ) : (
-                        <></>
-                      )}
-                    </Space>
-                  </Flex>
-                </Col>
-                <Col xs={2} sm={0}>
-                  <Link
-                    onClick={handleCart}
-                    className={clsx(style.button_header_text)}
-                    to="/cart"
-                    style={{ display: "flex", justifyContent: "end" }}
-                  >
-                    <Badge
-                      className={clsx(style.customFA)}
-                      dot={show}
-                      status="warning"
-                    >
-                      <FaCartShopping className={clsx(style.button_icon)} />
-                    </Badge>
-                  </Link>
+                        <div className={clsx(style.header_search_icon_search)}>
+                          <SearchOutlined />
+                        </div>
+                        <div
+                          onClick={() => {
+                            setSearch("");
+                            setIsList(false);
+                          }}
+                          className={clsx(style.header_search_icon_delete)}
+                        >
+                          {search ? <TiDelete /> : <></>}
+                        </div>
+                        {/* search result */}
+                        <Space
+                          ref={wrapperRef}
+                          className={clsx(
+                            style.header_search_result,
+                            style.active
+                          )}
+                        >
+                          {isList && productsSearch ? (
+                            productsSearch.map((product) => (
+                              <Link
+                                className={clsx(style.header_search_items)}
+                                to={`/sanpham/${product.slug}`}
+                                onClick={() => handleDetail(product._id)}
+                              >
+                                <Flex>
+                                  <Space style={{ marginRight: "10px" }}>
+                                    <Image
+                                      className={clsx(
+                                        style.header_search_items_img
+                                      )}
+                                      src={product?.pic}
+                                    ></Image>
+                                  </Space>
+                                  <Flex vertical>
+                                    <Space
+                                      style={{
+                                        fontSize: "16px",
+                                        lineHeight: "24px",
+                                      }}
+                                    >
+                                      {product.name}
+                                    </Space>
+                                    <Space style={{ fontWeight: "bold" }}>
+                                      <div>
+                                        {" "}
+                                        {numeral(product.total).format(
+                                          "0,0$"
+                                        )}{" "}
+                                        / {product.unit}
+                                      </div>
+                                    </Space>
+                                  </Flex>
+                                </Flex>
+                              </Link>
+                            ))
+                          ) : (
+                            <></>
+                          )}
+                        </Space>
+                      </Flex>
+                    </Col>
+                    <Col xs={2} sm={0}>
+                      <Link
+                        onClick={handleCart}
+                        className={clsx(style.button_header_text)}
+                        to="/cart"
+                        style={{ display: "flex", justifyContent: "end" }}
+                      >
+                        <Badge
+                          className={clsx(style.customFA)}
+                          dot={show}
+                          status="warning"
+                        >
+                          <FaCartShopping className={clsx(style.button_icon)} />
+                        </Badge>
+                      </Link>
+                    </Col>
+                  </Row>
                 </Col>
               </Row>
             </Col>

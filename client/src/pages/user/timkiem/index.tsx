@@ -51,6 +51,7 @@ function Timkiem() {
     localStorage.setItem("filter", JSON.stringify({ categoryId: categoryId }));
     localStorage.setItem("productId", JSON.stringify(value));
     dispatch(getProductById(value));
+    // lấy các sản phẩm có cùng danh mục, Update bằng cách so sánh với sản phẩm là categoryId
     dispatch(getAllProductSearch({ categoryId: categoryId }));
   };
 

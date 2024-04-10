@@ -5,7 +5,7 @@ import {
   getAllProductSearch,
   getProductById,
 } from "../../../slices/productSlice";
-import { Col, Row, Space, Image, Flex, Empty } from "antd";
+import { Col, Row, Space, Image, Flex, Empty, Breadcrumb } from "antd";
 import numeral from "numeral";
 import style from "./product.module.css";
 import clsx from "clsx";
@@ -84,7 +84,9 @@ function ProductDetail() {
         total: product?.total,
         discount: product?.discount,
         unit: product?.unit,
+        slug: product?.slug,
         check: true,
+        categoryId: product?.categoryId,
       })
     );
   };
@@ -101,6 +103,7 @@ function ProductDetail() {
         total: product?.total,
         discount: product?.discount,
         unit: product?.unit,
+        slug: product?.slug,
         check: true,
       })
     );
@@ -113,6 +116,11 @@ function ProductDetail() {
       JSON.stringify({ brandId: id, categoryId: categoryId })
     );
     dispatch(getAllProductSearch({ brandId: id, categoryId: categoryId }));
+  };
+  // search category
+  const handleSearchCategory = (id: string, name: string) => {
+    localStorage.setItem("filter", JSON.stringify({ categoryId: id }));
+    dispatch(getAllProductSearch({ categoryId: id }));
   };
 
   const handleShowMore = () => {
@@ -144,6 +152,52 @@ function ProductDetail() {
     <>
       <div className={clsx(style.product_background)}>
         <div className={clsx(style.wrapper_global)}>
+          <Row className={clsx(style.wrapper_breadcrumb)}>
+            <Breadcrumb
+              items={[
+                {
+                  title: (
+                    <Link className={clsx(style.button_home)} to={"/"}>
+                      Trang chủ
+                    </Link>
+                  ),
+                },
+                {
+                  title: (
+                    <Link
+                      to={`/timkiem?s=${product?.category.name}`}
+                      className={clsx(style.header_brand, style.button_home)}
+                      onClick={() =>
+                        handleSearchCategory(
+                          product?.category._id,
+                          product?.category.name
+                        )
+                      }
+                    >
+                      {product?.category.name}
+                    </Link>
+                  ),
+                },
+                {
+                  title: (
+                    <Link
+                      to={`/timkiem?s=${product?.brand.name}`}
+                      className={clsx(style.header_brand, style.button_home)}
+                      onClick={() =>
+                        handleSearchBrand(
+                          product?.brand._id,
+                          product?.brand.name,
+                          product?.category._id
+                        )
+                      }
+                    >
+                      {product?.brand.name}
+                    </Link>
+                  ),
+                },
+              ]}
+            />
+          </Row>
           <div className={clsx(style.product_wrapper)}>
             <Row>
               <Col xs={24} sm={10}>
@@ -829,7 +883,7 @@ function ProductDetail() {
         )}
       </div>
 
-      {/* buy */}
+      {/*mobile buy */}
       <Flex className={clsx(style.buy_wrapper_mobile)} justify="space-between">
         <Space>
           <FaFacebookMessenger style={{ color: "#1250dc", fontSize: "30px" }} />

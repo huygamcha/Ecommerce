@@ -15,3 +15,7 @@
   .text{
     color: #000;
   }
+  .text:hover{
+    color: #000;
+    
+  }
