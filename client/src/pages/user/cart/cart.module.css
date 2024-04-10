@@ -60,7 +60,7 @@
 }
 
 .product_name::first-letter {
-  text-transform: uppercase;
+  text-transform: uppercase;;
 }
 
 .product_price_discount {
