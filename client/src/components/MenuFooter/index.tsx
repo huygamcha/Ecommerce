@@ -1,10 +1,6 @@
 import { Flex, Space } from "antd";
 import clsx from "clsx";
-import React from "react";
-import { BiSolidHomeCircle } from "react-icons/bi";
-import { CiMedal } from "react-icons/ci";
 import style from "./MenuFooter.module.css";
-import { FaCartShopping, FaBars } from "react-icons/fa6";
 import { BsCart3 } from "react-icons/bs";
 import { FaRegUserCircle } from "react-icons/fa";
 import { FaHeadphonesSimple } from "react-icons/fa6";

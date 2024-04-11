@@ -4,7 +4,7 @@ import style from "./label.module.css";
 import { Space } from "antd";
 
 function Label({ title }: { title: string }) {
-  return <span className={clsx(style.wrapper)}>{title}</span>;
+  return <div className={clsx(style.wrapper)}>{title}</div>;
 }
 
 export default Label;

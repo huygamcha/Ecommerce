@@ -207,12 +207,20 @@ function CartScreen() {
                                 <Space>Giá thành</Space>
                               </Flex>
                             </Col>
-                            <Col xs={0} sm={8}>
+                            <Col xs={0} sm={4}>
                               <Flex
-                                justify="end"
+                                justify="center"
                                 style={{ marginLeft: "30px" }}
                               >
                                 <Space>Số lượng</Space>
+                              </Flex>
+                            </Col>
+                            <Col xs={0} sm={4}>
+                              <Flex
+                                justify="center"
+                                style={{ marginLeft: "30px" }}
+                              >
+                                <Space>Đơn vị</Space>
                               </Flex>
                             </Col>
                             <Col span={2}></Col>
@@ -318,8 +326,8 @@ function CartScreen() {
                                         style.flex_center,
                                         style.flex_start
                                       )}
-                                      xs={16}
-                                      sm={8}
+                                      xs={8}
+                                      sm={4}
                                     >
                                       <Space
                                         className={clsx(
@@ -368,31 +376,33 @@ function CartScreen() {
                                     </Col>
 
                                     {/* đơn vị */}
-                                    {/* <Col
-                                    className={clsx(style.flex_center)}
-                                    xs={8}
-                                    sm={4}
-                                  >
-                                    <Space className={clsx(style.product_unit)}>
-                                      {cart.unit}
-                                      <DownOutlined />
-                                      <Flex
-                                        className={clsx(
-                                          style.product_unit_child
-                                        )}
+                                    <Col
+                                      className={clsx(style.flex_center)}
+                                      xs={8}
+                                      sm={4}
+                                    >
+                                      <Space
+                                        className={clsx(style.product_unit)}
                                       >
-                                        <Space>
-                                          <CheckCircleOutlined
-                                            className={clsx(
-                                              style.product_unit_img
-                                            )}
-                                          />
-                                          {cart.unit}
-                                        </Space>
-                                        <Space>{cart.price}</Space>
-                                      </Flex>
-                                    </Space>
-                                  </Col> */}
+                                        {cart.unit}
+                                        <DownOutlined />
+                                        <Flex
+                                          className={clsx(
+                                            style.product_unit_child
+                                          )}
+                                        >
+                                          <Space>
+                                            <CheckCircleOutlined
+                                              className={clsx(
+                                                style.product_unit_img
+                                              )}
+                                            />
+                                            {cart.unit}
+                                          </Space>
+                                          <Space>{cart.price}</Space>
+                                        </Flex>
+                                      </Space>
+                                    </Col>
 
                                     <Col
                                       className={clsx(style.flex_center)}

@@ -200,6 +200,9 @@ function ProductScreen() {
                                   discount={product.discount}
                                 ></Discount>
                               </Space>
+                              <Space className={clsx(style.label_wrapper)}>
+                                <Label title={product.category.name} />
+                              </Space>
 
                               <Flex justify="center">
                                 <img
@@ -256,9 +259,6 @@ function ProductScreen() {
                                 )}
                               </Flex>
                             </Flex>
-                            <Space className={clsx(style.label_wrapper)}>
-                              <Label title={product.category.name} />
-                            </Space>
                           </Link>
                         </Col>
                       );
