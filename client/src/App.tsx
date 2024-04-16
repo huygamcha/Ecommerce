@@ -22,6 +22,7 @@ import {
   UserOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
+import { LiaProductHunt } from "react-icons/lia";
 import { Layout, Menu, Button, theme } from "antd";
 import ProductScreen from "./pages/user/product";
 import CartScreen from "./pages/user/cart";
@@ -181,6 +182,16 @@ const router = createBrowserRouter([
           },
         ],
       },
+      {
+        path: "/admin/orders",
+        element: <FooterAdmin />,
+        children: [
+          {
+            path: "/admin/orders/:id",
+            element: <Supplier />,
+          },
+        ],
+      },
     ],
   },
 ]);
@@ -252,6 +263,11 @@ function AdminRouter() {
               key: "/admin/banners",
               icon: <UploadOutlined />,
               label: "Banner",
+            },
+            {
+              key: "/admin/orders",
+              icon: <LiaProductHunt />,
+              label: "Order",
             },
           ]}
         />

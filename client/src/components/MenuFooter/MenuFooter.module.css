@@ -2,7 +2,7 @@
     display: flex;
     position: fixed;
     bottom: 0;
-    z-index: 999;
+    z-index: 9;
     background-color: #fff;
     width: 100% ;
     box-shadow: rgba(0, 39, 102, 0.3) 0px 0px 16px -4px, rgba(0, 39, 102, 0.3) 0px 0px 6px -2px;

@@ -532,11 +532,11 @@ function ProductScreen() {
                 autoHeight={true}
                 breakpoints={{
                   1200: {
-                    spaceBetween: 0,
-                    slidesPerView: 10,
+                    spaceBetween: 10,
+                    slidesPerView: 9,
                   },
                   0: {
-                    spaceBetween: 0,
+                    spaceBetween: 10,
                     slidesPerView: 3,
                   },
                 }}
@@ -547,7 +547,7 @@ function ProductScreen() {
               >
                 <Flex className={clsx(style.filter_select_wrapper)}>
                   <SwiperSlide style={{ width: "auto" }}>
-                    <Space>
+                    <div>
                       <Button
                         style={{
                           borderColor: searchAge === 1 ? " #1250dc" : "#a9b2be",
@@ -557,7 +557,7 @@ function ProductScreen() {
                         className={clsx(style.filter_select)}
                       >
                         Sơ sinh - 1 tuổi
-                        <Space
+                        <div
                           className={clsx(
                             searchAge === 1
                               ? style.filter_label
@@ -567,13 +567,13 @@ function ProductScreen() {
                           <div style={{ display: "none" }}>
                             Sơ sinh - 1 tuổi
                           </div>
-                        </Space>
+                        </div>
                       </Button>
-                    </Space>
+                    </div>
                   </SwiperSlide>
 
                   <SwiperSlide style={{ width: "auto" }}>
-                    <Space>
+                    <div>
                       <Button
                         style={{
                           borderColor: searchAge === 2 ? " #1250dc" : "#a9b2be",
@@ -583,7 +583,7 @@ function ProductScreen() {
                         className={clsx(style.filter_select)}
                       >
                         1 tuổi - 2 tuổi
-                        <Space
+                        <div
                           className={clsx(
                             searchAge === 2
                               ? style.filter_label
@@ -593,13 +593,13 @@ function ProductScreen() {
                           <div style={{ display: "none" }}>
                             Sơ sinh - 1 tuổi
                           </div>
-                        </Space>
+                        </div>
                       </Button>
-                    </Space>
+                    </div>
                   </SwiperSlide>
 
                   <SwiperSlide style={{ width: "auto" }}>
-                    <Space>
+                    <div>
                       <Button
                         style={{
                           borderColor: searchAge === 3 ? " #1250dc" : "#a9b2be",
@@ -609,7 +609,7 @@ function ProductScreen() {
                         className={clsx(style.filter_select)}
                       >
                         2 tuổi - 5 tuổi
-                        <Space
+                        <div
                           className={clsx(
                             searchAge === 3
                               ? style.filter_label
@@ -619,13 +619,13 @@ function ProductScreen() {
                           <div style={{ display: "none" }}>
                             Sơ sinh - 1 tuổi
                           </div>
-                        </Space>
+                        </div>
                       </Button>
-                    </Space>
+                    </div>
                   </SwiperSlide>
 
                   <SwiperSlide style={{ width: "auto" }}>
-                    <Space>
+                    <div>
                       <Button
                         style={{
                           borderColor: searchAge === 4 ? " #1250dc" : "#a9b2be",
@@ -635,7 +635,7 @@ function ProductScreen() {
                         className={clsx(style.filter_select)}
                       >
                         Trên 5 tuổi
-                        <Space
+                        <div
                           className={clsx(
                             searchAge === 4
                               ? style.filter_label
@@ -645,9 +645,9 @@ function ProductScreen() {
                           <div style={{ display: "none" }}>
                             Sơ sinh - 1 tuổi
                           </div>
-                        </Space>
+                        </div>
                       </Button>
-                    </Space>
+                    </div>
                   </SwiperSlide>
                 </Flex>
               </Swiper>
@@ -710,6 +710,9 @@ function ProductScreen() {
                                     discount={product.discount}
                                   ></Discount>
                                 </Space>
+                                <Space className={clsx(style.label_wrapper)}>
+                                  <Label title={product.category.name} />
+                                </Space>
 
                                 <Flex justify="center">
                                   <img
@@ -768,9 +771,6 @@ function ProductScreen() {
                                   )}
                                 </Flex>
                               </Flex>
-                              <Space className={clsx(style.label_wrapper)}>
-                                <Label title={product.category.name} />
-                              </Space>
                             </Link>
                           </SwiperSlide>
                         </>
@@ -857,7 +857,9 @@ function ProductScreen() {
                                   discount={product.discount}
                                 ></Discount>
                               </Space>
-
+                              <Space className={clsx(style.label_wrapper)}>
+                                <Label title={product.category.name} />
+                              </Space>
                               <Flex justify="center">
                                 <img
                                   src={product.pic}
@@ -888,9 +890,6 @@ function ProductScreen() {
                                 )}
                               </Flex>
                             </Flex>
-                            <Space className={clsx(style.label_wrapper)}>
-                              <Label title={product.category.name} />
-                            </Space>
                           </Link>
                         </Col>
                       );
@@ -974,7 +973,9 @@ function ProductScreen() {
                                       discount={product.discount}
                                     ></Discount>
                                   </Space>
-
+                                  <Space className={clsx(style.label_wrapper)}>
+                                    <Label title={product.category.name} />
+                                  </Space>
                                   <Flex justify="center">
                                     <img
                                       src={product.pic}
@@ -1037,9 +1038,6 @@ function ProductScreen() {
                                     )}
                                   </Flex>
                                 </Flex>
-                                <Space className={clsx(style.label_wrapper)}>
-                                  <Label title={product.category.name} />
-                                </Space>
                               </Link>
                             </SwiperSlide>
                           </>

@@ -102,6 +102,10 @@ function HeaderScreen() {
   const [show, setShow] = useState(false);
   // xác định chiều dài để thu gọn header mobile
   const [headerShowMobile, setHeaderShowMobile] = useState<boolean>(false);
+  // set mobile de dung useRef, bởi vì useRef chỉ được sử dụng 1 lần, nên phải ẩn useRef trên pc
+  // đi để cho useRef của mobile được hoạt động trong khi sử dụng hàm useOutsideAlerter
+  //  nếu không có thì bị lỗi ko thẻ chọn sản phẩm trên mobile được
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   //  ẩn hiện thi click ra ngoài
   const ref = useOutsideClick(() => {
@@ -166,6 +170,7 @@ function HeaderScreen() {
   const handleDetail = (value: string) => {
     dispatch(getProductById(value));
     localStorage.setItem("productId", JSON.stringify(value));
+    console.log("««««« value id id »»»»»", value);
     // setSearch("");
   };
 
@@ -186,7 +191,9 @@ function HeaderScreen() {
         console.log("««««« ref.current »»»»»", ref.current);
         console.log("««««« event »»»»»", event.target);
         if (ref.current && !ref.current.contains(event.target)) {
+          // list kết quả search ra được
           setIsList(false);
+          // thanh menu mobile
           setIsOpen(false);
         }
       }
@@ -197,11 +204,12 @@ function HeaderScreen() {
       };
     }, [ref]);
   }
-
   // kiểm tra chiều dài để hiển thị header
   useEffect(() => {
     function handleScrollHeader() {
-      console.log("««««« window »»»»»", window.scrollY);
+      if (window.innerWidth <= 575) {
+        setIsMobile(true);
+      }
       if (window.scrollY > 200) {
         setHeaderShowMobile(true);
       } else {
@@ -214,13 +222,16 @@ function HeaderScreen() {
       document.removeEventListener("scroll", handleScrollHeader);
     };
   });
-  // khi bấm ra ngoài thanh kết quả sẽ tắt
+  // // khi bấm ra ngoài thanh kết quả sẽ tắt
   const wrapperRef = useRef(null);
-  // khi bấm ra ngoài thanh menu phụ sẽ tắt
+  // // khi bấm ra ngoài thanh kết quả sẽ tắt
+  // const wrapperRefMobile = useRef(null);
+  // // // khi bấm ra ngoài thanh menu phụ sẽ  tắt
   const menuMobileRef = useRef(null);
   // khi scroll
   useOutsideAlerter(wrapperRef);
   useOutsideAlerter(menuMobileRef);
+  // useOutsideAlerterMobile(wrapperRefMobile);
 
   return (
     // 5 16 0 3
@@ -233,6 +244,7 @@ function HeaderScreen() {
         }}
       >
         <Row justify="end" className={clsx(style.wrapper_try)}>
+          {/* mobile */}
           {!headerShowMobile ? (
             <Col
               style={{
@@ -287,6 +299,7 @@ function HeaderScreen() {
                     <div className={clsx(style.header_search_icon_search)}>
                       <SearchOutlined />
                     </div>
+
                     <div
                       onClick={() => {
                         setSearch("");
@@ -296,7 +309,8 @@ function HeaderScreen() {
                     >
                       {search ? <TiDelete /> : <></>}
                     </div>
-                    {/* search result */}
+
+                    {/* search result mobile */}
                     <Space
                       ref={wrapperRef}
                       className={clsx(style.header_search_result, style.active)}
@@ -304,6 +318,7 @@ function HeaderScreen() {
                       {isList && productsSearch ? (
                         productsSearch.map((product) => (
                           <Link
+                            // pc
                             className={clsx(style.header_search_items)}
                             to={`/sanpham/${product.slug}`}
                             onClick={() => handleDetail(product._id)}
@@ -318,14 +333,9 @@ function HeaderScreen() {
                                 ></Image>
                               </Space>
                               <Flex vertical>
-                                <Space
-                                  style={{
-                                    fontSize: "16px",
-                                    lineHeight: "24px",
-                                  }}
-                                >
+                                <div className={clsx(style.header_name)}>
                                   {product.name}
-                                </Space>
+                                </div>
                                 <Space style={{ fontWeight: "bold" }}>
                                   <div>
                                     {" "}
@@ -378,6 +388,7 @@ function HeaderScreen() {
                         <div className={clsx(style.header_search_icon_search)}>
                           <SearchOutlined />
                         </div>
+
                         <div
                           onClick={() => {
                             setSearch("");
@@ -387,7 +398,8 @@ function HeaderScreen() {
                         >
                           {search ? <TiDelete /> : <></>}
                         </div>
-                        {/* search result */}
+
+                        {/* search result  mobile*/}
                         <Space
                           ref={wrapperRef}
                           className={clsx(
@@ -398,6 +410,7 @@ function HeaderScreen() {
                           {isList && productsSearch ? (
                             productsSearch.map((product) => (
                               <Link
+                                // pc
                                 className={clsx(style.header_search_items)}
                                 to={`/sanpham/${product.slug}`}
                                 onClick={() => handleDetail(product._id)}
@@ -412,14 +425,9 @@ function HeaderScreen() {
                                     ></Image>
                                   </Space>
                                   <Flex vertical>
-                                    <Space
-                                      style={{
-                                        fontSize: "16px",
-                                        lineHeight: "24px",
-                                      }}
-                                    >
+                                    <div className={clsx(style.header_name)}>
                                       {product.name}
-                                    </Space>
+                                    </div>
                                     <Space style={{ fontWeight: "bold" }}>
                                       <div>
                                         {" "}
@@ -483,6 +491,7 @@ function HeaderScreen() {
               <div className={clsx(style.header_search_icon_search)}>
                 <SearchOutlined />
               </div>
+
               <div
                 onClick={() => {
                   setSearch("");
@@ -492,14 +501,16 @@ function HeaderScreen() {
               >
                 {search ? <TiDelete /> : <></>}
               </div>
-              {/* search result */}
+
+              {/* search result pc */}
               <Space
-                ref={wrapperRef}
+                ref={!isMobile ? wrapperRef : null}
                 className={clsx(style.header_search_result, style.active)}
               >
                 {isList && productsSearch ? (
                   productsSearch.map((product) => (
                     <Link
+                      // pc
                       className={clsx(style.header_search_items)}
                       to={`/sanpham/${product.slug}`}
                       onClick={() => handleDetail(product._id)}
@@ -512,11 +523,9 @@ function HeaderScreen() {
                           ></Image>
                         </Space>
                         <Flex vertical>
-                          <Space
-                            style={{ fontSize: "16px", lineHeight: "24px" }}
-                          >
+                          <div className={clsx(style.header_name)}>
                             {product.name}
-                          </Space>
+                          </div>
                           <Space style={{ fontWeight: "bold" }}>
                             <div>
                               {" "}

@@ -1,6 +1,6 @@
 /* responsive */
 .menu_mobile_wrapper {
-  z-index: 9998;
+  z-index: 999899;
   width: 100%;
   height: 100vh;
   display: block;
@@ -214,7 +214,7 @@
   cursor: pointer;
   z-index: 99999;
   border-radius: 20px;
-  box-shadow: 1px 0 3px rgba(155, 155, 155, 0.6);
+  box-shadow: 1px 2px 3px rgba(155, 155, 155, 0.6);
   /* Tùy chỉnh thanh cuộn cho Chrome và Safari */
   scrollbar-width: thin;
   /* Cho Firefox */
@@ -232,6 +232,7 @@
   display: block;
   padding: 16px;
   border-bottom: 1px solid #e4e8ed;
+  cursor: pointer;
 }
 
 .header_search_items:hover {
@@ -387,9 +388,19 @@
   display: flex !important;
   align-items: center !important;
 }
+.header_name{
+ font-size: 16px;
+ line-height: 24px;
+ max-width: 100%;
+ font-size: 14px;
+ overflow: hidden;
+ display: -webkit-box;
+ -webkit-line-clamp: 2;
+ -webkit-box-orient: vertical;
+}
 
 /* Thiết lập padding cho xs */
-@media (max-width: 575.98px) {
+@media (max-width: 575px) {
   .brand_item>a {
     color: #020b27 !important;
     position: relative;
@@ -566,6 +577,13 @@
     border-radius: 30px;
     font-weight: 500;
   }
+  .header_search_result{
+    max-height: 65vh;
+  }
+  .header_search_items_img{
+    width: 92px !important;
+    height: 92px !important;
+  }
 
 }
 
@@ -573,6 +591,16 @@
 @media (max-width: 575px) {
   .wrapper_try_tag {
     display: none;
+  }
+  .header_name{
+    font-size: 14px;
+    line-height: 20px;
+    max-width: 100%;
+    font-size: 14px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
 }
 

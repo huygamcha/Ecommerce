@@ -209,9 +209,7 @@ function ProductDetail() {
                   <Row>
                     <Col xs={0} sm={24}>
                       <Image
-                        style={{ borderRadius: "10px" }}
-                        width="100%"
-                        height="335px"
+                        className={clsx(style.img_product)}
                         src={product?.pic}
                       ></Image>
                     </Col>
@@ -222,7 +220,7 @@ function ProductDetail() {
                       modules={[Navigation, Pagination, Scrollbar, A11y]}
                       breakpoints={{
                         1200: {
-                          spaceBetween: 10,
+                          spaceBetween: 0,
                           slidesPerView: 4,
                         },
                         0: {
@@ -741,11 +739,10 @@ function ProductDetail() {
                         slidesPerView: 6,
                       },
                       0: {
-                        spaceBetween: 18,
+                        spaceBetween: 14,
                         slidesPerView: 2,
                       },
                     }}
-                    style={{ backgroundColor: "#edf0f3" }}
                   >
                     {productsSearch.length > 6 ? (
                       <Flex
@@ -786,6 +783,11 @@ function ProductDetail() {
                                       ></Discount>
                                     </Space>
 
+                                    <Space
+                                      className={clsx(style.label_wrapper)}
+                                    >
+                                      <Label title={product.category.name} />
+                                    </Space>
                                     <Flex justify="center">
                                       <img
                                         src={product.pic}
@@ -858,9 +860,6 @@ function ProductDetail() {
                                       )}
                                     </Flex>
                                   </Flex>
-                                  <Space className={clsx(style.label_wrapper)}>
-                                    <Label title={product.category.name} />
-                                  </Space>
                                 </Link>
                               </SwiperSlide>
                             </>

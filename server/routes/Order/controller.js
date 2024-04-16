@@ -7,12 +7,57 @@ const {
 } = require("../../models");
 
 module.exports = {
+  // getAllOrder: async (req, res, next) => {
+  //   try {
+  //     const result = await Order.find()
+  //       .populate("customer")
+  //       .populate("employee")
+  //       .lean({ virtuals: true });
+  //     return res.send(200, {
+  //       message: "Lấy thông tin đơn hàng thành công",
+  //       payload: result,
+  //     });
+  //   } catch (error) {
+  //     console.log("««««« error »»»»»", error);
+  //     return res.send(400, {
+  //       message: "Lấy thông tin đơn hàng không thành công",
+  //     });
+  //   }
+  // },
+  // getDetailOrder: async (req, res, next) => {
+  //   try {
+  //     const { id } = req.params;
+
+  //     const payload = await Order.findById(id)
+  //       .populate("customer")
+  //       .populate("employee")
+  //       .lean({ virtual: true });
+
+  //     if (!payload) {
+  //       return res.send(404, {
+  //         message: "Không tìm thấy đơn hàng",
+  //       });
+  //     }
+
+  //     if (payload.isDeleted) {
+  //       return res.send(404, {
+  //         message: "Danh mục đã được xoá trước đó",
+  //       });
+  //     }
+
+  //     return res.send(200, {
+  //       message: "Tìm đơn hàng thành công",
+  //       payload: payload,
+  //     });
+  //   } catch (error) {
+  //     return res.send(400, {
+  //       message: "Lấy thông tin đơn hàng không thành công",
+  //     });
+  //   }
+  // },
   getAllOrder: async (req, res, next) => {
     try {
-      const result = await Order.find()
-        .populate("customer")
-        .populate("employee")
-        .lean({ virtuals: true });
+      const result = await Order.find().lean({ virtuals: true });
       return res.send(200, {
         message: "Lấy thông tin đơn hàng thành công",
         payload: result,
@@ -29,10 +74,7 @@ module.exports = {
     try {
       const { id } = req.params;
 
-      const payload = await Order.findById(id)
-        .populate("customer")
-        .populate("employee")
-        .lean({ virtual: true });
+      const payload = await Order.findById(id).lean({ virtual: true });
 
       if (!payload) {
         return res.send(404, {
@@ -60,55 +102,33 @@ module.exports = {
   createOrder: async (req, res, next) => {
     try {
       const {
-        status,
-        createdDate,
-        shippedDate,
-        description,
-        paymentType,
-        customerId,
-        employeeId,
-        orderDetails,
+        addressDetail,
+        commune,
+        district,
+        email,
+        name,
+        nameOrder,
+        notice,
+        phone,
+        phoneOrder,
+        province,
+        typePayment,
+        listProduct,
       } = req.body;
       console.log("««««« req.body »»»»»", req.body);
-
-      const errors = [];
-      const exitCustomerId = Customer.findOne({ _id: customerId });
-      const exitEmployeeId = Employee.findOne({ _id: employeeId });
-      const [checkCustomerId, checkEmployeeId] = await Promise.all([
-        exitCustomerId,
-        exitEmployeeId,
-      ]);
-
-      if (!checkEmployeeId)
-        errors.push({ employeeId: "Không có nhân viên này" });
-      else {
-        if (checkEmployeeId.isDeleted) {
-          errors.push({ employeeId: "Nhân viên này đã bị xoá" });
-        }
-      }
-      if (!checkCustomerId)
-        errors.push({ customerId: "Không có khách hàng này" });
-      else {
-        if (checkCustomerId.isDeleted)
-          errors.push({ customerId: "Khách hàng này đã bị xoá" });
-      }
-
-      if (errors.length > 0) {
-        return res.send(400, {
-          message: "Tạo đơn hàng không thành công",
-          errors: errors,
-        });
-      }
-
       const newOrder = new Order({
-        createdDate,
-        shippedDate,
-        description,
-        paymentType,
-        customerId,
-        employeeId,
-        orderDetails,
-        status,
+        addressDetail,
+        commune,
+        district,
+        email,
+        name,
+        nameOrder,
+        notice,
+        phone,
+        phoneOrder,
+        province,
+        typePayment,
+        listProduct,
       });
 
       const payload = await newOrder.save();
@@ -135,13 +155,7 @@ module.exports = {
         });
       }
 
-      if (payload.isDeleted) {
-        return res.send(404, {
-          message: "Sản phẩm đã được xoá trước đó",
-        });
-      }
-
-      await Order.findByIdAndUpdate(id, { isDeleted: true });
+      await Order.findByIdAndDelete(id, { new: true });
 
       return res.send(200, {
         message: "Xoá đơn hàng thành công",

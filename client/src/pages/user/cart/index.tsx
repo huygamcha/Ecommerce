@@ -44,6 +44,7 @@ import {
   getAllProductSearch,
   getProductById,
 } from "../../../slices/productSlice";
+import { createOrder } from "../../../slices/orderSlice";
 
 function CartScreen() {
   const currentUser = localStorage.getItem("userInfor")
@@ -88,12 +89,12 @@ function CartScreen() {
     nameOrder: string;
     phoneOrder: string;
     name: string;
-    phone: string;
-    email?: string;
+    phone: number;
+    email: string;
     province: string;
     district: string;
     commune: string;
-    addressDetail?: string;
+    addressDetail: string;
     typePayment: string;
     notice: string;
   };
@@ -137,7 +138,7 @@ function CartScreen() {
   };
 
   const onFinish = async (values: FieldType) => {
-    console.log("««««« values »»»»»", values);
+    await dispatch(createOrder({ ...values, listProduct: carts }));
   };
 
   return (

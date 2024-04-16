@@ -599,7 +599,9 @@ function Timkiem() {
                             <Space className={clsx(style.content_discount)}>
                               <Discount discount={product.discount}></Discount>
                             </Space>
-
+                            <Space className={clsx(style.label_wrapper)}>
+                              <Label title={product.category.name} />
+                            </Space>
                             <Flex justify="center">
                               <img
                                 src={product.pic}
@@ -630,9 +632,6 @@ function Timkiem() {
                               )}
                             </Flex>
                           </Flex>
-                          <Space className={clsx(style.label_wrapper)}>
-                            <Label title={product.category.name} />
-                          </Space>
                         </Link>
                       </Col>
                     ))

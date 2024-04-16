@@ -169,8 +169,6 @@ const Product = (props: Props) => {
   }, [isActive]);
 
   const onFinish = async (values: any) => {
-    // console.log("««««« albumCreate »»»»»", albumCreate);
-    // console.log("««««« values »»»»»", values);
     await dispatch(createProduct({ ...values, album: albumCreate }));
     setIsActive(!isActive);
   };
