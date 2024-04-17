@@ -23,8 +23,8 @@ interface OrdersType {
     nameOrder: string;
     phoneOrder: string;
     email: string;
-    name: string;
-    phone: number;
+    // name: string;
+    // phone: number;
     notice: string;
     addressDetail: string;
     commune: string;
@@ -51,8 +51,6 @@ const initialState: InitialType = {
         nameOrder: '',
         phoneOrder: '',
         email: '',
-        name: '',
-        phone: 0,
         notice: '',
         addressDetail: '',
         commune: '',

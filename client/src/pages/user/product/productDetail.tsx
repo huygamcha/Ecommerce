@@ -70,6 +70,7 @@ function ProductDetail() {
       dispatch(getAllProductSearch({ categoryId: product.categoryId }));
     }
   }, []);
+  console.log("««««« product.album.length »»»»»", product?.album.length);
 
   // add to cart
   const handleAddToCart = () => {
@@ -222,10 +223,12 @@ function ProductDetail() {
                         1200: {
                           spaceBetween: 0,
                           slidesPerView: 4,
+                          loop: true,
                         },
                         0: {
-                          spaceBetween: 10,
+                          spaceBetween: 0,
                           slidesPerView: 1,
+                          loop: true,
                         },
                       }}
                       pagination={{ clickable: true }}
@@ -737,10 +740,12 @@ function ProductDetail() {
                       1200: {
                         spaceBetween: 18,
                         slidesPerView: 6,
+                        loop: productsSearch.length > 6 ? true : false,
                       },
                       0: {
                         spaceBetween: 14,
                         slidesPerView: 2,
+                        loop: true,
                       },
                     }}
                   >

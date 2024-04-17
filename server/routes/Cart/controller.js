@@ -4,6 +4,7 @@ module.exports = {
   getAllCart: async (req, res, next) => {
     try {
       const result = await Cart.find().lean({ virtuals: true });
+
       return res.send(200, {
         message: "Lấy thông tin giỏ hàng thành công",
         payload: result,

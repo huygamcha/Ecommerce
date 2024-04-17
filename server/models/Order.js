@@ -60,19 +60,19 @@ const orderSchema = new Schema(
       required: true,
     },
     phoneOrder: {
-      type: Number,
+      type: String,
       required: true,
     },
     email: {
       type: String,
       required: true,
     },
-    name: {
-      type: String,
-    },
-    phone: {
-      type: Number,
-    },
+    // name: {
+    //   type: String,
+    // },
+    // phone: {
+    //   type: Number,
+    // },
     notice: {
       type: String,
     },

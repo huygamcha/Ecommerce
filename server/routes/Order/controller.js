@@ -57,7 +57,9 @@ module.exports = {
   // },
   getAllOrder: async (req, res, next) => {
     try {
-      const result = await Order.find().lean({ virtuals: true });
+      const result = await Order.find()
+        .lean({ virtuals: true })
+        .sort({ createdAt: -1 });
       return res.send(200, {
         message: "Lấy thông tin đơn hàng thành công",
         payload: result,

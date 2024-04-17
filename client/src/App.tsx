@@ -40,6 +40,7 @@ import Tag from "./pages/admin/tag";
 import Timkiem from "./pages/user/timkiem";
 import Brand from "./pages/admin/brand";
 import BannerAdmin from "./pages/admin/banner";
+import Order from "./pages/admin/order";
 const { Sider, Content } = Layout;
 numeral.locale("vi");
 
@@ -178,17 +179,17 @@ const router = createBrowserRouter([
         children: [
           {
             path: "/admin/footers/:id",
-            element: <Supplier />,
+            element: <FooterAdmin />,
           },
         ],
       },
       {
         path: "/admin/orders",
-        element: <FooterAdmin />,
+        element: <Order />,
         children: [
           {
             path: "/admin/orders/:id",
-            element: <Supplier />,
+            element: <Order />,
           },
         ],
       },

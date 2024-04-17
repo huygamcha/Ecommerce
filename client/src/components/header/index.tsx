@@ -337,7 +337,7 @@ function HeaderScreen() {
                                   {product.name}
                                 </div>
                                 <Space style={{ fontWeight: "bold" }}>
-                                  <div>
+                                  <div className={clsx(style.header_price)}>
                                     {" "}
                                     {numeral(product.total).format(
                                       "0,0$"

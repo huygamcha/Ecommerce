@@ -88,8 +88,8 @@ function CartScreen() {
   type FieldType = {
     nameOrder: string;
     phoneOrder: string;
-    name: string;
-    phone: number;
+    // name: string;
+    // phone: number;
     email: string;
     province: string;
     district: string;
@@ -138,6 +138,7 @@ function CartScreen() {
   };
 
   const onFinish = async (values: FieldType) => {
+    console.log("««««« values »»»»»", values);
     await dispatch(createOrder({ ...values, listProduct: carts }));
   };
 
@@ -973,7 +974,7 @@ function CartScreen() {
                                           </Col>
                                           <Col span={24}>
                                             <Row gutter={[8, 0]}>
-                                              <Col xs={24} sm={12}>
+                                              {/* <Col xs={24} sm={12}>
                                                 <Form.Item<FieldType>
                                                   rules={[
                                                     {
@@ -1021,7 +1022,7 @@ function CartScreen() {
                                                 >
                                                   <Input placeholder="Số điện thoại" />
                                                 </Form.Item>
-                                              </Col>
+                                              </Col> */}
                                               <Col xs={24} sm={12}>
                                                 <Form.Item<FieldType>
                                                   rules={[

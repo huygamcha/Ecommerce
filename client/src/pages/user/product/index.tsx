@@ -109,6 +109,7 @@ function ProductScreen() {
           <Row>
             <Col span={24}>
               <Swiper
+                loop={banners.length > 1 ? true : false}
                 autoplay={{
                   delay: 2000,
                 }}
@@ -304,10 +305,12 @@ function ProductScreen() {
                   1200: {
                     spaceBetween: 0,
                     slidesPerView: 5,
+                    loop: brands.length > 5 ? true : false,
                   },
                   0: {
                     spaceBetween: 6,
                     slidesPerView: 2,
+                    loop: true,
                   },
                 }}
               >
@@ -437,6 +440,7 @@ function ProductScreen() {
                 <Col xs={24} sm={0}>
                   <Swiper
                     modules={[Navigation, Pagination, Scrollbar, A11y]}
+                    loop={true}
                     breakpoints={{
                       0: {
                         spaceBetween: 10,
@@ -664,6 +668,7 @@ function ProductScreen() {
                   0: {
                     spaceBetween: 12,
                     slidesPerView: 2,
+                    loop: true,
                   },
                 }}
                 style={{
@@ -933,10 +938,12 @@ function ProductScreen() {
                     1200: {
                       spaceBetween: 14,
                       slidesPerView: 6,
+                      loop: histories.length > 6 ? true : false,
                     },
                     0: {
                       spaceBetween: 12,
                       slidesPerView: 2,
+                      loop: true,
                     },
                   }}
                   style={{ backgroundColor: "#eaeffa" }}
