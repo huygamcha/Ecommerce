@@ -41,6 +41,7 @@ import Timkiem from "./pages/user/timkiem";
 import Brand from "./pages/admin/brand";
 import BannerAdmin from "./pages/admin/banner";
 import Order from "./pages/admin/order";
+import OrderSuccess from "./components/orderSuccess";
 const { Sider, Content } = Layout;
 numeral.locale("vi");
 
@@ -98,6 +99,10 @@ const router = createBrowserRouter([
       {
         path: "/cart",
         element: <CartScreen />,
+      },
+      {
+        path: "/cart/thanhcong",
+        element: <OrderSuccess />,
       },
       {
         path: "/sanpham/:id",

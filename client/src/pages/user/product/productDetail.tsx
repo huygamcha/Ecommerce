@@ -70,7 +70,6 @@ function ProductDetail() {
       dispatch(getAllProductSearch({ categoryId: product.categoryId }));
     }
   }, []);
-  console.log("««««« product.album.length »»»»»", product?.album.length);
 
   // add to cart
   const handleAddToCart = () => {

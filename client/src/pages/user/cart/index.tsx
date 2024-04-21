@@ -45,6 +45,7 @@ import {
   getProductById,
 } from "../../../slices/productSlice";
 import { createOrder } from "../../../slices/orderSlice";
+import NoCart from "../../../components/noCart";
 
 function CartScreen() {
   const currentUser = localStorage.getItem("userInfor")
@@ -138,8 +139,8 @@ function CartScreen() {
   };
 
   const onFinish = async (values: FieldType) => {
-    console.log("««««« values »»»»»", values);
     await dispatch(createOrder({ ...values, listProduct: carts }));
+    navigate("/cart/thanhcong");
   };
 
   return (
@@ -1485,7 +1486,7 @@ function CartScreen() {
         ) : (
           <Row>
             <Col span={24}>
-              <Empty />
+              <NoCart />
             </Col>
           </Row>
         )}

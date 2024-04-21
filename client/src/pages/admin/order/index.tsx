@@ -12,6 +12,10 @@ import {
   Select,
   Image,
   Spin,
+  Flex,
+  Row,
+  Col,
+  DatePicker,
 } from "antd";
 import { useEffect } from "react";
 import {
@@ -30,6 +34,7 @@ import numeral from "numeral";
 type Props = {};
 
 const Order = (props: Props) => {
+  const { RangePicker } = DatePicker;
   const navigate = useNavigate();
   const param = useParams();
   // không hiển thị khi lần đầu load trang
@@ -37,6 +42,8 @@ const Order = (props: Props) => {
   const [isActive, setIsActive] = useState<boolean>(false);
 
   const [search, setSearch] = useState<string>("");
+  const [dates, setDates] = useState<any[]>([]);
+  const [isDateSearch, setIsDateSearch] = useState<boolean>(false);
 
   // get from database
   const dispatch = useAppDispatch();
@@ -104,7 +111,7 @@ const Order = (props: Props) => {
   // }, [isActive]);
 
   const onFinish = async (values: any) => {
-    console.log("««««« values »»»»»", values);
+    // console.log("««««« values »»»»»", values);
     await dispatch(createOrder({ ...values, pic: pic }));
     setPic("");
     // setInitialRender(false);
@@ -125,8 +132,6 @@ const Order = (props: Props) => {
     dispatch(getAllOrder());
     onShowMessage("Xoá đơn đặt hàng thành công");
   };
-
-  console.log("««««« initialRender »»»»»", initialRender);
 
   // upload image
   const [picDetail, setPicDetail] = useState<string>();
@@ -170,7 +175,7 @@ const Order = (props: Props) => {
   // table
   const columns = [
     {
-      title: "NO.",
+      title: "No.",
       dataIndex: "index",
       key: "index",
       width: "1%",
@@ -179,7 +184,7 @@ const Order = (props: Props) => {
       },
     },
     {
-      title: "MÃ ĐƠN HÀNG",
+      title: "Mã đơn hàng",
       dataIndex: "_id",
       key: "_id",
       render: (text: any, record: any, index: number) => {
@@ -187,7 +192,7 @@ const Order = (props: Props) => {
       },
     },
     {
-      title: "NGƯỜI NHẬN",
+      title: "Người nhận",
       dataIndex: "nameOrder",
       key: "nameOrder",
       filteredValue: [search],
@@ -225,37 +230,69 @@ const Order = (props: Props) => {
       },
     },
     {
-      title: "SỐ ĐIỆN THOẠI",
+      title: "Số điện thoại",
       dataIndex: "phoneOrder",
       key: "phoneOrder",
       render: (text: any, record: any, index: number) => {
         return <div>{text}</div>;
       },
     },
+    // {
+    //   title: "Sản phẩm",
+    //   dataIndex: "product",
+    //   key: "product",
+    //   render: (text: any, record: any, index: number) => {
+    //     return record.listProduct.map((item: any, index: number) => {
+    //       return (
+    //         <div>
+    //           {index + 1}. {item.name}
+    //         </div>
+    //       );
+    //     });
+    //   },
+    // },
     {
-      title: "SẢN PHẨM",
-      dataIndex: "product",
-      key: "product",
-      render: (text: any, record: any, index: number) => {
-        return record.listProduct.map((item: any, index: number) => {
-          return (
-            <div>
-              {index + 1}. {item.name}
-            </div>
-          );
-        });
-      },
-    },
-    {
-      title: "NGÀY GIỜ ĐẶT HÀNG",
+      title: (
+        <Flex align="center" justify="space-between">
+          <div>Ngày đặt</div>
+          <div style={{ width: "75%" }}>
+            <RangePicker
+              onChange={(value) => {
+                setDates(value || []);
+                setIsDateSearch(!isDateSearch);
+                // console.log("««««« value »»»»»", value);
+                // console.log("««««« value  time»»»»»", value, typeof value);
+              }}
+            />
+          </div>
+        </Flex>
+      ),
       dataIndex: "createdAt",
       key: "createdAt",
+      filteredValue: dates,
+      onFilter: (value: any, record: any) => {
+        // so sánh thời gian nhập vào và thời gian được tạo đơn
+        const timeRecord = new Date(record.createdAt);
+        const beforeTime = new Date(dates[0]);
+        beforeTime.setHours(0, 0, 0, 0);
+
+        const afterTime = new Date(dates[1]);
+        afterTime.setHours(0, 0, 0, 0);
+        afterTime.setDate(afterTime.getDate() + 1);
+
+        return timeRecord >= beforeTime && timeRecord < afterTime;
+      },
+
       render: (text: any, record: any, index: number) => {
-        return <div>{text}</div>;
+        // console.log("««««« text, typeof text »»»»»", text, typeof text);
+        const newDate = new Date(text);
+        newDate.setHours(newDate.getHours() + 7);
+        // return <div>{newDate.toUTCString()}</div>;
+        return <div>{newDate.toUTCString()}</div>;
       },
     },
     {
-      title: "TỔNG TIỀN",
+      title: "Tổng tiền",
       dataIndex: "totalPrice",
       key: "totalPrice",
       render: (text: any, record: any, index: number) => {
@@ -270,27 +307,27 @@ const Order = (props: Props) => {
     },
 
     {
-      title: "TRẠNG THÁI",
+      title: "Trạng thái",
       dataIndex: "status",
       key: "status",
       render: (text: any, record: any, index: number) => {
         return <div>{text ? `giao thành công` : "chưa giao"}</div>;
       },
     },
+    // {
+    //   title: "Địa chỉ",
+    //   dataIndex: "addressDetail",
+    //   key: "addressDetail",
+    //   render: (text: any, record: any, index: number) => {
+    //     return (
+    //       <div style={{ textAlign: "left" }}>
+    //         {`${record.province}, ${record.district}, ${record.commune}, ${text}`}
+    //       </div>
+    //     );
+    //   },
+    // },
     {
-      title: "ĐỊA CHỈ",
-      dataIndex: "addressDetail",
-      key: "addressDetail",
-      render: (text: any, record: any, index: number) => {
-        return (
-          <div style={{ textAlign: "left" }}>
-            {`${record.province}, ${record.district}, ${record.commune}, ${text}`}
-          </div>
-        );
-      },
-    },
-    {
-      title: "THANH TOÁN",
+      title: "Thanh toán",
       dataIndex: "typePayment",
       key: "typePayment",
       render: (text: any, record: any, index: number) => {
@@ -335,14 +372,27 @@ const Order = (props: Props) => {
     <div>
       {contextHolder}
 
-      <Card title="Danh sách các đơn đặt hàng">
-        <Input.Search
-          placeholder="tìm kiếm"
-          onSearch={(value) => setSearch(value)}
-          onChange={(e) => {
-            setSearch(e.target.value);
+      <Card>
+        <Row
+          style={{
+            marginBottom: "20px",
           }}
-        />
+        >
+          <Col span={20}>
+            <Space style={{ fontSize: "16px", fontWeight: "600" }}>
+              Danh sách đặt hàng
+            </Space>
+          </Col>
+          <Col span={4}>
+            <Input.Search
+              placeholder="tìm kiếm"
+              onSearch={(value) => setSearch(value)}
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
+            />
+          </Col>
+        </Row>
         <Table
           pagination={{ defaultPageSize: 10 }}
           dataSource={orders}

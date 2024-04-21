@@ -1,0 +1,54 @@
+.wrapper_global {
+    background-color: #edf0f3;
+    padding: 12px 0px 30px 0px;
+    max-width: 1236px;
+}
+.header_success {
+    color: #1250dc;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 24px;
+    text-align: center;
+}
+.header_des{
+    color: #020b27;
+    font-size: 16px;
+    text-align: center;
+    line-height: 24px;
+    margin-top: 6px;
+}
+.payment_type{
+    color: #020b27;
+    font-weight: 500;
+    margin: 10px 0px;
+}
+.detail_cart, .home {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    font-size: 16px;
+    line-height: 24px;
+    margin-top: 20px;
+    padding: 12px;
+    width: 49%;
+    background-color: #1958de;
+    color: #fff;
+    border-radius: 30px;
+    font-weight: 600;
+  }
+
+.home {
+    background-color: #eaeffa;
+    color: #1958de;
+}
+
+.detail_cart:hover {
+    color: #fff;
+
+}
+.home:hover {
+    color: #1958de;
+
+}
+  
+ 
