@@ -172,44 +172,21 @@ module.exports = {
   updateOrder: async (req, res, next) => {
     try {
       const { id } = req.params;
+      console.log("««««« id »»»»»", id);
       const {
+        addressDetail,
+        commune,
+        district,
+        email,
         name,
-        price,
-        discount,
-        stock,
-        categoryId,
-        supplierId,
-        description,
+        nameOrder,
+        notice,
+        phone,
+        phoneOrder,
+        province,
+        typePayment,
+        listProduct,
       } = req.body;
-
-      const errors = [];
-      const exitCategoryId = Category.findOne({ _id: categoryId });
-      const exitSupplierId = Supplier.findOne({ _id: supplierId });
-      const [checkCategoryId, checkSupplierId] = await Promise.all([
-        exitCategoryId,
-        exitSupplierId,
-      ]);
-
-      if (!checkCategoryId)
-        errors.push({ categoryId: "Không có khách hàng này" });
-      else {
-        if (checkCategoryId.isDeleted) {
-          errors.push({ categoryId: "Khách hàng này đã bị xoá" });
-        }
-      }
-      if (!checkSupplierId)
-        errors.push({ categoryId: "Không có nhà cung cấp này" });
-      else {
-        if (checkSupplierId.isDeleted)
-          errors.push({ categoryId: "Nhà cung cấp này đã bị xoá" });
-      }
-
-      if (errors.length > 0) {
-        return res.send(400, {
-          message: "Cập nhật đơn hàng không thành công",
-          errors: errors,
-        });
-      }
 
       const payload = await Order.findById(id);
       if (!payload) {
@@ -218,29 +195,29 @@ module.exports = {
         });
       }
 
-      if (payload.isDeleted) {
-        return res.send(404, {
-          message: "Danh mục đã được xoá trước đó",
-        });
-      }
-
       const result = await Order.findByIdAndUpdate(
         id,
         {
           name: name || this.name,
-          price: price || this.price,
-          stock: stock || this.stock,
-          discount: discount || this.discount,
-          description: description || this.description,
-          categoryId: categoryId || this.categoryId,
-          supplierId: supplierId || this.supplierId,
+          addressDetail: addressDetail || this.addressDetail,
+          commune: commune || this.commune,
+          district: district || this.district,
+          email: email || this.email,
+          name: name || this.name,
+          nameOrder: nameOrder || this.nameOrder,
+          notice: notice || this.notice,
+          phone: phone || this.phone,
+          phoneOrder: phoneOrder || this.phoneOrder,
+          province: province || this.province,
+          typePayment: typePayment || this.typePayment,
+          listProduct: listProduct || this.listProduct,
         },
         {
           new: true,
         }
       );
 
-      return res.send(404, {
+      return res.send(200, {
         message: "Cập nhật đơn hàng thành công",
         payload: result,
       });

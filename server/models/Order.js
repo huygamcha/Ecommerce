@@ -53,7 +53,7 @@ const orderSchema = new Schema(
   {
     status: {
       type: String,
-      required: false,
+      default: false,
     },
     nameOrder: {
       type: String,

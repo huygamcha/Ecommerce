@@ -30,6 +30,8 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { getAllCategory } from "../../../slices/categorySlice";
 import { render } from "@testing-library/react";
 import numeral from "numeral";
+import { StringLiteral } from "typescript";
+import axios from "axios";
 
 type Props = {};
 
@@ -80,50 +82,42 @@ const Order = (props: Props) => {
 
   // form
   type FieldType = {
-    name?: string;
-    categoryId: string;
-    pic?: string;
+    status: boolean;
+    nameOrder: string;
+    phoneOrder: string;
+    email?: string;
+    addressDetail: string;
+    commune: string;
+    district: string;
+    province: string;
+    typePayment: string;
+    listProduct: [];
+    address: string;
+    _id: string;
   };
 
   const [createForm] = Form.useForm<FieldType>();
   const [updateForm] = Form.useForm<FieldType>();
 
-  // useEffect(() => {
-  //   if (!initialRender) {
-  //     if (error.message !== "") {
-  //       if (!param.id) {
-  //         onShowMessage(`${error.errors?.name}`, "error");
-  //       } else {
-  //         onShowMessage(`${error.errors?.name}`, "error");
-  //       }
-  //     } else {
-  //       if (!param.id) {
-  //         onShowMessage("Tạo đơn đặt hàng thành công", "success");
-  //       } else {
-  //         onShowMessage("Cập nhật đơn đặt hàng thành công", "success");
-  //         navigate(-1);
-  //         setSelectedOrder(false);
-  //       }
-  //       createForm.resetFields();
-  //     }
-  //   }
-  //   dispatch(getAllOrder());
-  // }, [isActive]);
-
-  const onFinish = async (values: any) => {
-    // console.log("««««« values »»»»»", values);
-    await dispatch(createOrder({ ...values, pic: pic }));
-    setPic("");
-    // setInitialRender(false);
-    setIsActive(!isActive);
-  };
+  useEffect(() => {
+    if (!initialRender) {
+      if (param.id) {
+        onShowMessage("Cập nhật đơn đặt hàng thành công", "success");
+        navigate(-1);
+        setSelectedOrder(false);
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+        // window.location.reload();
+      }
+      createForm.resetFields();
+    }
+  }, [isActive]);
 
   // update order modal
   const onUpdate = async (values: any) => {
-    await dispatch(
-      updateOrder({ id: selectedOrder, values: { ...values, pic: picDetail } })
-    );
-    setPicDetail("");
+    console.log("««««« values order»»»»»", values);
+    await dispatch(updateOrder({ id: selectedOrder, values: values }));
     setIsActive(!isActive);
   };
 
@@ -137,40 +131,6 @@ const Order = (props: Props) => {
   const [picDetail, setPicDetail] = useState<string>();
   const [pic, setPic] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  const postDetails = (pics: any, infor: string) => {
-    if (pics === undefined) {
-      return;
-    }
-    if (pics.type === "image/jpeg" || pics.type === "image/png") {
-      setIsLoading(false);
-      const data = new FormData();
-      data.append("file", pics);
-      data.append("upload_preset", "pbl3_chatbot");
-      data.append("cloud_name", "drqphlfn6");
-      fetch("https://api.cloudinary.com/v1_1/drqphlfn6/image/upload", {
-        method: "post",
-        body: data,
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setIsLoading(true);
-          if (infor === "create") {
-            setPic(data.url.toString());
-            createForm.setFieldValue("pic", data.url.toString());
-          } else {
-            setPicDetail(data.url.toString());
-          }
-          console.log(data.url.toString());
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      return;
-    }
-    console.log("««««« pic »»»»»", pic);
-  };
 
   // table
   const columns = [
@@ -311,7 +271,7 @@ const Order = (props: Props) => {
       dataIndex: "status",
       key: "status",
       render: (text: any, record: any, index: number) => {
-        return <div>{text ? `giao thành công` : "chưa giao"}</div>;
+        return <div>{text ? `đã giao` : "chưa giao"}</div>;
       },
     },
     // {
@@ -334,40 +294,78 @@ const Order = (props: Props) => {
         return <div>{text}</div>;
       },
     },
-    // {
-    //   title: "Actions",
-    //   dataIndex: "actions",
-    //   key: "actions",
-    //   width: "1%",
-    //   render: (text: any, record: any) => {
-    //     return (
-    //       <Space size="small">
-    //         <Link to={`/admin/orders/${record._id}`}>
-    //           <Button
-    //             type="primary"
-    //             icon={<EditOutlined />}
-    //             onClick={() => {
-    //               setSelectedOrder(record._id);
-    //               updateForm.setFieldsValue(record);
-    //               setPicDetail(record.pic);
-    //             }}
-    //           ></Button>
-    //         </Link>
+    {
+      title: "Hành động",
+      dataIndex: "actions",
+      key: "actions",
+      width: "1%",
+      render: (text: any, record: any) => {
+        return (
+          <Space size="small">
+            <Link to={`/admin/orders/${record._id}`}>
+              <Button
+                type="primary"
+                icon={<EditOutlined />}
+                onClick={() => {
+                  setSelectedOrder(record._id);
+                  updateForm.setFieldsValue(record);
+                  setPicDetail(record.pic);
+                }}
+              ></Button>
+            </Link>
 
-    //         <Popconfirm
-    //           title="Xoá đơn đặt hàng"
-    //           description="Bạn có chắc xoá đơn đặt hàng này không?"
-    //           onConfirm={() => {
-    //             onDelete(record._id);
-    //           }}
-    //         >
-    //           <Button type="primary" danger icon={<DeleteOutlined />} />
-    //         </Popconfirm>
-    //       </Space>
-    //     );
-    //   },
-    // },
+            <Popconfirm
+              title="Xoá đơn đặt hàng"
+              description="Bạn có chắc xoá đơn đặt hàng này không?"
+              onConfirm={() => {
+                onDelete(record._id);
+              }}
+            >
+              <Button type="primary" danger icon={<DeleteOutlined />} />
+            </Popconfirm>
+          </Space>
+        );
+      },
+    },
   ];
+
+  // thong tin
+  const [province, setProvince] = useState([]);
+  const [district, setDistrict] = useState([]);
+  const [commune, setCommune] = useState([]);
+
+  useEffect(() => {
+    getProvince();
+  }, []);
+
+  const getProvince = async () => {
+    const data = await axios.get(
+      "https://api.mysupership.vn/v1/partner/areas/province"
+    );
+    setProvince(data.data.results);
+  };
+
+  const handleDistrict = async (id: string) => {
+    updateForm.setFieldValue("district", null);
+    updateForm.setFieldValue("commune", null);
+    const data = await axios.get(
+      `https://api.mysupership.vn/v1/partner/areas/district?province=${id}`
+    );
+    setDistrict(data.data.results);
+  };
+
+  const handleCommune = async (id: string) => {
+    updateForm.setFieldValue("commune", null);
+    const data = await axios.get(
+      `https://api.mysupership.vn/v1/partner/areas/commune?district=${id}`
+    );
+    setCommune(data.data.results);
+  };
+
+  const handleAddressDetail = async () => {
+    updateForm.setFieldValue("addressDetail", null);
+  };
+
   return (
     <div>
       {contextHolder}
@@ -383,6 +381,7 @@ const Order = (props: Props) => {
               Danh sách đặt hàng
             </Space>
           </Col>
+
           <Col span={4}>
             <Input.Search
               placeholder="tìm kiếm"
@@ -399,10 +398,12 @@ const Order = (props: Props) => {
           columns={columns}
         />
       </Card>
+
       {/* form edit và delete */}
       <Modal
         centered
         title="Chỉnh sửa đơn đặt hàng"
+        width={"200vh"}
         onCancel={() => {
           navigate(-1);
           setSelectedOrder(false);
@@ -418,15 +419,35 @@ const Order = (props: Props) => {
           <Form
             form={updateForm}
             name="update-form"
-            labelCol={{ span: 8 }}
-            wrapperCol={{ span: 12 }}
+            labelCol={{ span: 24 }}
+            // wrapperCol={{ span: 12 }}
             initialValues={{ name: "", description: "" }}
             onFinish={onUpdate}
             autoComplete="off"
           >
+            <Form.Item<FieldType> label="Mã đơn đặt hàng">
+              <Input
+                value={
+                  updateForm.getFieldValue("_id")
+                    ? updateForm.getFieldValue("_id").slice(18)
+                    : ""
+                }
+                disabled
+              />
+            </Form.Item>
+
+            <Form.Item<FieldType> label="Trạng thái giao hàng" name="status">
+              <Select
+                options={[
+                  { value: false, label: "Chưa giao" },
+                  { value: true, label: "Đã giao" },
+                ]}
+              />
+            </Form.Item>
+
             <Form.Item<FieldType>
-              label="Sửa đơn đặt hàng"
-              name="name"
+              label="Tên khách hàng"
+              name="nameOrder"
               rules={[
                 { required: true, message: "Vui lòng điền tên đơn đặt hàng!" },
                 {
@@ -439,33 +460,199 @@ const Order = (props: Props) => {
             </Form.Item>
 
             <Form.Item<FieldType>
-              label="Danh mục"
-              name="categoryId"
-              rules={[{ required: true, message: "Vui lòng chọn danh mục!" }]}
-              hasFeedback
+              label="Số điện thoại"
+              name="phoneOrder"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng điền sô điện thoại khách hàng!",
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item<FieldType>
+              label="Email khách hàng"
+              name="email"
+              rules={[
+                { required: true, message: "Vui lòng điền email khách hàng!" },
+                {
+                  min: 2,
+                  message: "Email khách hàng phải có ít nhất 2 ký tự!",
+                },
+                {
+                  type: "email",
+                  message: "Không đúng định dạng email",
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item<FieldType>
+              label="Tỉnh / thành phố"
+              name="province"
+              rules={[
+                { required: true, message: "Vui lòng điền tên đơn đặt hàng!" },
+                {
+                  min: 2,
+                  message: "Tên đơn đặt hàng phải có ít nhất 2 ký tự!",
+                },
+              ]}
             >
               <Select
-                options={categories.map((item: any) => {
+                placeholder="Chọn tỉnh / thành phố"
+                options={province.map((item: any) => {
                   return {
                     label: item.name,
-                    value: item._id,
+                    value: item.code,
                   };
                 })}
+                onChange={(e) => {
+                  const data: any = province.filter(
+                    (item: any) => item.code === e
+                  );
+
+                  if (data) {
+                    updateForm.setFieldValue("province", data[0].name);
+                  }
+                  handleDistrict(e);
+                }}
               />
             </Form.Item>
 
-            <Form.Item<FieldType> name="pic" label="Hình ảnh">
-              <Image height={100} src={picDetail}></Image>
-              <Input
-                type="file"
-                accept="image/*"
+            <Form.Item<FieldType>
+              label="Quận / huyện"
+              name="district"
+              rules={[
+                { required: true, message: "Vui lòng điền tên đơn đặt hàng!" },
+                {
+                  min: 2,
+                  message: "Tên đơn đặt hàng phải có ít nhất 2 ký tự!",
+                },
+              ]}
+            >
+              <Select
+                placeholder="Chọn quận / huyện"
+                options={
+                  district &&
+                  district.map((item: any) => {
+                    return {
+                      label: item.name,
+                      value: item.code,
+                    };
+                  })
+                }
                 onChange={(e) => {
-                  const selectedFile = e.target.files && e.target.files[0];
-                  if (selectedFile) {
-                    postDetails(selectedFile, "update");
+                  const data: any = district.filter(
+                    (item: any) => item.code === e
+                  );
+
+                  if (data) {
+                    updateForm.setFieldValue("district", data[0].name);
                   }
+                  handleCommune(e);
                 }}
-              ></Input>
+              />
+            </Form.Item>
+
+            <Form.Item<FieldType>
+              label="Phường / xã"
+              name="commune"
+              rules={[
+                { required: true, message: "Vui lòng điền tên đơn đặt hàng!" },
+                {
+                  min: 2,
+                  message: "Tên đơn đặt hàng phải có ít nhất 2 ký tự!",
+                },
+              ]}
+            >
+              <Select
+                placeholder="Chọn phường / xã"
+                options={
+                  commune &&
+                  commune.map((item: any) => {
+                    return {
+                      label: item.name,
+                      value: item.code,
+                    };
+                  })
+                }
+                onChange={(e) => {
+                  const data: any = commune.filter(
+                    (item: any) => item.code === e
+                  );
+
+                  if (data) {
+                    updateForm.setFieldValue("commune", data[0].name);
+                  }
+                  handleAddressDetail();
+                }}
+              />
+            </Form.Item>
+
+            <Form.Item<FieldType>
+              label="Địa chỉ cụ thể"
+              name="addressDetail"
+              rules={[
+                { required: true, message: "Vui lòng điền địa chỉ cụ thể!" },
+
+                {
+                  min: 2,
+                  message: "Địa chỉ cụ thể phải có ít nhất 2 ký tự!",
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item<FieldType>
+              label="Hình thức thanh toán"
+              name="typePayment"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng điền hình thức thanh toán!",
+                },
+              ]}
+            >
+              <Select
+                options={[
+                  { value: "shipCode", label: "shipCode" },
+                  { value: "vnPay", label: "vnPay" },
+                  { value: "visa", label: "visa" },
+                  { value: "zaloPay", label: "zaloPay" },
+                  { value: "momo", label: "momo" },
+                ]}
+              />
+            </Form.Item>
+
+            <Form.Item<FieldType>
+              label="Sản phẩm"
+              // name="listProduct"
+              rules={[
+                { required: true, message: "Vui lòng điền tên đơn đặt hàng!" },
+                {
+                  min: 2,
+                  message: "Tên đơn đặt hàng phải có ít nhất 2 ký tự!",
+                },
+              ]}
+            >
+              <Input.TextArea
+                rows={5}
+                value={
+                  updateForm.getFieldValue("listProduct")
+                    ? updateForm
+                        .getFieldValue("listProduct")
+                        .map((item: any, index: number) => {
+                          // console.log("««««« item »»»»»", item.name);
+                          return `${index + 1}. ${item.name}.`;
+                        })
+                        .join("\n")
+                    : ""
+                }
+              ></Input.TextArea>
             </Form.Item>
           </Form>
         </Card>
@@ -475,74 +662,3 @@ const Order = (props: Props) => {
 };
 
 export default Order;
-// <Card title="Tạo đơn đặt hàng mới" style={{ width: "100%" }}>
-//       <Form
-//         form={createForm}
-//         name="basic"
-//         labelCol={{ span: 6 }}
-//         wrapperCol={{ span: 12 }}
-//         initialValues={{ name: "", description: "" }}
-//         onFinish={onFinish}
-//         autoComplete="off"
-//       >
-//         <Form.Item<FieldType>
-//           label="Tên đơn đặt hàng"
-//           name="name"
-//           rules={[
-//             { required: true, message: "Vui lòng điền tên đơn đặt hàng!" },
-//             {
-//               min: 2,
-//               message: "Tên đơn đặt hàng phải lớn hơn 2 kí tự",
-//             },
-//           ]}
-//           hasFeedback
-//         >
-//           <Input />
-//         </Form.Item>
-
-//         <Form.Item<FieldType>
-//           label="Danh mục"
-//           name="categoryId"
-//           rules={[{ required: true, message: "Vui lòng chọn danh mục!" }]}
-//           hasFeedback
-//         >
-//           <Select
-//             options={categories.map((item: any) => {
-//               return {
-//                 label: item.name,
-//                 value: item._id,
-//               };
-//             })}
-//           />
-//         </Form.Item>
-
-//         <Form.Item<FieldType>
-//           rules={[{ required: true, message: "Vui lòng chọn hình ảnh!" }]}
-//           name="pic"
-//           label="Hình ảnh"
-//         >
-//           {pic ? <Image height={100} src={pic}></Image> : <Space></Space>}
-
-//           <Input
-//             type="file"
-//             accept="image/*"
-//             onChange={(e) => {
-//               const selectedFile = e.target.files && e.target.files[0];
-//               if (selectedFile) {
-//                 postDetails(selectedFile, "create");
-//               }
-//             }}
-//           ></Input>
-//         </Form.Item>
-
-//         <Form.Item wrapperCol={{ offset: 6 }}>
-//           {isLoading ? (
-//             <Button type="primary" htmlType="submit">
-//               Thêm đơn đặt hàng
-//             </Button>
-//           ) : (
-//             <Spin />
-//           )}
-//         </Form.Item>
-//       </Form>
-//     </Card>
