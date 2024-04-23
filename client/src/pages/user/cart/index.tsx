@@ -402,7 +402,9 @@ function CartScreen() {
                                             />
                                             {cart.unit}
                                           </Space>
-                                          <Space>{cart.price}</Space>
+                                          <Space>
+                                            {numeral(cart.price).format("0,0$")}
+                                          </Space>
                                         </Flex>
                                       </Space>
                                     </Col>

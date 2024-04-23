@@ -779,6 +779,8 @@ function HeaderScreen() {
           background: "#fff",
           display: "flex",
           justifyContent: "center",
+          zIndex: 9,
+          boxShadow: "rgba(0, 0, 0, 0.05) 0px 0.4px 0px",
         }}
       >
         <Row className={clsx(style.wrapper_try_brand)}>

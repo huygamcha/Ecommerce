@@ -97,13 +97,16 @@ function ProductScreen() {
   return (
     <>
       {/* banner */}
-      <div className={clsx(style.product_wrapper)}>
+      <div
+        style={{ borderRadius: "0px", backgroundColor: "#F8F9FD" }}
+        // className={clsx(style.product_wrapper)}
+      >
         <div
           className={clsx(
             style.wrapper_global,
             style.wrapper_global_banner,
-            style.customPT20,
-            style.product_wrapper
+            style.customPT20
+            // style.product_wrapper
           )}
         >
           <Row>
