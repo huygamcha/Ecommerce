@@ -388,6 +388,7 @@
 .customFA {
   display: flex !important;
   align-items: center !important;
+  /* align-items: center !important; */
 }
 .header_name{
  font-size: 16px;
