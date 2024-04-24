@@ -383,7 +383,7 @@ const productSlice = createSlice({
     builder.addCase(getProductBySuppliers.rejected, (state, action) => {
       state.loading = false;
       const customErrors = action.payload as { message?: string; errors?: any };
-      state.error = customErrors.errors; // Ensure a default message or fallback if action.error is undefined
+      state.error = customErrors.errors || undefined; // Ensure a default message or fallback if action.error is undefined
     });
 
     //get by id
