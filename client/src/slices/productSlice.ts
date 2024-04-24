@@ -401,7 +401,7 @@ const productSlice = createSlice({
       console.log("««««« action »»»»»", action);
       state.loading = false;
       const customErrors = action.payload as { message?: string; errors?: any };
-      state.error = customErrors.errors; // Ensure a default message or fallback if action.error is undefined
+      state.error = customErrors.errors || undefined; // Ensure a default message or fallback if action.error is undefined
     });
 
     // create
