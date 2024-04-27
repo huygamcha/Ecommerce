@@ -16,6 +16,9 @@ const footerSchema = new Schema(
     url: {
       type: String,
     },
+    optional: {
+      type: String,
+    },
   },
   {
     timestamps: true,

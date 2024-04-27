@@ -71,7 +71,7 @@
 }
 
 .content:hover {
-  border: 1px solid #1250dc;
+  border: 1px solid #1250dc !important;
   transition: 0.3s ease-in;
 }
 
@@ -577,8 +577,11 @@
 }
 
 .album_item {
-  height: 80px ;
-  width: 100% ;
+  padding: 12px;
+  border: 1px solid  rgb(193, 200, 209);
+  height: 110px !important;
+  width: 110px  !important;
+  border-radius: 10px!important;
 }
 
 .buy_wrapper_mobile {
@@ -588,6 +591,7 @@
 .button_back_cart {
   margin: 10px 0px;
 }
+
 
 .button_home {
   font-size: 14px;
@@ -606,8 +610,8 @@
 }
 .img_product {
   border-radius: 10px;
-  width: 100%!important;
-  height: 335px !important;
+  width: 372px!important;
+  height: 372px !important;
 }
 .img_product + div {
   border-radius: 10px;
@@ -620,10 +624,10 @@
   }
 
   .album_item {
-    width: 100%;
-    height: 335px;
-    padding-left: -12px;
-    padding-right: -12px;
+    width: 100% !important;
+    height: 335px !important;
+    border: none !important;
+padding: 0px;
   }
 
   .content {

@@ -663,10 +663,12 @@ function ProductScreen() {
             <Col span={24}>
               <Swiper
                 modules={[Navigation, Pagination, Scrollbar, A11y]}
+                loop={true}
                 breakpoints={{
                   1200: {
                     spaceBetween: 14,
                     slidesPerView: 6,
+                    loop: true,
                   },
                   0: {
                     spaceBetween: 12,
@@ -675,8 +677,7 @@ function ProductScreen() {
                   },
                 }}
                 style={{
-                  backgroundColor: "#2f6de5",
-                  padding: "10px",
+                  padding: "10px 0px",
                   borderRadius: "10px",
                   marginBottom: "60px",
                 }}
@@ -712,7 +713,11 @@ function ProductScreen() {
                               to={`/sanpham/${product.slug}`}
                               className={clsx(style.wrapper)}
                             >
-                              <Flex className={clsx(style.content)} vertical>
+                              <Flex
+                                style={{ border: "1px solid rgb(232 234 237)" }}
+                                className={clsx(style.content)}
+                                vertical
+                              >
                                 <Space className={clsx(style.content_discount)}>
                                   <Discount
                                     discount={product.discount}
@@ -795,6 +800,7 @@ function ProductScreen() {
               </Swiper>
             </Col>
           </Row>
+
           {/* gợi ý hôm nay */}
           <Row>
             <Col span={24}>

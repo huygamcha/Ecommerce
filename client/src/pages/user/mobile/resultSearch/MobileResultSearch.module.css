@@ -1,0 +1,63 @@
+/* Thiết lập padding cho sm */
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .wrapper_global {
+    background-color: #edf0f3;
+    padding: 20px;
+  }
+}
+.header_name{
+    font-size: 16px;
+    line-height: 24px;
+    max-width: 100%;
+    font-size: 14px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+   }
+.header_search_result {
+  /* max-height: 80vh; */
+  overflow: hidden;
+}
+.header_search_items {
+  color: #000;
+  display: block;
+  padding: 16px 0px;
+  border-bottom: 1px solid #e4e8ed;
+  cursor: pointer;
+}
+
+.header_search_items:hover {
+  border-radius: 5px;
+  color: #000;
+  background-color: #e4e8ed;
+}
+.header_search_items_img {
+  width: 85px !important;
+  height: 85px !important;
+}
+.header_tag{
+  color: #020b27;
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+.tag_wrapper{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tag_item{
+  padding: 8px;
+  display: inline-block;
+  border: 1px solid #c1c8d1;
+  border-radius: 50px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  color: #020b27;
+}
+.tag_item:hover{
+  color: #020b27;
+  
+}

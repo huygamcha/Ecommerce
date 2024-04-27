@@ -42,6 +42,9 @@ import Brand from "./pages/admin/brand";
 import BannerAdmin from "./pages/admin/banner";
 import Order from "./pages/admin/order";
 import OrderSuccess from "./components/orderSuccess";
+import SearchMobile from "./pages/layout/searchMobile";
+import HeaderScreenMobile from "./components/header/headerMobile";
+import MobileResultSearch from "./pages/user/mobile/resultSearch";
 const { Sider, Content } = Layout;
 numeral.locale("vi");
 
@@ -114,6 +117,19 @@ const router = createBrowserRouter([
       },
     ],
   },
+
+  {
+    path: "/mobile",
+    element: <SearchMobile />,
+    children: [
+      {
+        // path: "search", or
+        path: "/mobile",
+        element: <MobileResultSearch />,
+      },
+    ],
+  },
+
   {
     path: "/admin",
     element: <AdminRouter />,

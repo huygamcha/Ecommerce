@@ -1,7 +1,6 @@
-import React, { useCallback, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import {
   Button,
-  Checkbox,
   Form,
   Input,
   Card,
@@ -13,13 +12,7 @@ import {
   Select,
 } from "antd";
 import { useEffect } from "react";
-import {
-  createCategory,
-  deleteCategory,
-  updateCategory,
-} from "../../../slices/categorySlice";
 import { useAppSelector, useAppDispatch } from "../../../store";
-import { useForm } from "antd/es/form/Form";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
@@ -73,6 +66,7 @@ const FooterAdmin = (props: Props) => {
     name?: string;
     url?: string;
     column?: number;
+    optional?: string;
   };
 
   const [createForm] = Form.useForm<FieldType>();
@@ -166,6 +160,12 @@ const FooterAdmin = (props: Props) => {
         }
       },
     },
+    {
+      title: "Optional",
+      dataIndex: "optional",
+      key: "optional",
+      render: (text: string, record: any, index: number) => <div>{text}</div>,
+    },
 
     {
       title: "Column",
@@ -258,6 +258,10 @@ const FooterAdmin = (props: Props) => {
             <Input addonBefore="https://" />
           </Form.Item>
 
+          <Form.Item<FieldType> label="Optional" name="optional">
+            <Input />
+          </Form.Item>
+
           <Form.Item wrapperCol={{ offset: 6 }}>
             <Button type="primary" htmlType="submit">
               Thêm footer
@@ -321,6 +325,10 @@ const FooterAdmin = (props: Props) => {
 
             <Form.Item<FieldType> label="Url" name="url">
               <Input addonBefore="https://" />
+            </Form.Item>
+
+            <Form.Item<FieldType> label="Optional" name="optional">
+              <Input />
             </Form.Item>
           </Form>
         </Card>

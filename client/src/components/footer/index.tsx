@@ -14,6 +14,59 @@ const ListRender = ({
   specificColumn: number;
 }) => {
   const { footers } = useAppSelector((state) => state.footers);
+  return (
+    <Col xs={0} sm={4}>
+      <h4 className={clsx(style.text_heading)}>{title}</h4>
+      <Flex vertical>
+        {footers.map((footer) =>
+          footer.column === specificColumn ? (
+            <>
+              {footer.optional ? (
+                <div className={clsx(style.item_optional)}>
+                  <a
+                    className={clsx(style.text_item_optional)}
+                    target="_blank"
+                    href={footer.url}
+                    rel="noreferrer"
+                  >
+                    {footer.name}
+                  </a>
+                  <div>
+                    <a
+                      className={clsx(style.optional_item)}
+                      href={`tel:+${footer.optional}`}
+                    >
+                      {footer.optional}
+                    </a>
+                  </div>
+                </div>
+              ) : (
+                <a
+                  className={clsx(style.text_item)}
+                  target="_blank"
+                  href={footer.url}
+                  rel="noreferrer"
+                >
+                  {footer.name}
+                </a>
+              )}
+            </>
+          ) : (
+            <></>
+          )
+        )}
+      </Flex>
+    </Col>
+  );
+};
+const ListRenderMobile = ({
+  title,
+  specificColumn,
+}: {
+  title: string;
+  specificColumn: number;
+}) => {
+  const { footers } = useAppSelector((state) => state.footers);
   const [isShow, setIsShow] = useState<boolean>(false);
   return (
     <Col className={clsx(style.wrapper_mobile)} xs={24} sm={0}>
@@ -32,14 +85,37 @@ const ListRender = ({
       >
         {footers.map((footer) =>
           footer.column === specificColumn ? (
-            <a
-              className={clsx(style.text_item_mobile)}
-              target="_blank"
-              href={footer.url}
-              rel="noreferrer"
-            >
-              {footer.name}
-            </a>
+            <>
+              {footer.optional ? (
+                <div className={clsx(style.item_optional)}>
+                  <a
+                    className={clsx(style.text_item_mobile)}
+                    target="_blank"
+                    href={footer.url}
+                    rel="noreferrer"
+                  >
+                    {footer.name}
+                  </a>
+                  <div>
+                    <a
+                      className={clsx(style.optional_item)}
+                      href="https://zalo.me/0904309464"
+                    >
+                      {footer.optional}
+                    </a>
+                  </div>
+                </div>
+              ) : (
+                <a
+                  className={clsx(style.text_item_mobile)}
+                  target="_blank"
+                  href={footer.url}
+                  rel="noreferrer"
+                >
+                  {footer.name}
+                </a>
+              )}
+            </>
           ) : (
             <></>
           )
@@ -52,10 +128,6 @@ const ListRender = ({
 function FooterScreen() {
   const dispatch = useAppDispatch();
   const { footers } = useAppSelector((state) => state.footers);
-  const [isAbout, setIsAbout] = useState<boolean>(false);
-  const [isCategory, setIsCategory] = useState<boolean>(false);
-  const [isMore, setIsMore] = useState<boolean>(false);
-  const [isSwitchBoard, setIsSwitchBoard] = useState<boolean>(false);
 
   useEffect(() => {
     dispatch(getAllFooter());
@@ -64,82 +136,10 @@ function FooterScreen() {
   return (
     <div style={{ background: "#fff" }}>
       <Row className={clsx(style.global_wrapper)}>
-        <Col xs={0} sm={4}>
-          <h4 className={clsx(style.text_heading)}>VỀ CHÚNG TÔI</h4>
-          <Flex vertical>
-            {footers.map((footer) =>
-              footer.column === 1 ? (
-                <a
-                  className={clsx(style.text_item)}
-                  target="_blank"
-                  href={footer.url}
-                  rel="noreferrer"
-                >
-                  {footer.name}
-                </a>
-              ) : (
-                <></>
-              )
-            )}
-          </Flex>
-        </Col>
-        <Col xs={0} sm={4}>
-          <h4 className={clsx(style.text_heading)}>DANH MỤC</h4>
-          <Flex vertical>
-            {footers.map((footer) =>
-              footer.column === 2 ? (
-                <a
-                  className={clsx(style.text_item)}
-                  target="_blank"
-                  href={footer.url}
-                  rel="noreferrer"
-                >
-                  {footer.name}
-                </a>
-              ) : (
-                <></>
-              )
-            )}
-          </Flex>
-        </Col>
-        <Col xs={0} sm={4}>
-          <h4 className={clsx(style.text_heading)}>TÌM HIỂU THÊM</h4>
-          <Flex vertical>
-            {footers.map((footer) =>
-              footer.column === 3 ? (
-                <a
-                  className={clsx(style.text_item)}
-                  target="_blank"
-                  href={footer.url}
-                  rel="noreferrer"
-                >
-                  {footer.name}
-                </a>
-              ) : (
-                <></>
-              )
-            )}
-          </Flex>
-        </Col>
-        <Col xs={0} sm={4}>
-          <h4 className={clsx(style.text_heading)}>TỔNG ĐÀI</h4>
-          <Flex vertical>
-            {footers.map((footer) =>
-              footer.column === 4 ? (
-                <a
-                  className={clsx(style.text_item)}
-                  target="_blank"
-                  href={footer.url}
-                  rel="noreferrer"
-                >
-                  {footer.name}
-                </a>
-              ) : (
-                <></>
-              )
-            )}
-          </Flex>
-        </Col>
+        <ListRender title="về chúng tôi" specificColumn={1} />
+        <ListRender title="danh mục" specificColumn={2} />
+        <ListRender title="tìm hiểu thêm" specificColumn={3} />
+        <ListRender title="tổng đài" specificColumn={4} />
         <Col xs={0} sm={4}>
           <h4 className={clsx(style.text_heading)}>KẾT NỐI VỚI CHÚNG TÔI</h4>
           <Flex className={clsx(style.items)}>
@@ -216,11 +216,10 @@ function FooterScreen() {
             </Flex>
           </h4>
         </Col>
-
-        <ListRender title="VỀ CHÚNG TÔI" specificColumn={1} />
-        <ListRender title="DANH MỤC" specificColumn={2} />
-        <ListRender title="TÌM HIỂU THÊM" specificColumn={3} />
-        <ListRender title="TỔNG ĐÀI" specificColumn={4} />
+        <ListRenderMobile title="VỀ CHÚNG TÔI" specificColumn={1} />
+        <ListRenderMobile title="DANH MỤC" specificColumn={2} />
+        <ListRenderMobile title="TÌM HIỂU THÊM" specificColumn={3} />
+        <ListRenderMobile title="TỔNG ĐÀI" specificColumn={4} />
 
         <Col style={{ textAlign: "center", margin: "30px 0px" }} span={24}>
           © 2024 Cửa hàng Pam

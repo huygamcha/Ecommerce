@@ -38,7 +38,7 @@ module.exports = {
 
   createFooter: async (req, res, next) => {
     try {
-      const { name, url, column } = req.body;
+      const { name, url, column, optional } = req.body;
 
       const errors = {};
 
@@ -58,6 +58,7 @@ module.exports = {
         name,
         column,
         url,
+        optional,
       });
 
       const payload = await newFooter.save();
@@ -102,7 +103,7 @@ module.exports = {
   updateFooter: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const { name, url, column } = req.body;
+      const { name, url, column, optional } = req.body;
       const payload = await Footer.findById(id);
 
       const errors = {};
@@ -132,6 +133,7 @@ module.exports = {
           name: name || this.name,
           url: url || this.url,
           column: column || this.column,
+          optional: optional || this.optional,
         },
         {
           new: true,

@@ -12,13 +12,37 @@
   font-size: 12px;
   line-height: 16px;
   margin-bottom: 8px;
+  text-transform: uppercase;
 }
-
+.item_optional{
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
 .text_item {
   font-size: 14px;
   line-height: 20px;
   color: #1250dc;
   margin: 5px 0px;
+}
+.text_item_optional{
+  color: #4a4f63;
+  font-weight: 600;
+  margin-bottom: 4px;
+  font-size: 14px;
+  line-height: 20px;
+}
+.text_item_optional:hover{
+  color: #4a4f63;
+}
+.optional_item {
+  color: #1250dc;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+}
+.optional_item:hover{
+  color: #1250dc;
 }
 
 .text_item:hover {
@@ -76,6 +100,15 @@
   }
   .dropdown_item.active {
     display: flex;
+  }
+  .item_optional{
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 0px;
+  }
+  .optional_item{
+    font-size: 13px;
+    font-weight: 600;
   }
 
 }

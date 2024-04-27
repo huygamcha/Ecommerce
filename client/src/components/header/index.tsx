@@ -20,6 +20,7 @@ import numeral from "numeral";
 import { logout } from "../../slices/authSlice";
 import {
   createCartFromCustomer,
+  getAllCart,
   resetCartNotification,
 } from "../../slices/cartSlice";
 import { getAllTag } from "../../slices/tagSlice";
@@ -39,6 +40,7 @@ const ListItemBrand = ({
 }) => {
   const { brands } = useAppSelector((state) => state.brands);
   const [isShow, setIsShow] = useState<boolean>(false);
+
   return (
     <>
       <Flex
@@ -122,6 +124,7 @@ function HeaderScreen() {
   const { brands } = useAppSelector((state) => state.brands);
   const { add } = useAppSelector((state) => state.carts);
   const { tags } = useAppSelector((state) => state.tags);
+  const { carts } = useAppSelector((state) => state.carts);
 
   const handleSearch = (e: any) => {
     dispatch(getAllProductSearch({ search: e.target.value }));
@@ -164,6 +167,7 @@ function HeaderScreen() {
     if (tags.length === 0) dispatch(getAllTag());
     if (brands.length === 0) dispatch(getAllBrand());
     if (categories.length === 0) dispatch(getAllCategory());
+    if (carts.length === 0) dispatch(getAllCart());
   }, []);
 
   //click
@@ -276,24 +280,23 @@ function HeaderScreen() {
                     to="/cart"
                     style={{ display: "flex", justifyContent: "end" }}
                   >
-                    <Badge
-                      className={clsx(style.customFA)}
-                      dot={show}
-                      status="warning"
-                    >
-                      <FaCartShopping className={clsx(style.button_icon)} />
-                    </Badge>
+                    <div className={clsx(style.button_header_text)}>
+                      <FaCartShopping
+                        className={clsx(style.cart_notification_wrapper)}
+                      />
+                      <div className={clsx(style.cart_notification_item)}>
+                        {carts ? carts.length : 0}
+                      </div>
+                    </div>
                   </Link>
                 </Col>
                 <Col xs={24} sm={0}>
                   <Flex>
                     <Input
                       type="text"
-                      value={search}
-                      onChange={handleSearch}
                       className={clsx(style.header_search_input)}
                       placeholder="Tìm kiếm sản phẩm"
-                      onFocus={handleSearch}
+                      onClick={() => navigate("/mobile")}
                     ></Input>
 
                     <div className={clsx(style.header_search_icon_search)}>
@@ -377,12 +380,10 @@ function HeaderScreen() {
                     <Col xs={20} sm={0}>
                       <Flex>
                         <Input
+                          onClick={() => navigate("/mobile")}
                           type="text"
-                          value={search}
-                          onChange={handleSearch}
                           className={clsx(style.header_search_input)}
                           placeholder="Tìm kiếm sản phẩm"
-                          onFocus={handleSearch}
                         ></Input>
 
                         <div className={clsx(style.header_search_icon_search)}>
@@ -398,53 +399,6 @@ function HeaderScreen() {
                         >
                           {search ? <TiDelete /> : <></>}
                         </div>
-
-                        {/* search result  mobile*/}
-                        <Space
-                          ref={wrapperRef}
-                          className={clsx(
-                            style.header_search_result,
-                            style.active
-                          )}
-                        >
-                          {isList && productsSearch ? (
-                            productsSearch.map((product) => (
-                              <Link
-                                // pc
-                                className={clsx(style.header_search_items)}
-                                to={`/sanpham/${product.slug}`}
-                                onClick={() => handleDetail(product._id)}
-                              >
-                                <Flex>
-                                  <Space style={{ marginRight: "10px" }}>
-                                    <Image
-                                      className={clsx(
-                                        style.header_search_items_img
-                                      )}
-                                      src={product?.pic}
-                                    ></Image>
-                                  </Space>
-                                  <Flex vertical>
-                                    <div className={clsx(style.header_name)}>
-                                      {product.name}
-                                    </div>
-                                    <Space style={{ fontWeight: "bold" }}>
-                                      <div>
-                                        {" "}
-                                        {numeral(product.total).format(
-                                          "0,0$"
-                                        )}{" "}
-                                        / {product.unit}
-                                      </div>
-                                    </Space>
-                                  </Flex>
-                                </Flex>
-                              </Link>
-                            ))
-                          ) : (
-                            <></>
-                          )}
-                        </Space>
                       </Flex>
                     </Col>
                     <Col xs={2} sm={0}>
@@ -454,13 +408,14 @@ function HeaderScreen() {
                         to="/cart"
                         style={{ display: "flex", justifyContent: "end" }}
                       >
-                        <Badge
-                          className={clsx(style.customFA)}
-                          dot={show}
-                          status="warning"
-                        >
-                          <FaCartShopping className={clsx(style.button_icon)} />
-                        </Badge>
+                        <div className={clsx(style.button_header_text)}>
+                          <FaCartShopping
+                            className={clsx(style.cart_notification_wrapper)}
+                          />
+                          <div className={clsx(style.cart_notification_item)}>
+                            {carts ? carts.length : 0}
+                          </div>
+                        </div>
                       </Link>
                     </Col>
                   </Row>
@@ -469,6 +424,7 @@ function HeaderScreen() {
             </Col>
           )}
 
+          {/* pc */}
           <Col xs={0} sm={2} md={2} lg={5}>
             <Link to="/" className={clsx(style.header_text)}>
               <img
@@ -606,14 +562,13 @@ function HeaderScreen() {
                   className={clsx(style.button_header_text)}
                   to="/cart"
                 >
-                  <Badge
-                    className={clsx(style.customFA)}
-                    dot={show}
-                    status="warning"
-                  >
-                    <FaCartShopping className={clsx(style.button_icon)} />
-                  </Badge>
-                  <Space>Giỏ hàng</Space>
+                  <div className={clsx(style.cart_notification_wrapper)}>
+                    <FaCartShopping />
+                    <div className={clsx(style.cart_notification_item)}>
+                      {carts ? carts.length : 0}
+                    </div>
+                  </div>
+                  <Space style={{ marginLeft: "4px" }}>Giỏ hàng</Space>
                 </Link>
               </Space>
             </Flex>

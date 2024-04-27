@@ -30,7 +30,7 @@ interface ProductSearchType {
   search?: string;
   page?: number;
   pageSize?: number;
-  searchTag?: string ;
+  searchTag?: string;
   categoryId?: string;
   brandId?: string;
   priceFrom?: number;
@@ -46,6 +46,7 @@ interface InitialType {
   loading: boolean;
   deleted: boolean;
   updated: boolean;
+  isList: boolean;
   products: ProductsType[];
   productsSearch: ProductsType[];
   productsHistory: ProductsType[];
@@ -81,6 +82,7 @@ const initialState: InitialType = {
   loading: false,
   deleted: false,
   updated: false,
+  isList: false,
   products: [],
   productsSearch: [],
   productsHistory: []
@@ -125,20 +127,20 @@ const getAllProductSearch = createAsyncThunk<ProductsType[], ProductSearchType>(
       ? JSON.parse(localStorage.getItem("searchAge")!)
       : undefined;
 
-    let { searchTag, priceFrom, priceTo, ageFrom, ageTo , categoryId, brandId, search } = arg;
+    let { searchTag, priceFrom, priceTo, ageFrom, ageTo, categoryId, brandId, search } = arg;
     console.log('««««« arg »»»»»', arg);
 
     if (!search) {
-      search= ''
+      search = ''
     }
-    
+
     if (!searchTag) {
       searchTag = ''
     }
     if (filter && filter.searchTag) {
       searchTag = filter.searchTag;
     }
-  
+
     if (!categoryId) {
       categoryId = filter?.categoryId; // Use optional chaining to safely access filter.categoryId
     }
@@ -171,7 +173,7 @@ const getAllProductSearch = createAsyncThunk<ProductsType[], ProductSearchType>(
       ageTo = 100;
     }
     const response = await axios.get(
-      `${process.env.REACT_APP_BACKEND}/products/search?${categoryId? `categoryId=${categoryId}` : ''}${searchTag? `&searchTag=${searchTag}` : ''}${brandId? `&brandId=${brandId}` : ''}&priceFrom=${priceFrom}&priceTo=${priceTo}&ageFrom=${ageFrom}&ageTo=${ageTo}&search=${search}`
+      `${process.env.REACT_APP_BACKEND}/products/search?${categoryId ? `categoryId=${categoryId}` : ''}${searchTag ? `&searchTag=${searchTag}` : ''}${brandId ? `&brandId=${brandId}` : ''}&priceFrom=${priceFrom}&priceTo=${priceTo}&ageFrom=${ageFrom}&ageTo=${ageTo}&search=${search}`
     );
     const data: ProductsType[] = response.data.payload;
     return data; // Assuming products are in the `data` property of the response
@@ -182,10 +184,10 @@ const getProductByCategories = createAsyncThunk<
   ProductsType[],
   string | undefined
 >("product/getProductByCategories", async (id) => {
-  
+
   const categoryId = localStorage.getItem("searchCategory")
-  ? JSON.parse(localStorage.getItem("searchCategory")!)
-  : undefined;
+    ? JSON.parse(localStorage.getItem("searchCategory")!)
+    : undefined;
 
   if (!id) {
     id = categoryId.id
@@ -215,7 +217,7 @@ const getProductById = createAsyncThunk<ProductsType, string | undefined>(
   async (id) => {
     const response = await axios.get(
       `${process.env.REACT_APP_BACKEND}/products/${id}`
-      );
+    );
     const data: ProductsType = response.data.payload;
     return data; // Assuming products are in the `data` property of the response
   }
@@ -304,6 +306,16 @@ const productSlice = createSlice({
     //     state.productsHistory.push(action.payload.id)
     //   }
     // }
+
+    hasList: (state, action) => {
+      if (action.payload.isList) {
+        state.isList = true
+      }
+      else {
+        state.isList = false
+      }
+    }
+
   },
   extraReducers(builder) {
     //get all
@@ -382,8 +394,13 @@ const productSlice = createSlice({
     });
     builder.addCase(getProductBySuppliers.rejected, (state, action) => {
       state.loading = false;
-      const customErrors = action.payload as { message?: string; errors?: any };
-      state.error = customErrors.errors || undefined; // Ensure a default message or fallback if action.error is undefined
+      if (action.payload) { // Check if payload exists
+        const customErrors = action.payload as { message?: string; errors?: any };
+        state.error = customErrors.errors || undefined;
+      } else {
+        // Handle the case where there's no payload (optional)
+        state.error = { message: "", errors: { name: "" } };
+      }
     });
 
     //get by id
@@ -400,8 +417,13 @@ const productSlice = createSlice({
     builder.addCase(getProductById.rejected, (state, action) => {
       console.log("««««« action »»»»»", action);
       state.loading = false;
-      const customErrors = action.payload as { message?: string; errors?: any };
-      state.error = customErrors.errors || undefined; // Ensure a default message or fallback if action.error is undefined
+      if (action.payload) { // Check if payload exists
+        const customErrors = action.payload as { message?: string; errors?: any };
+        state.error = customErrors.errors || undefined;
+      } else {
+        // Handle the case where there's no payload (optional)
+        state.error = { message: "", errors: { name: "" } };
+      }
     });
 
     // create
@@ -420,9 +442,14 @@ const productSlice = createSlice({
       // redux chỉ hỗ trợ gọi tới action.payload
       // nếu gọi thêm action.payload.errors để trả rả như postman thì
       // redux không chắc rằng errors có phải là một object không nên nó không lưu => lỗi
-      const customErrors = action.payload as { message?: string; errors?: any };
       state.loading = false;
-      state.error = customErrors; // Ensure a default message or fallback if action.error is undefined
+      if (action.payload) { // Check if payload exists
+        const customErrors = action.payload as { message?: string; errors?: any };
+        state.error = customErrors.errors || undefined;
+      } else {
+        // Handle the case where there's no payload (optional)
+        state.error = { message: "", errors: { name: "" } };
+      }
     });
 
     //delete
@@ -436,9 +463,14 @@ const productSlice = createSlice({
       state.product = action.payload;
     });
     builder.addCase(deleteProduct.rejected, (state, action) => {
-      const customErrors = action.payload as { message?: string; errors?: any };
       state.loading = false;
-      state.error = customErrors.errors || undefined; // Ensure a default message or fallback if action.error is undefined
+      if (action.payload) { // Check if payload exists
+        const customErrors = action.payload as { message?: string; errors?: any };
+        state.error = customErrors.errors || undefined;
+      } else {
+        // Handle the case where there's no payload (optional)
+        state.error = { message: "", errors: { name: "" } };
+      }
     });
 
     //update
@@ -453,8 +485,13 @@ const productSlice = createSlice({
     });
     builder.addCase(updateProduct.rejected, (state, action) => {
       state.loading = false;
-      const customErrors = action.payload as { message?: string; errors?: any };
-      state.error = customErrors; // Ensure a default message or fallback if action.error is undefined
+      if (action.payload) { // Check if payload exists
+        const customErrors = action.payload as { message?: string; errors?: any };
+        state.error = customErrors.errors || undefined;
+      } else {
+        // Handle the case where there's no payload (optional)
+        state.error = { message: "", errors: { name: "" } };
+      }
     });
   },
 });
@@ -473,4 +510,4 @@ export {
   getAllProductSearch,
 };
 
-// export const { addToHistory } = actions
+export const { hasList } = actions

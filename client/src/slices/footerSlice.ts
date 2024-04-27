@@ -5,6 +5,7 @@ interface FooterType {
   name: string;
   column: number;
   url?: string;
+  optional?: string;
 }
 
 interface InitialType {
@@ -31,6 +32,7 @@ const initialState: InitialType = {
     name: "",
     column: 1,
     url: "",
+    optional: "",
   },
   loading: false,
   deleted: false,
