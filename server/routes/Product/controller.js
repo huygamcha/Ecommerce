@@ -366,7 +366,7 @@ module.exports = {
   updateProduct: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const {
+      let {
         name,
         price,
         discount,
@@ -386,7 +386,14 @@ module.exports = {
         specifications,
         unit,
         album,
+        sold,
+        autoQuantity,
+        quantity,
       } = req.body;
+
+      if (!autoQuantity) {
+        autoQuantity = 2;
+      }
 
       const errors = {};
       const exitName = Product.findOne({ _id: { $ne: id }, name });
@@ -438,14 +445,24 @@ module.exports = {
           message: "Không tìm thấy sản phẩm",
         });
       }
-
+      // 2 == update bth, 3 === tang so luong(khong mua) , 1 === tru so luong stock(mua)
+      console.log("««««« autoQuantity check »»»»»", autoQuantity);
+      if (autoQuantity === 1) {
+        stock = payload.stock - quantity;
+        sold = payload.sold + quantity;
+      }
+      if (autoQuantity === 3) {
+        stock = payload.stock + quantity;
+        sold = payload.sold - quantity;
+      }
+      console.log("««««« sold, stock »»»»»", this.stock, stock, quantity);
       const result = await Product.findByIdAndUpdate(
         id,
         {
           name: name || this.name,
           price: price || this.price,
           stock: stock || this.stock,
-          discount: discount || this.discount,
+          sold: sold || this.sold,
           description: description || this.description,
           categoryId: categoryId || this.categoryId,
           supplierId: supplierId || this.supplierId,

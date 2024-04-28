@@ -43,6 +43,7 @@ import axios from "axios";
 import {
   getAllProductSearch,
   getProductById,
+  updateProduct,
 } from "../../../slices/productSlice";
 import { createOrder } from "../../../slices/orderSlice";
 import NoCart from "../../../components/noCart";
@@ -139,6 +140,16 @@ function CartScreen() {
   };
 
   const onFinish = async (values: FieldType) => {
+    carts &&
+      carts.map(async (value: any) => {
+        console.log("««««« value cart »»»»»", value);
+        await dispatch(
+          updateProduct({
+            id: value.id,
+            values: { ...value, quantity: value.quantity, autoQuantity: 1 },
+          })
+        );
+      });
     await dispatch(createOrder({ ...values, listProduct: carts }));
     navigate("/cart/thanhcong");
   };

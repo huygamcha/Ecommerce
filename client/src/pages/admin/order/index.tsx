@@ -32,6 +32,7 @@ import { render } from "@testing-library/react";
 import numeral from "numeral";
 import { StringLiteral } from "typescript";
 import axios from "axios";
+import { updateProduct } from "../../../slices/productSlice";
 
 type Props = {};
 
@@ -116,13 +117,21 @@ const Order = (props: Props) => {
 
   // update order modal
   const onUpdate = async (values: any) => {
-    console.log("««««« values order»»»»»", values);
     await dispatch(updateOrder({ id: selectedOrder, values: values }));
     setIsActive(!isActive);
   };
 
-  const onDelete = async (values: any) => {
-    await dispatch(deleteOrder(values));
+  const onDelete = async (values: any, carts: any) => {
+    carts &&
+      carts.map(async (value: any) => {
+        await dispatch(
+          updateProduct({
+            id: value.id,
+            values: { ...value, quantity: value.quantity, autoQuantity: 3 },
+          })
+        );
+      });
+    // await dispatch(deleteOrder(values));
     dispatch(getAllOrder());
     onShowMessage("Xoá đơn đặt hàng thành công");
   };
@@ -270,8 +279,8 @@ const Order = (props: Props) => {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
-      render: (text: any, record: any, index: number) => {
-        return <div>{text ? `đã giao` : "chưa giao"}</div>;
+      render: (text: boolean, record: any, index: number) => {
+        return <div>{record.status ? "đã giao" : "chưa giao"}</div>;
       },
     },
     // {
@@ -318,7 +327,7 @@ const Order = (props: Props) => {
               title="Xoá đơn đặt hàng"
               description="Bạn có chắc xoá đơn đặt hàng này không?"
               onConfirm={() => {
-                onDelete(record._id);
+                onDelete(record._id, record.listProduct);
               }}
             >
               <Button type="primary" danger icon={<DeleteOutlined />} />
@@ -646,8 +655,9 @@ const Order = (props: Props) => {
                     ? updateForm
                         .getFieldValue("listProduct")
                         .map((item: any, index: number) => {
-                          // console.log("««««« item »»»»»", item.name);
-                          return `${index + 1}. ${item.name}.`;
+                          return `${index + 1}. ${item.name} (x${
+                            item.quantity
+                          }).`;
                         })
                         .join("\n")
                     : ""

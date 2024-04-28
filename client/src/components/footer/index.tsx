@@ -219,7 +219,7 @@ const ListRenderMobile = ({
               </Space>
             </Flex>
           </h4>
-          <Flex>
+          <Flex style={{ flexWrap: "wrap" }}>
             <img
               className={clsx(style.payment_list)}
               src="https://cdn1.nhathuoclongchau.com.vn/visa_fdc3324c35.svg"

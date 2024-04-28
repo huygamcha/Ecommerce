@@ -379,10 +379,17 @@
   letter-spacing: 0.005em;
   color: #020b27;
 }
+.product_wrapper_show{
+  position: relative;
+  margin-bottom: 20px;
+}
 
 .product_detail_show {
-  margin: 0px 50px;
+  position: absolute;
+  bottom: -10px;
   margin-top: 10px;
+  padding: 20px;
+
   cursor: pointer;
   letter-spacing: 0.005em;
   color: #020b27;
@@ -392,12 +399,20 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  margin-bottom: 10px;
+  margin-bottom: 10px; 
+  background: linear-gradient(rgba(245,245,245, 0) 0%, rgba(245,245,245, 0.7) 21.88%, rgba(245,245,245, 0.95) 45.31%, rgb(245,245,245) 67.71%, rgb(245,245,245) 100%);
+}
+.product_detail_show.show{
+  background: #f5f5f5;
+  bottom: -40px;
+  padding: 10px;
+
+
 }
 
 .product_detail {
   margin: 0px 16px;
-  height: 300px;
+  height: 200px;
   overflow: hidden;
   width: 100%;
 }
@@ -460,9 +475,9 @@
 }
 
 .filter_select_wrapper_recommend>div {
-  margin-left: 10px;
+  margin-right: 10px;
 }
-
+.filter_select__age_wrapper,
 .filter_select__tag_wrapper {
   background-color: #fff;
   border-radius: 10px;
@@ -471,14 +486,26 @@
   overflow-x: auto;
   display: flex;
 }
+.filter_select__tag_wrapper{
+  background-color: transparent;
+  padding: 0px;
+  margin-bottom: 0px;
+
+}
+.filter_select__age_wrapper{
+  margin-bottom: 0px;
+  padding: 0px;
+}
 /* Tạo thanh cuộn trong suốt cho Chrome, Safari và Edge */
-.filter_select__tag_wrapper::-webkit-scrollbar {
+.filter_select__tag_wrapper::-webkit-scrollbar,
+.filter_select__age_wrapper::-webkit-scrollbar {
   display: none;
   width:0px; /* Điều chỉnh độ rộng của thanh cuộn */
 }
 /* thiếu firefox */
 /* Tạo thanh cuộn trong suốt cho Firefox */
-.swiper-filter_select__tag_wrapper {
+.swiper-filter_select__tag_wrapper,
+.swiper-filter_select__age_wrapper {
   display: none;
   scrollbar-width: 0px;
 }
@@ -641,10 +668,10 @@
   }
 
   .album_item {
-    width: 100% !important;
-    height: 335px !important;
+    width: 393px !important;
+    height: 393px !important;
     border: none !important;
-padding: 0px;
+    padding: 0px;
   }
 
   .content {
@@ -813,14 +840,14 @@ padding: 0px;
     line-height: 28px;
     margin: 0px;
     margin-top: 0px;
-    background: #edf0f3;
+    /* background: #edf0f3; */
     letter-spacing: 0.005em;
     color: #020b27;
   }
 
   .product_detail {
     margin: 0px;
-    height: 300px;
+    height: 200px;
     overflow: hidden;
     width: 100%;
     text-align: start;

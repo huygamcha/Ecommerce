@@ -3,6 +3,7 @@ import axios from "axios";
 
 interface ProductsType {
   _id: string;
+  autoQuantity: number;
   name: string;
   description: string;
   categoryId: string;
@@ -24,6 +25,8 @@ interface ProductsType {
   album: Array<string>;
   age: number;
   tagList: Array<string>;
+  quantity: number;
+  sold: number;
 }
 
 interface ProductSearchType {
@@ -56,6 +59,9 @@ const initialState: InitialType = {
   success: false,
   error: { message: "", errors: { name: "" } },
   product: {
+    sold: 0,
+    quantity: 0,
+    autoQuantity: 2,
     tagList: [],
     album: [''],
     brand: {},
@@ -284,13 +290,11 @@ const updateProduct = createAsyncThunk<
   ProductsType,
   { id: string; values: ProductsType }
 >("product/updateProduct", async ({ id, values }, { rejectWithValue }) => {
-  const currentUser =  localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
-
   try {
     const config = {
       headers: {
         "Content-type": "application/json",
-        Authorization: `Bearer ${currentUser.token}`,
+        // Authorization: `Bearer ${currentUser.token}`,
       },
     };
     const response = await axios.patch(

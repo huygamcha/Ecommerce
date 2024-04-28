@@ -37,6 +37,7 @@ import { getAllBanner } from "../../../slices/bannerSlice";
 import MenuFooter from "../../../components/MenuFooter";
 import Label from "../../../components/label";
 import { FaDivide } from "react-icons/fa6";
+import { PiCaretDoubleDownBold, PiCaretDoubleUpBold } from "react-icons/pi";
 
 function ProductScreen() {
   const { products, error } = useAppSelector((state) => state.products);
@@ -49,6 +50,7 @@ function ProductScreen() {
   const navigate = useNavigate();
 
   const [searchAge, setSearchAge] = useState<Number>(1);
+  const [moreTopSale, setMoreTopSale] = useState<number>(5);
   const [searchTag, setSearchTag] = useState<string>(
     "65d8b631214ed285ba4bc016"
   );
@@ -94,6 +96,7 @@ function ProductScreen() {
       JSON.stringify({ categoryId: categoryId, brandId: brandId })
     );
   };
+  let count = 0;
 
   return (
     <>
@@ -189,84 +192,224 @@ function ProductScreen() {
               <Row gutter={{ xs: 7, sm: 14 }}>
                 {products && error.message === "" ? (
                   products.map((product, index) => {
-                    if (index <= 11)
-                      return (
-                        <Col xs={12} md={12} lg={4} style={{}}>
-                          <Link
-                            onClick={() =>
-                              handleDetail(product._id, product.categoryId)
-                            }
-                            to={`/sanpham/${product.slug}`}
-                            className={clsx(style.wrapper)}
-                          >
-                            <Flex className={clsx(style.content)} vertical>
-                              <Space className={clsx(style.content_discount)}>
-                                <Discount
-                                  discount={product.discount}
-                                ></Discount>
-                              </Space>
-                              <Space className={clsx(style.label_wrapper)}>
-                                <Label title={product.category.name} />
-                              </Space>
+                    if (window.innerWidth > 576) {
+                      if (index <= 11) {
+                        return (
+                          <Col xs={0} md={12} lg={4} style={{}}>
+                            <Link
+                              onClick={() =>
+                                handleDetail(product._id, product.categoryId)
+                              }
+                              to={`/sanpham/${product.slug}`}
+                              className={clsx(style.wrapper)}
+                            >
+                              <Flex className={clsx(style.content)} vertical>
+                                <Space className={clsx(style.content_discount)}>
+                                  <Discount
+                                    discount={product.discount}
+                                  ></Discount>
+                                </Space>
+                                <Space className={clsx(style.label_wrapper)}>
+                                  <Label title={product.category.name} />
+                                </Space>
 
-                              <Flex justify="center">
-                                <img
-                                  src={product.pic}
-                                  className={clsx(style.content_img)}
-                                  alt=""
-                                />
-                              </Flex>
-                              <Flex
-                                vertical
-                                justify="space-between"
-                                style={{ padding: "50px 20px 20px 20px" }}
-                              >
-                                <Space className={clsx(style.header_text)}>
-                                  {product.name}
-                                </Space>
-                                <Space className={clsx(style.header_discount)}>
+                                <Flex justify="center">
+                                  <img
+                                    src={product.pic}
+                                    className={clsx(style.content_img)}
+                                    alt=""
+                                  />
+                                </Flex>
+                                <Flex
+                                  vertical
+                                  justify="space-between"
+                                  style={{ padding: "50px 20px 20px 20px" }}
+                                >
+                                  <Space className={clsx(style.header_text)}>
+                                    {product.name}
+                                  </Space>
+                                  <Space
+                                    className={clsx(style.header_discount)}
+                                  >
+                                    {product && product?.discount > 0 ? (
+                                      <>
+                                        <Space>
+                                          <div>
+                                            {numeral(product?.total).format(
+                                              "0,0$"
+                                            )}
+                                            <span style={{ margin: "0 2px" }}>
+                                              &#47;
+                                            </span>
+                                            {product.unit}
+                                          </div>
+                                        </Space>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <Space>
+                                          <div>
+                                            {numeral(product?.price).format(
+                                              "0,0$"
+                                            )}
+                                            <span style={{ margin: "0 2px" }}>
+                                              &#47;
+                                            </span>
+                                            {product?.unit}
+                                          </div>
+                                        </Space>
+                                      </>
+                                    )}
+                                  </Space>
                                   {product && product?.discount > 0 ? (
-                                    <>
-                                      <Space>
-                                        <div>
-                                          {numeral(product?.total).format(
-                                            "0,0$"
-                                          )}
-                                          <span style={{ margin: "0 2px" }}>
-                                            &#47;
-                                          </span>
-                                          {product.unit}
-                                        </div>
-                                      </Space>
-                                    </>
+                                    <del className={clsx(style.header_price)}>
+                                      {numeral(product.price).format("0,0$")}
+                                    </del>
                                   ) : (
-                                    <>
-                                      <Space>
-                                        <div>
-                                          {numeral(product?.price).format(
-                                            "0,0$"
-                                          )}
-                                          <span style={{ margin: "0 2px" }}>
-                                            &#47;
-                                          </span>
-                                          {product?.unit}
-                                        </div>
-                                      </Space>
-                                    </>
+                                    <></>
                                   )}
-                                </Space>
-                                {product && product?.discount > 0 ? (
-                                  <del className={clsx(style.header_price)}>
-                                    {numeral(product.price).format("0,0$")}
-                                  </del>
-                                ) : (
-                                  <></>
-                                )}
+                                </Flex>
                               </Flex>
-                            </Flex>
-                          </Link>
-                        </Col>
-                      );
+                            </Link>
+                          </Col>
+                        );
+                      }
+                    } else {
+                      if (index <= moreTopSale) {
+                        return (
+                          <>
+                            <Col xs={12} md={0}>
+                              <Link
+                                onClick={() =>
+                                  handleDetail(product._id, product.categoryId)
+                                }
+                                to={`/sanpham/${product.slug}`}
+                                className={clsx(style.wrapper)}
+                              >
+                                <Flex className={clsx(style.content)} vertical>
+                                  <Space
+                                    className={clsx(style.content_discount)}
+                                  >
+                                    <Discount
+                                      discount={product.discount}
+                                    ></Discount>
+                                  </Space>
+                                  <Space className={clsx(style.label_wrapper)}>
+                                    <Label title={product.category.name} />
+                                  </Space>
+
+                                  <Flex justify="center">
+                                    <img
+                                      src={product.pic}
+                                      className={clsx(style.content_img)}
+                                      alt=""
+                                    />
+                                  </Flex>
+                                  <Flex
+                                    vertical
+                                    justify="space-between"
+                                    style={{ padding: "50px 20px 20px 20px" }}
+                                  >
+                                    <Space className={clsx(style.header_text)}>
+                                      {product.name}
+                                    </Space>
+                                    <Space
+                                      className={clsx(style.header_discount)}
+                                    >
+                                      {product && product?.discount > 0 ? (
+                                        <>
+                                          <Space>
+                                            <div>
+                                              {numeral(product?.total).format(
+                                                "0,0$"
+                                              )}
+                                              <span style={{ margin: "0 2px" }}>
+                                                &#47;
+                                              </span>
+                                              {product.unit}
+                                            </div>
+                                          </Space>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <Space>
+                                            <div>
+                                              {numeral(product?.price).format(
+                                                "0,0$"
+                                              )}
+                                              <span style={{ margin: "0 2px" }}>
+                                                &#47;
+                                              </span>
+                                              {product?.unit}
+                                            </div>
+                                          </Space>
+                                        </>
+                                      )}
+                                    </Space>
+                                    {product && product?.discount > 0 ? (
+                                      <del className={clsx(style.header_price)}>
+                                        {numeral(product.price).format("0,0$")}
+                                      </del>
+                                    ) : (
+                                      <></>
+                                    )}
+                                  </Flex>
+                                </Flex>
+                              </Link>
+                            </Col>
+
+                            {index === 5 && moreTopSale === 5 ? (
+                              <Col
+                                onClick={() => setMoreTopSale(11)}
+                                style={{
+                                  textAlign: "center",
+                                  fontSize: "14px",
+                                  lineHeight: "20px",
+                                  fontWeight: "600",
+                                }}
+                                span={24}
+                              >
+                                <Flex
+                                  justify="center"
+                                  style={{ marginTop: "10px" }}
+                                  align="center"
+                                >
+                                  <PiCaretDoubleDownBold />
+                                  <Space
+                                    style={{
+                                      marginLeft: "5px",
+                                      fontSize: "14px",
+                                      fontWeight: "600",
+                                    }}
+                                  >
+                                    Xem thêm 6 sản phẩm
+                                  </Space>
+                                </Flex>
+                              </Col>
+                            ) : index === 11 && moreTopSale === 11 ? (
+                              <Col onClick={() => setMoreTopSale(5)} span={24}>
+                                <Flex
+                                  style={{ marginTop: "10px" }}
+                                  justify="center"
+                                  align="center"
+                                >
+                                  <PiCaretDoubleUpBold />
+                                  <Space
+                                    style={{
+                                      marginLeft: "5px",
+                                      fontSize: "14px",
+                                      fontWeight: "600",
+                                    }}
+                                  >
+                                    Thu gọn
+                                  </Space>
+                                </Flex>
+                              </Col>
+                            ) : null}
+                          </>
+                        );
+                      }
+                    }
                   })
                 ) : (
                   <Col xs={24} sm={24} style={{ marginBottom: "25px" }}>
@@ -279,7 +422,7 @@ function ProductScreen() {
         </div>
       </div>
 
-      {/* most brand */}
+      {/* thương hiệu */}
       <div
         style={{
           background:
@@ -287,7 +430,6 @@ function ProductScreen() {
         }}
       >
         <div className={clsx(style.wrapper_global)}>
-          {/* thương hiệu */}
           <Row>
             <Col span={24}>
               <Flex align="center" className={clsx(style.title_product_relate)}>
@@ -535,130 +677,97 @@ function ProductScreen() {
               </Flex>
             </Col>
             <Col span={24}>
-              <Swiper
-                modules={[Navigation, Pagination, Scrollbar, A11y]}
-                autoHeight={true}
-                breakpoints={{
-                  1200: {
-                    spaceBetween: 10,
-                    slidesPerView: 9,
-                  },
-                  0: {
-                    spaceBetween: 10,
-                    slidesPerView: 2,
-                  },
-                }}
-                style={{
-                  backgroundColor: "#fff",
-                  borderRadius: "10px",
-                }}
+              <div
+                className={clsx(
+                  style.filter_select_wrapper_recommend,
+                  style.filter_select__age_wrapper
+                )}
               >
-                <Flex className={clsx(style.filter_select_wrapper)}>
-                  <SwiperSlide style={{ width: "auto" }}>
-                    <div>
-                      <Button
-                        style={{
-                          borderColor: searchAge === 1 ? " #1250dc" : "#a9b2be",
-                          color: searchAge === 1 ? "#1250dc" : "#4a4f63",
-                        }}
-                        onClick={() => setSearchAge(1)}
-                        className={clsx(style.filter_select)}
-                      >
-                        Sơ sinh - 1 tuổi
-                        <div
-                          className={clsx(
-                            searchAge === 1
-                              ? style.filter_label
-                              : { display: "none" }
-                          )}
-                        >
-                          <div style={{ display: "none" }}>
-                            Sơ sinh - 1 tuổi
-                          </div>
-                        </div>
-                      </Button>
-                    </div>
-                  </SwiperSlide>
-
-                  <SwiperSlide style={{ width: "auto" }}>
-                    <div>
-                      <Button
-                        style={{
-                          borderColor: searchAge === 2 ? " #1250dc" : "#a9b2be",
-                          color: searchAge === 2 ? "#1250dc" : "#4a4f63",
-                        }}
-                        onClick={() => setSearchAge(2)}
-                        className={clsx(style.filter_select)}
-                      >
-                        1 tuổi - 2 tuổi
-                        <div
-                          className={clsx(
-                            searchAge === 2
-                              ? style.filter_label
-                              : { display: "none" }
-                          )}
-                        >
-                          <div style={{ display: "none" }}>
-                            Sơ sinh - 1 tuổi
-                          </div>
-                        </div>
-                      </Button>
-                    </div>
-                  </SwiperSlide>
-
-                  <SwiperSlide style={{ width: "auto" }}>
-                    <div>
-                      <Button
-                        style={{
-                          borderColor: searchAge === 3 ? " #1250dc" : "#a9b2be",
-                          color: searchAge === 3 ? "#1250dc" : "#4a4f63",
-                        }}
-                        onClick={() => setSearchAge(3)}
-                        className={clsx(style.filter_select)}
-                      >
-                        2 tuổi - 5 tuổi
-                        <div
-                          className={clsx(
-                            searchAge === 3
-                              ? style.filter_label
-                              : { display: "none" }
-                          )}
-                        >
-                          <div style={{ display: "none" }}>
-                            Sơ sinh - 1 tuổi
-                          </div>
-                        </div>
-                      </Button>
-                    </div>
-                  </SwiperSlide>
-
-                  <SwiperSlide style={{ width: "auto" }}>
-                    <div>
-                      <Button
-                        style={{
-                          borderColor: searchAge === 4 ? " #1250dc" : "#a9b2be",
-                          color: searchAge === 4 ? "#1250dc" : "#4a4f63",
-                        }}
-                        onClick={() => setSearchAge(4)}
-                        className={clsx(style.filter_select)}
-                      >
-                        Trên 5 tuổi
-                        <div
-                          className={clsx(
-                            searchAge === 4
-                              ? style.filter_label
-                              : { display: "none" }
-                          )}
-                        >
-                          <div style={{ display: "none" }}>
-                            Sơ sinh - 1 tuổi
-                          </div>
-                        </div>
-                      </Button>
-                    </div>
-                  </SwiperSlide>
-                </Flex>
-              </Swiper>
+                <div className={clsx(style.filter_select_tag_item)}>
+                  <Button
+                    style={{
+                      borderColor: searchAge === 1 ? " #1250dc" : "#a9b2be",
+                      color: searchAge === 1 ? "#1250dc" : "#4a4f63",
+                    }}
+                    onClick={() => setSearchAge(1)}
+                    className={clsx(style.filter_select_tag)}
+                  >
+                    Sơ sinh - 1 tuổi
+                    <Space
+                      className={clsx(
+                        searchAge === 1
+                          ? style.filter_label_tag
+                          : { display: "none" }
+                      )}
+                    >
+                      <div style={{ display: "none" }}>1</div>
+                    </Space>
+                  </Button>
+                </div>
+                <div className={clsx(style.filter_select_tag_item)}>
+                  <Button
+                    style={{
+                      borderColor: searchAge === 2 ? " #1250dc" : "#a9b2be",
+                      color: searchAge === 2 ? "#1250dc" : "#4a4f63",
+                    }}
+                    onClick={() => setSearchAge(2)}
+                    className={clsx(style.filter_select_tag)}
+                  >
+                    1 tuổi - 2 tuổi
+                    <Space
+                      className={clsx(
+                        searchAge === 2
+                          ? style.filter_label_tag
+                          : { display: "none" }
+                      )}
+                    >
+                      <div style={{ display: "none" }}>1</div>
+                    </Space>
+                  </Button>
+                </div>
+                <div className={clsx(style.filter_select_tag_item)}>
+                  <Button
+                    style={{
+                      borderColor: searchAge === 3 ? " #1250dc" : "#a9b2be",
+                      color: searchAge === 3 ? "#1250dc" : "#4a4f63",
+                    }}
+                    onClick={() => setSearchAge(3)}
+                    className={clsx(style.filter_select_tag)}
+                  >
+                    2 tuổi - 5 tuổi
+                    <Space
+                      className={clsx(
+                        searchAge === 3
+                          ? style.filter_label_tag
+                          : { display: "none" }
+                      )}
+                    >
+                      <div style={{ display: "none" }}>1</div>
+                    </Space>
+                  </Button>
+                </div>
+                <div className={clsx(style.filter_select_tag_item)}>
+                  <Button
+                    style={{
+                      borderColor: searchAge === 4 ? " #1250dc" : "#a9b2be",
+                      color: searchAge === 4 ? "#1250dc" : "#4a4f63",
+                    }}
+                    onClick={() => setSearchAge(4)}
+                    className={clsx(style.filter_select_tag)}
+                  >
+                    Trên 5 tuổi
+                    <Space
+                      className={clsx(
+                        searchAge === 4
+                          ? style.filter_label_tag
+                          : { display: "none" }
+                      )}
+                    >
+                      <div style={{ display: "none" }}>1</div>
+                    </Space>
+                  </Button>
+                </div>
+              </div>
             </Col>
 
             <Col span={24}>
@@ -856,58 +965,131 @@ function ProductScreen() {
               <Row gutter={{ xs: 7, sm: 14 }}>
                 {products && error.message === "" ? (
                   products.map((product, index) => {
-                    if (product.tagList && product.tagList.includes(searchTag))
-                      return (
-                        <Col xs={12} md={12} lg={4} style={{}}>
-                          <Link
-                            onClick={() =>
-                              handleDetail(product._id, product.categoryId)
-                            }
-                            to={`/sanpham/${product.slug}`}
-                            className={clsx(style.wrapper)}
-                          >
-                            <Flex className={clsx(style.content)} vertical>
-                              <Space className={clsx(style.content_discount)}>
-                                <Discount
-                                  discount={product.discount}
-                                ></Discount>
-                              </Space>
-                              <Space className={clsx(style.label_wrapper)}>
-                                <Label title={product.category.name} />
-                              </Space>
-                              <Flex justify="center">
-                                <img
-                                  src={product.pic}
-                                  className={clsx(style.content_img)}
-                                  alt=""
-                                />
-                              </Flex>
-                              <Flex
-                                vertical
-                                justify="space-between"
-                                style={{ padding: "50px 20px 20px 20px" }}
-                              >
-                                <Space className={clsx(style.header_text)}>
-                                  {product.name}
+                    if (window.innerWidth > 576) {
+                      if (
+                        count < 12 &&
+                        product.tagList &&
+                        product.tagList.includes(searchTag)
+                      ) {
+                        count++;
+                        return (
+                          <Col xs={0} md={12} lg={4} style={{}}>
+                            <Link
+                              onClick={() =>
+                                handleDetail(product._id, product.categoryId)
+                              }
+                              to={`/sanpham/${product.slug}`}
+                              className={clsx(style.wrapper)}
+                            >
+                              <Flex className={clsx(style.content)} vertical>
+                                <Space className={clsx(style.content_discount)}>
+                                  <Discount
+                                    discount={product.discount}
+                                  ></Discount>
                                 </Space>
-                                <Space className={clsx(style.header_discount)}>
-                                  {numeral(
-                                    (product.price * (100 - product.discount)) /
-                                      100
-                                  ).format("0,0$")}
+                                <Space className={clsx(style.label_wrapper)}>
+                                  <Label title={product.category.name} />
                                 </Space>
-                                {product && product?.discount > 0 ? (
-                                  <del className={clsx(style.header_price)}>
-                                    {numeral(product.price).format("0,0$")}
-                                  </del>
-                                ) : (
-                                  <></>
-                                )}
+                                <Flex justify="center">
+                                  <img
+                                    src={product.pic}
+                                    className={clsx(style.content_img)}
+                                    alt=""
+                                  />
+                                </Flex>
+                                <Flex
+                                  vertical
+                                  justify="space-between"
+                                  style={{ padding: "50px 20px 20px 20px" }}
+                                >
+                                  <Space className={clsx(style.header_text)}>
+                                    {product.name}
+                                  </Space>
+                                  <Space
+                                    className={clsx(style.header_discount)}
+                                  >
+                                    {numeral(
+                                      (product.price *
+                                        (100 - product.discount)) /
+                                        100
+                                    ).format("0,0$")}
+                                  </Space>
+                                  {product && product?.discount > 0 ? (
+                                    <del className={clsx(style.header_price)}>
+                                      {numeral(product.price).format("0,0$")}
+                                    </del>
+                                  ) : (
+                                    <></>
+                                  )}
+                                </Flex>
                               </Flex>
-                            </Flex>
-                          </Link>
-                        </Col>
-                      );
+                            </Link>
+                          </Col>
+                        );
+                      }
+                    } else {
+                      if (
+                        count < 6 &&
+                        product.tagList &&
+                        product.tagList.includes(searchTag)
+                      ) {
+                        count++;
+                        return (
+                          <Col xs={12} md={0}>
+                            <Link
+                              onClick={() =>
+                                handleDetail(product._id, product.categoryId)
+                              }
+                              to={`/sanpham/${product.slug}`}
+                              className={clsx(style.wrapper)}
+                            >
+                              <Flex className={clsx(style.content)} vertical>
+                                <Space className={clsx(style.content_discount)}>
+                                  <Discount
+                                    discount={product.discount}
+                                  ></Discount>
+                                </Space>
+                                <Space className={clsx(style.label_wrapper)}>
+                                  <Label title={product.category.name} />
+                                </Space>
+                                <Flex justify="center">
+                                  <img
+                                    src={product.pic}
+                                    className={clsx(style.content_img)}
+                                    alt=""
+                                  />
+                                </Flex>
+                                <Flex
+                                  vertical
+                                  justify="space-between"
+                                  style={{ padding: "50px 20px 20px 20px" }}
+                                >
+                                  <Space className={clsx(style.header_text)}>
+                                    {product.name}
+                                  </Space>
+                                  <Space
+                                    className={clsx(style.header_discount)}
+                                  >
+                                    {numeral(
+                                      (product.price *
+                                        (100 - product.discount)) /
+                                        100
+                                    ).format("0,0$")}
+                                  </Space>
+                                  {product && product?.discount > 0 ? (
+                                    <del className={clsx(style.header_price)}>
+                                      {numeral(product.price).format("0,0$")}
+                                    </del>
+                                  ) : (
+                                    <></>
+                                  )}
+                                </Flex>
+                              </Flex>
+                            </Link>
+                          </Col>
+                        );
+                      }
+                    }
                   })
                 ) : (
                   <Col xs={24} sm={24} style={{ marginBottom: "25px" }}>

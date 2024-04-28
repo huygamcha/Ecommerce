@@ -52,7 +52,7 @@ const productDetail = new Schema({
 const orderSchema = new Schema(
   {
     status: {
-      type: String,
+      type: Boolean,
       default: false,
     },
     nameOrder: {

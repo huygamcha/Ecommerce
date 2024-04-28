@@ -7,6 +7,7 @@ interface CartType {
   name: string;
   pic: string;
   quantity: number;
+  sold: number;
   price: number;
   stock: number;
   total: number;

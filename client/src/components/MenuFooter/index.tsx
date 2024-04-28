@@ -30,10 +30,11 @@ function MenuFooter() {
         </Flex>
 
         <Flex vertical>
+          
+          <a href={`tel:0933110500`} className={clsx(style.text)}>
           <Flex justify="center">
             <PiPhoneLight className={clsx(style.icon)} />
           </Flex>
-          <a href={`tel:0933110500`} className={clsx(style.text)}>
             Tư vấn
           </a>
         </Flex>

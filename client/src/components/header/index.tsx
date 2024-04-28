@@ -192,8 +192,8 @@ function HeaderScreen() {
       function handleClickOutside(event: MouseEvent) {
         //  kiểm tra DOM cả 2 nếu khác nhau thì đã click ở ngoài
         // console.log("««««« ref »»»»»", ref.current.input);
-        console.log("««««« ref.current »»»»»", ref.current);
-        console.log("««««« event »»»»»", event.target);
+        // console.log("««««« ref.current »»»»»", ref.current);
+        // console.log("««««« event »»»»»", event.target);
         if (ref.current && !ref.current.contains(event.target)) {
           // list kết quả search ra được
           setIsList(false);

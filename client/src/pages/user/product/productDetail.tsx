@@ -26,6 +26,11 @@ import {
   PlusOutlined,
   UpOutlined,
 } from "@ant-design/icons";
+import {
+  PiCaretDoubleDown,
+  PiCaretDoubleDownBold,
+  PiCaretDoubleUpBold,
+} from "react-icons/pi";
 import { FaFacebookMessenger } from "react-icons/fa6";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
@@ -43,7 +48,9 @@ import Label from "../../../components/label";
 function ProductDetail() {
   const param = useParams();
 
-  const { product, productsSearch } = useAppSelector((state) => state.products);
+  const { product, productsSearch, products } = useAppSelector(
+    (state) => state.products
+  );
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -103,6 +110,7 @@ function ProductDetail() {
         slug: product?.slug,
         check: true,
         categoryId: product?.categoryId,
+        sold: product?.sold,
       })
     );
   };
@@ -125,6 +133,7 @@ function ProductDetail() {
         unit: product?.unit,
         slug: product?.slug,
         check: true,
+        sold: product?.sold,
       })
     );
     navigate("/cart");
@@ -756,7 +765,12 @@ function ProductDetail() {
               <div
                 className={clsx(style.wrapper_global, style.product_background)}
               >
-                <div className={clsx(style.product_wrapper)}>
+                <div
+                  className={clsx(
+                    style.product_wrapper,
+                    style.product_wrapper_show
+                  )}
+                >
                   <Row>
                     <Col className={clsx(style.product_detail_header)}>
                       Mô tả sản phẩm
@@ -774,20 +788,38 @@ function ProductDetail() {
                         onClick={handleShowMore}
                         className={clsx(style.product_detail_show)}
                       >
-                        <Space>
-                          <DownOutlined />
+                        <Flex align="center">
+                          <PiCaretDoubleDownBold />
+                        </Flex>
+                        <Space
+                          style={{
+                            marginLeft: "5px",
+                            fontSize: "14px",
+                            fontWeight: "600",
+                          }}
+                        >
+                          Xem thêm
                         </Space>
-                        <Space style={{ marginLeft: "5px" }}>Xem thêm</Space>
                       </Col>
                     ) : (
                       <Col
                         onClick={handleShowMore}
-                        className={clsx(style.product_detail_show)}
+                        className={clsx(style.product_detail_show, {
+                          [style.show]: showMore,
+                        })}
                       >
-                        <Space>
-                          <UpOutlined />
+                        <Flex align="center">
+                          <PiCaretDoubleUpBold />
+                        </Flex>
+                        <Space
+                          style={{
+                            marginLeft: "5px",
+                            fontSize: "14px",
+                            fontWeight: "600",
+                          }}
+                        >
+                          Thu gọn
                         </Space>
-                        <Space style={{ marginLeft: "5px" }}>Rút gọn</Space>
                       </Col>
                     )}
                   </Row>
@@ -960,6 +992,198 @@ function ProductDetail() {
                                   </SwiperSlide>
                                 </>
                               );
+                          })
+                        ) : (
+                          <SwiperSlide>
+                            <Col
+                              xs={24}
+                              sm={24}
+                              style={{ marginBottom: "25px" }}
+                            >
+                              <Empty />
+                            </Col>
+                          </SwiperSlide>
+                        )}
+                      </Swiper>
+                    </Col>
+                  </Row>
+                </div>
+              </div>
+            ) : (
+              <></>
+            )}
+            {histories ? (
+              <div
+                style={{
+                  background: "#eaeffa",
+                }}
+              >
+                <div className={clsx(style.wrapper_global)}>
+                  <Row>
+                    <Col span={24}>
+                      <Flex
+                        align="center"
+                        className={clsx(style.title_product_relate)}
+                      >
+                        <img
+                          className={clsx(style.icon_header)}
+                          src="https://nhathuoclongchau.com.vn/estore-images/icon-service/recently-product-watched-icon.svg"
+                          alt=""
+                        />
+                        Sản phẩm vừa xem
+                      </Flex>
+
+                      <Swiper
+                        modules={[Navigation, Pagination, Scrollbar, A11y]}
+                        breakpoints={{
+                          1200: {
+                            spaceBetween: 14,
+                            slidesPerView: 6,
+                            loop: histories.length > 6 ? true : false,
+                          },
+                          0: {
+                            spaceBetween: 12,
+                            slidesPerView: 2,
+                            loop: true,
+                          },
+                        }}
+                        style={{ backgroundColor: "#eaeffa" }}
+                      >
+                        {histories.length > 6 ? (
+                          <Flex
+                            justify="space-between"
+                            className={clsx(style.customSwiper_child)}
+                          >
+                            <ButtonNavigation />
+                          </Flex>
+                        ) : (
+                          <></>
+                        )}
+
+                        {products ? (
+                          products.map((product) => {
+                            if (histories.includes(product._id)) {
+                              return (
+                                <>
+                                  <SwiperSlide>
+                                    <Link
+                                      onClick={() =>
+                                        handleDetail(
+                                          product._id,
+                                          product.categoryId
+                                        )
+                                      }
+                                      to={`/sanpham/${product.slug}`}
+                                      className={clsx(style.wrapper)}
+                                    >
+                                      <Flex
+                                        className={clsx(style.content)}
+                                        vertical
+                                      >
+                                        <Space
+                                          className={clsx(
+                                            style.content_discount
+                                          )}
+                                        >
+                                          <Discount
+                                            discount={product.discount}
+                                          ></Discount>
+                                        </Space>
+                                        <Space
+                                          className={clsx(style.label_wrapper)}
+                                        >
+                                          <Label
+                                            title={product.category.name}
+                                          />
+                                        </Space>
+                                        <Flex justify="center">
+                                          <img
+                                            src={product.pic}
+                                            className={clsx(style.content_img)}
+                                            alt=""
+                                          />
+                                        </Flex>
+                                        <Flex
+                                          vertical
+                                          justify="space-between"
+                                          style={{
+                                            padding: " 50px 20px 20px 20px",
+                                          }}
+                                        >
+                                          <Space
+                                            className={clsx(style.header_text)}
+                                          >
+                                            {product.name}
+                                          </Space>
+                                          <Space
+                                            className={clsx(
+                                              style.header_discount
+                                            )}
+                                          >
+                                            {product &&
+                                            product?.discount > 0 ? (
+                                              <>
+                                                <Space>
+                                                  <div>
+                                                    {numeral(
+                                                      product?.total
+                                                    ).format("0,0$")}
+                                                    <span
+                                                      style={{
+                                                        margin: "0 2px",
+                                                      }}
+                                                    >
+                                                      &#47;
+                                                    </span>
+                                                    {product.unit}
+                                                  </div>
+                                                </Space>
+                                                <Space>
+                                                  {/* <del>
+                            {numeral(product?.price).format("$0,0")}
+                          </del> */}
+                                                </Space>
+                                              </>
+                                            ) : (
+                                              <>
+                                                <Space>
+                                                  <div>
+                                                    {numeral(
+                                                      product?.price
+                                                    ).format("0,0$")}
+                                                    <span
+                                                      style={{
+                                                        margin: "0 2px",
+                                                      }}
+                                                    >
+                                                      &#47;
+                                                    </span>
+                                                    {product?.unit}
+                                                  </div>
+                                                </Space>
+                                              </>
+                                            )}
+                                          </Space>
+                                          {product && product?.discount > 0 ? (
+                                            <del
+                                              className={clsx(
+                                                style.header_price
+                                              )}
+                                            >
+                                              {numeral(product.price).format(
+                                                "0,0$"
+                                              )}
+                                            </del>
+                                          ) : (
+                                            <></>
+                                          )}
+                                        </Flex>
+                                      </Flex>
+                                    </Link>
+                                  </SwiperSlide>
+                                </>
+                              );
+                            }
                           })
                         ) : (
                           <SwiperSlide>

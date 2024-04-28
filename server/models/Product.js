@@ -105,6 +105,12 @@ const productSchema = new Schema(
       type: Number,
       default: 0,
     },
+    autoQuantity: {
+      type: Number,
+    },
+    quantity: {
+      type: Number,
+    },
   },
   {
     timestamps: true,
