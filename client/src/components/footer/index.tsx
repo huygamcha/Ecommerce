@@ -16,46 +16,132 @@ const ListRender = ({
   const { footers } = useAppSelector((state) => state.footers);
   return (
     <Col xs={0} sm={4}>
-      <h4 className={clsx(style.text_heading)}>{title}</h4>
-      <Flex vertical>
-        {footers.map((footer) =>
-          footer.column === specificColumn ? (
-            <>
-              {footer.optional ? (
-                <div className={clsx(style.item_optional)}>
-                  <a
-                    className={clsx(style.text_item_optional)}
-                    target="_blank"
-                    href={footer.url}
-                    rel="noreferrer"
-                  >
-                    {footer.name}
-                  </a>
-                  <div>
+      {specificColumn === 4 ? (
+        <>
+          <h4 className={clsx(style.text_heading)}>{title}</h4>
+          <Flex vertical>
+            {footers.map((footer) =>
+              footer.column === specificColumn ? (
+                <>
+                  {footer.optional ? (
+                    <div className={clsx(style.item_optional)}>
+                      <a
+                        className={clsx(style.text_item_optional)}
+                        target="_blank"
+                        href={footer.url}
+                        rel="noreferrer"
+                      >
+                        {footer.name}
+                      </a>
+                      <div>
+                        <a
+                          className={clsx(style.optional_item)}
+                          href={`tel:${footer.optional}`}
+                        >
+                          {footer.optional}
+                        </a>
+                      </div>
+                    </div>
+                  ) : (
                     <a
-                      className={clsx(style.optional_item)}
-                      href={`tel:+${footer.optional}`}
+                      className={clsx(style.text_item)}
+                      target="_blank"
+                      href={footer.url}
+                      rel="noreferrer"
                     >
-                      {footer.optional}
+                      {footer.name}
                     </a>
-                  </div>
-                </div>
+                  )}
+                </>
               ) : (
-                <a
-                  className={clsx(style.text_item)}
-                  target="_blank"
-                  href={footer.url}
-                  rel="noreferrer"
-                >
-                  {footer.name}
-                </a>
-              )}
-            </>
-          ) : (
-            <></>
-          )
-        )}
-      </Flex>
+                <></>
+              )
+            )}
+          </Flex>
+
+          <h4 className={clsx(style.text_heading)}>Hỗ trợ thanh toán</h4>
+          <div style={{ display: "flex", flexWrap: "wrap" }}>
+            <img
+              className={clsx(style.payment_list)}
+              src="https://cdn1.nhathuoclongchau.com.vn/visa_fdc3324c35.svg"
+              alt=""
+            />{" "}
+            <img
+              className={clsx(style.payment_list)}
+              src="https://cdn1.nhathuoclongchau.com.vn/mtc_1ed684ff7c.svg"
+              alt=""
+            />
+            <img
+              className={clsx(style.payment_list)}
+              src="https://cdn1.nhathuoclongchau.com.vn/jcb_7655e615ce.svg"
+              alt=""
+            />
+            <img
+              className={clsx(style.payment_list)}
+              src="https://cdn1.nhathuoclongchau.com.vn/amex_2610a984a5.svg"
+              alt=""
+            />
+            <img
+              className={clsx(style.payment_list)}
+              src="https://cdn1.nhathuoclongchau.com.vn/smalls/vnpay_1f73f546c4.svg"
+              alt=""
+            />
+            <img
+              className={clsx(style.payment_list)}
+              src="https://cdn1.nhathuoclongchau.com.vn/zalopay_884e503cf9.svg"
+              alt=""
+            />
+            <img
+              className={clsx(style.payment_list)}
+              src="https://cdn1.nhathuoclongchau.com.vn/smalls/momo_ebbd8eb9b0.svg"
+              alt=""
+            />
+          </div>
+        </>
+      ) : (
+        <>
+          <h4 className={clsx(style.text_heading)}>{title}</h4>
+          <Flex vertical>
+            {footers.map((footer) =>
+              footer.column === specificColumn ? (
+                <>
+                  {footer.optional ? (
+                    <div className={clsx(style.item_optional)}>
+                      <a
+                        className={clsx(style.text_item_optional)}
+                        target="_blank"
+                        href={footer.url}
+                        rel="noreferrer"
+                      >
+                        {footer.name}
+                      </a>
+                      <div>
+                        <a
+                          className={clsx(style.optional_item)}
+                          href={`tel:${footer.optional}`}
+                        >
+                          {footer.optional}
+                        </a>
+                      </div>
+                    </div>
+                  ) : (
+                    <a
+                      className={clsx(style.text_item)}
+                      target="_blank"
+                      href={footer.url}
+                      rel="noreferrer"
+                    >
+                      {footer.name}
+                    </a>
+                  )}
+                </>
+              ) : (
+                <></>
+              )
+            )}
+          </Flex>
+        </>
+      )}
     </Col>
   );
 };
@@ -67,60 +153,165 @@ const ListRenderMobile = ({
   specificColumn: number;
 }) => {
   const { footers } = useAppSelector((state) => state.footers);
-  const [isShow, setIsShow] = useState<boolean>(false);
+  const [isShow, setIsShow] = useState<boolean>(
+    specificColumn === 4 ? true : false
+  );
   return (
     <Col className={clsx(style.wrapper_mobile)} xs={24} sm={0}>
-      <h4
-        onClick={() => setIsShow(!isShow)}
-        className={clsx(style.text_heading_mobile)}
-      >
-        <Flex justify="space-between">
-          <Space>{title} </Space>
-          <Space>{isShow ? <IoChevronDown /> : <IoChevronUp />}</Space>
-        </Flex>
-      </h4>
-      <Flex
-        className={clsx(style.dropdown_item, isShow ? style.active : "")}
-        vertical
-      >
-        {footers.map((footer) =>
-          footer.column === specificColumn ? (
-            <>
-              {footer.optional ? (
-                <div className={clsx(style.item_optional)}>
-                  <a
-                    className={clsx(style.text_item_mobile)}
-                    target="_blank"
-                    href={footer.url}
-                    rel="noreferrer"
-                  >
-                    {footer.name}
-                  </a>
-                  <div>
+      {specificColumn === 4 ? (
+        <>
+          <h4
+            onClick={() => setIsShow(!isShow)}
+            className={clsx(style.text_heading_mobile)}
+          >
+            <Flex justify="space-between">
+              <Space style={{ textTransform: "uppercase" }}>{title} </Space>
+              <Space>{isShow ? <IoChevronDown /> : <IoChevronUp />}</Space>
+            </Flex>
+          </h4>
+          <Flex
+            className={clsx(style.dropdown_item, isShow ? style.active : "")}
+            vertical
+          >
+            {footers.map((footer) =>
+              footer.column === specificColumn ? (
+                <>
+                  {footer.optional ? (
+                    <div className={clsx(style.item_optional)}>
+                      <a
+                        className={clsx(style.text_item_mobile)}
+                        target="_blank"
+                        href={footer.url}
+                        rel="noreferrer"
+                      >
+                        {footer.name}
+                      </a>
+                      <div>
+                        <a
+                          className={clsx(style.optional_item)}
+                          href={`tel:${footer.optional}`}
+                        >
+                          {footer.optional}
+                        </a>
+                      </div>
+                    </div>
+                  ) : (
                     <a
-                      className={clsx(style.optional_item)}
-                      href="https://zalo.me/0904309464"
+                      className={clsx(style.text_item_mobile)}
+                      target="_blank"
+                      href={footer.url}
+                      rel="noreferrer"
                     >
-                      {footer.optional}
+                      {footer.name}
                     </a>
-                  </div>
-                </div>
+                  )}
+                </>
               ) : (
-                <a
-                  className={clsx(style.text_item_mobile)}
-                  target="_blank"
-                  href={footer.url}
-                  rel="noreferrer"
-                >
-                  {footer.name}
-                </a>
-              )}
-            </>
-          ) : (
-            <></>
-          )
-        )}
-      </Flex>
+                <></>
+              )
+            )}
+          </Flex>
+
+          <h4 className={clsx(style.text_heading_mobile)}>
+            <Flex justify="space-between">
+              <Space style={{ textTransform: "uppercase" }}>
+                Hỗ trợ thanh toán
+              </Space>
+            </Flex>
+          </h4>
+          <Flex>
+            <img
+              className={clsx(style.payment_list)}
+              src="https://cdn1.nhathuoclongchau.com.vn/visa_fdc3324c35.svg"
+              alt=""
+            />{" "}
+            <img
+              className={clsx(style.payment_list)}
+              src="https://cdn1.nhathuoclongchau.com.vn/mtc_1ed684ff7c.svg"
+              alt=""
+            />
+            <img
+              className={clsx(style.payment_list)}
+              src="https://cdn1.nhathuoclongchau.com.vn/jcb_7655e615ce.svg"
+              alt=""
+            />
+            <img
+              className={clsx(style.payment_list)}
+              src="https://cdn1.nhathuoclongchau.com.vn/amex_2610a984a5.svg"
+              alt=""
+            />
+            <img
+              className={clsx(style.payment_list)}
+              src="https://cdn1.nhathuoclongchau.com.vn/smalls/vnpay_1f73f546c4.svg"
+              alt=""
+            />
+            <img
+              className={clsx(style.payment_list)}
+              src="https://cdn1.nhathuoclongchau.com.vn/zalopay_884e503cf9.svg"
+              alt=""
+            />
+            <img
+              className={clsx(style.payment_list)}
+              src="https://cdn1.nhathuoclongchau.com.vn/smalls/momo_ebbd8eb9b0.svg"
+              alt=""
+            />
+          </Flex>
+        </>
+      ) : (
+        <>
+          <h4
+            onClick={() => setIsShow(!isShow)}
+            className={clsx(style.text_heading_mobile)}
+          >
+            <Flex justify="space-between">
+              <Space>{title} </Space>
+              <Space>{isShow ? <IoChevronDown /> : <IoChevronUp />}</Space>
+            </Flex>
+          </h4>
+          <Flex
+            className={clsx(style.dropdown_item, isShow ? style.active : "")}
+            vertical
+          >
+            {footers.map((footer) =>
+              footer.column === specificColumn ? (
+                <>
+                  {footer.optional ? (
+                    <div className={clsx(style.item_optional)}>
+                      <a
+                        className={clsx(style.text_item_mobile)}
+                        target="_blank"
+                        href={footer.url}
+                        rel="noreferrer"
+                      >
+                        {footer.name}
+                      </a>
+                      <div>
+                        <a
+                          className={clsx(style.optional_item)}
+                          href={`tel:${footer.optional}`}
+                        >
+                          {footer.optional}
+                        </a>
+                      </div>
+                    </div>
+                  ) : (
+                    <a
+                      className={clsx(style.text_item_mobile)}
+                      target="_blank"
+                      href={footer.url}
+                      rel="noreferrer"
+                    >
+                      {footer.name}
+                    </a>
+                  )}
+                </>
+              ) : (
+                <></>
+              )
+            )}
+          </Flex>
+        </>
+      )}
     </Col>
   );
 };
@@ -143,13 +334,6 @@ function FooterScreen() {
         <Col xs={0} sm={4}>
           <h4 className={clsx(style.text_heading)}>KẾT NỐI VỚI CHÚNG TÔI</h4>
           <Flex className={clsx(style.items)}>
-            <a href="https://github.com/huygamcha">
-              <img
-                style={{ width: "30px", height: "30px" }}
-                src="http://res.cloudinary.com/drqphlfn6/image/upload/v1707808894/lzhvyybdxf29paic3spm.png"
-                alt="github"
-              />
-            </a>
             <a href="https://www.facebook.com/lehuynhhuy.taa">
               <img
                 style={{ width: "30px", height: "30px" }}
@@ -157,17 +341,18 @@ function FooterScreen() {
                 alt="facebook"
               />
             </a>
-            <a href="mailto:lehuynhhuy2002@gmail.com">
+            <a href="https://zalo.me/0933110500">
               <img
                 style={{ width: "30px", height: "30px" }}
-                src="http://res.cloudinary.com/drqphlfn6/image/upload/v1707809450/wk6gi5wxxm23rytw9ey4.jpg"
-                alt="email"
+                src="https://cdn1.nhathuoclongchau.com.vn/smalls/Logo_Zalo_979d41d52b.svg"
+                alt="facebook"
               />
             </a>
           </Flex>
         </Col>
 
         {/* mobile */}
+        <ListRenderMobile title="TỔNG ĐÀI" specificColumn={4} />
         <Col className={clsx(style.wrapper_mobile)} xs={24} sm={0}>
           <h4 className={clsx(style.text_heading_mobile)}>
             <Flex justify="space-between">
@@ -179,17 +364,6 @@ function FooterScreen() {
                   style.dropdown_item_social
                 )}
               >
-                <a href="https://github.com/huygamcha">
-                  <img
-                    style={{
-                      width: "30px",
-                      height: "30px",
-                      borderRadius: "10px",
-                    }}
-                    src="http://res.cloudinary.com/drqphlfn6/image/upload/v1707808894/lzhvyybdxf29paic3spm.png"
-                    alt="github"
-                  />
-                </a>
                 <a href="https://www.facebook.com/lehuynhhuy.taa">
                   <img
                     style={{
@@ -201,15 +375,15 @@ function FooterScreen() {
                     alt="facebook"
                   />
                 </a>
-                <a href="mailto:lehuynhhuy2002@gmail.com">
+                <a href="https://zalo.me/0933110500">
                   <img
                     style={{
                       width: "30px",
                       height: "30px",
                       borderRadius: "10px",
                     }}
-                    src="http://res.cloudinary.com/drqphlfn6/image/upload/v1707809450/wk6gi5wxxm23rytw9ey4.jpg"
-                    alt="email"
+                    src="https://cdn1.nhathuoclongchau.com.vn/smalls/Logo_Zalo_979d41d52b.svg"
+                    alt="facebook"
                   />
                 </a>
               </Flex>
@@ -219,7 +393,6 @@ function FooterScreen() {
         <ListRenderMobile title="VỀ CHÚNG TÔI" specificColumn={1} />
         <ListRenderMobile title="DANH MỤC" specificColumn={2} />
         <ListRenderMobile title="TÌM HIỂU THÊM" specificColumn={3} />
-        <ListRenderMobile title="TỔNG ĐÀI" specificColumn={4} />
 
         <Col style={{ textAlign: "center", margin: "30px 0px" }} span={24}>
           © 2024 Cửa hàng Pam

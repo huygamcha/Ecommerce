@@ -468,7 +468,21 @@
   border-radius: 10px;
   margin-bottom: 10px;
   padding: 6px 0px;
+  overflow-x: auto;
+  display: flex;
 }
+/* Tạo thanh cuộn trong suốt cho Chrome, Safari và Edge */
+.filter_select__tag_wrapper::-webkit-scrollbar {
+  display: none;
+  width:0px; /* Điều chỉnh độ rộng của thanh cuộn */
+}
+/* thiếu firefox */
+/* Tạo thanh cuộn trong suốt cho Firefox */
+.swiper-filter_select__tag_wrapper {
+  display: none;
+  scrollbar-width: 0px;
+}
+
 
 .filter_select {
   min-width: 64px;
@@ -501,6 +515,9 @@
   justify-content: end;
   align-items: center;
 }
+.filter_select_tag_wrapper{
+  /* overflow-x: auto; */
+}
 
 .filter_select_tag {
   min-width: 64px;
@@ -515,7 +532,7 @@
   line-height: 20px !important;
   font-weight: 600 !important;
   height: 34px;
-  width: 100%;
+  width: max-content;
 }
 
 .filter_label_tag {

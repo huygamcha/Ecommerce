@@ -1,8 +1,7 @@
 import { createSlice, createAsyncThunk, } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const currentUser =  localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
-
+// console.log('««««« currentUser.payload.token »»»»»', currentUser.token);
 interface BrandsType {
   name: string;
   _id: string;
@@ -44,8 +43,16 @@ const getAllBrand = createAsyncThunk<BrandsType[]>("brand/getAll",  async () => 
 
 // tham số thứ 2 là tham số truyền vào gửi từ client
 const createBrand = createAsyncThunk<BrandsType, BrandsType>("brand/createBrand", async (value, { rejectWithValue }) => {
+const currentUser =  localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
+
   try {
-    const response = await axios.post(`${process.env.REACT_APP_BACKEND}/brands`, value);
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${currentUser.token}`,
+      },
+    };
+    const response = await axios.post(`${process.env.REACT_APP_BACKEND}/brands`, value, config);
     const data: BrandsType = response.data;
     return data;
   } catch (error: any) {
@@ -58,10 +65,13 @@ const createBrand = createAsyncThunk<BrandsType, BrandsType>("brand/createBrand"
 });
 
 const deleteBrand = createAsyncThunk<BrandsType, string>("brand/deleteBrand", async (id, { rejectWithValue }) => {
+  const currentUser =  localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
+
   try {
     const config = {
       headers: {
         "Content-type": "application/json",
+        Authorization: `Bearer ${currentUser.token}`,
       },
     };
     const response = await axios.delete(`${process.env.REACT_APP_BACKEND}/brands/${id}`, config);
@@ -77,11 +87,12 @@ const deleteBrand = createAsyncThunk<BrandsType, string>("brand/deleteBrand", as
 });
 
 const updateBrand = createAsyncThunk<BrandsType, { id: string, values: BrandsType }>("brand/updateBrand", async ({ id, values }, { rejectWithValue }) => {
+const currentUser =  localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
   try {
     const config = {
       headers: {
         "Content-type": "application/json",
-        // Authorization: `Bearer ${currentUser.payload.token}`,
+        Authorization: `Bearer ${currentUser.token}`,
       },
     };
     const response = await axios.patch(`${process.env.REACT_APP_BACKEND}/brands/${id}`, values, config);

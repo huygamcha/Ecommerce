@@ -1,4 +1,10 @@
-import React, { Children, Fragment, useEffect, useState } from "react";
+import React, {
+  Children,
+  Fragment,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import numeral from "numeral";
@@ -23,7 +29,7 @@ import {
   VideoCameraOutlined,
 } from "@ant-design/icons";
 import { LiaProductHunt } from "react-icons/lia";
-import { Layout, Menu, Button, theme } from "antd";
+import { Layout, Menu, Button, theme, message } from "antd";
 import ProductScreen from "./pages/user/product";
 import CartScreen from "./pages/user/cart";
 import MainLayOut from "./pages/layout/mainLayout";
@@ -45,13 +51,14 @@ import OrderSuccess from "./components/orderSuccess";
 import SearchMobile from "./pages/layout/searchMobile";
 import HeaderScreenMobile from "./components/header/headerMobile";
 import MobileResultSearch from "./pages/user/mobile/resultSearch";
+import FooterContact from "./pages/admin/footer/FooterContact";
 const { Sider, Content } = Layout;
 numeral.locale("vi");
 
 const router = createBrowserRouter([
   {
     path: "/notPermit",
-    element: <NotPermit />,
+    element: <Login />,
   },
 
   {
@@ -204,6 +211,16 @@ const router = createBrowserRouter([
           },
         ],
       },
+      // {
+      //   path: "/admin/footersContact",
+      //   element: <FooterContact />,
+      //   children: [
+      //     {
+      //       path: "/admin/footersContact/:id",
+      //       element: <FooterContact />,
+      //     },
+      //   ],
+      // },
       {
         path: "/admin/orders",
         element: <Order />,
@@ -225,12 +242,30 @@ function AdminRouter() {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
   const currentUser = JSON.parse(localStorage.getItem("userInfor")!);
+  const [messageApi, contextHolder] = message.useMessage();
 
-  // useEffect(() => {
-  //   if (!currentUser?.isAdmin) {
-  //     navigate("/notPermit");
-  //   }
-  // });
+  const MESSAGE_TYPE = {
+    SUCCESS: "success",
+    INFO: "info",
+    WARNING: "warning",
+    ERROR: "error",
+  };
+  const onShowMessage = useCallback(
+    (content: any, type: any = MESSAGE_TYPE.SUCCESS) => {
+      messageApi.open({
+        type: type,
+        content: content,
+      });
+    },
+    [messageApi]
+  );
+  useEffect(() => {
+    if (!currentUser) {
+      navigate("/notPermit");
+    } else if (!currentUser?.isAdmin) {
+      navigate("/");
+    }
+  });
 
   return (
     <Layout>
@@ -280,6 +315,12 @@ function AdminRouter() {
               icon: <UploadOutlined />,
               label: "Footer",
             },
+
+            // {
+            //   key: "/admin/footersContact",
+            //   icon: <UploadOutlined />,
+            //   label: "Contact",
+            // },
 
             {
               key: "/admin/banners",

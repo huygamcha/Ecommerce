@@ -12,12 +12,16 @@ const { admin, protect } = require("../../authentication/checkRole");
 var router = express.Router();
 
 router.route("/").get(getAllCategory);
-router.route("/").post(validateSchema(checkCreateCategory), createCategory);
+router
+  .route("/")
+  .post(protect, admin, validateSchema(checkCreateCategory), createCategory);
 router
   .route("/:id")
   .delete(validateSchema(checkId), deleteCategory)
   .get(validateSchema(checkId), protect, admin, getDetailCategory)
   .patch(
+    protect,
+    admin,
     validateSchema(checkId),
     validateSchema(checkUpdateCategory),
     updateCategory

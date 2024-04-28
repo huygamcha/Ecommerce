@@ -88,10 +88,18 @@ const getAllOrder = createAsyncThunk<OrdersType[]>("order/getAll", async () => {
 const createOrder = createAsyncThunk<OrdersType, OrdersType>(
     "order/createOrder",
     async (name, { rejectWithValue }) => {
+        const currentUser =  localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
+
         try {
+          const config = {
+            headers: {
+              "Content-type": "application/json",
+              Authorization: `Bearer ${currentUser.token}`,
+            },
+          };
             const response = await axios.post(
                 `${process.env.REACT_APP_BACKEND}/orders`,
-                name
+                name, config
             );
             const data: OrdersType = response.data;
             return data;
@@ -108,12 +116,15 @@ const createOrder = createAsyncThunk<OrdersType, OrdersType>(
 const deleteOrder = createAsyncThunk<OrdersType, string>(
     "order/deleteOrder",
     async (id, { rejectWithValue }) => {
+        const currentUser =  localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
+
         try {
-            const config = {
-                headers: {
-                    "Content-type": "application/json",
-                },
-            };
+          const config = {
+            headers: {
+              "Content-type": "application/json",
+              Authorization: `Bearer ${currentUser.token}`,
+            },
+          };
             const response = await axios.delete(
                 `${process.env.REACT_APP_BACKEND}/orders/${id}`,
                 config
@@ -134,13 +145,15 @@ const updateOrder = createAsyncThunk<
     OrdersType,
     { id: string; values: OrdersType }
 >("order/updateOrder", async ({ id, values }, { rejectWithValue }) => {
+    const currentUser =  localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
+
     try {
-        const config = {
-            headers: {
-                "Content-type": "application/json",
-                // Authorization: `Bearer ${currentUser.payload.token}`,
-            },
-        };
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${currentUser.token}`,
+        },
+      };
         const response = await axios.patch(
             `${process.env.REACT_APP_BACKEND}/orders/${id}`,
             values,

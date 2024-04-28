@@ -12,12 +12,16 @@ const { admin, protect } = require("../../authentication/checkRole");
 var router = express.Router();
 
 router.route("/").get(getAllBrand);
-router.route("/").post(validateSchema(checkCreateBrand), createBrand);
+router
+  .route("/")
+  .post(protect, admin, validateSchema(checkCreateBrand), createBrand);
 router
   .route("/:id")
-  .delete(validateSchema(checkId), deleteBrand)
+  .delete(protect, admin, validateSchema(checkId), deleteBrand)
   .get(validateSchema(checkId), getDetailBrand)
   .patch(
+    protect,
+    admin,
     validateSchema(checkId),
     validateSchema(checkUpdateBrand),
     updateBrand

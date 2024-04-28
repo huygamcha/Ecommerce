@@ -17,7 +17,7 @@ import {
 } from "antd";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { loginUser } from "../../slices/authSlice";
-import { Link, useNavigate, Navigate } from "react-router-dom";
+import { Link, useNavigate, Navigate, useLocation } from "react-router-dom";
 import { DatePicker } from "antd";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -39,6 +39,7 @@ const Register: React.FC = () => {
 
   const dispatch = useAppDispatch();
   const { error, success } = useAppSelector((state) => state.customers);
+  const location = useLocation();
   const navigate = useNavigate();
 
   const [messageApi, contextHolder] = message.useMessage();
@@ -58,6 +59,9 @@ const Register: React.FC = () => {
     },
     [messageApi]
   );
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0 });
+  }, [location]);
 
   useEffect(() => {
     if (error) {
@@ -125,6 +129,7 @@ const Register: React.FC = () => {
           onFinish={onFinish}
           labelCol={{ span: 8 }}
           wrapperCol={{ span: 8 }}
+          style={{ marginTop: "30px" }}
         >
           <Form.Item<FieldType>
             name="firstName"

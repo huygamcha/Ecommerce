@@ -227,10 +227,18 @@ const getProductById = createAsyncThunk<ProductsType, string | undefined>(
 const createProduct = createAsyncThunk<ProductsType, ProductsType>(
   "product/createProduct",
   async (name, { rejectWithValue }) => {
+    const currentUser =  localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
+
     try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${currentUser.token}`,
+        },
+      };
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND}/products`,
-        name
+        name, config
       );
       const data: ProductsType = response.data;
       return data;
@@ -247,10 +255,13 @@ const createProduct = createAsyncThunk<ProductsType, ProductsType>(
 const deleteProduct = createAsyncThunk<ProductsType, string>(
   "product/deleteProduct",
   async (id, { rejectWithValue }) => {
+    const currentUser =  localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
+
     try {
       const config = {
         headers: {
           "Content-type": "application/json",
+          Authorization: `Bearer ${currentUser.token}`,
         },
       };
       const response = await axios.delete(
@@ -273,10 +284,13 @@ const updateProduct = createAsyncThunk<
   ProductsType,
   { id: string; values: ProductsType }
 >("product/updateProduct", async ({ id, values }, { rejectWithValue }) => {
+  const currentUser =  localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
+
   try {
     const config = {
       headers: {
         "Content-type": "application/json",
+        Authorization: `Bearer ${currentUser.token}`,
       },
     };
     const response = await axios.patch(

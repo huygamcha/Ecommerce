@@ -47,8 +47,15 @@ const getAllCategory = createAsyncThunk<CategoriesType[]>("category/getAll", asy
 
 // tham số thứ 2 là tham số truyền vào gửi từ client
 const createCategory = createAsyncThunk<CategoriesType, CategoriesType>("category/createCategory", async (name, { rejectWithValue }) => {
+  const currentUser = localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
   try {
-    const response = await axios.post(`${process.env.REACT_APP_BACKEND}/categories`, name);
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${currentUser.token}`,
+      },
+    };
+    const response = await axios.post(`${process.env.REACT_APP_BACKEND}/categories`, name, config);
     const data: CategoriesType = response.data;
     return data;
   } catch (error: any) {
@@ -61,10 +68,12 @@ const createCategory = createAsyncThunk<CategoriesType, CategoriesType>("categor
 });
 
 const deleteCategory = createAsyncThunk<CategoriesType, string>("category/deleteCategory", async (id, { rejectWithValue }) => {
+  const currentUser = localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
   try {
     const config = {
       headers: {
         "Content-type": "application/json",
+        Authorization: `Bearer ${currentUser.token}`,
       },
     };
     const response = await axios.delete(`${process.env.REACT_APP_BACKEND}/categories/${id}`, config);
@@ -80,11 +89,12 @@ const deleteCategory = createAsyncThunk<CategoriesType, string>("category/delete
 });
 
 const updateCategory = createAsyncThunk<CategoriesType, { id: string, values: CategoriesType }>("category/updateCategory", async ({ id, values }, { rejectWithValue }) => {
+  const currentUser = localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
   try {
     const config = {
       headers: {
         "Content-type": "application/json",
-        // Authorization: `Bearer ${currentUser.payload.token}`,
+        Authorization: `Bearer ${currentUser.token}`,
       },
     };
     const response = await axios.patch(`${process.env.REACT_APP_BACKEND}/categories/${id}`, values, config);

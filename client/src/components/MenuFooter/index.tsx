@@ -1,44 +1,60 @@
 import { Flex, Space } from "antd";
 import clsx from "clsx";
 import style from "./MenuFooter.module.css";
-import { BsCart3 } from "react-icons/bs";
-import { FaRegUserCircle } from "react-icons/fa";
-import { FaHeadphonesSimple } from "react-icons/fa6";
 import { AiOutlineHome } from "react-icons/ai";
 import { Link } from "react-router-dom";
-
+import { useAppDispatch, useAppSelector } from "../../store";
+import { useEffect } from "react";
+import { getAllCart } from "../../slices/cartSlice";
+import { PiShoppingCartLight } from "react-icons/pi";
+import { PiPhoneLight } from "react-icons/pi";
+import { PiUserThin } from "react-icons/pi";
 function MenuFooter() {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (carts.length === 0) dispatch(getAllCart());
+  }, []);
+  const { carts } = useAppSelector((state) => state.carts);
+
   return (
     <div>
       <Flex className={clsx(style.wrapper)} justify="space-between">
         <Flex vertical>
           <Flex justify="center">
-            <AiOutlineHome className={clsx(style.icon)} />
+            <AiOutlineHome className={clsx(style.icon, style.active)} />
           </Flex>
-          <Link to="/" className={clsx(style.text)}>
+          <Link to="/" className={clsx(style.text, style.active)}>
             Trang chủ
           </Link>
         </Flex>
 
         <Flex vertical>
           <Flex justify="center">
-            <FaHeadphonesSimple className={clsx(style.icon)} />
+            <PiPhoneLight className={clsx(style.icon)} />
           </Flex>
-          <Space>Tư vấn</Space>
+          <a href={`tel:0933110500`} className={clsx(style.text)}>
+            Tư vấn
+          </a>
         </Flex>
+
         <Flex vertical>
-          <Flex justify="center">
-            <BsCart3 className={clsx(style.icon)} />
-          </Flex>
-          <Link to="/cart" className={clsx(style.text)}>
-            Giỏ hàng
+          <Link className={clsx(style.button_header_text)} to="/cart">
+            <div className={clsx(style.cart_notification_wrapper)}>
+              <PiShoppingCartLight style={{ fontSize: "24px" }} />
+              <div className={clsx(style.cart_notification_item)}>
+                {carts ? carts.length : 0}
+              </div>
+            </div>
           </Link>
+          <Space className={clsx(style.text)}>Giỏ hàng</Space>
         </Flex>
+
         <Flex vertical>
           <Flex justify="center">
-            <FaRegUserCircle className={clsx(style.icon)} />
+            <PiUserThin className={clsx(style.icon)} />
           </Flex>
-          <Space>Tài khoản</Space>
+          <Space className={clsx(style.text)}>Tài khoản</Space>
         </Flex>
       </Flex>
     </div>

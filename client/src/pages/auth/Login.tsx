@@ -3,7 +3,7 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, ConfigProvider, Form, Input, Space, message } from "antd";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { loginUser } from "../../slices/authSlice";
-import { Link, useNavigate, Navigate } from "react-router-dom";
+import { Link, useNavigate, Navigate, useLocation } from "react-router-dom";
 import { getCartFromCustomer } from "../../slices/cartSlice";
 import { getInforUser } from "../../slices/customerSlice";
 
@@ -11,6 +11,7 @@ const Login: React.FC = () => {
   const dispatch = useAppDispatch();
   const { error, success, user } = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -29,6 +30,9 @@ const Login: React.FC = () => {
     },
     [messageApi]
   );
+  useEffect(() => {
+    window.scroll({ left: 0, top: 0 });
+  }, [location]);
 
   useEffect(() => {
     if (error) {
@@ -36,9 +40,13 @@ const Login: React.FC = () => {
     }
     if (success) {
       onShowMessage(`Đăng nhập thành công`, "success");
-      // dispatch(getInforUser(user.id));
+      console.log("««««« location.pathname »»»»»", location.pathname);
       dispatch(getCartFromCustomer());
-      navigate("/profile");
+      if (location.pathname === "/notPermit") {
+        navigate("/admin");
+      } else {
+        navigate("/profile");
+      }
     }
   }, [error, success]);
 
@@ -66,6 +74,7 @@ const Login: React.FC = () => {
           onFinish={onFinish}
           wrapperCol={{ span: 8 }}
           labelCol={{ span: 8 }}
+          style={{ marginTop: "30px" }}
         >
           <Form.Item
             label="Email"
@@ -74,6 +83,7 @@ const Login: React.FC = () => {
               { required: true, message: "Vui lòng nhập email" },
               { type: "email", message: "Email không hợp lệ" },
             ]}
+            style={{ marginBottom: "20px" }}
           >
             <Input
               prefix={<UserOutlined className="site-form-item-icon" />}
@@ -87,6 +97,7 @@ const Login: React.FC = () => {
               { required: true, message: "Vui lòng điền mật khẩu" },
               { min: 6, message: "Mật khẩu lớn hơn 6 kí tự" },
             ]}
+            style={{ marginBottom: "10px" }}
           >
             <Input.Password
               prefix={<LockOutlined className="site-form-item-icon" />}
@@ -94,13 +105,19 @@ const Login: React.FC = () => {
               placeholder="Password"
             />
           </Form.Item>
-          <Form.Item wrapperCol={{ xs: 8, offset: 8 }}>
+          <Form.Item
+            wrapperCol={{ xs: 8, offset: 8 }}
+            style={{ marginBottom: "10px" }}
+          >
             <a className="login-form-forgot" href="">
               Quên mật khẩu
             </a>
           </Form.Item>
 
-          <Form.Item wrapperCol={{ xs: 8, offset: 8 }}>
+          <Form.Item
+            wrapperCol={{ xs: 8, offset: 8 }}
+            style={{ marginBottom: "30px" }}
+          >
             <Button
               type="primary"
               htmlType="submit"
@@ -109,7 +126,7 @@ const Login: React.FC = () => {
               Đăng nhập
             </Button>
             <Link style={{ marginLeft: "5px" }} to="/auth/register">
-              Đăng kí!{" "}
+              Đăng kí!
             </Link>
           </Form.Item>
         </Form>

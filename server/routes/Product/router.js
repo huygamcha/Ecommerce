@@ -11,11 +11,14 @@ const {
 } = require("./controller");
 const { checkCreateProduct, checkUpdateProduct } = require("./validation");
 const { checkId, validateSchema, checkIdQuery } = require("../../utils");
+const { admin, protect } = require("../../authentication/checkRole");
 var router = express.Router();
 
 router.route("/").get(getAllProduct);
 router.route("/search").get(getAllProductSearch);
-router.route("/").post(validateSchema(checkCreateProduct), createProduct);
+router
+  .route("/")
+  .post(protect, admin, validateSchema(checkCreateProduct), createProduct);
 router
   .route("/byCategories")
   .get(validateSchema(checkIdQuery), getProductByCategories);
@@ -24,9 +27,11 @@ router
   .get(validateSchema(checkIdQuery), getProductBySuppliers);
 router
   .route("/:id")
-  .delete(validateSchema(checkId), deleteProduct)
+  .delete(protect, admin, validateSchema(checkId), deleteProduct)
   .get(validateSchema(checkId), getDetailProduct)
   .patch(
+    protect,
+    admin,
     validateSchema(checkId),
     validateSchema(checkUpdateProduct),
     updateProduct

@@ -24,7 +24,7 @@ module.exports = {
             productCount: { $size: "$products" },
           },
         },
-      ]);
+      ]).sort({ createdAt: -1 });
 
       return res.send(200, {
         message: "Lấy thông tin danh mục thành công",

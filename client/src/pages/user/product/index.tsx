@@ -36,6 +36,7 @@ import { Button } from "antd/es/radio";
 import { getAllBanner } from "../../../slices/bannerSlice";
 import MenuFooter from "../../../components/MenuFooter";
 import Label from "../../../components/label";
+import { FaDivide } from "react-icons/fa6";
 
 function ProductScreen() {
   const { products, error } = useAppSelector((state) => state.products);
@@ -544,7 +545,7 @@ function ProductScreen() {
                   },
                   0: {
                     spaceBetween: 10,
-                    slidesPerView: 3,
+                    slidesPerView: 2,
                   },
                 }}
                 style={{
@@ -815,7 +816,7 @@ function ProductScreen() {
               </Flex>
             </Col>
             <Col span={24}>
-              <Flex
+              <div
                 className={clsx(
                   style.filter_select_wrapper_recommend,
                   style.filter_select__tag_wrapper
@@ -823,7 +824,7 @@ function ProductScreen() {
               >
                 {tags ? (
                   tags.map((tag) => (
-                    <Space>
+                    <div className={clsx(style.filter_select_tag_item)}>
                       <Button
                         style={{
                           borderColor:
@@ -844,12 +845,12 @@ function ProductScreen() {
                           <div style={{ display: "none" }}>1</div>
                         </Space>
                       </Button>
-                    </Space>
+                    </div>
                   ))
                 ) : (
                   <></>
                 )}
-              </Flex>
+              </div>
             </Col>
             <Col xs={24} sm={24}>
               <Row gutter={{ xs: 7, sm: 14 }}>

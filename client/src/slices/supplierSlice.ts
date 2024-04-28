@@ -46,8 +46,16 @@ const getAllSupplier = createAsyncThunk<SuppliersType[]>("supplier/getAll", asyn
 
 // tham số thứ 2 là tham số truyền vào gửi từ client
 const createSupplier = createAsyncThunk<SuppliersType, SuppliersType>("supplier/createSupplier", async (name, { rejectWithValue }) => {
+  const currentUser =  localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
+
   try {
-    const response = await axios.post(`${process.env.REACT_APP_BACKEND}/suppliers`, name);
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${currentUser.token}`,
+      },
+    };
+    const response = await axios.post(`${process.env.REACT_APP_BACKEND}/suppliers`, name, config);
     const data: SuppliersType = response.data;
     return data;
   } catch (error: any) {
@@ -60,10 +68,13 @@ const createSupplier = createAsyncThunk<SuppliersType, SuppliersType>("supplier/
 });
 
 const deleteSupplier = createAsyncThunk<SuppliersType, string>("supplier/deleteSupplier", async (id, { rejectWithValue }) => {
+  const currentUser =  localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
+
   try {
     const config = {
       headers: {
         "Content-type": "application/json",
+        Authorization: `Bearer ${currentUser.token}`,
       },
     };
     const response = await axios.delete(`${process.env.REACT_APP_BACKEND}/suppliers/${id}`, config);
@@ -79,10 +90,13 @@ const deleteSupplier = createAsyncThunk<SuppliersType, string>("supplier/deleteS
 });
 
 const updateSupplier = createAsyncThunk<SuppliersType, { id: string, values: SuppliersType }>("supplier/updateSupplier", async ({ id, values }, { rejectWithValue }) => {
+  const currentUser =  localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
+
   try {
     const config = {
       headers: {
         "Content-type": "application/json",
+        Authorization: `Bearer ${currentUser.token}`,
       },
     };
     const response = await axios.patch(`${process.env.REACT_APP_BACKEND}/suppliers/${id}`, values, config);

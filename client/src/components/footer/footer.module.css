@@ -48,6 +48,15 @@
 .text_item:hover {
   color: #1250dc;
 }
+.payment_list{
+    height: 35px;
+    width: 45px;
+    border: 1px solid #e6e7eb;
+    padding: 3px;
+    margin-right: 4px;
+    margin-top: 5px;
+    border-radius: 6px;
+}
 
 
 /* mobile */
