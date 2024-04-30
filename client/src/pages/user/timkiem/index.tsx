@@ -16,6 +16,7 @@ import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { LuAlignCenter } from "react-icons/lu";
 import MenuFooter from "../../../components/MenuFooter";
 import Label from "../../../components/label";
+import Specifications from "../../../components/specifications";
 function Timkiem() {
   const filter = localStorage.getItem("filter")
     ? JSON.parse(localStorage.getItem("filter")!)
@@ -599,8 +600,16 @@ function Timkiem() {
                             <Space className={clsx(style.content_discount)}>
                               <Discount discount={product.discount}></Discount>
                             </Space>
-                            <Space className={clsx(style.label_wrapper)}>
-                              <Label title={product.category.name} />
+                            <Space
+                              className={clsx(
+                                style.label_wrapper,
+                                !product.stock && style.soldOut
+                              )}
+                            >
+                              <Label
+                                soldOut={!product.stock ? true : false}
+                                title={product.category.name}
+                              />
                             </Space>
                             <Flex justify="center">
                               <img
@@ -630,6 +639,7 @@ function Timkiem() {
                               ) : (
                                 <></>
                               )}
+                              <Specifications title={product.specifications} />
                             </Flex>
                           </Flex>
                         </Link>
@@ -637,7 +647,7 @@ function Timkiem() {
                     ))
                   ) : (
                     <Col xs={24} sm={24} style={{ marginBottom: "25px" }}>
-                      <Empty />
+                      <Empty description={<span>Không có sản phẩm nào</span>} />
                     </Col>
                   )}
                   <Col xs={24}></Col>

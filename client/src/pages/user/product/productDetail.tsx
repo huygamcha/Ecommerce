@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import {
+  getAllProduct,
   getAllProductSearch,
   getProductById,
 } from "../../../slices/productSlice";
@@ -15,22 +16,14 @@ import {
   Breadcrumb,
   message,
   ConfigProvider,
+  Input,
 } from "antd";
 import numeral from "numeral";
 import style from "./product.module.css";
 import clsx from "clsx";
 import { addToCart } from "../../../slices/cartSlice";
-import {
-  DownOutlined,
-  MinusOutlined,
-  PlusOutlined,
-  UpOutlined,
-} from "@ant-design/icons";
-import {
-  PiCaretDoubleDown,
-  PiCaretDoubleDownBold,
-  PiCaretDoubleUpBold,
-} from "react-icons/pi";
+import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
+import { PiCaretDoubleDownBold, PiCaretDoubleUpBold } from "react-icons/pi";
 import { FaFacebookMessenger } from "react-icons/fa6";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
@@ -44,6 +37,7 @@ import "swiper/css/scrollbar";
 import Discount from "../../../components/discount";
 import ButtonNavigation from "../../../components/buttonNavigation";
 import Label from "../../../components/label";
+import Specifications from "../../../components/specifications";
 
 function ProductDetail() {
   const param = useParams();
@@ -77,6 +71,7 @@ function ProductDetail() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0 });
+    if (products.length === 0) dispatch(getAllProduct({}));
   }, [location]);
 
   useEffect(() => {
@@ -325,11 +320,13 @@ function ProductDetail() {
                           </Link>
                         </div>
                       </Space>
-                      <Space>
-                        <Space className={clsx(style.name_detail)}>
-                          {product?.name}
-                        </Space>
+
+                      {/* name */}
+                      <Space className={clsx(style.name_detail)}>
+                        {product?.name}
                       </Space>
+
+                      {/* discount */}
                       <Space>
                         <Flex vertical>
                           {product && product?.discount > 0 ? (
@@ -362,7 +359,19 @@ function ProductDetail() {
                           )}
                         </Flex>
                       </Space>
-                      {product && product.specifications ? (
+
+                      {/* soldOut */}
+                      {!product?.stock && (
+                        <Space
+                          style={{ color: "red", marginTop: "0px" }}
+                          className={clsx(style.name_detail)}
+                        >
+                          Sản phẩm hiện đã hết hàng
+                        </Space>
+                      )}
+
+                      {/* specifications */}
+                      {product && product.specifications && (
                         <Space className={clsx(style.brief_detail_wrapper)}>
                           <Space className={clsx(style.brief_detail)}>
                             Quy cách
@@ -371,11 +380,10 @@ function ProductDetail() {
                             {product?.specifications}
                           </Space>
                         </Space>
-                      ) : (
-                        <></>
                       )}
 
-                      {product && product.fromBrand ? (
+                      {/* fromBrand */}
+                      {product && product.fromBrand && (
                         <Space className={clsx(style.brief_detail_wrapper)}>
                           <Space className={clsx(style.brief_detail)}>
                             Xuất xứ thương hiệu
@@ -384,11 +392,10 @@ function ProductDetail() {
                             {product?.fromBrand}
                           </Space>
                         </Space>
-                      ) : (
-                        <></>
                       )}
 
-                      {product && product.supplierHome ? (
+                      {/* supplierHome */}
+                      {product && product.supplierHome && (
                         <Space className={clsx(style.brief_detail_wrapper)}>
                           <Space className={clsx(style.brief_detail)}>
                             Nhà sản xuất
@@ -397,11 +404,10 @@ function ProductDetail() {
                             {product?.supplierHome}
                           </Space>
                         </Space>
-                      ) : (
-                        <></>
                       )}
 
-                      {product && product.country ? (
+                      {/* country */}
+                      {product && product.country && (
                         <Space className={clsx(style.brief_detail_wrapper)}>
                           <Space className={clsx(style.brief_detail)}>
                             Nước sản xuất
@@ -410,11 +416,10 @@ function ProductDetail() {
                             {product?.country}
                           </Space>
                         </Space>
-                      ) : (
-                        <></>
                       )}
 
-                      {product && product.ingredient ? (
+                      {/* ingredient */}
+                      {product && product.ingredient && (
                         <Space className={clsx(style.brief_detail_wrapper)}>
                           <Space className={clsx(style.brief_detail)}>
                             Thành phần
@@ -423,11 +428,10 @@ function ProductDetail() {
                             {product?.ingredient}
                           </Space>
                         </Space>
-                      ) : (
-                        <></>
                       )}
 
-                      {product && product.description ? (
+                      {/* description */}
+                      {product && product.description && (
                         <Space
                           style={{ display: "flex", alignItems: "start" }}
                           className={clsx(style.brief_detail_wrapper)}
@@ -439,11 +443,10 @@ function ProductDetail() {
                             {product?.description}
                           </Space>
                         </Space>
-                      ) : (
-                        <></>
                       )}
+
                       {/* promotion */}
-                      {product && product.discount ? (
+                      {product && product.discount && (
                         <Flex
                           vertical
                           className={clsx(style.promotion_wrapper)}
@@ -486,8 +489,6 @@ function ProductDetail() {
                             Giảm ngay 20% áp dụng đến 14/03
                           </Space>
                         </Flex>
-                      ) : (
-                        <></>
                       )}
 
                       {/* buy now */}
@@ -761,6 +762,7 @@ function ProductDetail() {
                 </Row>
               </div>
             </div>
+
             {product && product.detail ? (
               <div
                 className={clsx(style.wrapper_global, style.product_background)}
@@ -768,7 +770,8 @@ function ProductDetail() {
                 <div
                   className={clsx(
                     style.product_wrapper,
-                    style.product_wrapper_show
+                    style.product_wrapper_show,
+                    window.innerWidth > 1200 && style.showPc
                   )}
                 >
                   <Row>
@@ -804,9 +807,13 @@ function ProductDetail() {
                     ) : (
                       <Col
                         onClick={handleShowMore}
-                        className={clsx(style.product_detail_show, {
-                          [style.show]: showMore,
-                        })}
+                        className={clsx(
+                          style.product_detail_show,
+                          {
+                            [style.show]: showMore,
+                          },
+                          window.innerWidth > 1200 && style.showPc
+                        )}
                       >
                         <Flex align="center">
                           <PiCaretDoubleUpBold />
@@ -899,9 +906,15 @@ function ProductDetail() {
                                         </Space>
 
                                         <Space
-                                          className={clsx(style.label_wrapper)}
+                                          className={clsx(
+                                            style.label_wrapper,
+                                            !product.stock && style.soldOut
+                                          )}
                                         >
                                           <Label
+                                            soldOut={
+                                              !product.stock ? true : false
+                                            }
                                             title={product.category.name}
                                           />
                                         </Space>
@@ -986,6 +999,9 @@ function ProductDetail() {
                                           ) : (
                                             <></>
                                           )}
+                                          <Specifications
+                                            title={product.specifications}
+                                          />
                                         </Flex>
                                       </Flex>
                                     </Link>
@@ -1000,7 +1016,9 @@ function ProductDetail() {
                               sm={24}
                               style={{ marginBottom: "25px" }}
                             >
-                              <Empty />
+                              <Empty
+                                description={<span>Không có sản phẩm nào</span>}
+                              />
                             </Col>
                           </SwiperSlide>
                         )}
@@ -1090,9 +1108,15 @@ function ProductDetail() {
                                           ></Discount>
                                         </Space>
                                         <Space
-                                          className={clsx(style.label_wrapper)}
+                                          className={clsx(
+                                            style.label_wrapper,
+                                            !product.stock && style.soldOut
+                                          )}
                                         >
                                           <Label
+                                            soldOut={
+                                              !product.stock ? true : false
+                                            }
                                             title={product.category.name}
                                           />
                                         </Space>
@@ -1177,6 +1201,9 @@ function ProductDetail() {
                                           ) : (
                                             <></>
                                           )}
+                                          <Specifications
+                                            title={product.specifications}
+                                          />
                                         </Flex>
                                       </Flex>
                                     </Link>
@@ -1192,7 +1219,9 @@ function ProductDetail() {
                               sm={24}
                               style={{ marginBottom: "25px" }}
                             >
-                              <Empty />
+                              <Empty
+                                description={<span>Không có sản phẩm nào</span>}
+                              />
                             </Col>
                           </SwiperSlide>
                         )}
@@ -1207,22 +1236,34 @@ function ProductDetail() {
           </div>
 
           {/*mobile buy */}
+
           <Flex
             className={clsx(style.buy_wrapper_mobile)}
             justify="space-between"
           >
             <Space>
-              <FaFacebookMessenger
-                style={{ color: "#1250dc", fontSize: "30px" }}
-              />
+              <a href={`tel:0933110500`} className={clsx(style.text)}>
+                <FaFacebookMessenger
+                  style={{ color: "#1250dc", fontSize: "30px" }}
+                />
+              </a>
             </Space>
             <Space
               onClick={handleAddToCart}
-              className={clsx(style.add_to_cart)}
+              className={clsx(
+                style.add_to_cart,
+                product && !product.stock && style.soldOut_disabled
+              )}
             >
               Chọn mua
             </Space>
-            <Space onClick={handleAddToCartNow} className={clsx(style.buy_now)}>
+            <Space
+              onClick={handleAddToCartNow}
+              className={clsx(
+                style.buy_now,
+                product && !product.stock && style.soldOut_disabled
+              )}
+            >
               Mua ngay
             </Space>
           </Flex>

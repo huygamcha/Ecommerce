@@ -4,7 +4,7 @@
 }
 .label_wrapper {
   position: absolute;
-  bottom: 100px;
+  bottom: 144px;
   left: 0px;
 }
 .label_wrapper > div {
@@ -23,9 +23,20 @@
   background-color: #eff0f3;
   /* Màu sắc của border-left */
 }
-.wrapper:hover .label_wrapper::before{
+.label_wrapper.soldOut::before {
+  background-color: red;
+}
+
+.wrapper:hover .label_wrapper::before {
+  transition: 3s ease-in;
   display: none;
 }
+.wrapper:hover .label_wrapper.soldOut::before {
+  transition: 3s ease-in;
+  display: block;
+}
+
+
 .wrapper:hover {
   text-decoration: none;
   color: #000;
@@ -72,7 +83,7 @@
   background: #fff;
   border-radius: 10px;
   padding: 14px 0px;
-  height: 280px;
+  height: 330px;
   position: relative;
   border: 1px solid #fff;
 }

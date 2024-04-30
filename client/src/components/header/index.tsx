@@ -220,7 +220,6 @@ function HeaderScreen() {
         setHeaderShowMobile(false);
       }
     }
-
     document.addEventListener("scroll", handleScrollHeader);
     return () => {
       document.removeEventListener("scroll", handleScrollHeader);

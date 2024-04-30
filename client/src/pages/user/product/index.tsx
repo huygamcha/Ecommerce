@@ -38,6 +38,7 @@ import MenuFooter from "../../../components/MenuFooter";
 import Label from "../../../components/label";
 import { FaDivide } from "react-icons/fa6";
 import { PiCaretDoubleDownBold, PiCaretDoubleUpBold } from "react-icons/pi";
+import Specifications from "../../../components/specifications";
 
 function ProductScreen() {
   const { products, error } = useAppSelector((state) => state.products);
@@ -158,7 +159,7 @@ function ProductScreen() {
                 ) : (
                   <SwiperSlide>
                     <Col xs={24} sm={24} style={{ marginBottom: "25px" }}>
-                      <Empty />
+                      <Empty description={<span>Không có sản phẩm nào</span>} />
                     </Col>
                   </SwiperSlide>
                 )}
@@ -209,8 +210,17 @@ function ProductScreen() {
                                     discount={product.discount}
                                   ></Discount>
                                 </Space>
-                                <Space className={clsx(style.label_wrapper)}>
-                                  <Label title={product.category.name} />
+
+                                <Space
+                                  className={clsx(
+                                    style.label_wrapper,
+                                    !product.stock && style.soldOut
+                                  )}
+                                >
+                                  <Label
+                                    soldOut={!product.stock ? true : false}
+                                    title={product.category.name}
+                                  />
                                 </Space>
 
                                 <Flex justify="center">
@@ -228,6 +238,7 @@ function ProductScreen() {
                                   <Space className={clsx(style.header_text)}>
                                     {product.name}
                                   </Space>
+
                                   <Space
                                     className={clsx(style.header_discount)}
                                   >
@@ -268,6 +279,9 @@ function ProductScreen() {
                                   ) : (
                                     <></>
                                   )}
+                                  <Specifications
+                                    title={product.specifications}
+                                  />
                                 </Flex>
                               </Flex>
                             </Link>
@@ -294,8 +308,16 @@ function ProductScreen() {
                                       discount={product.discount}
                                     ></Discount>
                                   </Space>
-                                  <Space className={clsx(style.label_wrapper)}>
-                                    <Label title={product.category.name} />
+                                  <Space
+                                    className={clsx(
+                                      style.label_wrapper,
+                                      !product.stock && style.soldOut
+                                    )}
+                                  >
+                                    <Label
+                                      soldOut={!product.stock ? true : false}
+                                      title={product.category.name}
+                                    />
                                   </Space>
 
                                   <Flex justify="center">
@@ -413,7 +435,7 @@ function ProductScreen() {
                   })
                 ) : (
                   <Col xs={24} sm={24} style={{ marginBottom: "25px" }}>
-                    <Empty />
+                    <Empty description={<span>Không có sản phẩm nào</span>} />
                   </Col>
                 )}
               </Row>
@@ -507,7 +529,7 @@ function ProductScreen() {
                 ) : (
                   <SwiperSlide>
                     <Col xs={24} sm={24} style={{ marginBottom: "25px" }}>
-                      <Empty />
+                      <Empty description={<span>Không có sản phẩm nào</span>} />
                     </Col>
                   </SwiperSlide>
                 )}
@@ -578,7 +600,9 @@ function ProductScreen() {
                       ))
                     ) : (
                       <Col xs={24} sm={24} style={{ marginBottom: "25px" }}>
-                        <Empty />
+                        <Empty
+                          description={<span>Không có sản phẩm nào</span>}
+                        />
                       </Col>
                     )}
                   </Row>
@@ -644,7 +668,9 @@ function ProductScreen() {
                     ) : (
                       <SwiperSlide>
                         <Col xs={24} sm={24} style={{ marginBottom: "25px" }}>
-                          <Empty />
+                          <Empty
+                            description={<span>Không có sản phẩm nào</span>}
+                          />
                         </Col>
                       </SwiperSlide>
                     )}
@@ -833,8 +859,16 @@ function ProductScreen() {
                                     discount={product.discount}
                                   ></Discount>
                                 </Space>
-                                <Space className={clsx(style.label_wrapper)}>
-                                  <Label title={product.category.name} />
+                                <Space
+                                  className={clsx(
+                                    style.label_wrapper,
+                                    !product.stock && style.soldOut
+                                  )}
+                                >
+                                  <Label
+                                    soldOut={!product.stock ? true : false}
+                                    title={product.category.name}
+                                  />
                                 </Space>
 
                                 <Flex justify="center">
@@ -892,6 +926,9 @@ function ProductScreen() {
                                   ) : (
                                     <></>
                                   )}
+                                  <Specifications
+                                    title={product.specifications}
+                                  />
                                 </Flex>
                               </Flex>
                             </Link>
@@ -903,7 +940,7 @@ function ProductScreen() {
                 ) : (
                   <SwiperSlide>
                     <Col xs={24} sm={24} style={{ marginBottom: "25px" }}>
-                      <Empty />
+                      <Empty description={<span>Không có sản phẩm nào</span>} />
                     </Col>
                   </SwiperSlide>
                 )}
@@ -987,8 +1024,16 @@ function ProductScreen() {
                                     discount={product.discount}
                                   ></Discount>
                                 </Space>
-                                <Space className={clsx(style.label_wrapper)}>
-                                  <Label title={product.category.name} />
+                                <Space
+                                  className={clsx(
+                                    style.label_wrapper,
+                                    !product.stock && style.soldOut
+                                  )}
+                                >
+                                  <Label
+                                    soldOut={!product.stock ? true : false}
+                                    title={product.category.name}
+                                  />
                                 </Space>
                                 <Flex justify="center">
                                   <img
@@ -1021,6 +1066,9 @@ function ProductScreen() {
                                   ) : (
                                     <></>
                                   )}
+                                  <Specifications
+                                    title={product.specifications}
+                                  />
                                 </Flex>
                               </Flex>
                             </Link>
@@ -1049,8 +1097,16 @@ function ProductScreen() {
                                     discount={product.discount}
                                   ></Discount>
                                 </Space>
-                                <Space className={clsx(style.label_wrapper)}>
-                                  <Label title={product.category.name} />
+                                <Space
+                                  className={clsx(
+                                    style.label_wrapper,
+                                    !product.stock && style.soldOut
+                                  )}
+                                >
+                                  <Label
+                                    soldOut={!product.stock ? true : false}
+                                    title={product.category.name}
+                                  />
                                 </Space>
                                 <Flex justify="center">
                                   <img
@@ -1083,6 +1139,9 @@ function ProductScreen() {
                                   ) : (
                                     <></>
                                   )}
+                                  <Specifications
+                                    title={product.specifications}
+                                  />
                                 </Flex>
                               </Flex>
                             </Link>
@@ -1093,7 +1152,7 @@ function ProductScreen() {
                   })
                 ) : (
                   <Col xs={24} sm={24} style={{ marginBottom: "25px" }}>
-                    <Empty />
+                    <Empty description={<span>Không có sản phẩm nào</span>} />
                   </Col>
                 )}
               </Row>
@@ -1172,8 +1231,16 @@ function ProductScreen() {
                                       discount={product.discount}
                                     ></Discount>
                                   </Space>
-                                  <Space className={clsx(style.label_wrapper)}>
-                                    <Label title={product.category.name} />
+                                  <Space
+                                    className={clsx(
+                                      style.label_wrapper,
+                                      !product.stock && style.soldOut
+                                    )}
+                                  >
+                                    <Label
+                                      soldOut={!product.stock ? true : false}
+                                      title={product.category.name}
+                                    />
                                   </Space>
                                   <Flex justify="center">
                                     <img
@@ -1246,7 +1313,9 @@ function ProductScreen() {
                   ) : (
                     <SwiperSlide>
                       <Col xs={24} sm={24} style={{ marginBottom: "25px" }}>
-                        <Empty />
+                        <Empty
+                          description={<span>Không có sản phẩm nào</span>}
+                        />
                       </Col>
                     </SwiperSlide>
                   )}
