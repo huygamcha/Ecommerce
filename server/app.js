@@ -29,6 +29,8 @@ var tagRouter = require("./routes/Tag/router.js");
 var brandRouter = require("./routes/Brand/router.js");
 var bannerRouter = require("./routes/Banner/router.js");
 var authRouter = require("./routes/auth/router.js");
+var LocationRouter = require("./routes/Location/router.js");
+var PolicyRouter = require("./routes/Policy/router.js");
 const { admin } = require("./authentication/checkRole.js");
 // var usersRouter = require("./routes/users");
 
@@ -53,6 +55,8 @@ app.use("/footers", footerRouter);
 app.use("/tags", tagRouter);
 app.use("/brands", brandRouter);
 app.use("/banners", bannerRouter);
+app.use("/locations", LocationRouter);
+app.use("/policies", PolicyRouter);
 app.use("/", authRouter);
 app.use("/tesst", (req, res) => {
   res.send("123");

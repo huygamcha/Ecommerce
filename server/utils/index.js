@@ -43,9 +43,8 @@ const checkIdQuery = yup.object({
 });
 
 const fuzzySearch = (text) => {
-  text = slugify(text, { lower: true });
+  text = slugify(text, { lower: true, locate: "vi" });
   const regex = text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-  console.log("««««« regex »»»»»", new RegExp(regex, "gi"));
   return new RegExp(regex, "gi");
 };
 

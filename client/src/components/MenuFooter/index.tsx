@@ -9,6 +9,7 @@ import { getAllCart } from "../../slices/cartSlice";
 import { PiShoppingCartLight } from "react-icons/pi";
 import { PiPhoneLight } from "react-icons/pi";
 import { PiUserThin } from "react-icons/pi";
+import { IoChatboxEllipsesOutline } from "react-icons/io5";
 function MenuFooter() {
   const dispatch = useAppDispatch();
 
@@ -30,11 +31,10 @@ function MenuFooter() {
         </Flex>
 
         <Flex vertical>
-          
           <a href={`tel:0933110500`} className={clsx(style.text)}>
-          <Flex justify="center">
-            <PiPhoneLight className={clsx(style.icon)} />
-          </Flex>
+            <Flex justify="center">
+              <IoChatboxEllipsesOutline className={clsx(style.icon)} />
+            </Flex>
             Tư vấn
           </a>
         </Flex>

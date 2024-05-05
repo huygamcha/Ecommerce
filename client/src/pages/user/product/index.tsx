@@ -104,14 +104,12 @@ function ProductScreen() {
       {/* banner */}
       <div
         style={{ borderRadius: "0px", backgroundColor: "#F8F9FD" }}
-        // className={clsx(style.product_wrapper)}
       >
         <div
           className={clsx(
             style.wrapper_global,
             style.wrapper_global_banner,
             style.customPT20
-            // style.product_wrapper
           )}
         >
           <Row>
@@ -164,6 +162,148 @@ function ProductScreen() {
                   </SwiperSlide>
                 )}
               </Swiper>
+            </Col>
+          </Row>
+          {/* danh mục */}
+          <Row className={clsx(style.category_wrapper)}>
+            <Col xs={24} sm={24}>
+              <Flex align="center" className={clsx(style.title_product_relate)}>
+                <img
+                  className={clsx(style.icon_header)}
+                  style={{ height: "28px", width: "28px" }}
+                  src="https://cdn.nhathuoclongchau.com.vn/unsafe/28x28/https://cms-prod.s3-sgn09.fptcloud.com/smalls/danh_muc_noi_bat_d03496597a.png"
+                  alt=""
+                />
+                Danh mục nổi bật
+              </Flex>
+              <Row>
+                <Col xs={0} sm={24}>
+                  <Row gutter={[14, 14]}>
+                    {categories && error.message === "" ? (
+                      categories.map((category, index) => (
+                        <>
+                          <Col lg={4} style={{}}>
+                            <Link
+                              onClick={(e) => {
+                                handleSearchMenu(category._id, "");
+                              }}
+                              to={`/timkiem?s=${category.name}`}
+                              className={clsx(style.wrapper)}
+                            >
+                              <Flex
+                                className={clsx(style.content_category)}
+                                vertical
+                              >
+                                <Flex
+                                  vertical
+                                  justify="space-between"
+                                  style={{ padding: "20px" }}
+                                >
+                                  <Flex
+                                    className={clsx(
+                                      style.header_text,
+                                      style.header_text_category
+                                    )}
+                                    vertical
+                                    justify="center"
+                                    align="center"
+                                  >
+                                    <Space>{category.name}</Space>
+                                    <div
+                                      style={{
+                                        color: "#657384",
+                                        fontSize: "13px",
+                                        marginTop: "5px",
+                                      }}
+                                    >
+                                      {category.productCount} sản phẩm
+                                    </div>
+                                  </Flex>
+                                </Flex>
+                              </Flex>
+                            </Link>
+                          </Col>
+                        </>
+                      ))
+                    ) : (
+                      <Col xs={24} sm={24} style={{ marginBottom: "25px" }}>
+                        <Empty
+                          description={<span>Không có sản phẩm nào</span>}
+                        />
+                      </Col>
+                    )}
+                  </Row>
+                </Col>
+                <Col xs={24} sm={0}>
+                  <Swiper
+                    modules={[Navigation, Pagination, Scrollbar, A11y]}
+                    loop={true}
+                    breakpoints={{
+                      0: {
+                        spaceBetween: 10,
+                        slidesPerView: 2,
+                      },
+                    }}
+                    style={{ backgroundColor: "#fff" }}
+                  >
+                    {categories && error.message === "" ? (
+                      categories.map((category) => (
+                        <>
+                          <SwiperSlide>
+                            <Link
+                              onClick={(e) => {
+                                handleSearchMenu(category._id, "");
+                              }}
+                              to={`/timkiem?s=${category.name}`}
+                              className={clsx(style.wrapper)}
+                            >
+                              <Flex
+                                className={clsx(style.content_category)}
+                                vertical
+                              >
+                                <Flex
+                                  vertical
+                                  justify="space-between"
+                                  style={{ padding: "20px" }}
+                                >
+                                  <Flex
+                                    className={clsx(
+                                      style.header_text,
+                                      style.header_text_category
+                                    )}
+                                    vertical
+                                    justify="center"
+                                    align="center"
+                                  >
+                                    <Space>{category.name}</Space>
+                                    <div
+                                      style={{
+                                        color: "#657384",
+                                        fontSize: "13px",
+                                        marginTop: "5px",
+                                      }}
+                                    >
+                                      {category.productCount} sản phẩm
+                                    </div>
+                                  </Flex>
+                                </Flex>
+                              </Flex>
+                            </Link>
+                          </SwiperSlide>
+                        </>
+                      ))
+                    ) : (
+                      <SwiperSlide>
+                        <Col xs={24} sm={24} style={{ marginBottom: "25px" }}>
+                          <Empty
+                            description={<span>Không có sản phẩm nào</span>}
+                          />
+                        </Col>
+                      </SwiperSlide>
+                    )}
+                  </Swiper>
+                </Col>
+              </Row>
             </Col>
           </Row>
         </div>
@@ -468,7 +608,7 @@ function ProductScreen() {
                 modules={[Navigation, Pagination, Scrollbar, A11y]}
                 spaceBetween={0}
                 slidesPerView={5}
-                style={{ backgroundColor: "transparent", marginBottom: "60px" }}
+                style={{ backgroundColor: "transparent", marginBottom: "0px" }}
                 breakpoints={{
                   1200: {
                     spaceBetween: 0,
@@ -534,149 +674,6 @@ function ProductScreen() {
                   </SwiperSlide>
                 )}
               </Swiper>
-            </Col>
-          </Row>
-
-          {/* danh mục */}
-          <Row>
-            <Col xs={24} sm={24}>
-              <Flex align="center" className={clsx(style.title_product_relate)}>
-                <img
-                  className={clsx(style.icon_header)}
-                  style={{ height: "28px", width: "28px" }}
-                  src="https://cdn.nhathuoclongchau.com.vn/unsafe/28x28/https://cms-prod.s3-sgn09.fptcloud.com/smalls/danh_muc_noi_bat_d03496597a.png"
-                  alt=""
-                />
-                Danh mục nổi bật
-              </Flex>
-              <Row>
-                <Col xs={0} sm={24}>
-                  <Row gutter={[14, 14]}>
-                    {categories && error.message === "" ? (
-                      categories.map((category, index) => (
-                        <>
-                          <Col lg={4} style={{}}>
-                            <Link
-                              onClick={(e) => {
-                                handleSearchMenu(category._id, "");
-                              }}
-                              to={`/timkiem?s=${category.name}`}
-                              className={clsx(style.wrapper)}
-                            >
-                              <Flex
-                                className={clsx(style.content_category)}
-                                vertical
-                              >
-                                <Flex
-                                  vertical
-                                  justify="space-between"
-                                  style={{ padding: "20px" }}
-                                >
-                                  <Flex
-                                    className={clsx(
-                                      style.header_text,
-                                      style.header_text_category
-                                    )}
-                                    vertical
-                                    justify="center"
-                                    align="center"
-                                  >
-                                    <Space>{category.name}</Space>
-                                    <div
-                                      style={{
-                                        color: "#657384",
-                                        fontSize: "13px",
-                                        marginTop: "5px",
-                                      }}
-                                    >
-                                      {category.productCount} sản phẩm
-                                    </div>
-                                  </Flex>
-                                </Flex>
-                              </Flex>
-                            </Link>
-                          </Col>
-                        </>
-                      ))
-                    ) : (
-                      <Col xs={24} sm={24} style={{ marginBottom: "25px" }}>
-                        <Empty
-                          description={<span>Không có sản phẩm nào</span>}
-                        />
-                      </Col>
-                    )}
-                  </Row>
-                </Col>
-                <Col xs={24} sm={0}>
-                  <Swiper
-                    modules={[Navigation, Pagination, Scrollbar, A11y]}
-                    loop={true}
-                    breakpoints={{
-                      0: {
-                        spaceBetween: 10,
-                        slidesPerView: 2,
-                      },
-                    }}
-                    style={{ backgroundColor: "#fff" }}
-                  >
-                    {categories && error.message === "" ? (
-                      categories.map((category) => (
-                        <>
-                          <SwiperSlide>
-                            <Link
-                              onClick={(e) => {
-                                handleSearchMenu(category._id, "");
-                              }}
-                              to={`/timkiem?s=${category.name}`}
-                              className={clsx(style.wrapper)}
-                            >
-                              <Flex
-                                className={clsx(style.content_category)}
-                                vertical
-                              >
-                                <Flex
-                                  vertical
-                                  justify="space-between"
-                                  style={{ padding: "20px" }}
-                                >
-                                  <Flex
-                                    className={clsx(
-                                      style.header_text,
-                                      style.header_text_category
-                                    )}
-                                    vertical
-                                    justify="center"
-                                    align="center"
-                                  >
-                                    <Space>{category.name}</Space>
-                                    <div
-                                      style={{
-                                        color: "#657384",
-                                        fontSize: "13px",
-                                        marginTop: "5px",
-                                      }}
-                                    >
-                                      {category.productCount} sản phẩm
-                                    </div>
-                                  </Flex>
-                                </Flex>
-                              </Flex>
-                            </Link>
-                          </SwiperSlide>
-                        </>
-                      ))
-                    ) : (
-                      <SwiperSlide>
-                        <Col xs={24} sm={24} style={{ marginBottom: "25px" }}>
-                          <Empty
-                            description={<span>Không có sản phẩm nào</span>}
-                          />
-                        </Col>
-                      </SwiperSlide>
-                    )}
-                  </Swiper>
-                </Col>
-              </Row>
             </Col>
           </Row>
         </div>
@@ -815,7 +812,7 @@ function ProductScreen() {
                 style={{
                   padding: "10px 0px",
                   borderRadius: "10px",
-                  marginBottom: "60px",
+                  marginBottom: "30px",
                 }}
               >
                 <Flex

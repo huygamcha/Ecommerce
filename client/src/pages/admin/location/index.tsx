@@ -9,22 +9,21 @@ import {
   Popconfirm,
   Space,
   Modal,
-  Select,
 } from "antd";
 import { useEffect } from "react";
-import { useAppSelector, useAppDispatch } from "../../../store";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Link, useNavigate, useParams } from "react-router-dom";
 import {
-  createFooter,
-  deleteFooter,
-  getAllFooter,
-  updateFooter,
-} from "../../../slices/footerSlice";
+  createLocation,
+  getAllLocation,
+  deleteLocation,
+  updateLocation,
+} from "../../../slices/locationSlice";
+import { useAppSelector, useAppDispatch } from "../../../store";
+import { CopyOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 type Props = {};
 
-const FooterAdmin = (props: Props) => {
+const LocationAdmin = (props: Props) => {
   const navigate = useNavigate();
   const param = useParams();
   // không hiển thị khi lần đầu load trang
@@ -33,15 +32,17 @@ const FooterAdmin = (props: Props) => {
   // get from database
   const dispatch = useAppDispatch();
 
-  const { footers, success, error } = useAppSelector((state) => state.footers);
+  const { locations, error } = useAppSelector((state) => state.locations);
 
   useEffect(() => {
     setInitialRender(false);
-    dispatch(getAllFooter());
+    if (locations.length === 0) {
+      dispatch(getAllLocation());
+    }
   }, [dispatch]);
 
   //set active modal
-  const [selectedFooter, setSelectedFooter] = useState<any>(); // boolean or record._id
+  const [selectedLocation, setSelectedLocation] = useState<any>(); // boolean or record._id
 
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -64,9 +65,9 @@ const FooterAdmin = (props: Props) => {
   // form
   type FieldType = {
     name?: string;
-    url?: string;
-    column?: number;
-    optional?: string;
+    address?: string;
+    map?: string;
+    time?: string;
   };
 
   const [createForm] = Form.useForm<FieldType>();
@@ -74,53 +75,45 @@ const FooterAdmin = (props: Props) => {
 
   useEffect(() => {
     if (!initialRender) {
-      if (!success) {
-        if (!param.id) {
-          onShowMessage(`${error.errors.name}`, "error");
-        } else {
-          onShowMessage(`${error.errors.name}`, "error");
-        }
+      if (!param.id) {
+        onShowMessage("Tạo địa chỉ thành công", "success");
       } else {
-        if (!param.id) {
-          onShowMessage("Tạo footer thành công", "success");
-        } else {
-          onShowMessage("Cập nhật footer thành công", "success");
-          navigate(-1);
-          setSelectedFooter(false);
-        }
-        createForm.resetFields();
+        onShowMessage("Cập nhật địa chỉ thành công", "success");
+        navigate(-1);
+        setSelectedLocation(false);
       }
+      createForm.resetFields();
     }
-    dispatch(getAllFooter());
+    dispatch(getAllLocation());
   }, [isActive]);
 
   const onFinish = async (values: any) => {
-    console.log("««««« values »»»»»", values);
-    await dispatch(createFooter(values));
+    await dispatch(createLocation(values));
     // setInitialRender(false);
     setIsActive(!isActive);
   };
 
-  // update category modal
+  // update location modal
 
   const onUpdate = async (values: any) => {
-    console.log("««««« { id: selectedFooter, values: values } »»»»»", {
-      id: selectedFooter,
-      values: values,
-    });
-    await dispatch(updateFooter({ id: selectedFooter, values: values }));
+    await dispatch(updateLocation({ id: selectedLocation, values: values }));
     setIsActive(!isActive);
   };
 
   const onDelete = async (values: any) => {
-    await dispatch(deleteFooter(values));
-    dispatch(getAllFooter());
-    onShowMessage("Xoá footer thành công");
+    await dispatch(deleteLocation(values));
+    dispatch(getAllLocation());
+    onShowMessage("Xoá location thành công");
   };
 
-  // console.log("««««« category »»»»»", category);
-  // console.log("««««« footers »»»»»", footers);
-  // console.log("««««« error »»»»»", error);
+  //copy
+  const handleCopy = async (values: any) => {
+    await dispatch(
+      createLocation({ ...values, name: `${values.name} (copy)` })
+    );
+    setIsActive(!isActive);
+  };
+
   console.log("««««« initialRender »»»»»", initialRender);
 
   // table
@@ -141,40 +134,19 @@ const FooterAdmin = (props: Props) => {
     },
 
     {
-      title: "Url",
-      dataIndex: "url",
-      key: "url",
-      width: "45%",
-      render: (text: string, record: any, index: number) => {
-        if (text) {
-          return (
-            <a
-              target="_blank"
-              href={`${text}`}
-              style={{ color: "black" }}
-              rel="noreferrer"
-            >
-              {`${text}`}
-            </a>
-          );
-        }
-      },
+      title: "Địa chỉ",
+      dataIndex: "address",
+      key: "address",
     },
     {
-      title: "Optional",
-      dataIndex: "optional",
-      key: "optional",
-      render: (text: string, record: any, index: number) => <div>{text}</div>,
+      title: "Thời gian",
+      dataIndex: "time",
+      key: "time",
     },
-
     {
-      title: "Column",
-      dataIndex: "column",
-      key: "column",
-      width: "1%",
-      render: (text: number, record: any, index: number) => (
-        <div style={{ textAlign: "right" }}>{text}</div>
-      ),
+      title: "Chỉ đường",
+      dataIndex: "map",
+      key: "map",
     },
     {
       title: "Actions",
@@ -184,20 +156,24 @@ const FooterAdmin = (props: Props) => {
       render: (text: any, record: any) => {
         return (
           <Space size="small">
-            <Link to={`/admin/footers/${record._id}`}>
+            <Button
+              onClick={() => handleCopy(record)}
+              icon={<CopyOutlined />}
+            ></Button>
+            <Link to={`/admin/locations/${record._id}`}>
               <Button
                 type="primary"
                 icon={<EditOutlined />}
                 onClick={() => {
-                  setSelectedFooter(record._id);
+                  setSelectedLocation(record._id);
                   updateForm.setFieldsValue(record);
                 }}
               ></Button>
             </Link>
 
             <Popconfirm
-              title="Xoá footer"
-              description="Bạn có chắc xoá footer này không?"
+              title="Xoá location"
+              description="Bạn có chắc xoá location này không?"
               onConfirm={() => {
                 onDelete(record._id);
               }}
@@ -212,7 +188,7 @@ const FooterAdmin = (props: Props) => {
   return (
     <div>
       {contextHolder}
-      <Card title="Tạo footer mới" style={{ width: "100%" }}>
+      <Card title="Tạo location mới" style={{ width: "100%" }}>
         <Form
           form={createForm}
           name="basic"
@@ -223,65 +199,75 @@ const FooterAdmin = (props: Props) => {
           autoComplete="off"
         >
           <Form.Item<FieldType>
-            label="Tên footer"
+            label="Tên cửa hàng"
             name="name"
             rules={[
-              { required: true, message: "Vui lòng điền tên footer!" },
+              { required: true, message: "Vui lòng điền tên cửa hàng!" },
               {
                 min: 2,
-                message: "Tên footer phải lớn hơn 2 kí tự",
+                message: "Tên cửa hàng phải lớn hơn 2 kí tự",
               },
               {},
             ]}
-            hasFeedback
           >
             <Input />
           </Form.Item>
 
           <Form.Item<FieldType>
-            label="Cột"
-            name="column"
-            rules={[{ required: true, message: "Vui lòng chọn cột!" }]}
-            hasFeedback
+            label="Địa chỉ cửa hàng"
+            name="address"
+            rules={[
+              { required: true, message: "Vui lòng điền địa chỉ cửa hàng!" },
+              {
+                min: 2,
+                message: "Địa chỉ cửa hàng phải lớn hơn 2 kí tự",
+              },
+            ]}
           >
-            <Select
-              options={[
-                { value: 1, label: "VỀ CHÚNG TÔI" },
-                { value: 2, label: "DANH MỤC" },
-                { value: 3, label: "TÌM HIỂU THÊM" },
-                { value: 4, label: "TỔNG ĐÀI" },
-              ]}
-            />
-          </Form.Item>
-
-          <Form.Item<FieldType> label="Url" name="url">
             <Input />
           </Form.Item>
 
-          <Form.Item<FieldType> label="Optional" name="optional">
+          <Form.Item<FieldType>
+            label="Thời gian hoạt động"
+            name="time"
+            rules={[
+              {
+                required: true,
+                message: "Vui lòng nhập thời gian hoạt động!",
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item<FieldType>
+            label="Chỉ đường"
+            name="map"
+            rules={[{ required: true, message: "Vui lòng nhập chỉ đường!" }]}
+          >
             <Input />
           </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 6 }}>
             <Button type="primary" htmlType="submit">
-              Thêm footer
+              Thêm
             </Button>
           </Form.Item>
         </Form>
       </Card>
-      <Card title="Danh sách các footer">
-        <Table dataSource={footers} columns={columns} />
+      <Card title="Danh sách các cửa hàng">
+        <Table dataSource={locations} columns={columns} />
       </Card>
 
       {/* form edit và delete */}
       <Modal
         centered
-        title="Chỉnh sửa footer"
+        title="Chỉnh sửa cửa hàng"
         onCancel={() => {
           navigate(-1);
-          setSelectedFooter(false);
+          setSelectedLocation(false);
         }}
-        open={selectedFooter}
+        open={selectedLocation}
         okText="Save changes"
         onOk={() => {
           updateForm.submit();
@@ -298,36 +284,43 @@ const FooterAdmin = (props: Props) => {
             autoComplete="off"
           >
             <Form.Item<FieldType>
-              label="Sửa footer"
+              label="Tên cửa hàng"
               name="name"
               rules={[
-                { required: true, message: "Vui lòng điền tên footer!" },
-                { min: 2, message: "Tên footer phải có ít nhất 2 ký tự!" },
+                { required: true, message: "Vui lòng điền tên cửa hàng!" },
+                { min: 2, message: "tên cửa hàng phải có ít nhất 2 ký tự!" },
               ]}
             >
               <Input />
             </Form.Item>
             <Form.Item<FieldType>
-              label="Cột"
-              name="column"
-              rules={[{ required: true, message: "Vui lòng chọn cột!" }]}
-              hasFeedback
+              label="Thời gian"
+              name="time"
+              rules={[
+                { required: true, message: "Vui lòng điền tên cửa hàng!" },
+                { min: 2, message: "tên cửa hàng phải có ít nhất 2 ký tự!" },
+              ]}
             >
-              <Select
-                options={[
-                  { value: 1, label: "VỀ CHÚNG TÔI" },
-                  { value: 2, label: "DANH MỤC" },
-                  { value: 3, label: "TÌM HIỂU THÊM" },
-                  { value: 4, label: "TỔNG ĐÀI" },
-                ]}
-              />
-            </Form.Item>
-
-            <Form.Item<FieldType> label="Url" name="url">
               <Input />
             </Form.Item>
-
-            <Form.Item<FieldType> label="Optional" name="optional">
+            <Form.Item<FieldType>
+              label="Địa chỉ"
+              name="address"
+              rules={[
+                { required: true, message: "Vui lòng điền tên cửa hàng!" },
+                { min: 2, message: "tên cửa hàng phải có ít nhất 2 ký tự!" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item<FieldType>
+              label="Chỉ đường "
+              name="map"
+              rules={[
+                { required: true, message: "Vui lòng điền tên cửa hàng!" },
+                { min: 2, message: "tên cửa hàng phải có ít nhất 2 ký tự!" },
+              ]}
+            >
               <Input />
             </Form.Item>
           </Form>
@@ -337,4 +330,4 @@ const FooterAdmin = (props: Props) => {
   );
 };
 
-export default FooterAdmin;
+export default LocationAdmin;

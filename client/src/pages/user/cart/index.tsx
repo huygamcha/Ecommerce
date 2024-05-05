@@ -36,6 +36,8 @@ import {
   PlusOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+import { MdLocationOn } from "react-icons/md";
+import { FaCheckCircle, FaCircle } from "react-icons/fa";
 import { IoMdHome } from "react-icons/io";
 import { FiChevronDown, FiChevronUp, FiChevronLeft } from "react-icons/fi";
 
@@ -47,12 +49,11 @@ import {
 } from "../../../slices/productSlice";
 import { createOrder } from "../../../slices/orderSlice";
 import NoCart from "../../../components/noCart";
+import { getAllLocation } from "../../../slices/locationSlice";
+import { FaClock, FaLocationCrosshairs, FaLocationDot } from "react-icons/fa6";
 
 function CartScreen() {
-  const currentUser = localStorage.getItem("userInfor")
-    ? JSON.parse(localStorage.getItem("userInfor")!)
-    : undefined;
-  const location = useLocation();
+  const locationPath = useLocation();
   const [buy, setBuy] = useState<boolean>(false);
   const [whereBuy, setWhereBuy] = useState<boolean>(true);
 
@@ -60,17 +61,19 @@ function CartScreen() {
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
   const { carts, totalPrice, checkAll, totalOriginal, totalCheck } =
     useAppSelector((state) => state.carts);
+  const { location, locations } = useAppSelector((state) => state.locations);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getAllCart());
+    dispatch(getAllLocation());
     getProvince();
   }, []);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0 });
-  }, [location, buy]);
+  }, [locationPath, buy]);
 
   const handleQuantity = async (value: string, e: number | null) => {
     dispatch(changeQuantityCart({ id: value, quantity: e }));
@@ -167,7 +170,7 @@ function CartScreen() {
           <>
             {!buy ? (
               <>
-                <Row>
+                <Row className={clsx(style.breadcrumb_wrapper)}>
                   <Flex className={clsx(style.button_back_cart)}>
                     <Breadcrumb
                       items={[
@@ -597,7 +600,7 @@ function CartScreen() {
             ) : (
               <>
                 <Form onFinish={onFinish} form={cartForm}>
-                  <Row>
+                  <Row className={clsx(style.breadcrumb_wrapper)}>
                     <Flex
                       className={clsx(style.button_back_cart)}
                       style={{
@@ -617,13 +620,14 @@ function CartScreen() {
                   {/* danh sách mua hàng */}
                   <Row>
                     <Flex
+                      className={clsx(style.customPL16)}
                       style={{
                         marginBottom: "10px",
                         fontSize: "14px",
                         fontWeight: "600",
                       }}
                     >
-                      Danh sách sản phẩm{" "}
+                      Danh sách sản phẩm
                       <div style={{ marginLeft: "5px" }}> ({totalCheck})</div>
                     </Flex>
                     <Col xs={24} sm={24}>
@@ -865,7 +869,7 @@ function CartScreen() {
                                         !whereBuy ? style.selected : ""
                                       )}
                                     >
-                                      Nhận tại nhà thuốc
+                                      Nhận tại cửa hàng
                                     </Space>
                                   </Flex>
                                 </Flex>
@@ -1217,7 +1221,168 @@ function CartScreen() {
                                           </Col>
                                         </Row>
                                       ) : (
-                                        <></>
+                                        <Row>
+                                          <Col
+                                            style={{ marginBottom: "10px" }}
+                                            span={24}
+                                          >
+                                            <Flex align="center">
+                                              <img
+                                                style={{
+                                                  width: "24px",
+                                                  height: "24px",
+                                                }}
+                                                src="https://nhathuoclongchau.com.vn/estore-images/pin.png"
+                                                alt=""
+                                              />
+                                              <Space
+                                                className={clsx(
+                                                  style.typePayment_header
+                                                )}
+                                              >
+                                                Địa chỉ cửa hàng
+                                              </Space>
+                                            </Flex>
+                                          </Col>
+                                          <Col span={24}>
+                                            <Row gutter={[8, 0]}>
+                                              <Col span={24}>
+                                                <Flex
+                                                  className={clsx(
+                                                    style.wrapper_location
+                                                  )}
+                                                >
+                                                  {locations &&
+                                                    locations.map(
+                                                      (item: any) => (
+                                                        <Row
+                                                          style={{
+                                                            marginBottom:
+                                                              "16px",
+                                                          }}
+                                                          gutter={[4, 0]}
+                                                        >
+                                                          <Col xs={2} sm={1}>
+                                                            <Flex justify="center">
+                                                              <FaCheckCircle
+                                                                style={{
+                                                                  fontSize:
+                                                                    "20px",
+                                                                  color:
+                                                                    "#1250dd",
+                                                                }}
+                                                              />
+                                                            </Flex>
+                                                          </Col>
+                                                          <Col xs={22} sm={18}>
+                                                            <Row gutter={10}>
+                                                              <Col>
+                                                                <Space
+                                                                  style={{
+                                                                    color:
+                                                                      "#039855",
+                                                                    fontWeight: 600,
+                                                                  }}
+                                                                >
+                                                                  Có hàng
+                                                                  <Space></Space>
+                                                                </Space>
+                                                              </Col>
+                                                              <Col>
+                                                                <Space
+                                                                  style={{
+                                                                    color:
+                                                                      "#020b27",
+                                                                    fontWeight: 600,
+                                                                  }}
+                                                                >
+                                                                  {item.name}
+                                                                </Space>
+                                                              </Col>
+                                                            </Row>
+                                                            <Flex
+                                                              style={{
+                                                                margin:
+                                                                  "5px 0px",
+                                                              }}
+                                                              align="center"
+                                                            >
+                                                              <FaClock
+                                                                style={{
+                                                                  color:
+                                                                    "#aab2be",
+                                                                  fontSize:
+                                                                    "15px",
+                                                                  marginRight:
+                                                                    "5px",
+                                                                }}
+                                                              />
+                                                              {item.time}
+                                                            </Flex>
+                                                            <Flex
+                                                              style={{
+                                                                margin:
+                                                                  "5px 0px",
+                                                              }}
+                                                              align="center"
+                                                            >
+                                                              <FaLocationDot
+                                                                style={{
+                                                                  color:
+                                                                    "#aab2be",
+                                                                  fontSize:
+                                                                    "15px",
+                                                                  marginRight:
+                                                                    "5px",
+                                                                }}
+                                                              />
+                                                              {item.address}
+                                                            </Flex>
+                                                          </Col>
+                                                          <Col
+                                                            xs={2}
+                                                            sm={0}
+                                                          ></Col>
+                                                          <Col xs={22} sm={5}>
+                                                            <a
+                                                              className={clsx(
+                                                                style.location_map
+                                                              )}
+                                                              target="_blank"
+                                                              href={item.map}
+                                                              rel="noreferrer"
+                                                            >
+                                                              <Flex align="center">
+                                                                <FaLocationCrosshairs
+                                                                  style={{
+                                                                    fontSize:
+                                                                      "15px",
+                                                                    marginRight:
+                                                                      "3px",
+                                                                  }}
+                                                                />
+                                                                <Space>
+                                                                  Chỉ đường
+                                                                </Space>
+                                                              </Flex>
+                                                            </a>
+                                                          </Col>
+                                                        </Row>
+                                                      )
+                                                    )}
+                                                </Flex>
+                                              </Col>
+                                              <Col span={24}>
+                                                <Form.Item<FieldType> name="notice">
+                                                  <Input.TextArea
+                                                    rows={3}
+                                                    placeholder="Thêm ghi chú (ví dụ: Hãy gọi sau khi gói hàng xong)"
+                                                  />
+                                                </Form.Item>
+                                              </Col>
+                                            </Row>
+                                          </Col>
+                                        </Row>
                                       )}
                                     </div>
                                   </Col>

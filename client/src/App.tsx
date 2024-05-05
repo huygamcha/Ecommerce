@@ -1,11 +1,4 @@
-import React, {
-  Children,
-  Fragment,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
-import logo from "./logo.svg";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import numeral from "numeral";
 import "numeral/locales/vi";
@@ -29,7 +22,7 @@ import {
   VideoCameraOutlined,
 } from "@ant-design/icons";
 import { LiaProductHunt } from "react-icons/lia";
-import { Layout, Menu, Button, theme, message } from "antd";
+import { Layout, Menu, theme, message } from "antd";
 import ProductScreen from "./pages/user/product";
 import CartScreen from "./pages/user/cart";
 import MainLayOut from "./pages/layout/mainLayout";
@@ -39,7 +32,6 @@ import ProductDetail from "./pages/user/product/productDetail";
 import LoginLayout from "./pages/layout/loginLayout";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
-import NotPermit from "./pages/auth/NotPermit";
 import Payment from "./pages/user/payment";
 import FooterAdmin from "./pages/admin/footer";
 import Tag from "./pages/admin/tag";
@@ -49,9 +41,10 @@ import BannerAdmin from "./pages/admin/banner";
 import Order from "./pages/admin/order";
 import OrderSuccess from "./components/orderSuccess";
 import SearchMobile from "./pages/layout/searchMobile";
-import HeaderScreenMobile from "./components/header/headerMobile";
 import MobileResultSearch from "./pages/user/mobile/resultSearch";
-import FooterContact from "./pages/admin/footer/FooterContact";
+import LocationAdmin from "./pages/admin/location";
+import PolicyAdmin from "./pages/admin/policy";
+import PolicyScreen from "./pages/user/policy";
 const { Sider, Content } = Layout;
 numeral.locale("vi");
 
@@ -81,12 +74,12 @@ const router = createBrowserRouter([
     element: <MainLayOut />,
     children: [
       {
-        path: "/payment",
-        element: <Payment />,
+        path: "/:search",
+        element: <PolicyScreen />,
       },
       {
-        path: "/home",
-        element: <HomeScreen />,
+        path: "/payment",
+        element: <Payment />,
       },
       {
         path: "/",
@@ -125,6 +118,7 @@ const router = createBrowserRouter([
     ],
   },
 
+  // search theo mobile
   {
     path: "/mobile",
     element: <SearchMobile />,
@@ -231,6 +225,26 @@ const router = createBrowserRouter([
           },
         ],
       },
+      {
+        path: "/admin/locations",
+        element: <LocationAdmin />,
+        children: [
+          {
+            path: "/admin/locations/:id",
+            element: <LocationAdmin />,
+          },
+        ],
+      },
+      {
+        path: "/admin/policies",
+        element: <PolicyAdmin />,
+        children: [
+          {
+            path: "/admin/policies/:id",
+            element: <PolicyAdmin />,
+          },
+        ],
+      },
     ],
   },
 ]);
@@ -250,15 +264,7 @@ function AdminRouter() {
     WARNING: "warning",
     ERROR: "error",
   };
-  const onShowMessage = useCallback(
-    (content: any, type: any = MESSAGE_TYPE.SUCCESS) => {
-      messageApi.open({
-        type: type,
-        content: content,
-      });
-    },
-    [messageApi]
-  );
+
   useEffect(() => {
     if (!currentUser) {
       navigate("/notPermit");
@@ -331,6 +337,16 @@ function AdminRouter() {
               key: "/admin/orders",
               icon: <LiaProductHunt />,
               label: "Order",
+            },
+            {
+              key: "/admin/locations",
+              icon: <LiaProductHunt />,
+              label: "Địa chỉ",
+            },
+            {
+              key: "/admin/policies",
+              icon: <LiaProductHunt />,
+              label: "Chính sách",
             },
           ]}
         />

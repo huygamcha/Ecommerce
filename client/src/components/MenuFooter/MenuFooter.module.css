@@ -6,22 +6,24 @@
     background-color: #fff;
     width: 100% ;
     box-shadow: rgba(0, 39, 102, 0.3) 0px 0px 16px -4px, rgba(0, 39, 102, 0.3) 0px 0px 6px -2px;
-    padding: 20px 16px 16px 16px;
+    padding: 10px 16px 10px 16px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
   }
   .icon {
     font-size: 24px;
     margin-bottom: 4px;
   }
   .text{
-    color: #000;
-    font-weight: 600;
+    color: #7a7f89;
+    font-weight: 400;
   }
   .text:hover{
-    color: #000;
+    color: #7a7f89;
   }
 
   .button_header_text {
-    color: #000;
+    color: #7a7f89;
     display: flex;
     justify-content: center;
 
@@ -30,7 +32,7 @@
     display: flex;
   }
   .button_header_text:hover {
-    color: #000;
+    color: #7a7f89;
   }
   .cart_notification_wrapper{
     position: relative;

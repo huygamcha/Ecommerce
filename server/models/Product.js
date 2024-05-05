@@ -150,22 +150,20 @@ productSchema.virtual("total").get(function () {
   return this.price * ((100 - this.discount) / 100);
 });
 
+// khi lưu tạo slug
 productSchema.pre("save", function (next) {
-  console.log("««««« this.name »»»»»", this.name);
-  // Chỉ chuyển đổi name thành slug nếu name đã thay đổi
   if (this.isModified("name")) {
-    this.slug = slugify(this.name, { lower: true });
+    this.slug = slugify(this.name, { lower: true, locate: "vi" });
   }
   next();
 });
 
-// Pre-findOneAndUpdate hook
+// khi update
 productSchema.pre("findOneAndUpdate", function (next) {
   if (this._update.name) {
     const update = this.getUpdate();
-    update.slug = slugify(update.name, { lower: true });
+    update.slug = slugify(update.name, { lower: true, locate: "vi" });
   }
-  // Chuyển đổi name thành slug bất kể name có được thay đổi hay không
   next();
 });
 

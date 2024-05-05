@@ -18,9 +18,6 @@ interface InitialType {
   footers: FooterType[];
 }
 
-const currentUser = localStorage.getItem("userInfor")
-  ? JSON.parse(localStorage.getItem("userInfor")!)
-  : null;
 
 const initialState: InitialType = {
   success: false,
@@ -43,10 +40,19 @@ const initialState: InitialType = {
 const createFooter = createAsyncThunk<FooterType, FooterType>(
   "footer/createFooter",
   async (values, { rejectWithValue }) => {
-    try {
+    const currentUser = localStorage.getItem("userInfor")
+    ? JSON.parse(localStorage.getItem("userInfor")!)
+    : null;
+  try {
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${currentUser.token}`,
+      },
+    };
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND}/footers`,
-        values
+        values, config
       );
       const data: FooterType = response.data;
       return data;
@@ -121,11 +127,15 @@ const updateFooter = createAsyncThunk<
   FooterType,
   { id: string; values: FooterType }
 >("footer/updateFooter", async ({ id, values }, { rejectWithValue }) => {
+
+  const currentUser = localStorage.getItem("userInfor")
+    ? JSON.parse(localStorage.getItem("userInfor")!)
+    : null;
   try {
     const config = {
       headers: {
         "Content-type": "application/json",
-        //   Authorization: `Bearer ${currentUser.payload.token}`,
+        Authorization: `Bearer ${currentUser.token}`,
       },
     };
     const response = await axios.patch(
@@ -257,6 +267,5 @@ const footerSlice = createSlice({
 });
 
 const { reducer } = footerSlice;
-
 export default reducer;
-export { createFooter, getDetailFooter, updateFooter, getAllFooter ,deleteFooter };
+export { createFooter, getDetailFooter, updateFooter, getAllFooter, deleteFooter };

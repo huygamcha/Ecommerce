@@ -31,10 +31,7 @@ const productDetail = new Schema({
     type: String,
     required: true,
   },
-  // stock: {
-  //   type: Number,
-  //   required: true,
-  // },
+
   total: {
     type: Number,
     required: true,
@@ -67,12 +64,7 @@ const orderSchema = new Schema(
       type: String,
       required: true,
     },
-    // name: {
-    //   type: String,
-    // },
-    // phone: {
-    //   type: Number,
-    // },
+
     notice: {
       type: String,
     },

@@ -9,6 +9,8 @@ const Footer = require("./Footer");
 const Tag = require("./Tag");
 const Brand = require("./Brand");
 const Banner = require("./Banner");
+const Location = require("./Location");
+const Policy = require("./Policy");
 module.exports = {
   Category,
   Customer,
@@ -21,4 +23,6 @@ module.exports = {
   Tag,
   Brand,
   Banner,
+  Location,
+  Policy,
 };

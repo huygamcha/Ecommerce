@@ -6,7 +6,6 @@ const {
   getDetailOrder,
   updateOrder,
 } = require("./controller");
-const { checkCreateOrder, checkUpdateOrder } = require("./validation");
 const { checkId, validateSchema } = require("../../utils");
 const { admin, protect } = require("../../authentication/checkRole");
 var router = express.Router();

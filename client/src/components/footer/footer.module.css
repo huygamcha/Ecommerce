@@ -1,9 +1,15 @@
+
 .text_center {
   text-align: center;
 }
 
 .items>a {
   padding: 0 5px;
+}
+.global_wrapper_direction{
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
 }
 
 .text_heading {
@@ -57,10 +63,38 @@
     margin-top: 5px;
     border-radius: 6px;
 }
-
+.global_wrapper_direction{
+  background-color:#2267de;
+  padding: 16px 0px;
+}
+.direction_left_text{
+  font-size: 24px;
+        line-height: 36px;
+        margin-bottom: 0;
+        font-weight: 500;
+        color: #fff;
+}
+.location_map_wrapper{
+  background-color: #eaeffa;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 500;
+}
+.location_map{
+  color: #1250dc;
+}
+.location_map:hover{
+  color: #1250dc;
+}
 
 /* mobile */
 @media (max-width: 575.98px) {
+  .global_wrapper_direction{
+    margin-bottom: 0px !important;
+    display: flex;
+    justify-content: center;
+  }
   .wrapper_mobile{
     border-bottom: 1px solid #e4e8ed;
     padding-bottom: 16px;
@@ -146,7 +180,6 @@
 /* Thiết lập padding cho xl */
 @media (min-width: 1200px) {
   .global_wrapper {
-    /* padding: 0px 100px 100px 100px; */
     max-width: 1236px;
     margin: 0 auto;
     display: flex;

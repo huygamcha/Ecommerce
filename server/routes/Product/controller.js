@@ -20,8 +20,6 @@ module.exports = {
       const result = await Product.find({ slug: fuzzySearch(search) })
         .populate("category")
         .populate("supplier")
-        // .limit(limit)
-        // .skip(skip)
         .sort({ sold: -1, createdAt: -1 })
         .lean({ virtuals: true });
       if (result.length > 0) {

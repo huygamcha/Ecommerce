@@ -1,47 +1,47 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-
-interface BannersType {
-  pic: string;
+interface LocationsType {
   _id: string;
+  time: string;
+  address: string;
+  map: string;
 }
 
 interface InitialType {
   success: boolean;
-  error: { message: string; errors: { name: string } };
-  banner: BannersType;
+  error: string | undefined;
+  location: LocationsType;
   loading: boolean;
   deleted: boolean;
   updated: boolean;
-  banners: BannersType[];
+  locations: LocationsType[];
 }
 
 const initialState: InitialType = {
   success: false,
-  error: {
-    message: "",
-    errors: { name: "" },
-  },
-  banner: {
+  error: "",
+  location: {
     _id: "",
-    pic: "",
+    time: "",
+    address: "",
+    map: "",
   },
   loading: false,
   deleted: false,
   updated: false,
-  banners: [],
+  locations: [],
 };
 
-const getAllBanner = createAsyncThunk<BannersType[]>("banner/getAll", async () => {
-  const response = await axios.get(`${process.env.REACT_APP_BACKEND}/banners`);
-  const data: BannersType[] = response.data.payload;
+const getAllLocation = createAsyncThunk<LocationsType[]>("location/getAll", async () => {
+  const response = await axios.get(`${process.env.REACT_APP_BACKEND}/locations`);
+  const data: LocationsType[] = response.data.payload;
   return data; 
 });
 
 // tham số thứ 2 là tham số truyền vào gửi từ client
-const createBanner = createAsyncThunk<BannersType, BannersType>(
-  "banner/createBanner",
+const createLocation = createAsyncThunk<LocationsType, LocationsType>(
+  "location/createLocation",
   async (name, { rejectWithValue }) => {
     const currentUser = localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
     try {
@@ -52,10 +52,10 @@ const createBanner = createAsyncThunk<BannersType, BannersType>(
         },
       };
       const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND}/banners`,
+        `${process.env.REACT_APP_BACKEND}/locations`,
         name, config
       );
-      const data: BannersType = response.data;
+      const data: LocationsType = response.data;
       return data;
     } catch (error: any) {
       if (error.response && error.response.data) {
@@ -67,8 +67,8 @@ const createBanner = createAsyncThunk<BannersType, BannersType>(
   }
 );
 
-const deleteBanner = createAsyncThunk<BannersType, string>(
-  "banner/deleteBanner",
+const deleteLocation = createAsyncThunk<LocationsType, string>(
+  "location/deleteLocation",
   async (id, { rejectWithValue }) => {
     const currentUser = localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
     try {
@@ -79,7 +79,7 @@ const deleteBanner = createAsyncThunk<BannersType, string>(
         },
       };
       const response = await axios.delete(
-        `${process.env.REACT_APP_BACKEND}/banners/${id}`,
+        `${process.env.REACT_APP_BACKEND}/locations/${id}`,
         config
       );
       const data = response.data;
@@ -94,8 +94,8 @@ const deleteBanner = createAsyncThunk<BannersType, string>(
   }
 );
 
-const updateBanner = createAsyncThunk<BannersType, { id: string; values: BannersType }>(
-  "banner/updateBanner",
+const updateLocation = createAsyncThunk<LocationsType, { id: string; values: LocationsType }>(
+  "location/updateLocation",
   async ({ id, values }, { rejectWithValue }) => {
     const currentUser = localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
     try {
@@ -106,7 +106,7 @@ const updateBanner = createAsyncThunk<BannersType, { id: string; values: Banners
         },
       };
       const response = await axios.patch(
-        `${process.env.REACT_APP_BACKEND}/banners/${id}`,
+        `${process.env.REACT_APP_BACKEND}/locations/${id}`,
         values,
         config
       );
@@ -123,79 +123,69 @@ const updateBanner = createAsyncThunk<BannersType, { id: string; values: Banners
   }
 );
 
-const bannerSlice = createSlice({
-  name: "banner",
+const locationSlice = createSlice({
+  name: "location",
   initialState: initialState,
   reducers: {},
   extraReducers(builder) {
-    builder.addCase(getAllBanner.pending, (state) => {
+    builder.addCase(getAllLocation.pending, (state) => {
       state.loading = true;
     });
 
-    builder.addCase(getAllBanner.fulfilled, (state, action) => {
+    builder.addCase(getAllLocation.fulfilled, (state, action) => {
       state.loading = false;
-      state.banners = action.payload;
+      state.locations = action.payload;
     });
-    builder.addCase(getAllBanner.rejected, (state, action) => {
+    builder.addCase(getAllLocation.rejected, (state, action) => {
       state.loading = false;
-      state.error = { message: "", errors: { name: '' } };// Ensure a default message or fallback if action.error is undefined
+      state.error = action.error.message;
     });
 
     // create
-    builder.addCase(createBanner.pending, (state) => {
+    builder.addCase(createLocation.pending, (state) => {
       state.loading = true;
-      // state.error = "";
     });
 
-    builder.addCase(createBanner.fulfilled, (state, action) => {
+    builder.addCase(createLocation.fulfilled, (state, action) => {
       state.loading = false;
-      state.banner = action.payload;
-      state.error = { message: "", errors: { name: '' } };
-
+      state.location = action.payload;
     });
-    builder.addCase(createBanner.rejected, (state, action) => {
+    builder.addCase(createLocation.rejected, (state, action) => {
       state.loading = false;
-      const customErrors = action.payload as { message: string; errors: { name: string } };
-      state.error = customErrors; // Ensure a default message or fallback if action.error is undefined
+      state.error = action.error.message
     });
 
     //delete
-    builder.addCase(deleteBanner.pending, (state) => {
+    builder.addCase(deleteLocation.pending, (state) => {
       state.loading = true;
-      state.error = { message: "", errors: { name: '' } };
-
     });
 
-    builder.addCase(deleteBanner.fulfilled, (state, action) => {
+    builder.addCase(deleteLocation.fulfilled, (state, action) => {
       state.loading = false;
-      state.banner = action.payload;
+      state.location = action.payload;
     });
-    builder.addCase(deleteBanner.rejected, (state, action) => {
-      const customErrors = action.payload as { message: string; errors: { name: string } };
+    builder.addCase(deleteLocation.rejected, (state, action) => {
       state.loading = false;
-      state.error = customErrors; // Ensure a default message or fallback if action.error is undefined
+      state.error = action.error.message
     });
 
     //update
-    builder.addCase(updateBanner.pending, (state) => {
+    builder.addCase(updateLocation.pending, (state) => {
       state.loading = true;
-      state.error = { message: "", errors: { name: '' } };
     });
 
-    builder.addCase(updateBanner.fulfilled, (state, action) => {
+    builder.addCase(updateLocation.fulfilled, (state, action) => {
       state.loading = false;
-      state.banner = action.payload;
+      state.location = action.payload;
     });
 
-    builder.addCase(updateBanner.rejected, (state, action) => {
+    builder.addCase(updateLocation.rejected, (state, action) => {
       state.loading = false;
-      const customErrors = action.payload as { message: string; errors: { name: string } };
-      state.error = customErrors; // Ensure a default message or fallback if action.error is undefined
+      state.error = action.error.message
     });
   },
 });
 
-const { reducer } = bannerSlice;
-
+const { reducer } = locationSlice;
 export default reducer;
-export { getAllBanner, createBanner, deleteBanner, updateBanner };
+export { getAllLocation, createLocation, deleteLocation, updateLocation };

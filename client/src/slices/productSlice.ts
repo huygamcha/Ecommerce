@@ -290,11 +290,12 @@ const updateProduct = createAsyncThunk<
   ProductsType,
   { id: string; values: ProductsType }
 >("product/updateProduct", async ({ id, values }, { rejectWithValue }) => {
+  const currentUser =  localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
   try {
     const config = {
       headers: {
         "Content-type": "application/json",
-        // Authorization: `Bearer ${currentUser.token}`,
+        Authorization: `Bearer ${currentUser.token}`,
       },
     };
     const response = await axios.patch(

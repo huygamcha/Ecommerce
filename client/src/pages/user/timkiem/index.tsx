@@ -1,4 +1,4 @@
-import { Button, Col, Empty, Flex, Row, Space } from "antd";
+import { Button, Col, Empty, Flex, Row, Skeleton, Space } from "antd";
 import { useEffect, useState } from "react";
 import style from "./timkiem.module.css";
 import clsx from "clsx";
@@ -21,7 +21,7 @@ function Timkiem() {
   const filter = localStorage.getItem("filter")
     ? JSON.parse(localStorage.getItem("filter")!)
     : undefined;
-  const { productsSearch } = useAppSelector((state) => state.products);
+  const { productsSearch, loading } = useAppSelector((state) => state.products);
   const { categories } = useAppSelector((state) => state.categories);
   const { brands } = useAppSelector((state) => state.brands);
   const dispatch = useAppDispatch();
@@ -581,75 +581,86 @@ function Timkiem() {
               </Col>
               <Col xs={24} sm={24}>
                 <Row gutter={{ xs: 7, sm: 14 }}>
-                  {productsSearch ? (
-                    productsSearch.map((product) => (
-                      <Col
-                        xs={12}
-                        md={12}
-                        lg={6}
-                        className={clsx(style.customPB)}
-                      >
-                        <Link
-                          onClick={() =>
-                            handleDetail(product._id, product.categoryId)
-                          }
-                          to={`/sanpham/${product.slug}`}
-                          className={clsx(style.wrapper)}
+                  {!loading ? (
+                    productsSearch ? (
+                      productsSearch.map((product) => (
+                        <Col
+                          xs={12}
+                          md={12}
+                          lg={6}
+                          className={clsx(style.customPB)}
                         >
-                          <Flex className={clsx(style.content)} vertical>
-                            <Space className={clsx(style.content_discount)}>
-                              <Discount discount={product.discount}></Discount>
-                            </Space>
-                            <Space
-                              className={clsx(
-                                style.label_wrapper,
-                                !product.stock && style.soldOut
-                              )}
-                            >
-                              <Label
-                                soldOut={!product.stock ? true : false}
-                                title={product.category.name}
-                              />
-                            </Space>
-                            <Flex justify="center">
-                              <img
-                                src={product.pic}
-                                className={clsx(style.content_img)}
-                                alt=""
-                              />
-                            </Flex>
-                            <Flex
-                              vertical
-                              justify="space-between"
-                              style={{ padding: "45px 20px 20px 20px" }}
-                            >
-                              <Space className={clsx(style.header_text)}>
-                                {product.name}
+                          <Link
+                            onClick={() =>
+                              handleDetail(product._id, product.categoryId)
+                            }
+                            to={`/sanpham/${product.slug}`}
+                            className={clsx(style.wrapper)}
+                          >
+                            <Flex className={clsx(style.content)} vertical>
+                              <Space className={clsx(style.content_discount)}>
+                                <Discount
+                                  discount={product.discount}
+                                ></Discount>
                               </Space>
-                              <Space className={clsx(style.header_discount)}>
-                                {numeral(
-                                  (product.price * (100 - product.discount)) /
-                                    100
-                                ).format("0,0$")}
+                              <Space
+                                className={clsx(
+                                  style.label_wrapper,
+                                  !product.stock && style.soldOut
+                                )}
+                              >
+                                <Label
+                                  soldOut={!product.stock ? true : false}
+                                  title={product.category.name}
+                                />
                               </Space>
-                              {product && product?.discount > 0 ? (
-                                <del className={clsx(style.header_price)}>
-                                  {numeral(product.price).format("0,0$")}
-                                </del>
-                              ) : (
-                                <></>
-                              )}
-                              <Specifications title={product.specifications} />
+                              <Flex justify="center">
+                                <img
+                                  src={product.pic}
+                                  className={clsx(style.content_img)}
+                                  alt=""
+                                />
+                              </Flex>
+                              <Flex
+                                vertical
+                                justify="space-between"
+                                style={{ padding: "45px 20px 20px 20px" }}
+                              >
+                                <Space className={clsx(style.header_text)}>
+                                  {product.name}
+                                </Space>
+                                <Space className={clsx(style.header_discount)}>
+                                  {numeral(
+                                    (product.price * (100 - product.discount)) /
+                                      100
+                                  ).format("0,0$")}
+                                </Space>
+                                {product && product?.discount > 0 ? (
+                                  <del className={clsx(style.header_price)}>
+                                    {numeral(product.price).format("0,0$")}
+                                  </del>
+                                ) : (
+                                  <></>
+                                )}
+                                <Specifications
+                                  title={product.specifications}
+                                />
+                              </Flex>
                             </Flex>
-                          </Flex>
-                        </Link>
+                          </Link>
+                        </Col>
+                      ))
+                    ) : (
+                      <Col xs={24} sm={24} style={{ marginBottom: "25px" }}>
+                        <Empty
+                          description={<span>Không có sản phẩm nào</span>}
+                        />
                       </Col>
-                    ))
+                    )
                   ) : (
-                    <Col xs={24} sm={24} style={{ marginBottom: "25px" }}>
-                      <Empty description={<span>Không có sản phẩm nào</span>} />
-                    </Col>
+                    <Skeleton active></Skeleton>
                   )}
+
                   <Col xs={24}></Col>
                 </Row>
               </Col>
