@@ -229,11 +229,25 @@ const getProductById = createAsyncThunk<ProductsType, string | undefined>(
   }
 );
 
+const getProductBySlug = createAsyncThunk<ProductsType, string | undefined>(
+  "product/getProductBySlug",
+  async (slug) => {
+    const response = await axios.get(
+      `${process.env.REACT_APP_BACKEND}/products/slug/${slug}`
+    );
+    const data: ProductsType = response.data.payload;
+    console.log('««««« data »»»»»', data);
+    return data; 
+  }
+);
+
+
+
 // tham số thứ 2 là tham số truyền vào gửi từ client
 const createProduct = createAsyncThunk<ProductsType, ProductsType>(
   "product/createProduct",
   async (name, { rejectWithValue }) => {
-    const currentUser =  localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
+    const currentUser = localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
 
     try {
       const config = {
@@ -261,7 +275,7 @@ const createProduct = createAsyncThunk<ProductsType, ProductsType>(
 const deleteProduct = createAsyncThunk<ProductsType, string>(
   "product/deleteProduct",
   async (id, { rejectWithValue }) => {
-    const currentUser =  localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
+    const currentUser = localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
 
     try {
       const config = {
@@ -290,7 +304,7 @@ const updateProduct = createAsyncThunk<
   ProductsType,
   { id: string; values: ProductsType }
 >("product/updateProduct", async ({ id, values }, { rejectWithValue }) => {
-  const currentUser =  localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
+  const currentUser = localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
   try {
     const config = {
       headers: {
@@ -445,6 +459,28 @@ const productSlice = createSlice({
       }
     });
 
+    //get by slug
+    builder.addCase(getProductBySlug.pending, (state) => {
+      state.loading = true;
+      state.product = undefined;
+      state.error = { message: "", errors: { name: "" } };
+    });
+
+    builder.addCase(getProductBySlug.fulfilled, (state, action) => {
+      state.loading = false;
+      state.product = action.payload;
+    });
+    builder.addCase(getProductBySlug.rejected, (state, action) => {
+      state.loading = false;
+      if (action.payload) { // Check if payload exists
+        const customErrors = action.payload as { message?: string; errors?: any };
+        state.error = customErrors.errors || undefined;
+      } else {
+        // Handle the case where there's no payload (optional)
+        state.error = { message: "", errors: { name: "" } };
+      }
+    });
+
     // create
     builder.addCase(createProduct.pending, (state) => {
       state.loading = true;
@@ -527,6 +563,7 @@ export {
   getProductBySuppliers,
   getProductById,
   getAllProductSearch,
+  getProductBySlug
 };
 
 export const { hasList } = actions

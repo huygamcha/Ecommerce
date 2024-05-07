@@ -46,7 +46,7 @@ const getAllPolicy = createAsyncThunk<PoliciesType[]>("policy/getAll", async () 
 });
 
 const getPolicyById = createAsyncThunk<PoliciesType, string | undefined>(
-  "product/getProductById",
+  "policy/getPolicyById",
   async (id) => {
     const response = await axios.get(
       `${process.env.REACT_APP_BACKEND}/policies/${id}`

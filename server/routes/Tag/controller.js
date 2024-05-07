@@ -37,6 +37,27 @@ module.exports = {
     }
   },
 
+  getDetailTagSlug: async (req, res, next) => {
+    try {
+      const { tag } = req.params;
+
+      const payload = await Tag.findOne({ name: tag });
+      if (!payload) {
+        return res.send(404, {
+          message: "Không tìm thấy nhãn",
+        });
+      }
+      return res.send(200, {
+        message: "Tìm nhãn thành công",
+        payload: payload,
+      });
+    } catch (error) {
+      return res.send(400, {
+        message: "Lấy thông tin nhãn không thành công",
+      });
+    }
+  },
+
   createTag: async (req, res, next) => {
     try {
       const { name } = req.body;

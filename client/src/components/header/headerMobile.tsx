@@ -150,19 +150,17 @@ function HeaderScreenMobile() {
             className={clsx(style.wrapper_try_tag)}
           >
             <Flex className={clsx(style.wrapper_try_tag_display)}>
-              {tags ? (
-                tags.map((tag) => (
+              {tags &&
+                tags.map((tag, index) => (
                   <Link
+                    key={index}
                     onClick={() => handleSearchTag(tag._id)}
                     className={clsx(style.tag_item)}
                     to={`/timkiem?s=${tag.name}`}
                   >
                     {tag.name}
                   </Link>
-                ))
-              ) : (
-                <></>
-              )}
+                ))}
             </Flex>
           </Col>
           <Col xs={0} sm={8} md={9} lg={6}></Col>

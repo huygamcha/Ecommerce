@@ -23,11 +23,11 @@ const ListRender = ({
         <>
           <h4 className={clsx(style.text_heading)}>{title}</h4>
           <Flex vertical>
-            {footers.map((footer) =>
+            {footers.map((footer, index) =>
               footer.column === specificColumn ? (
                 <>
                   {footer.optional ? (
-                    <div className={clsx(style.item_optional)}>
+                    <div key={index} className={clsx(style.item_optional)}>
                       <a
                         className={clsx(style.text_item_optional)}
                         target="_blank"
@@ -47,6 +47,7 @@ const ListRender = ({
                     </div>
                   ) : (
                     <a
+                      key={index}
                       className={clsx(style.text_item)}
                       target="_blank"
                       href={footer.url}
@@ -105,11 +106,11 @@ const ListRender = ({
         <>
           <h4 className={clsx(style.text_heading)}>{title}</h4>
           <Flex vertical>
-            {footers.map((footer) =>
+            {footers.map((footer, index) =>
               footer.column === specificColumn ? (
                 <>
                   {footer.optional ? (
-                    <div className={clsx(style.item_optional)}>
+                    <div key={index} className={clsx(style.item_optional)}>
                       <a
                         className={clsx(style.text_item_optional)}
                         target="_blank"
@@ -129,6 +130,7 @@ const ListRender = ({
                     </div>
                   ) : (
                     <Link
+                      key={index}
                       to={`${footer.url}`}
                       className={clsx(style.text_item)}
                       // target="_blank"
@@ -177,11 +179,11 @@ const ListRenderMobile = ({
             className={clsx(style.dropdown_item, isShow ? style.active : "")}
             vertical
           >
-            {footers.map((footer) =>
+            {footers.map((footer, index) =>
               footer.column === specificColumn ? (
                 <>
                   {footer.optional ? (
-                    <div className={clsx(style.item_optional)}>
+                    <div key={index} className={clsx(style.item_optional)}>
                       <a
                         className={clsx(style.text_item_mobile)}
                         target="_blank"
@@ -201,6 +203,7 @@ const ListRenderMobile = ({
                     </div>
                   ) : (
                     <a
+                      key={index}
                       className={clsx(style.text_item_mobile)}
                       target="_blank"
                       href={footer.url}
@@ -231,11 +234,11 @@ const ListRenderMobile = ({
             className={clsx(style.dropdown_item, isShow ? style.active : "")}
             vertical
           >
-            {footers.map((footer) =>
+            {footers.map((footer, index) =>
               footer.column === specificColumn ? (
                 <>
                   {footer.optional ? (
-                    <div className={clsx(style.item_optional)}>
+                    <div key={index} className={clsx(style.item_optional)}>
                       <a
                         className={clsx(style.text_item_mobile)}
                         target="_blank"
@@ -255,6 +258,7 @@ const ListRenderMobile = ({
                     </div>
                   ) : (
                     <Link
+                      key={index}
                       to={`${footer.url}`}
                       className={clsx(style.text_item_mobile)}
                       // target="_blank"

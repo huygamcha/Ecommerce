@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import {
   getAllProduct,
   getAllProductSearch,
   getProductById,
+  getProductBySlug,
 } from "../../../slices/productSlice";
 import {
   Col,
@@ -38,7 +39,8 @@ import Discount from "../../../components/discount";
 import ButtonNavigation from "../../../components/buttonNavigation";
 import Label from "../../../components/label";
 import Specifications from "../../../components/specifications";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet-async";
+// error searchById cần fix cái này
 function ProductDetail() {
   const param = useParams();
 
@@ -71,18 +73,18 @@ function ProductDetail() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0 });
-    if (products.length === 0) dispatch(getAllProduct({}));
-    console.log("««««« location.path »»»»»", location.pathname.split("/")[2]);
-    dispatch(getProductById("65c26500be1c64b4e221f9d2"));
-    // dispatch(getAllProductSearch({ categoryId: product.categoryId }));
-  }, [location]);
+    const slug = location.pathname.split("/")[2];
+    if (products.length === 0) {
+      dispatch(getAllProduct({}));
+    }
+    if (!product?.name) dispatch(getProductBySlug(slug));
+  }, [dispatch, location.pathname, products.length]);
 
   useEffect(() => {
-    dispatch(
-      getAllProductSearch({ categoryId: product && product.categoryId })
-    );
-  }, [product]);
-
+    if (product && product.categoryId && productsSearch.length === 0) {
+      dispatch(getAllProductSearch({ categoryId: product.categoryId }));
+    }
+  }, [dispatch, product]);
   // useEffect(() => {
   //   const id = localStorage.getItem("productId")
   //     ? JSON.parse(localStorage.getItem("productId")!)
@@ -178,17 +180,13 @@ function ProductDetail() {
       localStorage.setItem("histories", JSON.stringify([value]));
     }
 
-    dispatch(getProductById(value));
+    // dispatch(getProductById(value));
+    // console.log("««««« come herre »»»»»", 321);
+    dispatch(getProductBySlug(value));
     dispatch(getAllProductSearch({ categoryId: categoryId }));
   };
   return (
     <div>
-      <Helmet>
-        <title>{product?.name}</title>
-        <meta property="og:image" content={product?.pic} />
-        <meta property="og:title" content={product?.name} />
-        <meta property="og:description" content={product?.description} />
-      </Helmet>
       <div>
         <ConfigProvider
           theme={{
@@ -308,8 +306,8 @@ function ProductDetail() {
                               )}
                             >
                               {product?.album &&
-                                product?.album.map((item) => (
-                                  <SwiperSlide>
+                                product?.album.map((item, index) => (
+                                  <SwiperSlide key={index}>
                                     <Image
                                       className={clsx(style.album_item)}
                                       src={item}
@@ -927,15 +925,16 @@ function ProductDetail() {
                             )}
 
                             {productsSearch ? (
-                              productsSearch.map((product) => {
+                              productsSearch.map((product, index) => {
                                 if (product._id !== productCurrent)
                                   return (
-                                    <>
+                                    <React.Fragment key={index}>
                                       <SwiperSlide>
                                         <Link
                                           onClick={() =>
                                             handleDetail(
-                                              product._id,
+                                              // product._id,
+                                              product.slug,
                                               product.categoryId
                                             )
                                           }
@@ -1062,7 +1061,7 @@ function ProductDetail() {
                                           </Flex>
                                         </Link>
                                       </SwiperSlide>
-                                    </>
+                                    </React.Fragment>
                                   );
                               })
                             ) : (
@@ -1137,15 +1136,16 @@ function ProductDetail() {
                             )}
 
                             {products ? (
-                              products.map((product) => {
+                              products.map((product, index) => {
                                 if (histories.includes(product._id)) {
                                   return (
-                                    <>
+                                    <React.Fragment key={index}>
                                       <SwiperSlide>
                                         <Link
                                           onClick={() =>
                                             handleDetail(
-                                              product._id,
+                                              // product._id,
+                                              product.slug,
                                               product.categoryId
                                             )
                                           }
@@ -1271,7 +1271,7 @@ function ProductDetail() {
                                           </Flex>
                                         </Link>
                                       </SwiperSlide>
-                                    </>
+                                    </React.Fragment>
                                   );
                                 }
                               })

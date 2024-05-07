@@ -8,6 +8,7 @@ const {
   getProductByCategories,
   getProductBySuppliers,
   getAllProductSearch,
+  getDetailProductSlug,
 } = require("./controller");
 const { checkCreateProduct, checkUpdateProduct } = require("./validation");
 const { checkId, validateSchema, checkIdQuery } = require("../../utils");
@@ -25,6 +26,8 @@ router
 router
   .route("/bySuppliers")
   .get(validateSchema(checkIdQuery), getProductBySuppliers);
+
+router.route("/slug/:slug").get(getDetailProductSlug);
 router
   .route("/:id")
   .delete(protect, admin, validateSchema(checkId), deleteProduct)

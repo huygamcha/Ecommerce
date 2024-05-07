@@ -24,8 +24,8 @@ function HomeScreen() {
     <>
       <Carousel easing="linear" speed={200} autoplay>
         {products ? (
-          products.map((product) => (
-            <div style={contentStyle}>
+          products.map((product, index) => (
+            <div key={index} style={contentStyle}>
               <img src={`${product.pic}`} alt="" style={contentStyle}></img>
             </div>
           ))

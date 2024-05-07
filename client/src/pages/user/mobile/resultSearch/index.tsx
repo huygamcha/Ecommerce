@@ -54,8 +54,8 @@ function MobileResultSearch() {
         <Space className={clsx(style.header_search_result)}>
           <Row>
             {productsSearch && isList ? (
-              productsSearch.map((product) => (
-                <Col span={24}>
+              productsSearch.map((product, index) => (
+                <Col key={index} span={24}>
                   <Link
                     className={clsx(style.header_search_items)}
                     to={`/sanpham/${product.slug}`}
@@ -90,8 +90,9 @@ function MobileResultSearch() {
                 <div className={clsx(style.header_tag)}>Tra cứu hàng đầu</div>
                 <div className={clsx(style.tag_wrapper)}>
                   {tags ? (
-                    tags.map((tag) => (
+                    tags.map((tag, index) => (
                       <Link
+                        key={index}
                         onClick={() => handleSearchTag(tag._id)}
                         className={clsx(style.tag_item)}
                         to={`/timkiem?s=${tag.name}`}

@@ -5,6 +5,7 @@ const {
   deleteTag,
   getDetailTag,
   updateTag,
+  getDetailTagSlug,
 } = require("./controller");
 const { checkCreateTag, checkUpdateTag } = require("./validation");
 const { checkId, validateSchema } = require("../../utils");
@@ -15,6 +16,9 @@ router.route("/").get(getAllTag);
 router
   .route("/")
   .post(protect, admin, validateSchema(checkCreateTag), createTag);
+
+router.route("/name/:tag").get(getDetailTagSlug);
+
 router
   .route("/:id")
   .delete(protect, admin, validateSchema(checkId), deleteTag)

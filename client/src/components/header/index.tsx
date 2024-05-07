@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Col, Flex, Input, Row, Space, Image, Badge } from "antd";
 import clsx from "clsx";
@@ -61,10 +61,10 @@ const ListItemBrand = ({
         }}
         vertical
       >
-        {brands.map((brand) => {
+        {brands.map((brand, index) => {
           if (brand.categoryId === categoryId && isShow) {
             return (
-              <Link to={`/timkiem?s=${categoryName}`}>
+              <Link key={index} to={`/timkiem?s=${categoryName}`}>
                 <Flex
                   onClick={(e) => {
                     // ngăn chặn việc gọi lên handleSearchMenu ở hàm, đánh đổi reload lại trang
@@ -136,8 +136,9 @@ function HeaderScreen() {
   };
 
   // search
-  const handleSearchTag = (e: string) => {
+  const handleSearchTag = (e: string, name: string) => {
     localStorage.setItem("filter", JSON.stringify({ searchTag: e }));
+    localStorage.setItem("filter", JSON.stringify({ searchTagName: name }));
   };
 
   // logout
@@ -174,7 +175,6 @@ function HeaderScreen() {
   const handleDetail = (value: string) => {
     dispatch(getProductById(value));
     localStorage.setItem("productId", JSON.stringify(value));
-    console.log("««««« value id id »»»»»", value);
     // setSearch("");
   };
 
@@ -317,10 +317,12 @@ function HeaderScreen() {
                       ref={wrapperRef}
                       className={clsx(style.header_search_result, style.active)}
                     >
-                      {isList && productsSearch ? (
-                        productsSearch.map((product) => (
+                      {isList &&
+                        productsSearch &&
+                        productsSearch.map((product, index) => (
                           <Link
                             // pc
+                            key={index}
                             className={clsx(style.header_search_items)}
                             to={`/sanpham/${product.slug}`}
                             onClick={() => handleDetail(product._id)}
@@ -349,10 +351,7 @@ function HeaderScreen() {
                               </Flex>
                             </Flex>
                           </Link>
-                        ))
-                      ) : (
-                        <></>
-                      )}
+                        ))}
                     </Space>
                   </Flex>
                 </Col>
@@ -462,9 +461,11 @@ function HeaderScreen() {
                 ref={!isMobile ? wrapperRef : null}
                 className={clsx(style.header_search_result, style.active)}
               >
-                {isList && productsSearch ? (
-                  productsSearch.map((product) => (
+                {isList &&
+                  productsSearch &&
+                  productsSearch.map((product, index) => (
                     <Link
+                      key={index}
                       // pc
                       className={clsx(style.header_search_items)}
                       to={`/sanpham/${product.slug}`}
@@ -491,10 +492,7 @@ function HeaderScreen() {
                         </Flex>
                       </Flex>
                     </Link>
-                  ))
-                ) : (
-                  <></>
-                )}
+                  ))}
               </Space>
             </Flex>
           </Col>
@@ -624,9 +622,9 @@ function HeaderScreen() {
                       </Flex>
                     </Col>
                     <Col span={24}>
-                      {categories ? (
-                        categories.map((category) => (
-                          <div>
+                      {categories &&
+                        categories.map((category, index) => (
+                          <div key={index}>
                             <Flex
                               vertical
                               justify="space-between"
@@ -655,10 +653,7 @@ function HeaderScreen() {
                               />
                             </Flex>
                           </div>
-                        ))
-                      ) : (
-                        <></>
-                      )}
+                        ))}
                     </Col>
                   </Row>
 
@@ -707,19 +702,17 @@ function HeaderScreen() {
             className={clsx(style.wrapper_try_tag)}
           >
             <Flex className={clsx(style.wrapper_try_tag_display)}>
-              {tags ? (
-                tags.map((tag) => (
+              {tags &&
+                tags.map((tag, index) => (
                   <Link
-                    onClick={() => handleSearchTag(tag._id)}
+                    key={index}
+                    onClick={() => handleSearchTag(tag._id, tag.name)}
                     className={clsx(style.tag_item)}
-                    to={`/timkiem?s=${tag.name}`}
+                    to={`/timkiem?t=${tag.name}`}
                   >
                     {tag.name}
                   </Link>
-                ))
-              ) : (
-                <></>
-              )}
+                ))}
             </Flex>
           </Col>
           <Col xs={0} sm={8} md={9} lg={6}></Col>
@@ -739,9 +732,9 @@ function HeaderScreen() {
       >
         <Row className={clsx(style.wrapper_try_brand)}>
           <Col className={clsx(style.menu_sub)}>
-            {categories ? (
-              categories.map((category) => (
-                <>
+            {categories &&
+              categories.map((category, index) => (
+                <React.Fragment key={index}>
                   <Link
                     onMouseEnter={() => setCategoryActive(category._id)}
                     onMouseLeave={() => setCategoryActive("")}
@@ -758,13 +751,16 @@ function HeaderScreen() {
                     </Space>
 
                     <Flex vertical className={clsx(style.brand_list)}>
-                      {brands.map((brand) => {
+                      {brands.map((brand, index) => {
                         if (
                           brand.categoryId === category._id &&
                           brand.categoryId === categoryActive
                         ) {
                           return (
-                            <Link to={`/timkiem?s=${category.name}`}>
+                            <Link
+                              key={index}
+                              to={`/timkiem?s=${category.name}`}
+                            >
                               <Flex
                                 onClick={(e) => {
                                   // ngăn chặn việc gọi lên handleSearchMenu ở hàm, đánh đổi reload lại trang
@@ -781,11 +777,8 @@ function HeaderScreen() {
                       })}
                     </Flex>
                   </Link>
-                </>
-              ))
-            ) : (
-              <></>
-            )}
+                </React.Fragment>
+              ))}
           </Col>
         </Row>
       </div>

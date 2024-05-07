@@ -27,6 +27,7 @@ function Timkiem() {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
+  console.log("««««« location »»»»»", location);
   // set product render
 
   // set active search
@@ -61,7 +62,6 @@ function Timkiem() {
     if (categories.length === 0) dispatch(getAllCategory());
     if (brands.length === 0) dispatch(getAllBrand());
     window.scrollTo({ top: 0, left: 0 });
-
     // dispatch(getAllBrand(filter.categoryId ? filter.categoryId : "'"));
   }, []);
 
@@ -187,8 +187,8 @@ function Timkiem() {
                     )}
                   >
                     <Row gutter={12}>
-                      {categories.map((category) => (
-                        <Col xs={12} sm={24}>
+                      {categories.map((category, index) => (
+                        <Col key={index} xs={12} sm={24}>
                           <Button
                             style={{
                               boxShadow:
@@ -238,10 +238,10 @@ function Timkiem() {
                     )}
                   >
                     <Row gutter={12}>
-                      {brands.map((brand) => {
+                      {brands.map((brand, index) => {
                         if (brand.categoryId === activeCategory) {
                           return (
-                            <Col xs={12} sm={24}>
+                            <Col key={index} xs={12} sm={24}>
                               <Button
                                 style={{
                                   boxShadow:
@@ -583,8 +583,9 @@ function Timkiem() {
                 <Row gutter={{ xs: 7, sm: 14 }}>
                   {!loading ? (
                     productsSearch ? (
-                      productsSearch.map((product) => (
+                      productsSearch.map((product, index) => (
                         <Col
+                          key={index}
                           xs={12}
                           md={12}
                           lg={6}

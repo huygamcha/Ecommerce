@@ -65,8 +65,9 @@ function PolicyScreen() {
                   </Space>
                 </Flex>
                 {policies &&
-                  policies.map((policy: any) => (
+                  policies.map((policy: any, index: number) => (
                     <Link
+                      key={index}
                       className={clsx(
                         style.wrapper_list_content_list,
                         params.search === policy.slug && style.active
@@ -99,8 +100,9 @@ function PolicyScreen() {
                   </Space>
                 </Flex>
                 {policies &&
-                  policies.map((policy: any) => (
+                  policies.map((policy: any, index: number) => (
                     <Link
+                      key={index}
                       className={clsx(
                         style.wrapper_list_content_list,
                         params.search === policy.slug && style.active

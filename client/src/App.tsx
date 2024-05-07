@@ -12,6 +12,7 @@ import {
   useNavigate,
   Outlet,
 } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
 
 import {
   ProductOutlined,
@@ -249,6 +250,9 @@ const router = createBrowserRouter([
   },
 ]);
 
+// If you are using react-helmet-async on server side
+const helmetContext = {};
+
 function AdminRouter() {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
@@ -381,9 +385,11 @@ function AdminRouter() {
 }
 function App() {
   return (
+    // <HelmetProvider context={helmetContext}>
     <React.StrictMode>
       <RouterProvider router={router} />
     </React.StrictMode>
+    // </HelmetProvider>
   );
 }
 

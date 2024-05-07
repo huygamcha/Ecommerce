@@ -917,7 +917,7 @@ const Product = (props: Props) => {
                     }
                   }}
                 ></Input>
-                {albumUpdate ? (
+                {albumUpdate &&
                   albumUpdate.map((item: any, index: number) => (
                     <div
                       key={index}
@@ -935,10 +935,7 @@ const Product = (props: Props) => {
                         Xóa
                       </Button>
                     </div>
-                  ))
-                ) : (
-                  <></>
-                )}
+                  ))}
               </Form.Item>
 
               <Form.Item<FieldType> label="Mô tả chi tiết" name="detail">

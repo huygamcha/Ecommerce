@@ -126,6 +126,17 @@ const updateTag = createAsyncThunk<TagsType, { id: string; values: TagsType }>(
   }
 );
 
+const getTagByName = createAsyncThunk<TagsType, string | undefined>(
+  "policy/getTagByName",
+  async (id) => {
+    const response = await axios.get(
+      `${process.env.REACT_APP_BACKEND}/tags/name/${id}`
+    );
+    const data: TagsType = response.data.payload;
+    return data; // Assuming products are in the `data` property of the response
+  }
+);
+
 const tagSlice = createSlice({
   name: "tag",
   initialState: initialState,
@@ -134,41 +145,48 @@ const tagSlice = createSlice({
     builder.addCase(getAllTag.pending, (state) => {
       state.loading = true;
     });
-
     builder.addCase(getAllTag.fulfilled, (state, action) => {
       state.loading = false;
       state.tags = action.payload;
     });
     builder.addCase(getAllTag.rejected, (state, action) => {
       state.loading = false;
-      state.error = { message: "", errors: { name : ''} };// Ensure a default message or fallback if action.error is undefined
+      state.error = { message: "", errors: { name : ''} };
+    });
+
+    //search by name
+    builder.addCase(getTagByName.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getTagByName.fulfilled, (state, action) => {
+      state.loading = false;
+      state.tag = action.payload;
+    });
+    builder.addCase(getTagByName.rejected, (state, action) => {
+      state.loading = false;
+      state.error = { message: "", errors: { name : ''} };
     });
 
     // create
     builder.addCase(createTag.pending, (state) => {
       state.loading = true;
-      // state.error = "";
     });
-
     builder.addCase(createTag.fulfilled, (state, action) => {
       state.loading = false;
       state.tag = action.payload;
       state.error = { message: "", errors: { name : ''}  };
-
     });
     builder.addCase(createTag.rejected, (state, action) => {
       state.loading = false;
       const customErrors = action.payload as { message: string; errors: { name : string} };
-      state.error = customErrors; // Ensure a default message or fallback if action.error is undefined
+      state.error = customErrors; 
     });
 
     //delete
     builder.addCase(deleteTag.pending, (state) => {
       state.loading = true;
       state.error = { message: "", errors: { name : ''}};
-
     });
-
     builder.addCase(deleteTag.fulfilled, (state, action) => {
       state.loading = false;
       state.tag = action.payload;
@@ -201,4 +219,4 @@ const tagSlice = createSlice({
 const { reducer } = tagSlice;
 
 export default reducer;
-export { getAllTag, createTag, deleteTag, updateTag };
+export { getAllTag, createTag, deleteTag, updateTag, getTagByName };

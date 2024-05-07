@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Col, Flex, Row, Space, Empty } from "antd";
 import { useAppDispatch, useAppSelector } from "../../../store";
@@ -102,9 +102,7 @@ function ProductScreen() {
   return (
     <>
       {/* banner */}
-      <div
-        style={{ borderRadius: "0px", backgroundColor: "#F8F9FD" }}
-      >
+      <div style={{ borderRadius: "0px", backgroundColor: "#F8F9FD" }}>
         <div
           className={clsx(
             style.wrapper_global,
@@ -141,9 +139,9 @@ function ProductScreen() {
                 </Flex>
 
                 {banners ? (
-                  banners.map((banner) => (
+                  banners.map((banner, index) => (
                     <>
-                      <SwiperSlide>
+                      <SwiperSlide key={index}>
                         <Link to={`/`} className={clsx(style.wrapper)}>
                           <img
                             src={banner.pic}
@@ -181,7 +179,7 @@ function ProductScreen() {
                   <Row gutter={[14, 14]}>
                     {categories && error.message === "" ? (
                       categories.map((category, index) => (
-                        <>
+                        <React.Fragment key={index}>
                           <Col lg={4} style={{}}>
                             <Link
                               onClick={(e) => {
@@ -223,7 +221,7 @@ function ProductScreen() {
                               </Flex>
                             </Link>
                           </Col>
-                        </>
+                        </React.Fragment>
                       ))
                     ) : (
                       <Col xs={24} sm={24} style={{ marginBottom: "25px" }}>
@@ -247,9 +245,9 @@ function ProductScreen() {
                     style={{ backgroundColor: "#fff" }}
                   >
                     {categories && error.message === "" ? (
-                      categories.map((category) => (
+                      categories.map((category, index) => (
                         <>
-                          <SwiperSlide>
+                          <SwiperSlide key={index}>
                             <Link
                               onClick={(e) => {
                                 handleSearchMenu(category._id, "");
@@ -336,7 +334,7 @@ function ProductScreen() {
                     if (window.innerWidth > 576) {
                       if (index <= 11) {
                         return (
-                          <Col xs={0} md={12} lg={4} style={{}}>
+                          <Col key={index} xs={0} md={12} lg={4} style={{}}>
                             <Link
                               onClick={() =>
                                 handleDetail(product._id, product.categoryId)
@@ -634,9 +632,9 @@ function ProductScreen() {
                 )}
 
                 {brands ? (
-                  brands.map((brand) => (
+                  brands.map((brand, index) => (
                     <>
-                      <SwiperSlide>
+                      <SwiperSlide key={index}>
                         <Link
                           onClick={(e) => {
                             handleSearchMenu(brand.categoryId, brand._id);
@@ -965,9 +963,12 @@ function ProductScreen() {
                   style.filter_select__tag_wrapper
                 )}
               >
-                {tags ? (
-                  tags.map((tag) => (
-                    <div className={clsx(style.filter_select_tag_item)}>
+                {tags &&
+                  tags.map((tag, index) => (
+                    <div
+                      key={index}
+                      className={clsx(style.filter_select_tag_item)}
+                    >
                       <Button
                         style={{
                           borderColor:
@@ -989,10 +990,7 @@ function ProductScreen() {
                         </Space>
                       </Button>
                     </div>
-                  ))
-                ) : (
-                  <></>
-                )}
+                  ))}
               </div>
             </Col>
             <Col xs={24} sm={24}>
@@ -1007,7 +1005,7 @@ function ProductScreen() {
                       ) {
                         count++;
                         return (
-                          <Col xs={0} md={12} lg={4} style={{}}>
+                          <Col key={index} xs={0} md={12} lg={4} style={{}}>
                             <Link
                               onClick={() =>
                                 handleDetail(product._id, product.categoryId)
@@ -1208,11 +1206,11 @@ function ProductScreen() {
                   )}
 
                   {products ? (
-                    products.map((product) => {
+                    products.map((product, index) => {
                       if (histories.includes(product._id)) {
                         return (
                           <>
-                            <SwiperSlide>
+                            <SwiperSlide key={index}>
                               <Link
                                 onClick={() =>
                                   handleDetail(product._id, product.categoryId)

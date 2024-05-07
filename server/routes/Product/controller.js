@@ -180,6 +180,57 @@ module.exports = {
     }
   },
 
+  getDetailProductSlug: async (req, res, next) => {
+    try {
+      const { slug } = req.params;
+      console.log("««««« slug »»»»»", slug);
+      const payload = await Product.findOne({ slug: fuzzySearch(slug) })
+        .populate("category")
+        .populate("tag")
+        .populate("brand")
+        .lean({ virtuals: true });
+      if (!payload) {
+        return res.send(404, {
+          message: "Không tìm thấy sản phẩm",
+        });
+      }
+      return res.send(200, {
+        message: "Tìm sản phẩm thành công",
+        payload: payload,
+      });
+    } catch (error) {
+      console.log("««««« error »»»»»", error);
+      return res.send(400, {
+        message: "Lấy thông tin sản phẩm không thành công",
+      });
+    }
+  },
+
+  getDetailProduct: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const payload = await Product.findById(id)
+        .populate("category")
+        .populate("tag")
+        .populate("brand")
+        .lean({ virtuals: true });
+      if (!payload) {
+        return res.send(404, {
+          message: "Không tìm thấy sản phẩm",
+        });
+      }
+
+      return res.send(200, {
+        message: "Tìm sản phẩm thành công",
+        payload: payload,
+      });
+    } catch (error) {
+      return res.send(400, {
+        message: "Lấy thông tin sản phẩm không thành công",
+      });
+    }
+  },
+
   getProductByCategories: async (req, res, next) => {
     try {
       const { id } = req.query;
@@ -212,6 +263,7 @@ module.exports = {
       });
     }
   },
+
   getProductBySuppliers: async (req, res, next) => {
     try {
       const { id } = req.query;
