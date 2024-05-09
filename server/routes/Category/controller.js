@@ -21,10 +21,14 @@ module.exports = {
           $project: {
             _id: 1,
             name: 1,
+            pic: 1,
             productCount: { $size: "$products" },
           },
         },
-      ]).sort({ createdAt: -1 });
+        {
+          $sort: { createdAt: 1 },
+        },
+      ]);
 
       return res.send(200, {
         message: "Lấy thông tin danh mục thành công",
@@ -65,9 +69,37 @@ module.exports = {
     }
   },
 
+  getDetailCategoryByName: async (req, res, next) => {
+    try {
+      const { name } = req.params;
+
+      const payload = await Category.findOne({ name: name });
+      if (!payload) {
+        return res.send(404, {
+          message: "Không tìm thấy danh mục",
+        });
+      }
+
+      if (payload.isDeleted) {
+        return res.send(404, {
+          message: "Danh mục đã được xoá trước đó",
+        });
+      }
+
+      return res.send(200, {
+        message: "Tìm danh mục thành công",
+        payload: payload,
+      });
+    } catch (error) {
+      return res.send(400, {
+        message: "Lấy thông tin danh mục không thành công",
+      });
+    }
+  },
+
   createCategory: async (req, res, next) => {
     try {
-      const { name, description } = req.body;
+      const { name, description, pic } = req.body;
 
       const error = [];
 
@@ -86,6 +118,7 @@ module.exports = {
       const newCategory = new Category({
         name,
         description,
+        pic,
       });
 
       const payload = await newCategory.save();
@@ -112,7 +145,7 @@ module.exports = {
         });
       }
 
-      await Category.findByIdAndDelete(id, { isDeleted: true });
+      await Category.findByIdAndDelete(id, { new: true });
 
       return res.send(200, {
         message: "Xoá danh mục thành công",

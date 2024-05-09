@@ -40,6 +40,28 @@ module.exports = {
     }
   },
 
+  getDetailByName: async (req, res, next) => {
+    try {
+      const { name } = req.params;
+      console.log("««««« name »»»»»", name);
+      const payload = await Brand.findOne({ name: name }).populate("category");
+      if (!payload) {
+        return res.send(404, {
+          message: "Không tìm thấy thương hiệu",
+        });
+      }
+      return res.send(200, {
+        message: "Tìm thương hiệu thành công",
+        payload: payload,
+      });
+    } catch (error) {
+      console.log("««««« error »»»»»", error);
+      return res.send(400, {
+        message: "Lấy thông tin thương hiệu không thành công",
+      });
+    }
+  },
+
   createBrand: async (req, res, next) => {
     try {
       const { name, categoryId, pic } = req.body;
@@ -105,9 +127,11 @@ module.exports = {
       const { id } = req.params;
       const { name, categoryId, pic } = req.body;
       const payload = await Brand.findById(id);
+      console.log("««««« payload »»»»»", payload);
 
       const errors = {};
       const exitName = await Brand.findOne({ name, _id: { $ne: id } });
+
       if (exitName) {
         errors.name = "Tên thương hiệu đã tồn tại!";
       }

@@ -40,7 +40,6 @@ module.exports = {
   getDetailTagSlug: async (req, res, next) => {
     try {
       const { tag } = req.params;
-
       const payload = await Tag.findOne({ name: tag });
       if (!payload) {
         return res.send(404, {

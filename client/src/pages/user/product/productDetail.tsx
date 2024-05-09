@@ -39,7 +39,6 @@ import Discount from "../../../components/discount";
 import ButtonNavigation from "../../../components/buttonNavigation";
 import Label from "../../../components/label";
 import Specifications from "../../../components/specifications";
-import { Helmet } from "react-helmet-async";
 // error searchById cần fix cái này
 function ProductDetail() {
   const param = useParams();
@@ -72,7 +71,7 @@ function ProductDetail() {
     : [];
 
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0 });
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
     const slug = location.pathname.split("/")[2];
     if (products.length === 0) {
       dispatch(getAllProduct({}));
@@ -81,7 +80,12 @@ function ProductDetail() {
   }, [dispatch, location.pathname, products.length]);
 
   useEffect(() => {
-    if (product && product.categoryId && productsSearch.length === 0) {
+    if (
+      product &&
+      product.categoryId &&
+      productsSearch &&
+      productsSearch.length === 0
+    ) {
       dispatch(getAllProductSearch({ categoryId: product.categoryId }));
     }
   }, [dispatch, product]);
@@ -180,9 +184,9 @@ function ProductDetail() {
       localStorage.setItem("histories", JSON.stringify([value]));
     }
 
-    // dispatch(getProductById(value));
+    dispatch(getProductById(value));
     // console.log("««««« come herre »»»»»", 321);
-    dispatch(getProductBySlug(value));
+    // dispatch(getProductBySlug(value));
     dispatch(getAllProductSearch({ categoryId: categoryId }));
   };
   return (
@@ -215,7 +219,7 @@ function ProductDetail() {
                         {
                           title: (
                             <Link
-                              to={`/timkiem?s=${product?.category.name}`}
+                              to={`/timkiem?c=${product?.category.name}`}
                               className={clsx(
                                 style.header_brand,
                                 style.button_home
@@ -234,7 +238,7 @@ function ProductDetail() {
                         {
                           title: (
                             <Link
-                              to={`/timkiem?s=${product?.brand.name}`}
+                              to={`/timkiem?b=${product?.brand.name}`}
                               className={clsx(
                                 style.header_brand,
                                 style.button_home
@@ -934,7 +938,7 @@ function ProductDetail() {
                                           onClick={() =>
                                             handleDetail(
                                               // product._id,
-                                              product.slug,
+                                              product._id,
                                               product.categoryId
                                             )
                                           }
@@ -1087,7 +1091,7 @@ function ProductDetail() {
                 ) : (
                   <></>
                 )}
-                {histories ? (
+                {histories && (
                   <div
                     style={{
                       background: "#eaeffa",
@@ -1106,6 +1110,7 @@ function ProductDetail() {
                               alt=""
                             />
                             Sản phẩm vừa xem
+                            <div>{histories.length}</div>
                           </Flex>
 
                           <Swiper
@@ -1124,18 +1129,16 @@ function ProductDetail() {
                             }}
                             style={{ backgroundColor: "#eaeffa" }}
                           >
-                            {histories.length > 6 ? (
+                            {histories.length > 6 && (
                               <Flex
                                 justify="space-between"
                                 className={clsx(style.customSwiper_child)}
                               >
                                 <ButtonNavigation />
                               </Flex>
-                            ) : (
-                              <></>
                             )}
 
-                            {products ? (
+                            {products &&
                               products.map((product, index) => {
                                 if (histories.includes(product._id)) {
                                   return (
@@ -1145,7 +1148,7 @@ function ProductDetail() {
                                           onClick={() =>
                                             handleDetail(
                                               // product._id,
-                                              product.slug,
+                                              product._id,
                                               product.categoryId
                                             )
                                           }
@@ -1274,29 +1277,12 @@ function ProductDetail() {
                                     </React.Fragment>
                                   );
                                 }
-                              })
-                            ) : (
-                              <SwiperSlide>
-                                <Col
-                                  xs={24}
-                                  sm={24}
-                                  style={{ marginBottom: "25px" }}
-                                >
-                                  <Empty
-                                    description={
-                                      <span>Không có sản phẩm nào</span>
-                                    }
-                                  />
-                                </Col>
-                              </SwiperSlide>
-                            )}
+                              })}
                           </Swiper>
                         </Col>
                       </Row>
                     </div>
                   </div>
-                ) : (
-                  <></>
                 )}
               </div>
 

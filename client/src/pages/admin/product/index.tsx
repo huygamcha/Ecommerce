@@ -465,6 +465,7 @@ const Product = (props: Props) => {
     await dispatch(createProduct({ ...values, name: `${values.name} (copy)` }));
     setIsActive(!isActive);
   };
+  
   return (
     <div>
       <ConfigProvider

@@ -109,6 +109,17 @@ const currentUser =  localStorage.getItem('userInfor') ? JSON.parse(localStorage
   }
 });
 
+const getBrandByName = createAsyncThunk<BrandsType, string | undefined>(
+  "category/getCategoryByName",
+  async (name) => {
+    const response = await axios.get(
+      `${process.env.REACT_APP_BACKEND}/brands/name/${name}`
+    );
+    const data: BrandsType = response.data.payload;
+    return data; // Assuming products are in the `data` property of the response
+  }
+);
+
 
 const brandSlice = createSlice({
   name: "brand",
@@ -118,9 +129,7 @@ const brandSlice = createSlice({
     builder.addCase(getAllBrand.pending, (state) => {
       state.loading = true;
       state.error = {message: '', errors: {name : ''}};
-
     });
-
     builder.addCase(
       getAllBrand.fulfilled,
       (state, action) => {
@@ -136,13 +145,32 @@ const brandSlice = createSlice({
         state.error = customErrors
       }
     );
+    
+
+    // get brand by name
+    builder.addCase(getBrandByName.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(
+      getBrandByName.fulfilled,
+      (state, action) => {
+        state.loading = false;
+        state.brand = action.payload;
+      }
+    );
+    builder.addCase(
+      getBrandByName.rejected,
+      (state, action) => {
+        state.loading = false;
+        state.error = {message: '', errors: {name : ''}};
+      }
+    );
 
     // create
     builder.addCase(createBrand.pending, (state) => {
       state.loading = true;
       state.error = {message: '', errors: {name : ''}};
     });
-
     builder.addCase(
       createBrand.fulfilled,
       (state, action) => {
@@ -169,7 +197,6 @@ const brandSlice = createSlice({
       state.loading = true;
       state.error = {message: '', errors: {name : ''}};
     });
-
     builder.addCase(
       deleteBrand.fulfilled,
       (state, action) => {
@@ -190,18 +217,14 @@ const brandSlice = createSlice({
     builder.addCase(updateBrand.pending, (state) => {
       state.loading = true;
       state.error = {message: '', errors: {name : ''}};
-
     });
-
     builder.addCase(
       updateBrand.fulfilled,
       (state, action) => {
         state.loading = false;
         state.brand = action.payload;
-      
       }
     );
-
     builder.addCase(
       updateBrand.rejected,
       (state, action) => {
@@ -222,6 +245,7 @@ export {
   getAllBrand,
   createBrand,
   deleteBrand,
-  updateBrand
+  updateBrand,
+  getBrandByName
 }
 

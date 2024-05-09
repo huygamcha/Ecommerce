@@ -5,6 +5,7 @@ const {
   deleteCategory,
   getDetailCategory,
   updateCategory,
+  getDetailCategoryByName,
 } = require("./controller");
 const { checkCreateCategory, checkUpdateCategory } = require("./validation");
 const { checkId, validateSchema } = require("../../utils");
@@ -15,6 +16,7 @@ router.route("/").get(getAllCategory);
 router
   .route("/")
   .post(protect, admin, validateSchema(checkCreateCategory), createCategory);
+router.route("/name/:name").get(getDetailCategoryByName);
 router
   .route("/:id")
   .delete(validateSchema(checkId), deleteCategory)

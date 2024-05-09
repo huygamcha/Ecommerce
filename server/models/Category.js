@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
+const slugify = require("slugify");
 
 const categorySchema = new Schema(
   {
@@ -17,8 +18,10 @@ const categorySchema = new Schema(
       type: Boolean,
       default: false,
     },
-
     pic: {
+      type: String,
+    },
+    slug: {
       type: String,
     },
   },
@@ -27,6 +30,24 @@ const categorySchema = new Schema(
     versionKey: false,
   }
 );
+
+// khi lưu tạo slug
+categorySchema.pre("save", function (next) {
+  if (this.isModified("name")) {
+    this.slug = slugify(this.name, { lower: true, locale: "vi" });
+    this.link = `${process.env.BACKEND}/${this.slug}`;
+  }
+  next();
+});
+
+categorySchema.pre("findOneAndUpdate", function (next) {
+  if (this._update.name) {
+    const update = this.getUpdate();
+    update.slug = slugify(update.name, { lower: true, locale: "vi" });
+    update.link = `${process.env.BACKEND}/${update.slug}`;
+  }
+  next();
+});
 
 const Category = model("category", categorySchema);
 module.exports = Category;

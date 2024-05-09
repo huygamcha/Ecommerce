@@ -13,7 +13,7 @@ import {
 } from "antd";
 import { useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "../../../store";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { CopyOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   createFooter,
@@ -101,6 +101,12 @@ const FooterAdmin = (props: Props) => {
     setIsActive(!isActive);
   };
 
+  //copy
+  const handleCopy = async (values: any) => {
+    await dispatch(createFooter({ ...values, name: `${values.name} (copy)` }));
+    setIsActive(!isActive);
+  };
+
   // update category modal
 
   const onUpdate = async (values: any) => {
@@ -184,6 +190,10 @@ const FooterAdmin = (props: Props) => {
       render: (text: any, record: any) => {
         return (
           <Space size="small">
+            <Button
+              onClick={() => handleCopy(record)}
+              icon={<CopyOutlined />}
+            ></Button>
             <Link to={`/admin/footers/${record._id}`}>
               <Button
                 type="primary"

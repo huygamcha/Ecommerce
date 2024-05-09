@@ -5,6 +5,7 @@ const {
   deleteBrand,
   getDetailBrand,
   updateBrand,
+  getDetailByName,
 } = require("./controller");
 const { checkCreateBrand, checkUpdateBrand } = require("./validation");
 const { checkId, validateSchema } = require("../../utils");
@@ -15,6 +16,7 @@ router.route("/").get(getAllBrand);
 router
   .route("/")
   .post(protect, admin, validateSchema(checkCreateBrand), createBrand);
+router.route("/name/:name").get(getDetailByName);
 router
   .route("/:id")
   .delete(protect, admin, validateSchema(checkId), deleteBrand)

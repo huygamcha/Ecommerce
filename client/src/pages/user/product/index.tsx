@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Col, Flex, Row, Space, Empty } from "antd";
@@ -62,7 +63,7 @@ function ProductScreen() {
     : [];
 
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0 });
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
 
     if (products.length === 0) dispatch(getAllProduct({}));
     if (categories.length === 0) dispatch(getAllCategory());
@@ -185,7 +186,7 @@ function ProductScreen() {
                               onClick={(e) => {
                                 handleSearchMenu(category._id, "");
                               }}
-                              to={`/timkiem?s=${category.name}`}
+                              to={`/timkiem?c=${category.name}`}
                               className={clsx(style.wrapper)}
                             >
                               <Flex
@@ -206,6 +207,15 @@ function ProductScreen() {
                                     justify="center"
                                     align="center"
                                   >
+                                    {category.pic && (
+                                      <img
+                                        style={{
+                                          height: "24px",
+                                          width: "24px",
+                                        }}
+                                        src={category.pic}
+                                      ></img>
+                                    )}
                                     <Space>{category.name}</Space>
                                     <div
                                       style={{
@@ -242,7 +252,7 @@ function ProductScreen() {
                         slidesPerView: 2,
                       },
                     }}
-                    style={{ backgroundColor: "#fff" }}
+                    style={{ backgroundColor: "#f7f8fc" }}
                   >
                     {categories && error.message === "" ? (
                       categories.map((category, index) => (
@@ -252,7 +262,7 @@ function ProductScreen() {
                               onClick={(e) => {
                                 handleSearchMenu(category._id, "");
                               }}
-                              to={`/timkiem?s=${category.name}`}
+                              to={`/timkiem?c=${category.name}`}
                               className={clsx(style.wrapper)}
                             >
                               <Flex
@@ -273,6 +283,15 @@ function ProductScreen() {
                                     justify="center"
                                     align="center"
                                   >
+                                    {category.pic && (
+                                      <img
+                                        style={{
+                                          height: "24px",
+                                          width: "24px",
+                                        }}
+                                        src={category.pic}
+                                      ></img>
+                                    )}
                                     <Space>{category.name}</Space>
                                     <div
                                       style={{
@@ -639,7 +658,7 @@ function ProductScreen() {
                           onClick={(e) => {
                             handleSearchMenu(brand.categoryId, brand._id);
                           }}
-                          to={`/timkiem?s=${brand.name}`}
+                          to={`/timkiem?b=${brand.name}`}
                           className={clsx(style.wrapper)}
                         >
                           <Flex className={clsx(style.content_brand)} vertical>
@@ -1194,15 +1213,13 @@ function ProductScreen() {
                   }}
                   style={{ backgroundColor: "#eaeffa" }}
                 >
-                  {histories.length > 6 ? (
+                  {histories.length > 6 && (
                     <Flex
                       justify="space-between"
                       className={clsx(style.customSwiper_child)}
                     >
                       <ButtonNavigation />
                     </Flex>
-                  ) : (
-                    <></>
                   )}
 
                   {products ? (

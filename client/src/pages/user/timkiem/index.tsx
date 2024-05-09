@@ -10,25 +10,27 @@ import {
   getAllProductSearch,
   getProductById,
 } from "../../../slices/productSlice";
-import { getAllCategory } from "../../../slices/categorySlice";
-import { getAllBrand } from "../../../slices/brandSlice";
+import { getCategoryByName } from "../../../slices/categorySlice";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { LuAlignCenter } from "react-icons/lu";
 import MenuFooter from "../../../components/MenuFooter";
 import Label from "../../../components/label";
 import Specifications from "../../../components/specifications";
+import { getTagByName } from "../../../slices/tagSlice";
+import { getBrandByName } from "../../../slices/brandSlice";
 function Timkiem() {
   const filter = localStorage.getItem("filter")
     ? JSON.parse(localStorage.getItem("filter")!)
     : undefined;
   const { productsSearch, loading } = useAppSelector((state) => state.products);
-  const { categories } = useAppSelector((state) => state.categories);
+  const { categories, category } = useAppSelector((state) => state.categories);
   const { brands } = useAppSelector((state) => state.brands);
+  const { tag } = useAppSelector((state) => state.tags);
+  const { brand } = useAppSelector((state) => state.brands);
+
   const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
-  console.log("««««« location »»»»»", location);
-  // set product render
 
   // set active search
   const [activePrice, setActivePrice] = useState<number>(0);
@@ -58,46 +60,134 @@ function Timkiem() {
   };
 
   useEffect(() => {
-    // window.location.reload();
-    if (categories.length === 0) dispatch(getAllCategory());
-    if (brands.length === 0) dispatch(getAllBrand());
-    window.scrollTo({ top: 0, left: 0 });
-    // dispatch(getAllBrand(filter.categoryId ? filter.categoryId : "'"));
-  }, []);
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  }, [productsSearch]);
 
   useEffect(() => {
-    localStorage.removeItem("searchPrice");
-    localStorage.removeItem("searchAge");
-    // dispatch(getAllProductSearch({ searchTag: "" }));
-    if (filter.categoryId && !filter.searchTag) {
-      setActiveCategory(filter.categoryId);
-      setActiveBrand(filter.brandId);
-      dispatch(
-        getAllProductSearch({
-          categoryId: filter.categoryId,
-          brandId: filter.brandId,
-        })
-      );
-    } else if (filter.searchTag) {
-      dispatch(
-        getAllProductSearch({
-          searchTag: filter.searchTag,
-        })
-      );
+    if (location.search.split("=")[0] === "?t") {
+      // load từ user khác
+      if (!filter) {
+        dispatch(getTagByName(location.search.split("=")[1]));
+      } else {
+        setActiveCategory("");
+        dispatch(
+          getAllProductSearch({
+            searchTag: filter.searchTag,
+          })
+        );
+      }
     }
-    // nêu là lịch sử search là SearchTag thì
-    if (filter && filter.searchTag) {
-      setActiveCategory("");
+
+    if (location.search.split("=")[0] === "?c") {
+      // load từ user khác
+      if (!filter) {
+        dispatch(getCategoryByName(location.search.split("=")[1]));
+      } else {
+        dispatch(
+          getAllProductSearch({
+            categoryId: filter.categoryId,
+            brandId: filter.brandId,
+          })
+        );
+      }
+    }
+
+    if (location.search.split("=")[0] === "?b") {
+      // load từ user khác
+      if (!filter) {
+        dispatch(getBrandByName(location.search.split("=")[1]));
+      } else {
+        dispatch(
+          getAllProductSearch({
+            categoryId: filter.categoryId,
+            brandId: filter.brandId,
+          })
+        );
+      }
     }
   }, [location.search]);
+
+  useEffect(() => {
+    if (
+      tag &&
+      location.search.split("=")[0] === "?t" &&
+      encodeURIComponent(tag.name) === location.search.split("=")[1] &&
+      !filter
+    ) {
+      localStorage.setItem("filter", JSON.stringify({ searchTag: tag._id }));
+      const filter = localStorage.getItem("filter")
+        ? JSON.parse(localStorage.getItem("filter")!)
+        : undefined;
+      if (filter.searchTag) {
+        // Nếu lịch sử search là SearchTag sẽ mất thanh category
+        setActiveCategory("");
+        dispatch(
+          getAllProductSearch({
+            searchTag: filter.searchTag,
+          })
+        );
+      }
+    }
+
+    if (
+      category &&
+      location.search.split("=")[0] === "?c" &&
+      encodeURIComponent(category.name) === location.search.split("=")[1] &&
+      !filter
+    ) {
+      localStorage.setItem(
+        "filter",
+        JSON.stringify({ categoryId: category._id, brandId: "" })
+      );
+      const filter = localStorage.getItem("filter")
+        ? JSON.parse(localStorage.getItem("filter")!)
+        : undefined;
+      if (filter.categoryId) {
+        setActiveCategory(filter.categoryId);
+        setActiveBrand(filter.brandId);
+        dispatch(
+          getAllProductSearch({
+            categoryId: filter.categoryId,
+            brandId: filter.brandId,
+          })
+        );
+      }
+    }
+
+    if (
+      category &&
+      location.search.split("=")[0] === "?b" &&
+      encodeURIComponent(category.name) === location.search.split("=")[1] &&
+      !filter
+    ) {
+      localStorage.setItem(
+        "filter",
+        JSON.stringify({ categoryId: brand.categoryId, brandId: brand._id })
+      );
+      const filter = localStorage.getItem("filter")
+        ? JSON.parse(localStorage.getItem("filter")!)
+        : undefined;
+      if (filter.categoryId) {
+        setActiveCategory(filter.categoryId);
+        setActiveBrand(filter.brandId);
+        dispatch(
+          getAllProductSearch({
+            categoryId: filter.categoryId,
+            brandId: filter.brandId,
+          })
+        );
+      }
+    }
+  }, [tag, category, brand]);
 
   //search category
   const handleSearchCategory = (id: string, name: string) => {
     localStorage.setItem("filter", JSON.stringify({ categoryId: id }));
     dispatch(getAllProductSearch({ categoryId: id }));
     setActiveCategory(id);
+    setActiveBrand("");
     setDropBrand(true);
-    navigate(`/timkiem?s=${name}`);
+    navigate(`/timkiem?c=${name}`);
   };
 
   //search brand
@@ -111,8 +201,7 @@ function Timkiem() {
     localStorage.setItem("filter", JSON.stringify(filter));
     setActiveBrand(id);
     dispatch(getAllProductSearch({ brandId: id }));
-
-    // navigate(`/timkiem?s=${name}`);
+    navigate(`/timkiem?b=${name}`);
   };
 
   // search price

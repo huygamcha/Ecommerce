@@ -31,7 +31,7 @@ const Login: React.FC = () => {
     [messageApi]
   );
   useEffect(() => {
-    window.scroll({ left: 0, top: 0 });
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   }, [location]);
 
   useEffect(() => {

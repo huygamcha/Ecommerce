@@ -23,7 +23,7 @@ import {
   getAllCart,
   resetCartNotification,
 } from "../../slices/cartSlice";
-import { getAllTag } from "../../slices/tagSlice";
+import { getAllTag, getTagByName } from "../../slices/tagSlice";
 import { getAllBrand } from "../../slices/brandSlice";
 import { getAllCategory } from "../../slices/categorySlice";
 import { useOutsideClick } from "../OutsideClick/index";
@@ -64,7 +64,7 @@ const ListItemBrand = ({
         {brands.map((brand, index) => {
           if (brand.categoryId === categoryId && isShow) {
             return (
-              <Link key={index} to={`/timkiem?s=${categoryName}`}>
+              <Link key={index} to={`/timkiem?b=${brand.name}`}>
                 <Flex
                   onClick={(e) => {
                     // ngăn chặn việc gọi lên handleSearchMenu ở hàm, đánh đổi reload lại trang
@@ -137,8 +137,10 @@ function HeaderScreen() {
 
   // search
   const handleSearchTag = (e: string, name: string) => {
-    localStorage.setItem("filter", JSON.stringify({ searchTag: e }));
-    localStorage.setItem("filter", JSON.stringify({ searchTagName: name }));
+    localStorage.setItem(
+      "filter",
+      JSON.stringify({ searchTag: e, searchTagname: name })
+    );
   };
 
   // logout
@@ -602,7 +604,7 @@ function HeaderScreen() {
                     </Space>
                   </Flex>
 
-                  {/* danh mục và thương hiệu */}
+                  {/* danh mục và thương hiệu mobile */}
                   <Row>
                     <Col span={24}>
                       <Flex
@@ -634,7 +636,7 @@ function HeaderScreen() {
                                 onClick={(e) => {
                                   handleSearchMenu(category._id, "");
                                 }}
-                                to={`/timkiem?s=${category.name}`}
+                                to={`/timkiem?c=${category.name}`}
                               >
                                 <div
                                   style={{ width: "70%" }}
@@ -741,7 +743,7 @@ function HeaderScreen() {
                     onClick={(e) => {
                       handleSearchMenu(category._id, "");
                     }}
-                    to={`/timkiem?s=${category.name}`}
+                    to={`/timkiem?c=${category.name}`}
                   >
                     <Space className={clsx(style.brand_item)}>
                       {category.name}
@@ -757,10 +759,7 @@ function HeaderScreen() {
                           brand.categoryId === categoryActive
                         ) {
                           return (
-                            <Link
-                              key={index}
-                              to={`/timkiem?s=${category.name}`}
-                            >
+                            <Link key={index} to={`/timkiem?b=${brand.name}`}>
                               <Flex
                                 onClick={(e) => {
                                   // ngăn chặn việc gọi lên handleSearchMenu ở hàm, đánh đổi reload lại trang

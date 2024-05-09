@@ -87,6 +87,7 @@
   content: "";
   display: block;
   top: 7px;
+  left: -0.5px;
   width: 50px;
 }
 
@@ -126,6 +127,7 @@
 }
 
 .header_text_category {
+  height: 60px;
   display: flex;
   justify-content: center;
 }

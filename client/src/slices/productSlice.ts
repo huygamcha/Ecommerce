@@ -134,7 +134,7 @@ const getAllProductSearch = createAsyncThunk<ProductsType[], ProductSearchType>(
       : undefined;
 
     let { searchTag, priceFrom, priceTo, ageFrom, ageTo, categoryId, brandId, search } = arg;
-    console.log('««««« arg »»»»»', arg);
+    console.log('««««« arg search tim kiem »»»»»', arg);
 
     if (!search) {
       search = ''

@@ -12,7 +12,8 @@ function PolicyScreen() {
   const dispatch = useAppDispatch();
   const params = useParams();
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0 });
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+
     if (policies.length === 0) dispatch(getAllPolicy());
     if (params.search !== policy.slug) dispatch(getPolicyById(params.search));
   }, [params]);

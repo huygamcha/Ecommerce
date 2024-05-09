@@ -21,7 +21,7 @@ import {
   updateBrand,
 } from "../../../slices/brandSlice";
 import { useAppSelector, useAppDispatch } from "../../../store";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { CopyOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { getAllCategory } from "../../../slices/categorySlice";
 import { render } from "@testing-library/react";
@@ -105,6 +105,11 @@ const Brand = (props: Props) => {
     await dispatch(createBrand({ ...values, pic: pic }));
     setPic("");
     // setInitialRender(false);
+    setIsActive(!isActive);
+  };
+  //copy
+  const handleCopy = async (values: any) => {
+    await dispatch(createBrand({ ...values, name: `${values.name} (copy)` }));
     setIsActive(!isActive);
   };
 
@@ -208,6 +213,10 @@ const Brand = (props: Props) => {
       render: (text: any, record: any) => {
         return (
           <Space size="small">
+            <Button
+              onClick={() => handleCopy(record)}
+              icon={<CopyOutlined />}
+            ></Button>
             <Link to={`/admin/brands/${record._id}`}>
               <Button
                 type="primary"

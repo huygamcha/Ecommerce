@@ -21,7 +21,7 @@ import {
   updateBanner,
 } from "../../../slices/bannerSlice";
 import { useAppSelector, useAppDispatch } from "../../../store";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { CopyOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { getAllCategory } from "../../../slices/categorySlice";
 import { render } from "@testing-library/react";
@@ -103,6 +103,12 @@ const BannerAdmin = (props: Props) => {
     await dispatch(createBanner({ ...values, pic: pic }));
     setPic("");
     // setInitialRender(false);
+    setIsActive(!isActive);
+  };
+
+  //copy
+  const handleCopy = async (values: any) => {
+    await dispatch(createBanner({ ...values, name: `${values.name} (copy)` }));
     setIsActive(!isActive);
   };
 
@@ -190,6 +196,10 @@ const BannerAdmin = (props: Props) => {
       render: (text: any, record: any) => {
         return (
           <Space size="small">
+            <Button
+              onClick={() => handleCopy(record)}
+              icon={<CopyOutlined />}
+            ></Button>
             <Link to={`/admin/banners/${record._id}`}>
               <Button
                 type="primary"

@@ -40,23 +40,6 @@ const checkUpdateBrand = yup.object({
       .max(50, "Tên thương hiệu không được dài hơn 50 kí tự")
       .min(2, "Tên thương hiệu không được nhỏ hơn 2 kí tự"),
     pic: yup.string(),
-    categoryId: yup
-      .string()
-      .test(
-        "Validate ObjectID",
-        "CategoryId không phải là id hợp lệ",
-        (value) => {
-          if (value !== undefined && value !== null && value !== "") {
-            return ObjectId.isValid(value);
-          }
-          return true;
-        }
-      )
-      .test({
-        name: "required",
-        message: "CategoryId không được bỏ trống",
-        test: (value) => value !== undefined && value !== null && value !== "",
-      }),
   }),
 });
 

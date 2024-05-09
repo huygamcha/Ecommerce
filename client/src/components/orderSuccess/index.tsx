@@ -7,7 +7,7 @@ import { useEffect } from "react";
 function OrderSuccess() {
   const location = useLocation();
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0 });
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   }, [location]);
   return (
     <div

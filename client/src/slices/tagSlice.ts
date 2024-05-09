@@ -127,7 +127,7 @@ const updateTag = createAsyncThunk<TagsType, { id: string; values: TagsType }>(
 );
 
 const getTagByName = createAsyncThunk<TagsType, string | undefined>(
-  "policy/getTagByName",
+  "tag/getTagByName",
   async (id) => {
     const response = await axios.get(
       `${process.env.REACT_APP_BACKEND}/tags/name/${id}`

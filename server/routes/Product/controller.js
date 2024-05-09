@@ -78,7 +78,7 @@ module.exports = {
 
       let result;
 
-      // tìm kiểm ở header
+      // tìm kiểm ở ở ô input
       if (search) {
         result = await Product.find({
           age: { $gte: ageFrom, $lte: ageTo },
@@ -112,7 +112,6 @@ module.exports = {
           })
             .populate("category")
             .populate("brand")
-
             // .limit(limit)
             // .skip(skip)
             .sort({ createdAt: -1 })
@@ -128,7 +127,6 @@ module.exports = {
           })
             .populate("category")
             .populate("brand")
-
             // .limit(limit)
             // .skip(skip)
             .sort({ createdAt: -1 })

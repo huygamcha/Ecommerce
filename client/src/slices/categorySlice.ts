@@ -1,13 +1,15 @@
 import { createSlice, createAsyncThunk, } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const currentUser =  localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
 
 interface CategoriesType {
   name: string;
   description: string;
   _id: string;
   productCount: number;
+  slug: string;
+  pic: string;
+
 }
 
 
@@ -25,6 +27,8 @@ const initialState: InitialType = {
   success: false,
   error: '',
   category: {
+  pic: '',
+    slug: '',
     _id: '',
     name: "",
     description: "",
@@ -66,6 +70,17 @@ const createCategory = createAsyncThunk<CategoriesType, CategoriesType>("categor
     }
   }
 });
+
+const getCategoryByName = createAsyncThunk<CategoriesType, string | undefined>(
+  "category/getCategoryByName",
+  async (name) => {
+    const response = await axios.get(
+      `${process.env.REACT_APP_BACKEND}/categories/name/${name}`
+    );
+    const data: CategoriesType = response.data.payload;
+    return data; // Assuming products are in the `data` property of the response
+  }
+);
 
 const deleteCategory = createAsyncThunk<CategoriesType, string>("category/deleteCategory", async (id, { rejectWithValue }) => {
   const currentUser = localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
@@ -186,6 +201,26 @@ const categorySlice = createSlice({
       }
     );
 
+    // get by name
+     builder.addCase(getCategoryByName.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(
+      getCategoryByName.fulfilled,
+      (state, action) => {
+        state.loading = false;
+        state.category = action.payload;
+      }
+    );
+    builder.addCase(
+      getCategoryByName.rejected,
+      (state, action) => {
+        state.loading = false;
+        state.error =    state.error = { message: "", errors: { name : ''} };; // Ensure a default message or fallback if action.error is undefined
+      }
+    );
+
     //update
     builder.addCase(updateCategory.pending, (state) => {
       state.loading = true;
@@ -221,6 +256,7 @@ export {
   getAllCategory,
   createCategory,
   deleteCategory,
-  updateCategory
+  updateCategory,
+  getCategoryByName
 }
 

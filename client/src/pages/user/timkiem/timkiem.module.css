@@ -97,8 +97,9 @@
   position: absolute;
   content: "";
   display: block;
-  top: 8px;
+  top: 7px;
   width: 50px;
+  left: -0.5px;
 }
 .content_discount > div {
   width: 100%;

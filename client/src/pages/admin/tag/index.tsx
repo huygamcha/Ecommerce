@@ -20,7 +20,7 @@ import {
 } from "../../../slices/tagSlice";
 import { useAppSelector, useAppDispatch } from "../../../store";
 import { useForm } from "antd/es/form/Form";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { CopyOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 type Props = {};
@@ -98,6 +98,12 @@ const Tag = (props: Props) => {
     setIsActive(!isActive);
   };
 
+  //copy
+  const handleCopy = async (values: any) => {
+    await dispatch(createTag({ ...values, name: `${values.name} (copy)` }));
+    setIsActive(!isActive);
+  };
+
   // update tag modal
 
   const onUpdate = async (values: any) => {
@@ -145,6 +151,10 @@ const Tag = (props: Props) => {
       render: (text: any, record: any) => {
         return (
           <Space size="small">
+            <Button
+              onClick={() => handleCopy(record)}
+              icon={<CopyOutlined />}
+            ></Button>
             <Link to={`/admin/tags/${record._id}`}>
               <Button
                 type="primary"
