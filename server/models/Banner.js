@@ -7,6 +7,10 @@ const bannerSchema = new Schema(
     pic: {
       type: String,
     },
+    subBanner: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

@@ -142,6 +142,7 @@ const Product = (props: Props) => {
     specifications: string;
     unit: string;
     album: Array<string>;
+    age: number;
   };
 
   const [createForm] = Form.useForm<FieldType>();
@@ -465,7 +466,7 @@ const Product = (props: Props) => {
     await dispatch(createProduct({ ...values, name: `${values.name} (copy)` }));
     setIsActive(!isActive);
   };
-  
+
   return (
     <div>
       <ConfigProvider
@@ -587,6 +588,24 @@ const Product = (props: Props) => {
               name="stock"
             >
               <InputNumber style={{ width: "100%" }} defaultValue={0} min={0} />
+            </Form.Item>
+
+            <Form.Item<FieldType>
+              rules={[{ required: true, message: "Vui lòng nhập độ tuổi!" }]}
+              label="Độ tuổi"
+              name="age"
+            >
+              <Select
+                options={[
+                  { value: 0, label: "Sơ sinh - 1 tuổi" },
+                  { value: 1, label: "1 tuổi" },
+                  { value: 2, label: "2 tuổi" },
+                  { value: 3, label: "3 tuổi" },
+                  { value: 4, label: "4 tuổi" },
+                  { value: 5, label: "5 tuổi" },
+                  { value: 6, label: "Trên 5 tuổi" },
+                ]}
+              />
             </Form.Item>
 
             <Form.Item<FieldType> label="Đơn vị" name="unit">
@@ -800,6 +819,24 @@ const Product = (props: Props) => {
                       value: item._id,
                       label: item.name,
                     }))}
+                />
+              </Form.Item>
+
+              <Form.Item<FieldType>
+                rules={[{ required: true, message: "Vui lòng nhập độ tuổi!" }]}
+                label="Độ tuổi"
+                name="age"
+              >
+                <Select
+                  options={[
+                    { value: 0, label: "Sơ sinh - 1 tuổi" },
+                    { value: 1, label: "1 tuổi" },
+                    { value: 2, label: "2 tuổi" },
+                    { value: 3, label: "3 tuổi" },
+                    { value: 4, label: "4 tuổi" },
+                    { value: 5, label: "5 tuổi" },
+                    { value: 6, label: "Trên 5 tuổi" },
+                  ]}
                 />
               </Form.Item>
 

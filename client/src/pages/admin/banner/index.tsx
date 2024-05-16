@@ -25,6 +25,7 @@ import { CopyOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { getAllCategory } from "../../../slices/categorySlice";
 import { render } from "@testing-library/react";
+import { IoCheckmarkCircle } from "react-icons/io5";
 
 type Props = {};
 
@@ -71,6 +72,7 @@ const BannerAdmin = (props: Props) => {
   // form
   type FieldType = {
     pic?: string;
+    subBanner: boolean;
   };
 
   const [createForm] = Form.useForm<FieldType>();
@@ -102,6 +104,7 @@ const BannerAdmin = (props: Props) => {
     console.log("««««« values »»»»»", values);
     await dispatch(createBanner({ ...values, pic: pic }));
     setPic("");
+    setPicDetail("");
     // setInitialRender(false);
     setIsActive(!isActive);
   };
@@ -110,6 +113,8 @@ const BannerAdmin = (props: Props) => {
   const handleCopy = async (values: any) => {
     await dispatch(createBanner({ ...values, name: `${values.name} (copy)` }));
     setIsActive(!isActive);
+    setPicDetail("");
+    setPic("");
   };
 
   // update banner modal
@@ -121,6 +126,7 @@ const BannerAdmin = (props: Props) => {
       })
     );
     setPicDetail("");
+    setPic("");
     setIsActive(!isActive);
   };
 
@@ -179,13 +185,28 @@ const BannerAdmin = (props: Props) => {
         return <div style={{ textAlign: "right" }}>{index + 1}</div>;
       },
     },
-
     {
-      title: "Image",
+      title: "Banner",
       dataIndex: "pic",
       key: "pic",
       render: (text: string, record: any) => {
         return <Image height={100} width={100} src={text}></Image>;
+      },
+    },
+    {
+      title: "SubBanner",
+      dataIndex: "subBanner",
+      key: "subBanner",
+      render: (text: string, record: any) => {
+        return (
+          <div>
+            {text && (
+              <IoCheckmarkCircle
+                style={{ fontSize: "20px", color: "#266ce0" }}
+              />
+            )}
+          </div>
+        );
       },
     },
     {
@@ -244,8 +265,7 @@ const BannerAdmin = (props: Props) => {
             name="pic"
             label="Hình ảnh"
           >
-            {pic ? <Image height={100} src={pic}></Image> : <Space></Space>}
-            {/* <Space>{pic}</Space> */}
+            {pic && <Image height={100} src={pic}></Image>}
             <Input
               type="file"
               accept="image/*"
@@ -256,6 +276,15 @@ const BannerAdmin = (props: Props) => {
                 }
               }}
             ></Input>
+          </Form.Item>
+
+          <Form.Item<FieldType> name="subBanner" label="Sub Banner">
+            <Select
+              options={[
+                { value: true, label: "Chọn làm sub banner" },
+                { value: false, label: "Chọn làm banner chính" },
+              ]}
+            ></Select>
           </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 6 }}>
@@ -310,6 +339,15 @@ const BannerAdmin = (props: Props) => {
                   }
                 }}
               ></Input>
+            </Form.Item>
+
+            <Form.Item<FieldType> name="subBanner" label="Sub Banner">
+              <Select
+                options={[
+                  { value: true, label: "Chọn làm sub banner" },
+                  { value: false, label: "Chọn làm banner chính" },
+                ]}
+              ></Select>
             </Form.Item>
           </Form>
         </Card>

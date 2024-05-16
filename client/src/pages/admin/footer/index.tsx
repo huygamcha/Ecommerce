@@ -256,9 +256,9 @@ const FooterAdmin = (props: Props) => {
           >
             <Select
               options={[
-                { value: 1, label: "VỀ CHÚNG TÔI" },
+                { value: 1, label: "CHÍNH SÁCH" },
                 { value: 2, label: "DANH MỤC" },
-                { value: 3, label: "TÌM HIỂU THÊM" },
+                { value: 3, label: "HỖ TRỢ" },
                 { value: 4, label: "TỔNG ĐÀI" },
               ]}
             />

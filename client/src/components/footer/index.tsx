@@ -341,9 +341,9 @@ function FooterScreen() {
       </div>
       <div style={{ background: "#fff" }}>
         <Row className={clsx(style.global_wrapper)}>
-          <ListRender title="về chúng tôi" specificColumn={1} />
+          <ListRender title="chính sách" specificColumn={1} />
           <ListRender title="danh mục" specificColumn={2} />
-          <ListRender title="tìm hiểu thêm" specificColumn={3} />
+          <ListRender title="hỗ trợ" specificColumn={3} />
           <ListRender title="tổng đài" specificColumn={4} />
           <Col xs={0} sm={4}>
             <h4 className={clsx(style.text_heading)}>KẾT NỐI VỚI CHÚNG TÔI</h4>
@@ -450,8 +450,8 @@ function FooterScreen() {
               </Flex>
             </h4>
           </Col>
-          <ListRenderMobile title="VỀ CHÚNG TÔI" specificColumn={1} />
-          <ListRenderMobile title="DANH MỤC" specificColumn={2} />
+          <ListRenderMobile title="chính sách" specificColumn={1} />
+          <ListRenderMobile title="hỗ trợ" specificColumn={2} />
           <ListRenderMobile title="TÌM HIỂU THÊM" specificColumn={3} />
 
           <Col style={{ textAlign: "center", margin: "30px 0px" }} span={24}>

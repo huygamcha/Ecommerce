@@ -15,9 +15,11 @@
   bottom: 144px;
   left: 0px;
 }
-.label_wrapper > div {
+
+.label_wrapper>div {
   width: 100%;
 }
+
 .label_wrapper::before {
   content: '';
   position: absolute;
@@ -27,22 +29,20 @@
   width: 2px;
   background-color: #eff0f3;
 }
+
 .label_wrapper.soldOut::before {
   background-color: red;
 }
+
 .wrapper:hover .label_wrapper::before {
   transition: 3s ease-in;
   display: none;
 }
+
 .wrapper:hover .label_wrapper.soldOut::before {
   transition: 3s ease-in;
   display: block;
 }
-
-
-
-
-
 
 .content {
   background: #fff;
@@ -62,7 +62,7 @@
 .content_brand {
   background: #fff;
   /* border-radius: 10px; */
-  padding: 14px 0px;
+  padding: 24px 0px;
   /* height: 260px; */
   position: relative;
   border: 1px solid rgb(193, 200, 209);
@@ -103,8 +103,8 @@
 }
 
 .content_img_brand {
-  height: 160px;
-  width: 160px;
+  height: 50px;
+  width: 90px;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
@@ -112,6 +112,18 @@
 .content_img_banner {
   height: 300px;
   width: 100%;
+}
+
+.content_img_subBanner {
+  height: 150px;
+  width: 100%;
+  border-radius: 10px;
+}
+
+.content_img_subBanner_line {
+  height: 150px;
+  width: 50%;
+  border-radius: 10px;
 }
 
 .header_text {
@@ -139,7 +151,6 @@
   font-size: 14px;
   font-weight: 600;
   line-height: 16px;
-  height: 32px;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -283,7 +294,8 @@
   opacity: 0.3;
   padding: 12px;
 }
-.soldOut_disabled{
+
+.soldOut_disabled {
   pointer-events: none;
   opacity: 0.3;
 }
@@ -366,17 +378,28 @@
   height: 40px;
   margin-right: 10px;
 }
-
+.policy_main_header_home,
 .policy_main_header {
   font-size: 16px;
   line-height: 24px;
   font-weight: 500;
 }
+.policy_main_header_home{
+  font-size: 18px;
+  font-weight: 600;
+}
 
+.policy_sub_header_home,
 .policy_sub_header {
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
+}
+
+.policy_sub_header_home{
+  font-size: 14px;
+  color: #7c8190;
+  font-weight: 600;
 }
 
 /* tab detail  */
@@ -393,7 +416,8 @@
   letter-spacing: 0.005em;
   color: #020b27;
 }
-.product_wrapper_show{
+
+.product_wrapper_show {
   position: relative;
   margin-bottom: 20px;
 }
@@ -412,15 +436,17 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  margin-bottom: 10px; 
-  background: linear-gradient(rgba(245,245,245, 0) 0%, rgba(245,245,245, 0.7) 21.88%, rgba(245,245,245, 0.95) 45.31%, rgb(245,245,245) 67.71%, rgb(245,245,245) 100%);
+  margin-bottom: 10px;
+  background: linear-gradient(rgba(245, 245, 245, 0) 0%, rgba(245, 245, 245, 0.7) 21.88%, rgba(245, 245, 245, 0.95) 45.31%, rgb(245, 245, 245) 67.71%, rgb(245, 245, 245) 100%);
 }
-.product_detail_show.show{
+
+.product_detail_show.show {
   background: #f5f5f5;
   bottom: -40px;
   padding: 10px;
 }
-.product_detail_show.show.showPc{
+
+.product_detail_show.show.showPc {
   background: #fff;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
@@ -486,13 +512,14 @@
   flex: 1
 }
 
-.filter_select_wrapper > div {
+.filter_select_wrapper>div {
   margin-right: 10px;
 }
 
 .filter_select_wrapper_recommend>div {
   margin-right: 10px;
 }
+
 .filter_select__age_wrapper,
 .filter_select__tag_wrapper {
   background-color: #fff;
@@ -502,22 +529,30 @@
   overflow-x: auto;
   display: flex;
 }
-.filter_select__tag_wrapper{
+.filter_select__age_wrapper{
+  background-color: transparent ;
+}
+
+.filter_select__tag_wrapper {
   background-color: transparent;
   padding: 0px;
   margin-bottom: 0px;
 
 }
-.filter_select__age_wrapper{
+
+.filter_select__age_wrapper {
   margin-bottom: 0px;
   padding: 0px;
 }
+
 /* Tạo thanh cuộn trong suốt cho Chrome, Safari và Edge */
 .filter_select__tag_wrapper::-webkit-scrollbar,
 .filter_select__age_wrapper::-webkit-scrollbar {
   display: none;
-  width:0px; /* Điều chỉnh độ rộng của thanh cuộn */
+  width: 0px;
+  /* Điều chỉnh độ rộng của thanh cuộn */
 }
+
 /* thiếu firefox */
 /* Tạo thanh cuộn trong suốt cho Firefox */
 .swiper-filter_select__tag_wrapper,
@@ -558,7 +593,8 @@
   justify-content: end;
   align-items: center;
 }
-.filter_select_tag_wrapper{
+
+.filter_select_tag_wrapper {
   /* overflow-x: auto; */
 }
 
@@ -596,6 +632,8 @@
 
 .icon_header {
   margin-right: 8px;
+  height: 30px;
+  width: 30px;
 }
 
 /* banner top sale */
@@ -638,10 +676,10 @@
 
 .album_item {
   padding: 12px;
-  border: 1px solid  rgb(193, 200, 209);
+  border: 1px solid rgb(193, 200, 209);
   height: 110px !important;
-  width: 110px  !important;
-  border-radius: 10px!important;
+  width: 110px !important;
+  border-radius: 10px !important;
 }
 
 .buy_wrapper_mobile {
@@ -668,29 +706,119 @@
 .wrapper_breadcrumb {
   margin-bottom: 10px;
 }
+
 .img_product {
   border-radius: 10px;
-  width: 372px!important;
+  width: 372px !important;
   height: 372px !important;
 }
-.img_product + div {
+
+.img_product+div {
   border-radius: 10px;
 }
-.category_wrapper{
+.img_product+div:hover {
+  opacity: 0 !important;
+}
+
+.category_wrapper {
   margin-top: 30px;
 }
 
+.wrapper_location {
+  display: block;
+  border: 1px solid #c1c8d1;
+  padding: 16px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.wrapper_location::-webkit-scrollbar {
+  width: 3px;
+  /* Đây là chiều rộng của thanh cuộn */
+}
+
+.wrapper_location::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  /* Màu nền của track */
+}
+
+.wrapper_location::-webkit-scrollbar-thumb {
+  background: #888;
+  /* Màu của thanh cuộn */
+  border-radius: 5px;
+  /* Độ cong của thanh cuộn */
+}
+
+.total_banner_wrapper>div:last-child {
+  padding-left: 8px;
+}
+
+
+.wrapper_subBanner_line img:first-child {
+  margin-right: 10px;
+  border-radius: 16px;
+  height: 176px;
+  width: calc(50% - 10px);
+}
+
+.wrapper_subBanner_line img:last-child {
+  margin-left: 10px;
+  border-radius: 16px;
+  height: 176px;
+  width: calc(50% - 10px);
+}
+
+.policy_wrapper_preFooter_list{
+
+}
+
+
 /* Thiết lập padding cho xs */
 @media (max-width: 575.98px) {
-  .category_wrapper{
+  .policy_wrapper_preFooter_list{
+    flex-direction: column;
+  }
+/* 
+  .policy_wrapper_preFooter_list div{
+   width: 50%;
+  } */
+  .wrapper_subBanner_line img {
+    width: 100% !important;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+    border-radius: 0px !important;
+
+  }
+
+  .total_banner_wrapper>div:last-child {
+    padding-left: 0px;
+  }
+
+  .category_wrapper {
     padding: 0px 16px;
     margin-top: 0px;
     margin-bottom: 30px;
   }
+
+  .content_img_subBanner,
   .content_img_banner {
     height: 215px;
     width: 100%;
+    padding: 0px 16px;
+    margin-top: 20px;
+    border-radius: 6%;
   }
+
+  .content_img_subBanner {
+    width: 50%;
+    height: 100px;
+    margin-top: 0px;
+    padding: 0px;
+  }
+
+
   .wrapper_breadcrumb {
     margin-top: 10px;
   }
@@ -745,7 +873,7 @@
     width: 100%;
     margin: 20px 0px;
     border-radius: 10px;
-  } 
+  }
 
   .customPT20 {
     padding: 0px;
@@ -888,6 +1016,20 @@
   .content_brand {
     border-radius: 10px;
   }
+
+  .wrapper_subBanner {
+    padding: 0px 16px;
+    margin-top: -20px;
+    margin-bottom: 20px;
+  }
+
+  .wrapper_subBanner img:first-child {
+    padding-right: 3px;
+  }
+
+  .wrapper_subBanner img:last-child {
+    padding-left: 3px;
+  }
 }
 
 /* Thiết lập padding cho sm */
@@ -913,6 +1055,7 @@
 
 /* Thiết lập padding cho xl */
 @media (min-width: 1200px) {
+
   .wrapper_global {
     padding: 20px 0px 30px 0px;
     max-width: 1236px;
@@ -934,7 +1077,8 @@
     /* background-color: red; */
     border-radius: 20px;
   }
-  .product_wrapper.showPc{
+
+  .product_wrapper.showPc {
     border-radius: 20px 0px;
 
   }

@@ -5,6 +5,7 @@ import axios from "axios";
 interface BannersType {
   pic: string;
   _id: string;
+  subBanner: boolean;
 }
 
 interface InitialType {
@@ -24,6 +25,7 @@ const initialState: InitialType = {
     errors: { name: "" },
   },
   banner: {
+    subBanner: false,
     _id: "",
     pic: "",
   },

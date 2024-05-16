@@ -8,20 +8,17 @@ const productSchema = new Schema(
     name: {
       type: String,
       require: [true, "Tên sản phẩm không được bỏ trống"],
-      maxLength: [50, "Tên sản phẩm không được quá 50 kí tự"],
       unique: [true, "Tên sản phẩm không được trùng"],
     },
 
     price: {
       type: Number,
-      // require: [true, "Giá sản phẩm không được bỏ trống"],
       default: 0,
       min: [0, "Giá sản phẩm không được âm"],
     },
 
     discount: {
       type: Number,
-      // require: [true, "Phần trăm giảm giá sản phẩm không được bỏ trống"],
       default: 0,
       min: [0, "Phần trăm giảm giá sản phẩm không được âm"],
       max: [75, "Phần trăm giảm giá sản phẩm không được nhỏ hơn 75%"],
@@ -29,14 +26,12 @@ const productSchema = new Schema(
 
     stock: {
       type: Number,
-      // require: [true, "Số lượng sản phẩm không được bỏ trống"],
       default: 0,
       min: [0, "Số lượng sản phẩm không được âm"],
     },
 
     age: {
       type: Number,
-      // require: [true, "Số lượng sản phẩm không được bỏ trống"],
       default: 0,
       min: [0, "Độ tuổi sản phẩm không được âm"],
     },

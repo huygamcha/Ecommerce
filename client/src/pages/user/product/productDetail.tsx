@@ -18,6 +18,8 @@ import {
   message,
   ConfigProvider,
   Skeleton,
+  Form,
+  Input,
 } from "antd";
 import numeral from "numeral";
 import style from "./product.module.css";
@@ -25,7 +27,12 @@ import clsx from "clsx";
 import { addToCart } from "../../../slices/cartSlice";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import { PiCaretDoubleDownBold, PiCaretDoubleUpBold } from "react-icons/pi";
-import { FaFacebookMessenger } from "react-icons/fa6";
+import {
+  FaClock,
+  FaFacebookMessenger,
+  FaLocationCrosshairs,
+  FaLocationDot,
+} from "react-icons/fa6";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 import "swiper/css";
@@ -39,6 +46,7 @@ import Discount from "../../../components/discount";
 import ButtonNavigation from "../../../components/buttonNavigation";
 import Label from "../../../components/label";
 import Specifications from "../../../components/specifications";
+import { FaCheckCircle } from "react-icons/fa";
 // error searchById cần fix cái này
 function ProductDetail() {
   const param = useParams();
@@ -46,6 +54,8 @@ function ProductDetail() {
   const { product, productsSearch, products } = useAppSelector(
     (state) => state.products
   );
+
+  const { locations } = useAppSelector((state) => state.locations);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -472,7 +482,7 @@ function ProductDetail() {
                           )}
 
                           {/* promotion */}
-                          {product && product.discount && (
+                          {product && product.discount ? (
                             <Flex
                               vertical
                               className={clsx(style.promotion_wrapper)}
@@ -519,6 +529,8 @@ function ProductDetail() {
                                 Giảm ngay 20% áp dụng đến 14/03
                               </Space>
                             </Flex>
+                          ) : (
+                            <></>
                           )}
 
                           {/* buy now */}
@@ -810,7 +822,7 @@ function ProductDetail() {
                   </div>
                 </div>
 
-                {product && product.detail ? (
+                {product && product.detail && (
                   <div
                     className={clsx(
                       style.wrapper_global,
@@ -881,9 +893,128 @@ function ProductDetail() {
                         )}
                       </Row>
                     </div>
+                    {window.innerWidth <= 576 && (
+                      <Row>
+                        <Col style={{ marginBottom: "10px" }} span={24}>
+                          <Flex align="center">
+                            <img
+                              style={{
+                                width: "24px",
+                                height: "24px",
+                              }}
+                              src="https://nhathuoclongchau.com.vn/estore-images/pin.png"
+                              alt=""
+                            />
+                            <Space className={clsx(style.typePayment_header)}>
+                              Địa chỉ cửa hàng
+                            </Space>
+                          </Flex>
+                        </Col>
+                        <Col span={24}>
+                          <Row gutter={[8, 0]}>
+                            <Col span={24}>
+                              <Flex className={clsx(style.wrapper_location)}>
+                                {locations &&
+                                  locations.map((item: any) => (
+                                    <Row
+                                      style={{
+                                        marginBottom: "16px",
+                                      }}
+                                      gutter={[4, 0]}
+                                    >
+                                      <Col xs={2} sm={1}>
+                                        <Flex justify="center">
+                                          <FaCheckCircle
+                                            style={{
+                                              fontSize: "20px",
+                                              color: "#1250dd",
+                                            }}
+                                          />
+                                        </Flex>
+                                      </Col>
+                                      <Col xs={22} sm={18}>
+                                        <Row gutter={10}>
+                                          <Col>
+                                            <Space
+                                              style={{
+                                                color: "#039855",
+                                                fontWeight: 600,
+                                              }}
+                                            >
+                                              Có hàng
+                                              <Space></Space>
+                                            </Space>
+                                          </Col>
+                                          <Col>
+                                            <Space
+                                              style={{
+                                                color: "#020b27",
+                                                fontWeight: 600,
+                                              }}
+                                            >
+                                              {item.name}
+                                            </Space>
+                                          </Col>
+                                        </Row>
+                                        <Flex
+                                          style={{
+                                            margin: "5px 0px",
+                                          }}
+                                          align="center"
+                                        >
+                                          <FaClock
+                                            style={{
+                                              color: "#aab2be",
+                                              fontSize: "15px",
+                                              marginRight: "5px",
+                                            }}
+                                          />
+                                          {item.time}
+                                        </Flex>
+                                        <Flex
+                                          style={{
+                                            margin: "5px 0px",
+                                          }}
+                                          align="center"
+                                        >
+                                          <FaLocationDot
+                                            style={{
+                                              color: "#aab2be",
+                                              fontSize: "15px",
+                                              marginRight: "5px",
+                                            }}
+                                          />
+                                          {item.address}
+                                        </Flex>
+                                      </Col>
+                                      <Col xs={2} sm={0}></Col>
+                                      <Col xs={22} sm={5}>
+                                        <a
+                                          className={clsx(style.location_map)}
+                                          target="_blank"
+                                          href={item.map}
+                                          rel="noreferrer"
+                                        >
+                                          <Flex align="center">
+                                            <FaLocationCrosshairs
+                                              style={{
+                                                fontSize: "15px",
+                                                marginRight: "3px",
+                                              }}
+                                            />
+                                            <Space>Chỉ đường</Space>
+                                          </Flex>
+                                        </a>
+                                      </Col>
+                                    </Row>
+                                  ))}
+                              </Flex>
+                            </Col>
+                          </Row>
+                        </Col>
+                      </Row>
+                    )}
                   </div>
-                ) : (
-                  <></>
                 )}
               </div>
 
@@ -1110,7 +1241,6 @@ function ProductDetail() {
                               alt=""
                             />
                             Sản phẩm vừa xem
-                            <div>{histories.length}</div>
                           </Flex>
 
                           <Swiper

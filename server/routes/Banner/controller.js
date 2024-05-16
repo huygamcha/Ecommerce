@@ -18,10 +18,11 @@ module.exports = {
 
   createBanner: async (req, res, next) => {
     try {
-      const { pic } = req.body;
+      const { pic, subBanner } = req.body;
 
       const newBanner = new Banner({
         pic,
+        subBanner,
       });
 
       const payload = await newBanner.save();
@@ -48,7 +49,7 @@ module.exports = {
         });
       }
 
-      await Banner.findByIdAndDelete(id, { isDeleted: true });
+      await Banner.findByIdAndDelete(id, { new: true });
 
       return res.send(200, {
         message: "Xoá ảnh bìa thành công",
@@ -63,7 +64,7 @@ module.exports = {
   updateBanner: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const { pic } = req.body;
+      const { pic, subBanner } = req.body;
       const payload = await Banner.findById(id);
 
       if (!payload) {
@@ -76,6 +77,7 @@ module.exports = {
         id,
         {
           pic: pic || this.pic,
+          subBanner: subBanner || this.subBanner,
         },
         {
           new: true,

@@ -10,7 +10,6 @@ const checkCreateProduct = yup.object({
         message: "Tên sản phẩm không được bỏ trống",
         test: (value) => value !== undefined && value !== null && value !== "",
       })
-      .max(50, "Tên sản phẩm không được dài hơn 50 kí tự")
       .min(2, "Tên sản phẩm không được nhỏ hơn 2 kí tự"),
 
     price: yup
@@ -31,9 +30,7 @@ const checkCreateProduct = yup.object({
         name: "required",
         message: "Số lượng sản phẩm không được bỏ trống",
         test: (value) => value !== undefined && value !== null && value !== "",
-      })
-      .max(500, "Số lượng sản phẩm không được dài hơn 500 kí tự"),
-
+      }),
     discount: yup
       .number()
       .max(75, "Giảm giá sản phẩm không được lớn hơn 75")
