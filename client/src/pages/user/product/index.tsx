@@ -115,9 +115,9 @@ function ProductScreen() {
             <Col xs={24} sm={16}>
               <Swiper
                 loop={banners.length > 1 ? true : false}
-                autoplay={{
-                  delay: 2000,
-                }}
+                // autoplay={{
+                //   delay: 2000,
+                // }}
                 modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
                 breakpoints={{
                   1200: {
@@ -129,6 +129,7 @@ function ProductScreen() {
                     slidesPerView: 1,
                   },
                 }}
+                style={{ fontSize: 0 }}
                 pagination={{ clickable: true }}
                 className={clsx(style.background_banner)}
               >
@@ -164,7 +165,14 @@ function ProductScreen() {
             </Col>
             {/* sub Banner */}
             <Col xs={24} sm={8}>
-              <div className={clsx(style.wrapper_subBanner)}>
+              {/* style={{fontSize: 0}} để cho ảnh bằng với chiều dài của thẻ */}
+              <div
+                style={{ fontSize: 0 }}
+                className={clsx(
+                  style.wrapper_subBanner,
+                  style.wrapper_subBanner_header
+                )}
+              >
                 {banners &&
                   banners.map((banner, index) => {
                     if (banner.subBanner) {
@@ -184,7 +192,10 @@ function ProductScreen() {
           {/* danh mục */}
           <Row className={clsx(style.category_wrapper)}>
             <Col xs={24} sm={24}>
-              <Flex align="center" className={clsx(style.title_product_relate)}>
+              <Flex
+                align="center"
+                className={clsx(style.title_product_category_top)}
+              >
                 <img
                   className={clsx(style.icon_header)}
                   style={{ height: "28px", width: "28px" }}
@@ -622,10 +633,15 @@ function ProductScreen() {
             "linear-gradient(180deg, rgba(255,243,233,1) 0%, rgba(255,255,255,1) 34%)",
         }}
       >
-        <div className={clsx(style.wrapper_global)}>
+        <div
+          className={clsx(style.wrapper_brand_favorite, style.wrapper_global)}
+        >
           <Row>
             <Col span={24}>
-              <Flex align="center" className={clsx(style.title_product_relate)}>
+              <Flex
+                align="center"
+                className={clsx(style.title_product_brand_favorite)}
+              >
                 <img
                   className={clsx(style.icon_header)}
                   style={{ width: "28px", height: "28px" }}
@@ -711,7 +727,11 @@ function ProductScreen() {
         {window.innerWidth > 576 ? (
           <div
             style={{ fontSize: 0 }}
-            className={clsx(style.wrapper_global, style.wrapper_subBanner_line)}
+            className={clsx(
+              style.wrapper_global,
+              style.wrapper_subBanner_line,
+              style.wrapper_subBanner
+            )}
           >
             {banners &&
               banners.map((banner, index) => {
@@ -806,7 +826,6 @@ function ProductScreen() {
                   },
                 }}
                 style={{
-                  padding: "10px 0px",
                   borderRadius: "10px",
                   marginBottom: "30px",
                 }}
@@ -958,7 +977,6 @@ function ProductScreen() {
                   },
                 }}
                 style={{
-                  padding: "10px 0px",
                   borderRadius: "10px",
                   marginBottom: "30px",
                 }}
@@ -1203,7 +1221,6 @@ function ProductScreen() {
                   },
                 }}
                 style={{
-                  padding: "10px 0px",
                   borderRadius: "10px",
                   marginBottom: "30px",
                 }}

@@ -48,7 +48,7 @@
   background: #fff;
   border-radius: 10px;
   padding: 14px 0px;
-  margin-top: 14px;
+  margin-top: 10px;
   height: 330px;
   position: relative;
   border: 1px solid #fff;
@@ -115,10 +115,11 @@
 }
 
 .content_img_subBanner {
-  height: 150px;
+  height: 144px;
   width: 100%;
-  border-radius: 10px;
+  border-radius: 12px;
 }
+
 
 .content_img_subBanner_line {
   height: 150px;
@@ -499,12 +500,19 @@
   width: 100%;
   /* background-color: red; */
 }
-
+.title_product_brand_favorite,
+.title_product_category_top,
 .title_product_relate {
   font-size: 18px;
   line-height: 24px;
   font-weight: 600;
+}
+.title_product_brand_favorite,
+.title_product_category_top{
   margin-bottom: 14px;
+}
+.title_product_relate{
+  margin-bottom: 5px;
 }
 
 /* filter */
@@ -721,7 +729,7 @@
 }
 
 .category_wrapper {
-  margin-top: 30px;
+  /* margin-top: 30px; */
 }
 
 .wrapper_location {
@@ -752,22 +760,25 @@
 }
 
 .total_banner_wrapper>div:last-child {
-  padding-left: 8px;
+  padding-left: 12px;
 }
 
 
 .wrapper_subBanner_line img:first-child {
   margin-right: 10px;
-  border-radius: 16px;
+  border-radius: 12px;
   height: 176px;
   width: calc(50% - 10px);
 }
 
 .wrapper_subBanner_line img:last-child {
   margin-left: 10px;
-  border-radius: 16px;
+  border-radius: 12px;
   height: 176px;
   width: calc(50% - 10px);
+}
+.wrapper_subBanner_header img:first-child{
+  margin-bottom: 12px;
 }
 
 .policy_wrapper_preFooter_list{
@@ -777,6 +788,10 @@
 
 /* Thiết lập padding cho xs */
 @media (max-width: 575.98px) {
+  .wrapper_subBanner_header img:first-child{
+    margin-bottom: 0px;
+  }
+  
   .policy_wrapper_preFooter_list{
     flex-direction: column;
   }
@@ -1055,12 +1070,18 @@
 
 /* Thiết lập padding cho xl */
 @media (min-width: 1200px) {
-
+  .wrapper_subBanner,
   .wrapper_global {
     padding: 20px 0px 30px 0px;
     max-width: 1236px;
     margin: 0 auto;
-
+  }
+  .wrapper_brand_favorite{
+    padding-top: 0px;
+    padding-bottom: 16px;
+  }
+  .wrapper_subBanner{
+    padding: 0px 0px 40px 0px;
   }
 
   .top_sale {
@@ -1095,7 +1116,7 @@
 
   /* banner */
   .background_banner {
-    border-radius: 20px;
+    border-radius: 10px;
     background-color: transparent;
   }
 }
