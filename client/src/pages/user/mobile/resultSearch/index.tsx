@@ -95,7 +95,7 @@ function MobileResultSearch() {
                         key={index}
                         onClick={() => handleSearchTag(tag._id)}
                         className={clsx(style.tag_item)}
-                        to={`/timkiem?s=${tag.name}`}
+                        to={`/timkiem?t=${tag.name}`}
                       >
                         {tag.name}
                       </Link>

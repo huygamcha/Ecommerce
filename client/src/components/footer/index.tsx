@@ -296,46 +296,40 @@ function FooterScreen() {
         <Row
           className={clsx(style.global_wrapper, style.global_wrapper_direction)}
         >
-          <Col>
-            <Flex
-              style={{
-                margin: "5px 0px",
-              }}
-              align="center"
-            >
-              <FaLocationDot
+          <Col xs={24}>
+            <Flex justify="space-between">
+              <Flex
                 style={{
-                  color: "#fff",
-                  fontSize: "28px",
-                  marginRight: "5px",
+                  margin: "5px 0px",
                 }}
-              />
-              <Space className={clsx(style.direction_left_text)}>
-                Xem địa chỉ cửa hàng
-              </Space>
+                align="center"
+              >
+                <FaLocationDot className={clsx(style.location_icon)} />
+                <Space className={clsx(style.direction_left_text)}>
+                  Xem địa chỉ cửa hàng
+                </Space>
+              </Flex>
+              <div className={clsx(style.location_map_wrapper)}>
+                {locations && locations.length > 0 && (
+                  <a
+                    target="_blank"
+                    href={locations[0].map}
+                    rel="noreferrer"
+                    className={clsx(style.location_map)}
+                  >
+                    <Flex align="center">
+                      <FaLocationCrosshairs
+                        style={{
+                          fontSize: "15px",
+                          marginRight: "5px",
+                        }}
+                      />
+                      <Space>Chỉ đường</Space>
+                    </Flex>
+                  </a>
+                )}
+              </div>
             </Flex>
-          </Col>
-          <Col>
-            <div className={clsx(style.location_map_wrapper)}>
-              {locations && locations.length > 0 && (
-                <a
-                  target="_blank"
-                  href={locations[0].map}
-                  rel="noreferrer"
-                  className={clsx(style.location_map)}
-                >
-                  <Flex align="center">
-                    <FaLocationCrosshairs
-                      style={{
-                        fontSize: "15px",
-                        marginRight: "5px",
-                      }}
-                    />
-                    <Space>Chỉ đường</Space>
-                  </Flex>
-                </a>
-              )}
-            </div>
           </Col>
         </Row>
       </div>

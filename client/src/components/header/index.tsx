@@ -136,11 +136,8 @@ function HeaderScreen() {
   };
 
   // search
-  const handleSearchTag = (e: string, name: string) => {
-    localStorage.setItem(
-      "filter",
-      JSON.stringify({ searchTag: e, searchTagname: name })
-    );
+  const handleSearchTag = (e: string) => {
+    localStorage.setItem("filter", JSON.stringify({ searchTag: e }));
   };
 
   // logout
@@ -188,14 +185,14 @@ function HeaderScreen() {
     );
   };
 
-  // useREF
+  // useREF chỉ được sử dụng 1 lần trên cùng thời điểm, nếu tuỳ hợp phải xử lí để ẩn các useRef còn lại
   function useOutsideAlerter(ref: React.RefObject<any>) {
     useEffect(() => {
       function handleClickOutside(event: MouseEvent) {
         //  kiểm tra DOM cả 2 nếu khác nhau thì đã click ở ngoài
         // console.log("««««« ref »»»»»", ref.current.input);
-        // console.log("««««« ref.current »»»»»", ref.current);
-        // console.log("««««« event »»»»»", event.target);
+        console.log("««««« ref.current »»»»»", ref.current);
+        console.log("««««« event »»»»»", event.target);
         if (ref.current && !ref.current.contains(event.target)) {
           // list kết quả search ra được
           setIsList(false);
@@ -231,7 +228,8 @@ function HeaderScreen() {
   const wrapperRef = useRef(null);
   // // khi bấm ra ngoài thanh kết quả sẽ tắt
   // const wrapperRefMobile = useRef(null);
-  // // // khi bấm ra ngoài thanh menu phụ sẽ  tắt
+
+  // // // khi bấm ra ngoài thanh menu phụ sẽ tắt
   const menuMobileRef = useRef(null);
   // khi scroll
   useOutsideAlerter(wrapperRef);
@@ -316,7 +314,7 @@ function HeaderScreen() {
 
                     {/* search result mobile */}
                     <Space
-                      ref={wrapperRef}
+                      // ref={wrapperRef}
                       className={clsx(style.header_search_result, style.active)}
                     >
                       {isList &&
@@ -460,7 +458,7 @@ function HeaderScreen() {
 
               {/* search result pc */}
               <Space
-                ref={!isMobile ? wrapperRef : null}
+                ref={!isMobile && !isOpen ? wrapperRef : null}
                 className={clsx(style.header_search_result, style.active)}
               >
                 {isList &&
@@ -573,9 +571,9 @@ function HeaderScreen() {
             </Flex>
           </Col>
 
-          {/* open mobile */}
+          {/* open mobile navigation*/}
           <Space>
-            {isOpen ? (
+            {isOpen && (
               <div
                 onClick={(e) => e.stopPropagation()}
                 className={clsx(style.menu_mobile_wrapper)}
@@ -675,8 +673,6 @@ function HeaderScreen() {
                   </Flex>
                 </Flex>
               </div>
-            ) : (
-              <></>
             )}
           </Space>
         </Row>
@@ -708,7 +704,7 @@ function HeaderScreen() {
                 tags.map((tag, index) => (
                   <Link
                     key={index}
-                    onClick={() => handleSearchTag(tag._id, tag.name)}
+                    onClick={() => handleSearchTag(tag._id)}
                     className={clsx(style.tag_item)}
                     to={`/timkiem?t=${tag.name}`}
                   >

@@ -499,17 +499,7 @@ const Order = (props: Props) => {
               <Input />
             </Form.Item>
 
-            <Form.Item<FieldType>
-              label="Tỉnh / thành phố"
-              name="province"
-              rules={[
-                { required: true, message: "Vui lòng điền tên đơn đặt hàng!" },
-                {
-                  min: 2,
-                  message: "Tên đơn đặt hàng phải có ít nhất 2 ký tự!",
-                },
-              ]}
-            >
+            <Form.Item<FieldType> label="Tỉnh / thành phố" name="province">
               <Select
                 placeholder="Chọn tỉnh / thành phố"
                 options={province.map((item: any) => {
@@ -531,17 +521,7 @@ const Order = (props: Props) => {
               />
             </Form.Item>
 
-            <Form.Item<FieldType>
-              label="Quận / huyện"
-              name="district"
-              rules={[
-                { required: true, message: "Vui lòng điền tên đơn đặt hàng!" },
-                {
-                  min: 2,
-                  message: "Tên đơn đặt hàng phải có ít nhất 2 ký tự!",
-                },
-              ]}
-            >
+            <Form.Item<FieldType> label="Quận / huyện" name="district">
               <Select
                 placeholder="Chọn quận / huyện"
                 options={
@@ -566,17 +546,7 @@ const Order = (props: Props) => {
               />
             </Form.Item>
 
-            <Form.Item<FieldType>
-              label="Phường / xã"
-              name="commune"
-              rules={[
-                { required: true, message: "Vui lòng điền tên đơn đặt hàng!" },
-                {
-                  min: 2,
-                  message: "Tên đơn đặt hàng phải có ít nhất 2 ký tự!",
-                },
-              ]}
-            >
+            <Form.Item<FieldType> label="Phường / xã" name="commune">
               <Select
                 placeholder="Chọn phường / xã"
                 options={
@@ -601,18 +571,7 @@ const Order = (props: Props) => {
               />
             </Form.Item>
 
-            <Form.Item<FieldType>
-              label="Địa chỉ cụ thể"
-              name="addressDetail"
-              rules={[
-                { required: true, message: "Vui lòng điền địa chỉ cụ thể!" },
-
-                {
-                  min: 2,
-                  message: "Địa chỉ cụ thể phải có ít nhất 2 ký tự!",
-                },
-              ]}
-            >
+            <Form.Item<FieldType> label="Địa chỉ cụ thể" name="addressDetail">
               <Input />
             </Form.Item>
 

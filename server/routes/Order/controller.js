@@ -84,12 +84,6 @@ module.exports = {
         });
       }
 
-      if (payload.isDeleted) {
-        return res.send(404, {
-          message: "Danh mục đã được xoá trước đó",
-        });
-      }
-
       return res.send(200, {
         message: "Tìm đơn hàng thành công",
         payload: payload,

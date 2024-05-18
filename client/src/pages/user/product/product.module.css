@@ -442,7 +442,7 @@
 }
 
 .product_detail_show.show {
-  background: #f5f5f5;
+  background: #fff;
   bottom: -40px;
   padding: 10px;
 }
@@ -679,14 +679,14 @@
 
 .album_wrapper {
   width: 100%;
-  margin-top: 50px;
+  margin-top: 20px;
 }
 
 .album_item {
   padding: 12px;
   border: 1px solid rgb(193, 200, 209);
   height: 110px !important;
-  width: 110px !important;
+  width: 120px !important;
   border-radius: 10px !important;
 }
 
@@ -712,7 +712,7 @@
 }
 
 .wrapper_breadcrumb {
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
 }
 
 .img_product {
@@ -731,13 +731,22 @@
 .category_wrapper {
   /* margin-top: 30px; */
 }
+.typePayment_header{
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 28px;
+  margin: 0px;
+  margin-top: 0px;
+  letter-spacing: 0.005em;
+  color: #020b27;
+  margin-left: 4px;
+}
 
 .wrapper_location {
   display: block;
   border: 1px solid #c1c8d1;
   padding: 16px;
   border-radius: 20px;
-  margin-bottom: 20px;
   max-height: 400px;
   overflow-y: auto;
 }
@@ -784,6 +793,18 @@
 .policy_wrapper_preFooter_list{
 
 }
+.product_detail_discount{
+  background-color: #ff0200;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  height: 32px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
 
 
 /* Thiết lập padding cho xs */
@@ -825,6 +846,9 @@
     margin-top: 20px;
     border-radius: 6%;
   }
+  .content_img_subBanner{
+    border-radius: 12px;
+  }
 
   .content_img_subBanner {
     width: 50%;
@@ -832,12 +856,9 @@
     margin-top: 0px;
     padding: 0px;
   }
-
-
   .wrapper_breadcrumb {
     margin-top: 10px;
   }
-
   .album_item {
     width: 393px !important;
     height: 393px !important;
@@ -1041,9 +1062,28 @@
   .wrapper_subBanner img:first-child {
     padding-right: 3px;
   }
-
   .wrapper_subBanner img:last-child {
     padding-left: 3px;
+  }
+  .wrapper_global_breadcrumb{
+    padding-bottom: 0px;
+  }
+  .wrapper_global_detail{
+    padding-top: 0px;
+    background-color: #fff;
+  }
+  .album_wrapper {
+    margin-top: 0px;
+  }
+  .wrapper_breadcrumb {
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+  .customBackgroundWhite{
+    background-color: #fff;
+  }
+  .customMT8{
+    margin-top: 8px;
   }
 }
 
@@ -1052,6 +1092,11 @@
   .wrapper_global {
     padding: 20px;
   }
+  .wrapper_global_detail{
+    padding: 0px;
+    padding-top: 16px;
+  }
+ 
 }
 
 /* Thiết lập padding cho md */
@@ -1059,12 +1104,20 @@
   .wrapper_global {
     padding: 30px;
   }
+  .wrapper_global_detail{
+    padding: 0px;
+    padding-top: 16px;
+  }
 }
 
 /* Thiết lập padding cho lg */
 @media (min-width: 992px) and (max-width: 1199.98px) {
   .wrapper_global {
     padding: 40px;
+  }
+  .wrapper_global_detail{
+    padding: 0px;
+    padding-top: 16px;
   }
 }
 
@@ -1075,6 +1128,14 @@
     padding: 20px 0px 30px 0px;
     max-width: 1236px;
     margin: 0 auto;
+  }
+  .wrapper_global_detail{
+    padding: 0px;
+    padding-top: 16px;
+  }
+  .wrapper_global_breadcrumb{
+    padding: 0px;
+    padding-top: 16px
   }
   .wrapper_brand_favorite{
     padding-top: 0px;

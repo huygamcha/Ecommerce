@@ -215,7 +215,12 @@ function ProductDetail() {
           {product ? (
             <>
               <div className={clsx(style.product_background)}>
-                <div className={clsx(style.wrapper_global)}>
+                <div
+                  className={clsx(
+                    style.wrapper_global,
+                    style.wrapper_global_breadcrumb
+                  )}
+                >
                   <Row className={clsx(style.wrapper_breadcrumb)}>
                     <Breadcrumb
                       items={[
@@ -268,6 +273,14 @@ function ProductDetail() {
                       ]}
                     />
                   </Row>
+                </div>
+
+                <div
+                  className={clsx(
+                    style.wrapper_global,
+                    style.wrapper_global_detail
+                  )}
+                >
                   <div className={clsx(style.product_wrapper)}>
                     <Row>
                       <Col xs={24} sm={10}>
@@ -282,7 +295,9 @@ function ProductDetail() {
                                 style={{
                                   display: "flex",
                                   justifyContent: "center",
-                                  marginTop: "50px",
+                                  padding: "20px 0px",
+                                  border: "1px solid #f3f2f3",
+                                  borderRadius: "16px",
                                 }}
                               >
                                 <Image
@@ -340,7 +355,7 @@ function ProductDetail() {
                             <div className={clsx(style.title_brand)}>
                               Thương hiệu:
                               <Link
-                                to={`/timkiem?s=${product?.brand.name}`}
+                                to={`/timkiem?b=${product?.brand.name}`}
                                 className={clsx(style.header_brand)}
                                 onClick={() =>
                                   handleSearchBrand(
@@ -373,6 +388,11 @@ function ProductDetail() {
                                       </span>
                                       {product.unit}
                                     </div>
+                                    <div
+                                      className={clsx(
+                                        style.product_detail_discount
+                                      )}
+                                    >{`-${product.discount}%`}</div>
                                   </Space>
                                   <Space className={clsx(style.price_total)}>
                                     <del>
@@ -526,7 +546,7 @@ function ProductDetail() {
                                     alt=""
                                   />
                                 </Space>
-                                Giảm ngay 20% áp dụng đến 14/03
+                                {` Giảm ngay ${product.discount}%`}
                               </Space>
                             </Flex>
                           ) : (
@@ -826,7 +846,9 @@ function ProductDetail() {
                   <div
                     className={clsx(
                       style.wrapper_global,
-                      style.product_background
+                      style.product_background,
+                      style.customBackgroundWhite,
+                      style.customMT8
                     )}
                   >
                     <div
@@ -893,48 +915,57 @@ function ProductDetail() {
                         )}
                       </Row>
                     </div>
-                    {window.innerWidth <= 576 && (
-                      <Row>
-                        <Col style={{ marginBottom: "10px" }} span={24}>
-                          <Flex align="center">
-                            <img
-                              style={{
-                                width: "24px",
-                                height: "24px",
-                              }}
-                              src="https://nhathuoclongchau.com.vn/estore-images/pin.png"
-                              alt=""
-                            />
-                            <Space className={clsx(style.typePayment_header)}>
-                              Địa chỉ cửa hàng
-                            </Space>
-                          </Flex>
-                        </Col>
-                        <Col span={24}>
-                          <Row gutter={[8, 0]}>
-                            <Col span={24}>
-                              <Flex className={clsx(style.wrapper_location)}>
-                                {locations &&
-                                  locations.map((item: any) => (
-                                    <Row
-                                      style={{
-                                        marginBottom: "16px",
-                                      }}
-                                      gutter={[4, 0]}
-                                    >
-                                      <Col xs={2} sm={1}>
-                                        <Flex justify="center">
-                                          <FaCheckCircle
-                                            style={{
-                                              fontSize: "20px",
-                                              color: "#1250dd",
-                                            }}
-                                          />
-                                        </Flex>
-                                      </Col>
-                                      <Col xs={22} sm={18}>
-                                        <Row gutter={10}>
-                                          <Col>
+                  </div>
+                )}
+              </div>
+
+              {/* địa chỉ cửa hàn, theo category, theo lịch sử*/}
+              <div className={clsx(style.product_background)}>
+                {/* xem địa chỉ cửa hàng */}
+                {window.innerWidth <= 576 && (
+                  <div
+                    className={clsx(
+                      style.wrapper_global,
+                      style.customBackgroundWhite
+                    )}
+                  >
+                    <Row>
+                      <Col style={{ marginBottom: "10px" }} span={24}>
+                        <Flex align="center">
+                          <img
+                            style={{
+                              width: "24px",
+                              height: "24px",
+                            }}
+                            src="https://nhathuoclongchau.com.vn/estore-images/pin.png"
+                            alt=""
+                          />
+                          <Space className={clsx(style.typePayment_header)}>
+                            Địa chỉ cửa hàng
+                          </Space>
+                        </Flex>
+                      </Col>
+                      <Col span={24}>
+                        <Row gutter={[8, 0]}>
+                          <Col span={24}>
+                            <Flex className={clsx(style.wrapper_location)}>
+                              {locations &&
+                                locations.map((item: any) => (
+                                  <Row gutter={[4, 0]}>
+                                    <Col xs={2} sm={1}>
+                                      <Flex justify="center">
+                                        <FaCheckCircle
+                                          style={{
+                                            fontSize: "20px",
+                                            color: "#1250dd",
+                                          }}
+                                        />
+                                      </Flex>
+                                    </Col>
+                                    <Col xs={22} sm={18}>
+                                      <Row gutter={10}>
+                                        <Col>
+                                          {product.stock ? (
                                             <Space
                                               style={{
                                                 color: "#039855",
@@ -942,84 +973,90 @@ function ProductDetail() {
                                               }}
                                             >
                                               Có hàng
-                                              <Space></Space>
                                             </Space>
-                                          </Col>
-                                          <Col>
+                                          ) : (
                                             <Space
                                               style={{
-                                                color: "#020b27",
+                                                color: "#ff0200",
                                                 fontWeight: 600,
                                               }}
                                             >
-                                              {item.name}
+                                              Hết hàng
                                             </Space>
-                                          </Col>
-                                        </Row>
-                                        <Flex
-                                          style={{
-                                            margin: "5px 0px",
-                                          }}
-                                          align="center"
-                                        >
-                                          <FaClock
+                                          )}
+                                        </Col>
+                                        <Col>
+                                          <Space
                                             style={{
-                                              color: "#aab2be",
+                                              color: "#020b27",
+                                              fontWeight: 600,
+                                            }}
+                                          >
+                                            {item.name}
+                                          </Space>
+                                        </Col>
+                                      </Row>
+                                      <Flex
+                                        style={{
+                                          margin: "5px 0px",
+                                        }}
+                                        align="center"
+                                      >
+                                        <FaClock
+                                          style={{
+                                            color: "#aab2be",
+                                            fontSize: "15px",
+                                            marginRight: "5px",
+                                          }}
+                                        />
+                                        {item.time}
+                                      </Flex>
+                                      <Flex
+                                        style={{
+                                          margin: "5px 0px",
+                                        }}
+                                        align="center"
+                                      >
+                                        <FaLocationDot
+                                          style={{
+                                            color: "#aab2be",
+                                            fontSize: "15px",
+                                            marginRight: "5px",
+                                          }}
+                                        />
+                                        {item.address}
+                                      </Flex>
+                                    </Col>
+                                    <Col xs={2} sm={0}></Col>
+                                    <Col xs={22} sm={5}>
+                                      <a
+                                        className={clsx(style.location_map)}
+                                        target="_blank"
+                                        href={item.map}
+                                        rel="noreferrer"
+                                      >
+                                        <Flex align="center">
+                                          <FaLocationCrosshairs
+                                            style={{
                                               fontSize: "15px",
-                                              marginRight: "5px",
+                                              marginRight: "3px",
                                             }}
                                           />
-                                          {item.time}
+                                          <Space>Chỉ đường</Space>
                                         </Flex>
-                                        <Flex
-                                          style={{
-                                            margin: "5px 0px",
-                                          }}
-                                          align="center"
-                                        >
-                                          <FaLocationDot
-                                            style={{
-                                              color: "#aab2be",
-                                              fontSize: "15px",
-                                              marginRight: "5px",
-                                            }}
-                                          />
-                                          {item.address}
-                                        </Flex>
-                                      </Col>
-                                      <Col xs={2} sm={0}></Col>
-                                      <Col xs={22} sm={5}>
-                                        <a
-                                          className={clsx(style.location_map)}
-                                          target="_blank"
-                                          href={item.map}
-                                          rel="noreferrer"
-                                        >
-                                          <Flex align="center">
-                                            <FaLocationCrosshairs
-                                              style={{
-                                                fontSize: "15px",
-                                                marginRight: "3px",
-                                              }}
-                                            />
-                                            <Space>Chỉ đường</Space>
-                                          </Flex>
-                                        </a>
-                                      </Col>
-                                    </Row>
-                                  ))}
-                              </Flex>
-                            </Col>
-                          </Row>
-                        </Col>
-                      </Row>
-                    )}
+                                      </a>
+                                    </Col>
+                                  </Row>
+                                ))}
+                            </Flex>
+                          </Col>
+                        </Row>
+                      </Col>
+                    </Row>
                   </div>
                 )}
-              </div>
 
-              <div className={clsx(style.product_background)}>
-                {productsSearch ? (
+                {productsSearch && (
                   <div
                     className={clsx(
                       style.wrapper_global,
@@ -1219,9 +1256,8 @@ function ProductDetail() {
                       </Row>
                     </div>
                   </div>
-                ) : (
-                  <></>
                 )}
+
                 {histories && (
                   <div
                     style={{

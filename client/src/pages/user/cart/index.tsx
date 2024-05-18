@@ -1232,13 +1232,7 @@ function CartScreen() {
                                                   {locations &&
                                                     locations.map(
                                                       (item: any) => (
-                                                        <Row
-                                                          style={{
-                                                            marginBottom:
-                                                              "16px",
-                                                          }}
-                                                          gutter={[4, 0]}
-                                                        >
+                                                        <Row gutter={[4, 0]}>
                                                           <Col xs={2} sm={1}>
                                                             <Flex justify="center">
                                                               <FaCheckCircle

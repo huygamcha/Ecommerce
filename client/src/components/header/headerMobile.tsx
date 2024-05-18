@@ -43,11 +43,12 @@ function HeaderScreenMobile() {
   const { tags } = useAppSelector((state) => state.tags);
 
   const handleSearch = (e: any) => {
-    dispatch(getAllProductSearch({ search: e.target.value }));
-    dispatch(hasList({ isList: true }));
     setSearch(e.target.value);
     if (e.target.value === "") {
       dispatch(hasList({ isList: false }));
+    } else {
+      dispatch(hasList({ isList: true }));
+      dispatch(getAllProductSearch({ search: e.target.value }));
     }
   };
 
@@ -100,10 +101,10 @@ function HeaderScreenMobile() {
                         autoFocus
                         type="text"
                         value={search}
-                        onChange={handleSearch}
+                        onInput={handleSearch}
                         className={clsx(style.header_search_input)}
                         placeholder="Tìm kiếm sản phẩm"
-                        onFocus={handleSearch}
+                        // onFocus={handleSearch}
                       ></Input>
 
                       <div className={clsx(style.header_search_icon_search)}>
@@ -156,7 +157,7 @@ function HeaderScreenMobile() {
                     key={index}
                     onClick={() => handleSearchTag(tag._id)}
                     className={clsx(style.tag_item)}
-                    to={`/timkiem?s=${tag.name}`}
+                    to={`/timkiem?t=${tag.name}`}
                   >
                     {tag.name}
                   </Link>

@@ -12,7 +12,7 @@ var router = express.Router();
 
 router.route("/").get(getAllOrder);
 // router.route("/").post(validateSchema(checkCreateOrder), createOrder);
-router.route("/").post(protect, admin, createOrder);
+router.route("/").post(createOrder);
 router
   .route("/:id")
   .delete(protect, admin, validateSchema(checkId), deleteOrder)
