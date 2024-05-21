@@ -202,10 +202,17 @@
 .customPB {
   margin-bottom: 14px;
 }
+.policy_footer_wrapper{
+  padding-top: 30px;
+}
 
 
 /* Thiết lập padding cho xs */
 @media (max-width: 575.98px) {
+  .policy_footer_wrapper{
+    padding-top: 16px;
+    padding-bottom: 6px;
+  }
   .wrapper_global {
     background-color: #edf0f3;
     padding: 10px;
@@ -246,5 +253,7 @@
     background-color: #edf0f3;
     padding: 30px 0px;
     max-width: 1236px;
+    margin: 0 auto;
+
   }
 }

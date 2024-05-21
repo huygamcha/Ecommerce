@@ -1,0 +1,265 @@
+.wrapper_global_location {
+    width: 100%;
+    border-radius: 12px;
+}
+
+
+.wrapper_subBanner {
+    padding: 16px 16px;
+    background-color: #fff;
+    border-radius: 12px;
+}
+
+.wrapper_subBanner_img {
+    margin-right: 6px;
+}
+
+.wrapper_subBanner_img img:first-child {
+    margin-bottom: 12px;
+}
+
+.content_img_subBanner {
+    height: 144px;
+    width: 100%;
+    border-radius: 12px;
+}
+
+.wrapper_global_breadcrumb {
+    padding: 0px;
+    padding-top: 12px;
+    width: 100%;
+}
+
+.button_home {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    color: #1250dc !important;
+    cursor: pointer;
+}
+
+.button_home:hover {
+    background-color: transparent !important;
+}
+
+.location_name {
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.location_wrapper_album {
+    margin-top: 12px;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 500;
+}
+
+.buy_wrapper {
+    width: max-content;
+    gap: 8px;
+}
+
+.map,
+.contact,
+.direction_map,
+.call_consult {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    font-size: 16px;
+    height: 30px;
+    line-height: 24px;
+    margin-top: 12px;
+    padding: 22px;
+    background-color: #eaeffa;
+    color: #1958de;
+    border-radius: 30px;
+    font-weight: 500;
+}
+
+.map, .direction_map {
+    background-color: #1958de;
+    color: #fff;
+}
+.contact:hover{
+    color: #1958de;
+}
+.direction_map{
+    color: #fff;
+}
+.map:hover{
+    color: #fff;
+}
+
+.album_list {
+    gap: 16px;
+    margin-bottom: 12px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.album_item {
+    object-fit: cover;
+    width: 158px;
+    height: 88px;
+    border-radius: 8px;
+}
+
+.customMR {
+    margin-right: 6px;
+}
+
+.wrapper_detail_location {
+    background-color: #fff;
+    margin-left: 6px;
+    padding: 16px;
+    border-radius: 12px;
+}
+
+.wrapper_policy_footer {
+    padding-top: 30px;
+    padding-bottom: 14px;
+}
+
+@media (max-width: 576px) {
+    .buy_wrapper {
+        display: none
+    }    
+    .buy_wrapper_mobile {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        z-index: 999;
+        background-color: #fff;
+        width: 100%;
+        border-top-right-radius: 20px;
+        border-top-left-radius: 20px;
+        box-shadow: rgba(0, 39, 102, 0.3) 0px 0px 16px -4px, rgba(0, 39, 102, 0.3) 0px 0px 6px -2px;
+        padding: 20px 16px 16px 16px;
+    }
+
+    .buy_wrapper_mobile .map,
+    .buy_wrapper_mobile .contact {
+        cursor: pointer;
+        font-size: 16px;
+        height: 30px;
+        line-height: 20px;
+        margin-top: 0;
+        width: 49%;
+    }
+
+    .map,
+    .contact {
+        width: 49%;
+    }
+
+    .buy_wrapper_mobile .map>div {
+        max-width: 100%;
+    }
+
+    .wrapper_policy_footer {
+        padding: 0px 16px;
+        padding-top: 16px;
+    }
+
+    .wrapper_subBanner_line img {
+        width: 100% !important;
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+        border-radius: 0px !important;
+    }
+
+    .content_img_subBanner_line {
+        height: 176px;
+        width: 50%;
+        border-radius: 10px;
+    }
+
+
+    .album_list {
+        gap: 8px;
+    }
+
+    .album_item {
+        object-fit: cover;
+        width: 88px;
+        height: 88px;
+        border-radius: 8px;
+    }
+
+    .wrapper_detail_location {
+        margin-left: 0px;
+        border-radius: 0px;
+    }
+
+    .wrapper_global_breadcrumb {
+        padding: 16px;
+        margin-top: 10px;
+    }
+
+    .wrapper_subBanner_img img:first-child {
+        margin-bottom: 0px;
+    }
+
+    .content_img_subBanner {
+        border-radius: 12px;
+        width: 50%;
+        height: 100px;
+        margin-top: 0px;
+        padding: 0px;
+    }
+}
+
+/* Thiết lập padding cho sm */
+@media (min-width: 577px) and (max-width: 767.98px) {
+
+
+    .wrapper_global_breadcrumb {
+        padding: 12px;
+    }
+
+    .wrapper_subBanner_img img:first-child {
+        margin-bottom: 0px;
+    }
+
+    .content_img_subBanner {
+        border-radius: 12px;
+        width: 50%;
+        height: 100px;
+        margin-top: 0px;
+        padding: 0px;
+    }
+}
+
+/* Thiết lập padding cho md */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .wrapper_global {}
+
+    .wrapper_global_breadcrumb {
+        padding: 12px;
+    }
+}
+
+/* Thiết lập padding cho lg */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .wrapper_global {}
+
+    .wrapper_global_breadcrumb {
+        padding: 12px;
+    }
+}
+
+/* Thiết lập padding cho xl */
+@media (min-width: 1200px) {
+    .wrapper_global {
+
+        max-width: 1236px;
+    }
+
+    .wrapper_global_breadcrumb {
+        padding: 12px 0px;
+        max-width: 1236px;
+    }
+}

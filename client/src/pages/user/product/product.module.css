@@ -65,15 +65,15 @@
   padding: 24px 0px;
   /* height: 260px; */
   position: relative;
-  border: 1px solid rgb(193, 200, 209);
-  border-right: 0.5px solid rgb(193, 200, 209);
-  border-left: 0.5px solid rgb(193, 200, 209);
+  border: 1px solid #eaeaea;
+  border-right:0.5px solid #eaeaea;
+  border-left:0.5px solid #eaeaea;
 }
 
 .content_brand:hover {
-  border: 1px solid #1250dc;
-  border-left: 0.5px solid #1250dc;
-  border-right: 0.5px solid #1250dc;
+  /* border: 1px solid #1250dc; */
+  /* border-left: 0.5px solid #1250dc; */
+  /* border-right: 0.5px solid #1250dc; */
   transition: 0.2s linear;
 }
 
@@ -805,10 +805,16 @@
   padding: 2px 8px;
   border-radius: 12px;
 }
+.policy_footer_wrapper{
+  padding-top: 30px;
+}
 
 
 /* Thiết lập padding cho xs */
 @media (max-width: 575.98px) {
+  .policy_footer_wrapper{
+    padding-top: 16px;
+  }
   .wrapper_subBanner_header img:first-child{
     margin-bottom: 0px;
   }
@@ -825,7 +831,6 @@
     margin-left: 0px !important;
     margin-right: 0px !important;
     border-radius: 0px !important;
-
   }
 
   .total_banner_wrapper>div:last-child {
@@ -859,6 +864,7 @@
   .wrapper_breadcrumb {
     margin-top: 10px;
   }
+  
   .album_item {
     width: 393px !important;
     height: 393px !important;

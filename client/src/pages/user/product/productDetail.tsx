@@ -1453,7 +1453,6 @@ function ProductDetail() {
               </div>
 
               {/*mobile buy */}
-
               <Flex
                 className={clsx(style.buy_wrapper_mobile)}
                 justify="space-between"

@@ -18,6 +18,7 @@ import Label from "../../../components/label";
 import Specifications from "../../../components/specifications";
 import { getTagByName } from "../../../slices/tagSlice";
 import { getBrandByName } from "../../../slices/brandSlice";
+import PolicyFooter from "../../../components/policyFooter";
 function Timkiem() {
   const filter = localStorage.getItem("filter")
     ? JSON.parse(localStorage.getItem("filter")!)
@@ -756,9 +757,23 @@ function Timkiem() {
               </Col>
             </Row>
           </Col>
+          <Col span={24}>
+            <div className={clsx(style.policy_footer_wrapper)}>
+              <PolicyFooter />
+            </div>
+          </Col>
         </Row>
       </div>
 
+      {/* <div
+        style={{
+          background: "#eaeffa",
+        }}
+      >
+        <div className={clsx(style.wrapper_global)}>
+          <PolicyFooter />
+        </div>
+      </div> */}
       <Row>
         <Col xs={24} sm={0}>
           <MenuFooter />

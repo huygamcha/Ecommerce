@@ -654,6 +654,13 @@ function HeaderScreen() {
                             </Flex>
                           </div>
                         ))}
+                      <Link
+                        className={clsx(style.hethongcuahang, style.brand_item)}
+                        to={"/hethongcuahang"}
+                        onClick={() => setIsOpen(false)}
+                      >
+                        Hệ thống cửa hàng
+                      </Link>
                     </Col>
                   </Row>
 
@@ -729,7 +736,7 @@ function HeaderScreen() {
         }}
       >
         <Row className={clsx(style.wrapper_try_brand)}>
-          <Col className={clsx(style.menu_sub)}>
+          <Col span={20} className={clsx(style.menu_sub)}>
             {categories &&
               categories.map((category, index) => (
                 <React.Fragment key={index}>
@@ -741,12 +748,12 @@ function HeaderScreen() {
                     }}
                     to={`/timkiem?c=${category.name}`}
                   >
-                    <Space className={clsx(style.brand_item)}>
+                    <div className={clsx(style.brand_item)}>
                       {category.name}
-                      <Flex align="center">
+                      <Flex style={{ marginLeft: "2px" }} align="center">
                         <FiChevronDown />
                       </Flex>
-                    </Space>
+                    </div>
 
                     <Flex vertical className={clsx(style.brand_list)}>
                       {brands.map((brand, index) => {
@@ -774,6 +781,11 @@ function HeaderScreen() {
                   </Link>
                 </React.Fragment>
               ))}
+          </Col>
+          <Col span={4}>
+            <Link className={clsx(style.hethongcuahang)} to={"/hethongcuahang"}>
+              Hệ thống cửa hàng
+            </Link>
           </Col>
         </Row>
       </div>

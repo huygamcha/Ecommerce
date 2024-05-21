@@ -6,6 +6,11 @@ interface LocationsType {
   time: string;
   address: string;
   map: string;
+  name: string;
+  iframe: string;
+  description: string;
+  album: Array<string>;
+  
 }
 
 interface InitialType {
@@ -22,6 +27,10 @@ const initialState: InitialType = {
   success: false,
   error: "",
   location: {
+    album: [],
+    iframe: '',
+    description: '',
+    name: '',
     _id: "",
     time: "",
     address: "",

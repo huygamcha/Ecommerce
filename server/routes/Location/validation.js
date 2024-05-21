@@ -23,6 +23,11 @@ const checkCreateLocation = yup.object({
       message: "Chỉ đường không được bỏ trống",
       test: (value) => value !== undefined && value !== null && value !== "",
     }),
+    iframe: yup.string().test({
+      name: "required",
+      message: "Hình ảnh iframe không được bỏ trống",
+      test: (value) => value !== undefined && value !== null && value !== "",
+    }),
   }),
 });
 
@@ -31,6 +36,8 @@ const checkUpdateLocation = yup.object({
     time: yup.string(),
     address: yup.string(),
     map: yup.string(),
+    iframe: yup.string(),
+    description: yup.string(),
   }),
 });
 

@@ -10,27 +10,18 @@ import {
   Space,
   Modal,
   Select,
-  Image,
-  Spin,
   Flex,
   Row,
   Col,
   DatePicker,
 } from "antd";
 import { useEffect } from "react";
-import {
-  createOrder,
-  getAllOrder,
-  deleteOrder,
-  updateOrder,
-} from "../../../slices/orderSlice";
+import { getAllOrder, updateOrder } from "../../../slices/orderSlice";
 import { useAppSelector, useAppDispatch } from "../../../store";
-import { DeleteOutlined, EditOutlined, FilterFilled } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { getAllCategory } from "../../../slices/categorySlice";
-import { render } from "@testing-library/react";
 import numeral from "numeral";
-import { StringLiteral } from "typescript";
 import axios from "axios";
 import { updateProduct } from "../../../slices/productSlice";
 

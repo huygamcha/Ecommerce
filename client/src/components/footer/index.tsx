@@ -8,6 +8,7 @@ import { IoChevronDown, IoChevronUp } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { FaLocationCrosshairs, FaLocationDot } from "react-icons/fa6";
 import { getAllLocation } from "../../slices/locationSlice";
+import { GrDirections } from "react-icons/gr";
 
 const ListRender = ({
   title,
@@ -226,7 +227,7 @@ const ListRenderMobile = ({
             className={clsx(style.text_heading_mobile)}
           >
             <Flex justify="space-between">
-              <Space>{title} </Space>
+              <Space style={{ textTransform: "uppercase" }}>{title} </Space>
               <Space>{isShow ? <IoChevronDown /> : <IoChevronUp />}</Space>
             </Flex>
           </h4>
@@ -318,7 +319,7 @@ function FooterScreen() {
                     className={clsx(style.location_map)}
                   >
                     <Flex align="center">
-                      <FaLocationCrosshairs
+                      <GrDirections
                         style={{
                           fontSize: "15px",
                           marginRight: "5px",

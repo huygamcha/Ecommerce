@@ -15,6 +15,17 @@ const LocationSchema = new Schema(
     map: {
       type: String,
     },
+    description: {
+      type: String,
+    },
+    album: [
+      {
+        type: String,
+      },
+    ],
+    iframe: {
+      type: String,
+    },
   },
   {
     timestamps: true,

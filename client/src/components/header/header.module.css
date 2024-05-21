@@ -90,11 +90,13 @@
   width: 100%;
   /* box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 12px; */
 }
-.cart_notification_wrapper{
+
+.cart_notification_wrapper {
   position: relative;
   font-size: 22px;
 }
-.cart_notification_item{
+
+.cart_notification_item {
   min-width: 16px;
   min-height: 16px;
   background: #fa8c16;
@@ -116,11 +118,14 @@
   height: 40px;
   overflow-x: auto;
 }
+
 /* Tạo thanh cuộn trong suốt cho Chrome, Safari và Edge */
 .wrapper_try_tag::-webkit-scrollbar {
   display: none;
-  width:0px; /* Điều chỉnh độ rộng của thanh cuộn */
+  width: 0px;
+  /* Điều chỉnh độ rộng của thanh cuộn */
 }
+
 /* thiếu firefox */
 /* Tạo thanh cuộn trong suốt cho Firefox */
 .swiper-wrapper_try_tag {
@@ -422,19 +427,41 @@
   align-items: center !important;
   /* align-items: center !important; */
 }
-.header_name{
- font-size: 16px;
- line-height: 24px;
- max-width: 100%;
- font-size: 14px;
- overflow: hidden;
- display: -webkit-box;
- -webkit-line-clamp: 2;
- -webkit-box-orient: vertical;
+
+.header_name {
+  font-size: 16px;
+  line-height: 24px;
+  max-width: 100%;
+  font-size: 14px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.hethongcuahang {
+  color: #020b27;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  margin-left: 8px;
+}
+.hethongcuahang:hover{
+  color: #020b27;
 }
 
 /* Thiết lập padding cho mobile */
 @media (max-width: 575px) {
+  .hethongcuahang {
+    color: #020b27;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 600;
+    margin-left: 0px;
+    margin-bottom: 12px;
+  }
   .brand_item>a {
     color: #020b27 !important;
     position: relative;
@@ -448,7 +475,7 @@
 
   .brand_list {
     display: flex;
-    position: initial;  
+    position: initial;
   }
 
   .brand_list_item {
@@ -475,6 +502,7 @@
     padding: 8px 16px;
     position: fixed;
   }
+
   /* .wrapper_try_mobile{
     transition: 5s linear;
     display: none;
@@ -513,11 +541,12 @@
   .header_search_result {
     top: 35px;
   }
-  .cart_notification_item{ 
+
+  .cart_notification_item {
     top: -4px;
     right: -4px;
   }
-  
+
   .brand_item {
     padding: 12px 0px;
     display: flex;
@@ -538,6 +567,7 @@
   }
 
   .contactNowMobile_wrapper {
+    border-top: 1px solid rgba(5, 5, 5, 0.06);
     background: #fff;
     position: fixed;
     bottom: 0;
@@ -582,7 +612,7 @@
     line-height: 18px;
     color: #fff;
   }
- 
+
 
   .add_to_cart {
     cursor: pointer;
@@ -615,10 +645,12 @@
     border-radius: 30px;
     font-weight: 500;
   }
-  .header_search_result{
+
+  .header_search_result {
     max-height: 65vh;
   }
-  .header_search_items_img{
+
+  .header_search_items_img {
     width: 85px !important;
     height: 85px !important;
   }
@@ -626,7 +658,8 @@
   .wrapper_try_tag {
     display: none;
   }
-  .header_name{
+
+  .header_name {
     font-size: 12px !important;
     line-height: 20px;
     max-width: 100%;
@@ -636,7 +669,8 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
   }
-  .header_price{
+
+  .header_price {
     font-size: 14px !important;
   }
 
@@ -672,6 +706,7 @@
     padding-top: 20px;
     max-width: 1236px;
   }
+
   .wrapper_try_brand {
     padding: 14px 0px 20px 0px;
     max-width: 1236px;

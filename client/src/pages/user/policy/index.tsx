@@ -6,13 +6,14 @@ import { useEffect } from "react";
 import { getAllPolicy, getPolicyById } from "../../../slices/policySlice";
 import { Link, useParams } from "react-router-dom";
 import { AiOutlineBars } from "react-icons/ai";
+import PolicyFooter from "../../../components/policyFooter";
 
 function PolicyScreen() {
   const { policies, policy } = useAppSelector((state) => state.policies);
   const dispatch = useAppDispatch();
   const params = useParams();
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
 
     if (policies.length === 0) dispatch(getAllPolicy());
     if (params.search !== policy.slug) dispatch(getPolicyById(params.search));
@@ -118,6 +119,7 @@ function PolicyScreen() {
               </Flex>
             </Col>
           </Row>
+          <PolicyFooter />
         </div>
       </div>
     </>

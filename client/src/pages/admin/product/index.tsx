@@ -189,7 +189,6 @@ const Product = (props: Props) => {
     setPicDetail("");
     setPicAdd("");
     setAlbumUpdate([]);
-
     setIsActive(!isActive);
   };
 

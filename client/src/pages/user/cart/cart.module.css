@@ -375,11 +375,16 @@
 .location_map:hover{
   color: #1250dc;
 }
-
+.policy_footer_wrapper{
+  padding-top: 30px;
+}
 
 
 
 @media (max-width: 575.98px) {
+  .policy_footer_wrapper{
+    padding: 16px 0px;
+  }
   .customPL16 {
     padding-left: 16px;
   }
@@ -498,6 +503,7 @@
     background-color: #edf0f3;
     padding: 12px 0px 30px 0px;
     max-width: 1236px;
+    margin: 0 auto;
   }
   .location_map{
     justify-content: end;

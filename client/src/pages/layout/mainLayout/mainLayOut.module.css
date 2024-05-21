@@ -1,3 +1,6 @@
+.wrapper{
+    background-color: #eff0f3;
+}
 /* Thiết lập padding cho xs */
 @media (max-width: 575.98px) {
     .wrapper{

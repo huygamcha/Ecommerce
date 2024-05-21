@@ -7,7 +7,6 @@ import { useAppDispatch, useAppSelector } from "../../store";
 import { useEffect } from "react";
 import { getAllCart } from "../../slices/cartSlice";
 import { PiShoppingCartLight } from "react-icons/pi";
-import { PiPhoneLight } from "react-icons/pi";
 import { PiUserThin } from "react-icons/pi";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
 function MenuFooter() {

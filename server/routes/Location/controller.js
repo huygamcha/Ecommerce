@@ -39,13 +39,16 @@ module.exports = {
 
   createLocation: async (req, res, next) => {
     try {
-      const { time, map, name, address } = req.body;
+      const { time, map, name, address, album, iframe, description } = req.body;
 
       const newLocation = new Location({
         time,
         map,
         address,
         name,
+        album,
+        iframe,
+        description,
       });
 
       const payload = await newLocation.save();
@@ -73,7 +76,7 @@ module.exports = {
         });
       }
 
-      await Location.findByIdAndDelete(id, { isDeleted: true });
+      await Location.findByIdAndDelete(id, { new: true });
 
       return res.send(200, {
         message: "Xoá thông tin cửa hàng thành công",
@@ -88,7 +91,7 @@ module.exports = {
   updateLocation: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const { time, map, address, name } = req.body;
+      const { time, map, address, name, album, iframe, description } = req.body;
       const payload = await Location.findById(id);
 
       if (!payload) {
@@ -104,6 +107,9 @@ module.exports = {
           address: address || this.address,
           name: name || this.name,
           map: map || this.map,
+          album: album || this.album,
+          iframe: iframe || this.iframe,
+          description: description || this.description,
         },
         {
           new: true,

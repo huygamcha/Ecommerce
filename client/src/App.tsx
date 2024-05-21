@@ -46,6 +46,7 @@ import MobileResultSearch from "./pages/user/mobile/resultSearch";
 import LocationAdmin from "./pages/admin/location";
 import PolicyAdmin from "./pages/admin/policy";
 import PolicyScreen from "./pages/user/policy";
+import PageLocation from "./components/pageLocation";
 const { Sider, Content } = Layout;
 numeral.locale("vi");
 
@@ -99,6 +100,10 @@ const router = createBrowserRouter([
       {
         path: "/profile",
         element: <ProfileScreen />,
+      },
+      {
+        path: "/hethongcuahang",
+        element: <PageLocation />,
       },
       {
         path: "/cart",

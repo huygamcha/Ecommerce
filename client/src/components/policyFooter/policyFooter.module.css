@@ -1,0 +1,79 @@
+/* Thiết lập padding cho xs */
+/* @media (max-width: 575.98px) {} */
+
+/* Thiết lập padding cho sm */
+/* @media (min-width: 576px) and (max-width: 767.98px) {} */
+
+/* Thiết lập padding cho md */
+/* @media (min-width: 768px) and (max-width: 991.98px) {} */
+
+/* Thiết lập padding cho lg */
+/* @media (min-width: 992px) and (max-width: 1199.98px) {} */
+
+/* Thiết lập padding cho xl */
+/* @media (min-width: 1200px) {} */
+
+
+.policy_img {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.policy_main_header_home,
+.policy_main_header {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 500;
+}
+
+.policy_main_header_home {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.policy_sub_header_home,
+.policy_sub_header {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+}
+
+.policy_sub_header_home {
+    font-size: 14px;
+    color: #7c8190;
+    font-weight: 600;
+}
+
+/* Thiết lập padding cho xs */
+@media (max-width: 575.98px) {
+    .policy_wrapper_preFooter_list {
+        flex-direction: column;
+    }
+
+    .policy_main_header {
+        text-align: center;
+        font-size: 16px;
+        line-height: 16px;
+        font-weight: 700;
+    }
+    .policy_sub_header{
+        color: #7d838d;
+        font-size: 14px;
+        text-align: center;
+
+    }
+
+}
+
+/* Thiết lập padding cho sm */
+@media (min-width: 576px) and (max-width: 767.98px) {}
+
+/* Thiết lập padding cho md */
+@media (min-width: 768px) and (max-width: 991.98px) {}
+
+/* Thiết lập padding cho lg */
+@media (min-width: 992px) and (max-width: 1199.98px) {}
+
+/* Thiết lập padding cho xl */
+@media (min-width: 1200px) {}

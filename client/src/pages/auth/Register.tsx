@@ -6,18 +6,9 @@ import {
   PhoneOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import {
-  Avatar,
-  Button,
-  ConfigProvider,
-  Form,
-  Input,
-  Space,
-  message,
-} from "antd";
+import { Button, ConfigProvider, Form, Input, message } from "antd";
 import { useAppDispatch, useAppSelector } from "../../store";
-import { loginUser } from "../../slices/authSlice";
-import { Link, useNavigate, Navigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { DatePicker } from "antd";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
