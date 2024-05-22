@@ -116,9 +116,9 @@ function ProductScreen() {
             <Col xs={24} sm={16}>
               <Swiper
                 loop={banners.length > 1 ? true : false}
-                // autoplay={{
-                //   delay: 2000,
-                // }}
+                autoplay={{
+                  delay: 2000,
+                }}
                 modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
                 breakpoints={{
                   1200: {
@@ -827,7 +827,7 @@ function ProductScreen() {
                   },
                 }}
                 style={{
-                  borderRadius: "10px",
+                  borderRadius: "12",
                   marginBottom: "30px",
                 }}
               >
@@ -978,7 +978,7 @@ function ProductScreen() {
                   },
                 }}
                 style={{
-                  borderRadius: "10px",
+                  borderRadius: "12px",
                   marginBottom: "30px",
                 }}
               >
@@ -1222,7 +1222,7 @@ function ProductScreen() {
                   },
                 }}
                 style={{
-                  borderRadius: "10px",
+                  borderRadius: "12px",
                   marginBottom: "30px",
                 }}
               >

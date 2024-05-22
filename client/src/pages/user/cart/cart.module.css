@@ -1,21 +1,21 @@
 .wrapper {
   background-color: #edf0f3;
-  border-radius: 10px;
+  border-radius: 12px;
 }
 
 .wrapper_content {
   background-color: #fff;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 8px 16px;
 }
 
 .wrapper_right {
-  margin-left: 5px;
+  margin-left: 12px;
 }
 
-.wrapper_left {
+/* .wrapper_left {
   margin-right: 5px;
-}
+} */
 
 
 .wrapper_detail {
@@ -85,7 +85,7 @@
 /* quantity */
 .quantity_detail_wrapper {
   border: 1px solid #e4e8ed;
-  border-radius: 20px;
+  border-radius: 12px;
   display: flex;
   justify-content: start;
 }
@@ -142,13 +142,14 @@
 .product_unit:hover .product_unit_child {
   display: flex;
   justify-content: space-between;
-  width: 200%;
+  /* width: 200%; */
+  gap: 8px;
   position: absolute;
   bottom: -55px;
   right: 0;
   background-color: #fff;
   padding: 16px 16px;
-  border-radius: 10px;
+  border-radius: 12px;
   box-shadow: 0 9px 28px 8px rgba(0, 0, 0, 0.05), 0 6px 16px rgba(0, 0, 0, 0.08),
     0 3px 6px -4px rgba(0, 0, 0, 0.12);
     z-index: 99;
@@ -218,7 +219,7 @@
   background-color: #fff;
   cursor: pointer;
   padding: 4px 34px;
-  border-radius: 10px;
+  border-radius: 12px;
   margin-left: 2px;
 }
 
@@ -269,7 +270,7 @@
 /* promotion */
 .promotion_wrapper {
   background-color: #eef0f3;
-  border-radius: 10px;
+  border-radius: 12px;
 
   /* border: 1px solid rgb(228, 232, 237) !important; */
 
@@ -308,7 +309,7 @@
   background-color: #eef0f3;
   padding: 6px;
   padding-bottom: 0px;
-  border-radius: 6px;
+  border-radius: 12px;
   margin-right: 6px;
   border: 1px solid #e4e8ee;
 }
@@ -348,7 +349,7 @@
   display: block;
   border: 1px solid #c1c8d1;
   padding: 16px;
-  border-radius: 20px;
+  border-radius: 12px;
   margin-bottom: 20px;
   max-height: 400px;
   overflow-y: auto;
@@ -382,6 +383,9 @@
 
 
 @media (max-width: 575.98px) {
+  .wrapper_content{
+    border-radius: 0px;
+  }
   .policy_footer_wrapper{
     padding: 16px 0px;
   }
@@ -421,10 +425,10 @@
 
   .wrapper_content_mobile_preBuy {
     background-color: #fff;
-    border-radius: 10px;
+    border-radius: 0px;
     padding: 8px 16px;
-    border-top-right-radius: 20px;
-    border-top-left-radius: 20px;
+    border-top-right-radius: 12px;
+    border-top-left-radius: 12px;
     box-shadow: rgba(0, 39, 102, 0.3) 0px 0px 16px -4px, rgba(0, 39, 102, 0.3) 0px 0px 6px -2px;
   }
 

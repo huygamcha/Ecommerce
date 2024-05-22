@@ -407,14 +407,17 @@ function CartScreen() {
                                               style.product_unit_child
                                             )}
                                           >
-                                            <Space>
+                                            <Flex
+                                              style={{ gap: "4px" }}
+                                              align="center"
+                                            >
                                               <CheckCircleOutlined
                                                 className={clsx(
                                                   style.product_unit_img
                                                 )}
                                               />
-                                              {cart.unit}
-                                            </Space>
+                                              <div>{cart.unit}</div>
+                                            </Flex>
                                             <Space>
                                               {numeral(cart.price).format(
                                                 "0,0$"
@@ -430,6 +433,7 @@ function CartScreen() {
                                         sm={2}
                                       >
                                         <Popconfirm
+                                          placement="leftTop"
                                           title="Xoá sản phẩm"
                                           description="Bạn có chắc xoá sản phẩm này không?"
                                           onConfirm={() => {

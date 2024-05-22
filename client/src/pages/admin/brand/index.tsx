@@ -138,7 +138,11 @@ const Brand = (props: Props) => {
     if (pics === undefined) {
       return;
     }
-    if (pics.type === "image/jpeg" || pics.type === "image/png") {
+    if (
+      pics.type === "image/jpeg" ||
+      pics.type === "image/png" ||
+      pics.type === "image/webp"
+    ) {
       setIsLoading(false);
       const data = new FormData();
       data.append("file", pics);

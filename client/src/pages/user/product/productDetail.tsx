@@ -297,7 +297,7 @@ function ProductDetail() {
                                   justifyContent: "center",
                                   padding: "20px 0px",
                                   border: "1px solid #f3f2f3",
-                                  borderRadius: "16px",
+                                  borderRadius: "12px",
                                 }}
                               >
                                 <Image

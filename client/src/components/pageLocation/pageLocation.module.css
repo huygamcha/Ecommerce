@@ -92,6 +92,9 @@
 .map:hover{
     color: #fff;
 }
+.map, .contact {
+    display: none;
+}
 
 .album_list {
     gap: 16px;
@@ -124,6 +127,9 @@
 }
 
 @media (max-width: 576px) {
+    .map, .contact {
+        display: block;
+    }
     .buy_wrapper {
         display: none
     }    

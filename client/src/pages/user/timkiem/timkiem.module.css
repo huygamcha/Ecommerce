@@ -44,7 +44,7 @@
 
 .navbar_wrapper{
   background-color: #fff;
-  border-radius: 10px;
+  border-radius: 12px;
   /* max-height: 600px; */
   height: auto;
   overflow-y: auto;
@@ -81,7 +81,7 @@
 
 .content {
   background: #fff;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 14px 0px;
   height: 330px;
   position: relative;

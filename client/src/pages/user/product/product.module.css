@@ -46,7 +46,7 @@
 
 .content {
   background: #fff;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 14px 0px;
   margin-top: 10px;
   height: 330px;
@@ -56,7 +56,7 @@
 
 .content_category {
   border: 1px solid rgb(193, 200, 209);
-  border-radius: 10px;
+  border-radius: 12px;
 }
 
 .content_brand {
@@ -124,7 +124,7 @@
 .content_img_subBanner_line {
   height: 150px;
   width: 50%;
-  border-radius: 10px;
+  border-radius: 12px;
 }
 
 .header_text {
@@ -270,7 +270,7 @@
 
 .quantity_detail_wrapper {
   border: 1px solid #c1c8d1;
-  border-radius: 20px;
+  border-radius: 12px;
   display: flex;
   justify-content: start;
 }
@@ -330,7 +330,7 @@
   display: flex;
   width: 100%;
   border: 1px solid rgb(228, 232, 237);
-  border-radius: 8px;
+  border-radius: 12px;
   margin-bottom: 35px;
 }
 
@@ -467,7 +467,7 @@
 .product_detail>p>img {
   width: 100%;
   height: 100%;
-  border-radius: 10px;
+  border-radius: 12px;
 }
 
 .product_detail>p:has(img) {
@@ -531,7 +531,7 @@
 .filter_select__age_wrapper,
 .filter_select__tag_wrapper {
   background-color: #fff;
-  border-radius: 10px;
+  border-radius: 12px;
   margin-bottom: 10px;
   padding: 6px 0px;
   overflow-x: auto;
@@ -572,7 +572,7 @@
 
 .filter_select {
   min-width: 64px;
-  border-radius: 20px !important;
+  border-radius: 12px !important;
   position: relative;
   padding: 13px 9px !important;
   margin: 5px 0px;
@@ -684,10 +684,10 @@
 
 .album_item {
   padding: 12px;
-  border: 1px solid rgb(193, 200, 209);
+  border: 1px solid rgb(243, 242, 243);
   height: 110px !important;
   width: 120px !important;
-  border-radius: 10px !important;
+  border-radius: 12px !important;
 }
 
 .buy_wrapper_mobile {
@@ -716,13 +716,13 @@
 }
 
 .img_product {
-  border-radius: 10px;
+  border-radius: 12px;
   width: 372px !important;
   height: 372px !important;
 }
 
 .img_product+div {
-  border-radius: 10px;
+  border-radius: 12px;
 }
 .img_product+div:hover {
   opacity: 0 !important;
@@ -746,7 +746,7 @@
   display: block;
   border: 1px solid #c1c8d1;
   padding: 16px;
-  border-radius: 20px;
+  border-radius: 12px;
   max-height: 400px;
   overflow-y: auto;
 }
@@ -812,6 +812,12 @@
 
 /* Thiết lập padding cho xs */
 @media (max-width: 575.98px) {
+  .wrapper_subBanner_line{
+    padding: 0px 16px;
+  }
+  .album_item{
+    margin-top: 16px;
+  }
   .policy_footer_wrapper{
     padding-top: 16px;
   }
@@ -840,7 +846,7 @@
   .category_wrapper {
     padding: 0px 16px;
     margin-top: 0px;
-    margin-bottom: 30px;
+    padding-bottom: 30px;
   }
 
   .content_img_subBanner,
@@ -891,8 +897,8 @@
     z-index: 999;
     background-color: #fff;
     width: 100%;
-    border-top-right-radius: 20px;
-    border-top-left-radius: 20px;
+    border-top-right-radius: 12px;
+    border-top-left-radius: 12px;
     box-shadow: rgba(0, 39, 102, 0.3) 0px 0px 16px -4px, rgba(0, 39, 102, 0.3) 0px 0px 6px -2px;
     padding: 20px 16px 16px 16px;
   }
@@ -914,7 +920,7 @@
   .album_wrapper {
     width: 100%;
     margin: 20px 0px;
-    border-radius: 10px;
+    border-radius: 12px;
   }
 
   .customPT20 {
@@ -1056,7 +1062,7 @@
   }
 
   .content_brand {
-    border-radius: 10px;
+    border-radius: 12px;
   }
 
   .wrapper_subBanner {
@@ -1163,12 +1169,11 @@
   .product_wrapper {
     background-color: #fff;
     /* background-color: red; */
-    border-radius: 20px;
+    border-radius: 12px;
   }
 
   .product_wrapper.showPc {
-    border-radius: 20px 0px;
-
+    border-radius: 12px 0px;
   }
 
   /* list tìm kiếm liên quan */
@@ -1183,7 +1188,7 @@
 
   /* banner */
   .background_banner {
-    border-radius: 10px;
+    border-radius: 12px;
     background-color: transparent;
   }
 }

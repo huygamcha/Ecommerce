@@ -24,6 +24,7 @@ import {
 } from "@ant-design/icons";
 import { LiaProductHunt } from "react-icons/lia";
 import { Layout, Menu, theme, message } from "antd";
+import { IoHomeOutline } from "react-icons/io5";
 import ProductScreen from "./pages/user/product";
 import CartScreen from "./pages/user/cart";
 import MainLayOut from "./pages/layout/mainLayout";
@@ -299,6 +300,11 @@ function AdminRouter() {
           mode="inline"
           defaultSelectedKeys={["1"]}
           items={[
+            {
+              key: "/",
+              icon: <IoHomeOutline />,
+              label: "Trang chủ",
+            },
             {
               key: "/admin/products",
               icon: <ProductOutlined />,

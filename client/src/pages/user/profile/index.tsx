@@ -111,7 +111,11 @@ function ProfileScreen() {
     if (pics === undefined) {
       return;
     }
-    if (pics.type === "image/jpeg" || pics.type === "image/png") {
+    if (
+      pics.type === "image/jpeg" ||
+      pics.type === "image/png" ||
+      pics.type === "image/webp"
+    ) {
       const data = new FormData();
       data.append("file", pics);
       data.append("upload_preset", "pbl3_chatbot");
