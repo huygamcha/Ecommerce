@@ -111,6 +111,7 @@ const checkCreateProduct = yup.object({
     description: yup.string(),
     slug: yup.string(),
     age: yup.number(),
+    fakeNumber: yup.string(),
   }),
 });
 
@@ -189,6 +190,7 @@ const checkUpdateProduct = yup.object({
     description: yup.string(),
     slug: yup.string(),
     age: yup.number(),
+    fakeNumber: yup.string(),
   }),
 });
 

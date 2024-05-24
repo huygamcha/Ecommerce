@@ -85,7 +85,7 @@
 /* quantity */
 .quantity_detail_wrapper {
   border: 1px solid #e4e8ed;
-  border-radius: 12px;
+  border-radius: 50px;
   display: flex;
   justify-content: start;
 }

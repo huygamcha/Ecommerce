@@ -106,6 +106,9 @@ const productSchema = new Schema(
     quantity: {
       type: Number,
     },
+    fakeNumber: {
+      type: String,
+    },
   },
   {
     timestamps: true,

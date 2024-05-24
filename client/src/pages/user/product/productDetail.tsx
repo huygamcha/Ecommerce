@@ -47,6 +47,7 @@ import ButtonNavigation from "../../../components/buttonNavigation";
 import Label from "../../../components/label";
 import Specifications from "../../../components/specifications";
 import { FaCheckCircle } from "react-icons/fa";
+import FakeNumber from "../../../components/fakeNumber";
 // error searchById cần fix cái này
 function ProductDetail() {
   const param = useParams();
@@ -641,7 +642,7 @@ function ProductDetail() {
                               Sản phẩm đang được chú ý,{" "}
                               <span
                                 className={clsx(style.attractive_content)}
-                              >{`có ${addedToCart} người đang thêm vào giỏ hàng & ${viewing} đang xem`}</span>
+                              >{`có ${addedToCart} người đang thêm vào giỏ hàng & ${viewing} người đang xem`}</span>
                             </span>
                           </Flex>
 
@@ -1163,6 +1164,13 @@ function ProductDetail() {
                                               >
                                                 {product.name}
                                               </Space>
+
+                                              {product.fakeNumber && (
+                                                <FakeNumber
+                                                  title={product.fakeNumber}
+                                                />
+                                              )}
+
                                               <Space
                                                 className={clsx(
                                                   style.header_discount
@@ -1258,7 +1266,7 @@ function ProductDetail() {
                   </div>
                 )}
 
-                {histories && (
+                {histories && histories.length ? (
                   <div
                     style={{
                       background: "#eaeffa",
@@ -1370,6 +1378,11 @@ function ProductDetail() {
                                               >
                                                 {product.name}
                                               </Space>
+                                              {product.fakeNumber && (
+                                                <FakeNumber
+                                                  title={product.fakeNumber}
+                                                />
+                                              )}
                                               <Space
                                                 className={clsx(
                                                   style.header_discount
@@ -1449,6 +1462,8 @@ function ProductDetail() {
                       </Row>
                     </div>
                   </div>
+                ) : (
+                  <></>
                 )}
               </div>
 

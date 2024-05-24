@@ -310,6 +310,7 @@ module.exports = {
         specifications,
         unit,
         album,
+        fakeNumber,
       } = req.body;
 
       const errors = {};
@@ -373,6 +374,7 @@ module.exports = {
         unit,
         detail,
         album,
+        fakeNumber,
       });
 
       const payload = await newProduct.save();
@@ -437,6 +439,7 @@ module.exports = {
         sold,
         autoQuantity,
         quantity,
+        fakeNumber,
       } = req.body;
 
       if (!autoQuantity) {
@@ -527,6 +530,8 @@ module.exports = {
           specifications: specifications || this.specifications,
           unit: unit || this.unit,
           album: album || this.album,
+          discount: discount || this.discount,
+          fakeNumber: fakeNumber || this.fakeNumber,
         },
         {
           new: true,

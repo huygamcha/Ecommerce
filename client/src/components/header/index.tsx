@@ -11,7 +11,7 @@ import {
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { FaCartShopping, FaBars } from "react-icons/fa6";
 import { HiOutlineXMark } from "react-icons/hi2";
-
+import { RiHome5Fill } from "react-icons/ri";
 import { TiDelete } from "react-icons/ti";
 import { FaPhoneAlt } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "../../store";
@@ -655,10 +655,12 @@ function HeaderScreen() {
                           </div>
                         ))}
                       <Link
+                        style={{ display: "flex", alignItems: "center" }}
                         className={clsx(style.hethongcuahang, style.brand_item)}
-                        to={"/hethongcuahang"}
                         onClick={() => setIsOpen(false)}
+                        to={"/hethongcuahang"}
                       >
+                        <RiHome5Fill style={{ marginRight: "4px" }} />
                         Hệ thống cửa hàng
                       </Link>
                     </Col>
@@ -783,7 +785,12 @@ function HeaderScreen() {
               ))}
           </Col>
           <Col span={4}>
-            <Link className={clsx(style.hethongcuahang)} to={"/hethongcuahang"}>
+            <Link
+              style={{ display: "flex", alignItems: "center" }}
+              className={clsx(style.hethongcuahang)}
+              to={"/hethongcuahang"}
+            >
+              <RiHome5Fill style={{ marginRight: "4px" }} />
               Hệ thống cửa hàng
             </Link>
           </Col>

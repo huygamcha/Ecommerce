@@ -12,7 +12,7 @@
 /* label _ tag */
 .label_wrapper {
   position: absolute;
-  bottom: 144px;
+  bottom: 178px;
   left: 0px;
 }
 
@@ -49,7 +49,7 @@
   border-radius: 12px;
   padding: 14px 0px;
   margin-top: 10px;
-  height: 330px;
+  height: 362px;
   position: relative;
   border: 1px solid #fff;
 }
@@ -270,7 +270,7 @@
 
 .quantity_detail_wrapper {
   border: 1px solid #c1c8d1;
-  border-radius: 12px;
+  border-radius: 50px;
   display: flex;
   justify-content: start;
 }
@@ -438,7 +438,7 @@
   justify-content: center;
   width: 100%;
   margin-bottom: 10px;
-  background: linear-gradient(rgba(245, 245, 245, 0) 0%, rgba(245, 245, 245, 0.7) 21.88%, rgba(245, 245, 245, 0.95) 45.31%, rgb(245, 245, 245) 67.71%, rgb(245, 245, 245) 100%);
+  background: linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.7) 21.88%, rgba(255, 255, 255, 0.95) 45.31%, rgb(255, 255, 255) 67.71%, rgb(255, 255, 255) 100%);
 }
 
 .product_detail_show.show {
@@ -812,8 +812,15 @@
 
 /* Thiết lập padding cho xs */
 @media (max-width: 575.98px) {
+  .album_item+div:hover {
+    opacity: 0 !important;
+  }
   .wrapper_subBanner_line{
     padding: 0px 16px;
+  }
+  .wrapper_subBanner_line img:last-child, 
+  .wrapper_subBanner_line img:first-child  {
+    border-radius: 12px;
   }
   .album_item{
     margin-top: 16px;

@@ -143,6 +143,7 @@ const Product = (props: Props) => {
     unit: string;
     album: Array<string>;
     age: number;
+    fakeNumber: string;
   };
 
   const [createForm] = Form.useForm<FieldType>();
@@ -619,6 +620,10 @@ const Product = (props: Props) => {
               <Input.TextArea placeholder="Hộp" rows={1} />
             </Form.Item>
 
+            <Form.Item<FieldType> label="Số lượng bán ảo" name="fakeNumber">
+              <Input.TextArea placeholder="35k+" rows={1} />
+            </Form.Item>
+
             <Form.Item<FieldType> label="Quy cách" name="specifications">
               <Input.TextArea placeholder="1 hộp 500ml bột" rows={1} />
             </Form.Item>
@@ -918,6 +923,10 @@ const Product = (props: Props) => {
 
               <Form.Item<FieldType> label="Nước sản xuất" name="country">
                 <Input.TextArea placeholder="Việt Nam" rows={1} />
+              </Form.Item>
+
+              <Form.Item<FieldType> label="Số lượng bán ảo" name="fakeNumber">
+                <Input.TextArea placeholder="35k+" rows={1} />
               </Form.Item>
 
               <Form.Item<FieldType> label="Thành phần" name="ingredient">

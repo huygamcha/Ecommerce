@@ -7,6 +7,7 @@ interface ProductsType {
   name: string;
   description: string;
   categoryId: string;
+  brandId: string;
   price: number;
   discount: number;
   stock: number;
@@ -27,6 +28,7 @@ interface ProductsType {
   tagList: Array<string>;
   quantity: number;
   sold: number;
+  fakeNumber: string;
 }
 
 interface ProductSearchType {
@@ -59,6 +61,7 @@ const initialState: InitialType = {
   success: false,
   error: { message: "", errors: { name: "" } },
   product: {
+  fakeNumber: "",
     sold: 0,
     quantity: 0,
     autoQuantity: 2,
@@ -66,6 +69,7 @@ const initialState: InitialType = {
     album: [''],
     brand: {},
     category: {},
+    brandId: '',
     slug: "",
     _id: "",
     name: "",

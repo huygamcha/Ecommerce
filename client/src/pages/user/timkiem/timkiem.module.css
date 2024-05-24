@@ -4,7 +4,7 @@
 }
 .label_wrapper {
   position: absolute;
-  bottom: 144px;
+  bottom: 178px;
   left: 0px;
 }
 .label_wrapper > div {
@@ -83,7 +83,7 @@
   background: #fff;
   border-radius: 12px;
   padding: 14px 0px;
-  height: 330px;
+  height: 362px;
   position: relative;
   border: 1px solid #fff;
 }
@@ -146,7 +146,7 @@
 .filter_select {
 
   position: relative;
-  padding: 25px 9px !important;
+  padding: 18px 9px !important;
   margin  : 5px 0px;
   display: flex ;
   justify-content: center;

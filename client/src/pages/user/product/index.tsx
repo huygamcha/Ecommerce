@@ -25,7 +25,6 @@ import {
 } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
-import { Virtual } from "swiper/modules";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
@@ -37,10 +36,10 @@ import { Button } from "antd/es/radio";
 import { getAllBanner } from "../../../slices/bannerSlice";
 import MenuFooter from "../../../components/MenuFooter";
 import Label from "../../../components/label";
-import { FaDivide } from "react-icons/fa6";
 import { PiCaretDoubleDownBold, PiCaretDoubleUpBold } from "react-icons/pi";
 import Specifications from "../../../components/specifications";
 import PolicyFooter from "../../../components/policyFooter";
+import FakeNumber from "../../../components/fakeNumber";
 
 function ProductScreen() {
   const { products, error } = useAppSelector((state) => state.products);
@@ -57,6 +56,12 @@ function ProductScreen() {
   const [searchTag, setSearchTag] = useState<string>(
     "65d8b631214ed285ba4bc016"
   );
+  const [searchBimTa, setSearchBimTa] = useState<string>(
+    "663edce82873fdc0f099a6c0"
+  );
+  const [searchSuaBot, setSeachSuaBot] = useState<string>(
+    "65df3f646fc28fc99f7b4dad"
+  );
 
   // lưu vào lịch sử
   const histories = localStorage.getItem("histories")
@@ -64,7 +69,7 @@ function ProductScreen() {
     : [];
 
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    // window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
 
     if (products.length === 0) dispatch(getAllProduct({}));
     if (categories.length === 0) dispatch(getAllCategory());
@@ -426,6 +431,10 @@ function ProductScreen() {
                                     {product.name}
                                   </Space>
 
+                                  {product.fakeNumber && (
+                                    <FakeNumber title={product.fakeNumber} />
+                                  )}
+
                                   <Space
                                     className={clsx(style.header_discount)}
                                   >
@@ -520,6 +529,9 @@ function ProductScreen() {
                                     <Space className={clsx(style.header_text)}>
                                       {product.name}
                                     </Space>
+                                    {product.fakeNumber && (
+                                      <FakeNumber title={product.fakeNumber} />
+                                    )}
                                     <Space
                                       className={clsx(style.header_discount)}
                                     >
@@ -796,7 +808,10 @@ function ProductScreen() {
             "linear-gradient(0deg, rgba(184,208,255,1) 3%, rgba(236,243,255,1) 71%, rgba(255,255,255,1) 90%)",
         }}
       >
-        <div className={clsx(style.wrapper_global)}>
+        <div
+          style={{ paddingBottom: "12px" }}
+          className={clsx(style.wrapper_global)}
+        >
           {/* Bỉm tã */}
           <Row>
             <Col span={24}>
@@ -808,6 +823,52 @@ function ProductScreen() {
                 />
                 Bỉm tã
               </Flex>
+            </Col>
+            <Col span={24}>
+              <div
+                className={clsx(
+                  style.filter_select_wrapper_recommend,
+                  style.filter_select__tag_wrapper
+                )}
+              >
+                {brands &&
+                  brands.map((brand, index) => {
+                    if (brand.categoryId === "65c1a957dcdd1e4eceaa3cf3") {
+                      return (
+                        <div
+                          key={index}
+                          className={clsx(style.filter_select_tag_item)}
+                        >
+                          <Button
+                            style={{
+                              borderColor:
+                                searchBimTa === brand._id
+                                  ? " #1250dc"
+                                  : "#a9b2be",
+                              color:
+                                searchBimTa === brand._id
+                                  ? "#1250dc"
+                                  : "#4a4f63",
+                            }}
+                            onClick={() => setSearchBimTa(brand._id)}
+                            className={clsx(style.filter_select_tag)}
+                          >
+                            {brand.name}
+                            <Space
+                              className={clsx(
+                                searchBimTa === brand._id
+                                  ? style.filter_label_tag
+                                  : { display: "none" }
+                              )}
+                            >
+                              <div style={{ display: "none" }}>1</div>
+                            </Space>
+                          </Button>
+                        </div>
+                      );
+                    }
+                  })}
+              </div>
             </Col>
 
             <Col span={24}>
@@ -840,7 +901,7 @@ function ProductScreen() {
 
                 {products ? (
                   products.map((product) => {
-                    if (product.categoryId === "65c1a957dcdd1e4eceaa3cf3") {
+                    if (product.brandId === searchBimTa) {
                       return (
                         <>
                           <SwiperSlide>
@@ -888,6 +949,10 @@ function ProductScreen() {
                                   <Space className={clsx(style.header_text)}>
                                     {product.name}
                                   </Space>
+
+                                  {product.fakeNumber && (
+                                    <FakeNumber title={product.fakeNumber} />
+                                  )}
                                   <Space
                                     className={clsx(style.header_discount)}
                                   >
@@ -960,6 +1025,52 @@ function ProductScreen() {
                 Sữa bột
               </Flex>
             </Col>
+            <Col span={24}>
+              <div
+                className={clsx(
+                  style.filter_select_wrapper_recommend,
+                  style.filter_select__tag_wrapper
+                )}
+              >
+                {brands &&
+                  brands.map((brand, index) => {
+                    if (brand.categoryId === "65c1b7ec667c58db30291bee") {
+                      return (
+                        <div
+                          key={index}
+                          className={clsx(style.filter_select_tag_item)}
+                        >
+                          <Button
+                            style={{
+                              borderColor:
+                                searchSuaBot === brand._id
+                                  ? " #1250dc"
+                                  : "#a9b2be",
+                              color:
+                                searchSuaBot === brand._id
+                                  ? "#1250dc"
+                                  : "#4a4f63",
+                            }}
+                            onClick={() => setSeachSuaBot(brand._id)}
+                            className={clsx(style.filter_select_tag)}
+                          >
+                            {brand.name}
+                            <Space
+                              className={clsx(
+                                searchSuaBot === brand._id
+                                  ? style.filter_label_tag
+                                  : { display: "none" }
+                              )}
+                            >
+                              <div style={{ display: "none" }}>1</div>
+                            </Space>
+                          </Button>
+                        </div>
+                      );
+                    }
+                  })}
+              </div>
+            </Col>
 
             <Col span={24}>
               <Swiper
@@ -991,7 +1102,7 @@ function ProductScreen() {
 
                 {products ? (
                   products.map((product) => {
-                    if (product.categoryId === "65c1b7ec667c58db30291bee") {
+                    if (product.brandId === searchSuaBot) {
                       return (
                         <>
                           <SwiperSlide>
@@ -1039,6 +1150,10 @@ function ProductScreen() {
                                   <Space className={clsx(style.header_text)}>
                                     {product.name}
                                   </Space>
+
+                                  {product.fakeNumber && (
+                                    <FakeNumber title={product.fakeNumber} />
+                                  )}
                                   <Space
                                     className={clsx(style.header_discount)}
                                   >
@@ -1294,6 +1409,9 @@ function ProductScreen() {
                                   <Space className={clsx(style.header_text)}>
                                     {product.name}
                                   </Space>
+                                  {product.fakeNumber && (
+                                    <FakeNumber title={product.fakeNumber} />
+                                  )}
                                   <Space
                                     className={clsx(style.header_discount)}
                                   >
@@ -1456,6 +1574,9 @@ function ProductScreen() {
                                   <Space className={clsx(style.header_text)}>
                                     {product.name}
                                   </Space>
+                                  {product.fakeNumber && (
+                                    <FakeNumber title={product.fakeNumber} />
+                                  )}
                                   <Space
                                     className={clsx(style.header_discount)}
                                   >
@@ -1527,6 +1648,9 @@ function ProductScreen() {
                                   <Space className={clsx(style.header_text)}>
                                     {product.name}
                                   </Space>
+                                  {product.fakeNumber && (
+                                    <FakeNumber title={product.fakeNumber} />
+                                  )}
                                   <Space
                                     className={clsx(style.header_discount)}
                                   >
@@ -1564,13 +1688,16 @@ function ProductScreen() {
       </div>
 
       {/* sản phẩm vừa xem  */}
-      {histories && (
+      {histories && histories.length ? (
         <div
           style={{
             background: "#eaeffa",
           }}
         >
-          <div className={clsx(style.wrapper_global)}>
+          <div
+            style={{ paddingTop: "10px" }}
+            className={clsx(style.wrapper_global)}
+          >
             <Row>
               <Col span={24}>
                 <Flex
@@ -1652,11 +1779,16 @@ function ProductScreen() {
                                   <Flex
                                     vertical
                                     justify="space-between"
-                                    style={{ padding: " 50px 20px 20px 20px" }}
+                                    style={{
+                                      padding: " 50px 20px 20px 20px",
+                                    }}
                                   >
                                     <Space className={clsx(style.header_text)}>
                                       {product.name}
                                     </Space>
+                                    {product.fakeNumber && (
+                                      <FakeNumber title={product.fakeNumber} />
+                                    )}
                                     <Space
                                       className={clsx(style.header_discount)}
                                     >
@@ -1702,6 +1834,9 @@ function ProductScreen() {
                                     ) : (
                                       <></>
                                     )}
+                                    <Specifications
+                                      title={product.specifications}
+                                    />
                                   </Flex>
                                 </Flex>
                               </Link>
@@ -1729,6 +1864,8 @@ function ProductScreen() {
             </div>
           </div>
         </div>
+      ) : (
+        <></>
       )}
 
       <Row>

@@ -154,6 +154,7 @@
         line-height: 20px;
         margin-top: 0;
         width: 49%;
+        display: flex;
     }
 
     .map,
@@ -175,6 +176,8 @@
         margin-left: 0px !important;
         margin-right: 0px !important;
         border-radius: 0px !important;
+        /* padding: 0px 16px; */
+        background-color: #fff;
     }
 
     .content_img_subBanner_line {
