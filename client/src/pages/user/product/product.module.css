@@ -12,7 +12,7 @@
 /* label _ tag */
 .label_wrapper {
   position: absolute;
-  bottom: 178px;
+  bottom: 150px;
   left: 0px;
 }
 
@@ -49,7 +49,7 @@
   border-radius: 12px;
   padding: 14px 0px;
   margin-top: 10px;
-  height: 362px;
+  height: 332px;
   position: relative;
   border: 1px solid #fff;
 }
@@ -89,6 +89,7 @@
   top: 7px;
   left: -0.5px;
   width: 50px;
+  z-index: 9;
 }
 
 .content_discount>div {
@@ -674,7 +675,6 @@
 
 .customPT20 {
   padding: 20px;
-  background-color: #f7f8fc;
 }
 
 .album_wrapper {
@@ -808,12 +808,33 @@
 .policy_footer_wrapper{
   padding-top: 30px;
 }
-
+.product_name_wrapper{
+  position: relative;
+}
+.product_name_fakeNumber{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+.product_name_fakeNumber::after {
+  content: '';
+  display: block;
+  position: absolute;
+  bottom: 0;
+  right: -1px;
+  height: 100%;
+  width: 2px;
+  background-color: #266ce0;
+}
+.album_item+div:hover {
+  opacity: 0 !important;
+}
 
 /* Thiết lập padding cho xs */
 @media (max-width: 575.98px) {
-  .album_item+div:hover {
-    opacity: 0 !important;
+
+  .wrapper_subBanner_line > div {
+    border-radius: 12px;
   }
   .wrapper_subBanner_line{
     padding: 0px 16px;
@@ -862,7 +883,7 @@
     width: 100%;
     padding: 0px 16px;
     margin-top: 20px;
-    border-radius: 6%;
+    border-radius: 8%;
   }
   .content_img_subBanner{
     border-radius: 12px;

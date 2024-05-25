@@ -19,6 +19,7 @@ import Specifications from "../../../components/specifications";
 import { getTagByName } from "../../../slices/tagSlice";
 import { getBrandByName } from "../../../slices/brandSlice";
 import PolicyFooter from "../../../components/policyFooter";
+import FakeNumber from "../../../components/fakeNumber";
 function Timkiem() {
   const filter = localStorage.getItem("filter")
     ? JSON.parse(localStorage.getItem("filter")!)
@@ -705,13 +706,28 @@ function Timkiem() {
                                   title={product.category.name}
                                 />
                               </Space>
-                              <Flex justify="center">
+
+                              {/* pic and fakeNumber */}
+                              <Flex
+                                className={clsx(style.product_name_wrapper)}
+                                justify="center"
+                              >
                                 <img
                                   src={product.pic}
                                   className={clsx(style.content_img)}
                                   alt=""
                                 />
+                                <Space
+                                  className={clsx(
+                                    style.product_name_fakeNumber
+                                  )}
+                                >
+                                  {product.fakeNumber && (
+                                    <FakeNumber title={product.fakeNumber} />
+                                  )}
+                                </Space>
                               </Flex>
+
                               <Flex
                                 vertical
                                 justify="space-between"

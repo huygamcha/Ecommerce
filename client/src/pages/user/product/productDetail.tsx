@@ -565,7 +565,7 @@ function ProductDetail() {
                               <Space
                                 onClick={() => setQuantity(quantity - 1)}
                                 className={clsx(
-                                  quantity === 0
+                                  quantity === 1
                                     ? style.quantity_icon_detail_disabled
                                     : style.quantity_icon_detail
                                 )}
@@ -596,13 +596,23 @@ function ProductDetail() {
                           >
                             <Space
                               onClick={handleAddToCart}
-                              className={clsx(style.add_to_cart)}
+                              className={clsx(
+                                style.add_to_cart,
+                                product && !product.stock
+                                  ? style.soldOut_disabled
+                                  : ""
+                              )}
                             >
                               Thêm vào giỏ hàng
                             </Space>
                             <Space
                               onClick={handleAddToCartNow}
-                              className={clsx(style.buy_now)}
+                              className={clsx(
+                                style.buy_now,
+                                product && !product.stock
+                                  ? style.soldOut_disabled
+                                  : ""
+                              )}
                             >
                               Chọn mua
                             </Space>
@@ -1059,6 +1069,7 @@ function ProductDetail() {
 
                 {productsSearch && (
                   <div
+                    style={{ paddingBottom: "10px" }}
                     className={clsx(
                       style.wrapper_global,
                       style.product_background
@@ -1075,12 +1086,12 @@ function ProductDetail() {
                             modules={[Navigation, Pagination, Scrollbar, A11y]}
                             breakpoints={{
                               1200: {
-                                spaceBetween: 18,
+                                spaceBetween: 14,
                                 slidesPerView: 6,
-                                loop: productsSearch.length > 6 ? true : false,
+                                loop: histories.length > 6 ? true : false,
                               },
                               0: {
-                                spaceBetween: 14,
+                                spaceBetween: 12,
                                 slidesPerView: 2,
                                 loop: true,
                               },
@@ -1141,7 +1152,13 @@ function ProductDetail() {
                                                 title={product.category.name}
                                               />
                                             </Space>
-                                            <Flex justify="center">
+                                            {/* pic and fakeNumber */}
+                                            <Flex
+                                              className={clsx(
+                                                style.product_name_wrapper
+                                              )}
+                                              justify="center"
+                                            >
                                               <img
                                                 src={product.pic}
                                                 className={clsx(
@@ -1149,6 +1166,17 @@ function ProductDetail() {
                                                 )}
                                                 alt=""
                                               />
+                                              <Space
+                                                className={clsx(
+                                                  style.product_name_fakeNumber
+                                                )}
+                                              >
+                                                {product.fakeNumber && (
+                                                  <FakeNumber
+                                                    title={product.fakeNumber}
+                                                  />
+                                                )}
+                                              </Space>
                                             </Flex>
                                             <Flex
                                               vertical
@@ -1164,12 +1192,6 @@ function ProductDetail() {
                                               >
                                                 {product.name}
                                               </Space>
-
-                                              {product.fakeNumber && (
-                                                <FakeNumber
-                                                  title={product.fakeNumber}
-                                                />
-                                              )}
 
                                               <Space
                                                 className={clsx(
@@ -1272,7 +1294,10 @@ function ProductDetail() {
                       background: "#eaeffa",
                     }}
                   >
-                    <div className={clsx(style.wrapper_global)}>
+                    <div
+                      style={{ paddingTop: "10px" }}
+                      className={clsx(style.wrapper_global)}
+                    >
                       <Row>
                         <Col span={24}>
                           <Flex
@@ -1355,7 +1380,13 @@ function ProductDetail() {
                                                 title={product.category.name}
                                               />
                                             </Space>
-                                            <Flex justify="center">
+                                            {/* pic and fakeNumber */}
+                                            <Flex
+                                              className={clsx(
+                                                style.product_name_wrapper
+                                              )}
+                                              justify="center"
+                                            >
                                               <img
                                                 src={product.pic}
                                                 className={clsx(
@@ -1363,6 +1394,17 @@ function ProductDetail() {
                                                 )}
                                                 alt=""
                                               />
+                                              <Space
+                                                className={clsx(
+                                                  style.product_name_fakeNumber
+                                                )}
+                                              >
+                                                {product.fakeNumber && (
+                                                  <FakeNumber
+                                                    title={product.fakeNumber}
+                                                  />
+                                                )}
+                                              </Space>
                                             </Flex>
                                             <Flex
                                               vertical
@@ -1378,11 +1420,7 @@ function ProductDetail() {
                                               >
                                                 {product.name}
                                               </Space>
-                                              {product.fakeNumber && (
-                                                <FakeNumber
-                                                  title={product.fakeNumber}
-                                                />
-                                              )}
+
                                               <Space
                                                 className={clsx(
                                                   style.header_discount

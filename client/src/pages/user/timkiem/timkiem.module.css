@@ -4,7 +4,7 @@
 }
 .label_wrapper {
   position: absolute;
-  bottom: 178px;
+  bottom: 150px;
   left: 0px;
 }
 .label_wrapper > div {
@@ -83,7 +83,7 @@
   background: #fff;
   border-radius: 12px;
   padding: 14px 0px;
-  height: 362px;
+  height: 332px;
   position: relative;
   border: 1px solid #fff;
 }
@@ -100,6 +100,8 @@
   top: 7px;
   width: 50px;
   left: -0.5px;
+  z-index: 9;
+
 }
 .content_discount > div {
   width: 100%;
@@ -204,6 +206,24 @@
 }
 .policy_footer_wrapper{
   padding-top: 30px;
+}
+.product_name_wrapper{
+  position: relative;
+}
+.product_name_fakeNumber{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+.product_name_fakeNumber::after {
+  content: '';
+  display: block;
+  position: absolute;
+  bottom: 0;
+  right: -1px;
+  height: 100%;
+  width: 2px;
+  background-color: #266ce0;
 }
 
 

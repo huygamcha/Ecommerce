@@ -40,6 +40,7 @@ import { PiCaretDoubleDownBold, PiCaretDoubleUpBold } from "react-icons/pi";
 import Specifications from "../../../components/specifications";
 import PolicyFooter from "../../../components/policyFooter";
 import FakeNumber from "../../../components/fakeNumber";
+import { FaCartShopping } from "react-icons/fa6";
 
 function ProductScreen() {
   const { products, error } = useAppSelector((state) => state.products);
@@ -69,7 +70,7 @@ function ProductScreen() {
     : [];
 
   useEffect(() => {
-    // window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
 
     if (products.length === 0) dispatch(getAllProduct({}));
     if (categories.length === 0) dispatch(getAllCategory());
@@ -109,7 +110,7 @@ function ProductScreen() {
   return (
     <>
       {/* banner */}
-      <div style={{ borderRadius: "0px", backgroundColor: "#F8F9FD" }}>
+      <div style={{ borderRadius: "0px" }}>
         <div
           className={clsx(
             style.wrapper_global,
@@ -415,13 +416,26 @@ function ProductScreen() {
                                   />
                                 </Space>
 
-                                <Flex justify="center">
+                                <Flex
+                                  className={clsx(style.product_name_wrapper)}
+                                  justify="center"
+                                >
                                   <img
                                     src={product.pic}
                                     className={clsx(style.content_img)}
                                     alt=""
                                   />
+                                  <Space
+                                    className={clsx(
+                                      style.product_name_fakeNumber
+                                    )}
+                                  >
+                                    {product.fakeNumber && (
+                                      <FakeNumber title={product.fakeNumber} />
+                                    )}
+                                  </Space>
                                 </Flex>
+
                                 <Flex
                                   vertical
                                   justify="space-between"
@@ -430,10 +444,6 @@ function ProductScreen() {
                                   <Space className={clsx(style.header_text)}>
                                     {product.name}
                                   </Space>
-
-                                  {product.fakeNumber && (
-                                    <FakeNumber title={product.fakeNumber} />
-                                  )}
 
                                   <Space
                                     className={clsx(style.header_discount)}
@@ -514,13 +524,29 @@ function ProductScreen() {
                                     />
                                   </Space>
 
-                                  <Flex justify="center">
+                                  {/* pic and fakeNumber */}
+                                  <Flex
+                                    className={clsx(style.product_name_wrapper)}
+                                    justify="center"
+                                  >
                                     <img
                                       src={product.pic}
                                       className={clsx(style.content_img)}
                                       alt=""
                                     />
+                                    <Space
+                                      className={clsx(
+                                        style.product_name_fakeNumber
+                                      )}
+                                    >
+                                      {product.fakeNumber && (
+                                        <FakeNumber
+                                          title={product.fakeNumber}
+                                        />
+                                      )}
+                                    </Space>
                                   </Flex>
+
                                   <Flex
                                     vertical
                                     justify="space-between"
@@ -529,9 +555,7 @@ function ProductScreen() {
                                     <Space className={clsx(style.header_text)}>
                                       {product.name}
                                     </Space>
-                                    {product.fakeNumber && (
-                                      <FakeNumber title={product.fakeNumber} />
-                                    )}
+
                                     <Space
                                       className={clsx(style.header_discount)}
                                     >
@@ -570,6 +594,9 @@ function ProductScreen() {
                                         {numeral(product.price).format("0,0$")}
                                       </del>
                                     )}
+                                    <Specifications
+                                      title={product.specifications}
+                                    />
                                   </Flex>
                                 </Flex>
                               </Link>
@@ -774,13 +801,6 @@ function ProductScreen() {
               spaceBetween={0}
               slidesPerView={1}
             >
-              <Flex
-                justify="space-between"
-                className={clsx(style.customSwiper_child)}
-              >
-                <ButtonNavigation />
-              </Flex>
-
               {banners &&
                 banners.map((banner, index) => {
                   if (banner.subBanner) {
@@ -805,7 +825,7 @@ function ProductScreen() {
       <div
         style={{
           background:
-            "linear-gradient(0deg, rgba(184,208,255,1) 3%, rgba(236,243,255,1) 71%, rgba(255,255,255,1) 90%)",
+            "linear-gradient(0deg, rgba(184,208,255,1) 38%, rgba(236,243,255,1) 92%, rgba(255,255,255,1) 100%)",
         }}
       >
         <div
@@ -912,11 +932,7 @@ function ProductScreen() {
                               to={`/sanpham/${product.slug}`}
                               className={clsx(style.wrapper)}
                             >
-                              <Flex
-                                style={{ border: "1px solid rgb(232 234 237)" }}
-                                className={clsx(style.content)}
-                                vertical
-                              >
+                              <Flex className={clsx(style.content)} vertical>
                                 <Space className={clsx(style.content_discount)}>
                                   <Discount
                                     discount={product.discount}
@@ -934,12 +950,25 @@ function ProductScreen() {
                                   />
                                 </Space>
 
-                                <Flex justify="center">
+                                {/* pic and fakeNumber */}
+                                <Flex
+                                  className={clsx(style.product_name_wrapper)}
+                                  justify="center"
+                                >
                                   <img
                                     src={product.pic}
                                     className={clsx(style.content_img)}
                                     alt=""
                                   />
+                                  <Space
+                                    className={clsx(
+                                      style.product_name_fakeNumber
+                                    )}
+                                  >
+                                    {product.fakeNumber && (
+                                      <FakeNumber title={product.fakeNumber} />
+                                    )}
+                                  </Space>
                                 </Flex>
                                 <Flex
                                   vertical
@@ -1113,11 +1142,7 @@ function ProductScreen() {
                               to={`/sanpham/${product.slug}`}
                               className={clsx(style.wrapper)}
                             >
-                              <Flex
-                                style={{ border: "1px solid rgb(232 234 237)" }}
-                                className={clsx(style.content)}
-                                vertical
-                              >
+                              <Flex className={clsx(style.content)} vertical>
                                 <Space className={clsx(style.content_discount)}>
                                   <Discount
                                     discount={product.discount}
@@ -1135,12 +1160,25 @@ function ProductScreen() {
                                   />
                                 </Space>
 
-                                <Flex justify="center">
+                                {/* pic and fakeNumber */}
+                                <Flex
+                                  className={clsx(style.product_name_wrapper)}
+                                  justify="center"
+                                >
                                   <img
                                     src={product.pic}
                                     className={clsx(style.content_img)}
                                     alt=""
                                   />
+                                  <Space
+                                    className={clsx(
+                                      style.product_name_fakeNumber
+                                    )}
+                                  >
+                                    {product.fakeNumber && (
+                                      <FakeNumber title={product.fakeNumber} />
+                                    )}
+                                  </Space>
                                 </Flex>
                                 <Flex
                                   vertical
@@ -1151,9 +1189,6 @@ function ProductScreen() {
                                     {product.name}
                                   </Space>
 
-                                  {product.fakeNumber && (
-                                    <FakeNumber title={product.fakeNumber} />
-                                  )}
                                   <Space
                                     className={clsx(style.header_discount)}
                                   >
@@ -1372,11 +1407,7 @@ function ProductScreen() {
                               to={`/sanpham/${product.slug}`}
                               className={clsx(style.wrapper)}
                             >
-                              <Flex
-                                style={{ border: "1px solid rgb(232 234 237)" }}
-                                className={clsx(style.content)}
-                                vertical
-                              >
+                              <Flex className={clsx(style.content)} vertical>
                                 <Space className={clsx(style.content_discount)}>
                                   <Discount
                                     discount={product.discount}
@@ -1394,13 +1425,27 @@ function ProductScreen() {
                                   />
                                 </Space>
 
-                                <Flex justify="center">
+                                {/* pic and fakeNumber */}
+                                <Flex
+                                  className={clsx(style.product_name_wrapper)}
+                                  justify="center"
+                                >
                                   <img
                                     src={product.pic}
                                     className={clsx(style.content_img)}
                                     alt=""
                                   />
+                                  <Space
+                                    className={clsx(
+                                      style.product_name_fakeNumber
+                                    )}
+                                  >
+                                    {product.fakeNumber && (
+                                      <FakeNumber title={product.fakeNumber} />
+                                    )}
+                                  </Space>
                                 </Flex>
+
                                 <Flex
                                   vertical
                                   justify="space-between"
@@ -1409,9 +1454,7 @@ function ProductScreen() {
                                   <Space className={clsx(style.header_text)}>
                                     {product.name}
                                   </Space>
-                                  {product.fakeNumber && (
-                                    <FakeNumber title={product.fakeNumber} />
-                                  )}
+
                                   <Space
                                     className={clsx(style.header_discount)}
                                   >
@@ -1559,12 +1602,25 @@ function ProductScreen() {
                                     title={product.category.name}
                                   />
                                 </Space>
-                                <Flex justify="center">
+                                {/* pic and fakeNumber */}
+                                <Flex
+                                  className={clsx(style.product_name_wrapper)}
+                                  justify="center"
+                                >
                                   <img
                                     src={product.pic}
                                     className={clsx(style.content_img)}
                                     alt=""
                                   />
+                                  <Space
+                                    className={clsx(
+                                      style.product_name_fakeNumber
+                                    )}
+                                  >
+                                    {product.fakeNumber && (
+                                      <FakeNumber title={product.fakeNumber} />
+                                    )}
+                                  </Space>
                                 </Flex>
                                 <Flex
                                   vertical
@@ -1574,9 +1630,7 @@ function ProductScreen() {
                                   <Space className={clsx(style.header_text)}>
                                     {product.name}
                                   </Space>
-                                  {product.fakeNumber && (
-                                    <FakeNumber title={product.fakeNumber} />
-                                  )}
+
                                   <Space
                                     className={clsx(style.header_discount)}
                                   >
@@ -1633,12 +1687,25 @@ function ProductScreen() {
                                     title={product.category.name}
                                   />
                                 </Space>
-                                <Flex justify="center">
+                                {/* pic and fakeNumber */}
+                                <Flex
+                                  className={clsx(style.product_name_wrapper)}
+                                  justify="center"
+                                >
                                   <img
                                     src={product.pic}
                                     className={clsx(style.content_img)}
                                     alt=""
                                   />
+                                  <Space
+                                    className={clsx(
+                                      style.product_name_fakeNumber
+                                    )}
+                                  >
+                                    {product.fakeNumber && (
+                                      <FakeNumber title={product.fakeNumber} />
+                                    )}
+                                  </Space>
                                 </Flex>
                                 <Flex
                                   vertical
@@ -1648,9 +1715,7 @@ function ProductScreen() {
                                   <Space className={clsx(style.header_text)}>
                                     {product.name}
                                   </Space>
-                                  {product.fakeNumber && (
-                                    <FakeNumber title={product.fakeNumber} />
-                                  )}
+
                                   <Space
                                     className={clsx(style.header_discount)}
                                   >
@@ -1769,12 +1834,27 @@ function ProductScreen() {
                                       title={product.category.name}
                                     />
                                   </Space>
-                                  <Flex justify="center">
+                                  {/* pic and fakeNumber */}
+                                  <Flex
+                                    className={clsx(style.product_name_wrapper)}
+                                    justify="center"
+                                  >
                                     <img
                                       src={product.pic}
                                       className={clsx(style.content_img)}
                                       alt=""
                                     />
+                                    <Space
+                                      className={clsx(
+                                        style.product_name_fakeNumber
+                                      )}
+                                    >
+                                      {product.fakeNumber && (
+                                        <FakeNumber
+                                          title={product.fakeNumber}
+                                        />
+                                      )}
+                                    </Space>
                                   </Flex>
                                   <Flex
                                     vertical
@@ -1786,9 +1866,7 @@ function ProductScreen() {
                                     <Space className={clsx(style.header_text)}>
                                       {product.name}
                                     </Space>
-                                    {product.fakeNumber && (
-                                      <FakeNumber title={product.fakeNumber} />
-                                    )}
+
                                     <Space
                                       className={clsx(style.header_discount)}
                                     >
