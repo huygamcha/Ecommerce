@@ -230,13 +230,13 @@
 
 /* không là element con nên phải dùng + */
 .header_search_input:focus+.header_search_icon_search {
-  background-color: #1d5adf;
-  color: #fff;
+  /* background-color: #1d5adf; */
+  color: #205ae2;
 }
 
 .header_search_input:target+.header_search_icon_search {
-  background-color: #1d5adf;
-  color: #fff;
+  /* background-color: #1d5adf; */
+  color: #205ae2;
 }
 
 .header_search_result {
@@ -291,15 +291,19 @@
 .header_search_icon_search {
   padding: 10px;
   border-radius: 50px;
-  background-color: #c2d0f6;
-  color: #4f7be5;
+  /* background-color: #c2d0f6; */
+  color: #859de0;
   display: block;
   position: absolute;
   right: 1%;
-  bottom: 50%;
+  bottom: 44%;
   transform: translateY(50%);
   cursor: pointer;
-  font-size: 20px;
+  font-size: 26px;
+}
+
+.header_search_icon_search > svg {
+  stroke-width: 1px;
 }
 
 .header_search_icon_delete {
@@ -535,7 +539,7 @@
 
   .header_search_icon_search {
     padding: 4px;
-    font-size: 14px;
+    font-size: 20px;
   }
 
   .header_search_result {

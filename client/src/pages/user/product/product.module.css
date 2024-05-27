@@ -55,8 +55,8 @@
 }
 
 .content_category {
-  border: 1px solid rgb(193, 200, 209);
-  border-radius: 12px;
+  /* border: 1px solid rgb(193, 200, 209); */
+  /* border-radius: 12px; */
 }
 
 .content_brand {
@@ -141,7 +141,7 @@
 }
 
 .header_text_category {
-  height: 60px;
+  /* height: 60px; */
   display: flex;
   justify-content: center;
 }
@@ -423,7 +423,7 @@
   position: relative;
   margin-bottom: 20px;
 }
-
+.product_detail_show_right,
 .product_detail_show {
   position: absolute;
   bottom: -10px;
@@ -438,29 +438,50 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  margin-bottom: 10px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
   background: linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.7) 21.88%, rgba(255, 255, 255, 0.95) 45.31%, rgb(255, 255, 255) 67.71%, rgb(255, 255, 255) 100%);
 }
+.product_detail_show_right {
+  width: calc(100% - 20px);
+}
 
+.product_detail_show_right.showRight,
 .product_detail_show.show {
   background: #fff;
-  bottom: -40px;
+  bottom: -30px;
   padding: 10px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
 }
 
+.product_detail_show_right.show.showPc,
 .product_detail_show.show.showPc {
   background: #fff;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
 }
+.product_detail_show_right.showPc{
+  bottom: -50px;
+  background: linear-gradient(rgba(238, 240, 243, 0) 0%, rgba(238, 240, 243, 0.7) 21.88%, rgba(238, 240, 243, 0.95) 45.31%, rgb(238, 240, 243) 67.71%, rgb(238, 240, 243) 100%);
 
+}
+.product_detail_right,
 .product_detail {
   margin: 0px 16px;
   height: 200px;
   overflow: hidden;
   width: 100%;
 }
+.product_detail{
 
+  height: 323px;
+}
+.product_detail_right {
+  height: 360px;
+}
+
+.product_detail_right.showRight,
 .product_detail.show {
   height: auto !important;
 }
@@ -829,7 +850,21 @@
 .album_item+div:hover {
   opacity: 0 !important;
 }
+.detail_left_wrapper {
+  height: max-content;
+  background: #fff;
+  border-radius: 12px;
+}
 
+.detail_right_wrapper {
+  padding-left: 20px;
+  height: max-content;
+}
+.detail_right_header{
+  text-align: center;
+  font-weight: 600;
+  font-size: 20px;
+}
 /* Thiết lập padding cho xs */
 @media (max-width: 575.98px) {
 
@@ -843,9 +878,7 @@
   .wrapper_subBanner_line img:first-child  {
     border-radius: 12px;
   }
-  .album_item{
-    margin-top: 16px;
-  }
+ 
   .policy_footer_wrapper{
     padding-top: 16px;
   }
@@ -1109,7 +1142,7 @@
     padding-bottom: 0px;
   }
   .wrapper_global_detail{
-    padding-top: 0px;
+    padding-top: 16px;
     background-color: #fff;
   }
   .album_wrapper {

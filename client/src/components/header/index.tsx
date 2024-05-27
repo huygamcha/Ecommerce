@@ -8,6 +8,7 @@ import {
   SearchOutlined,
   UserDeleteOutlined,
 } from "@ant-design/icons";
+import { RiSearchLine } from "react-icons/ri";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { FaCartShopping, FaBars } from "react-icons/fa6";
 import { HiOutlineXMark } from "react-icons/hi2";
@@ -299,7 +300,7 @@ function HeaderScreen() {
                     ></Input>
 
                     <div className={clsx(style.header_search_icon_search)}>
-                      <SearchOutlined />
+                      <RiSearchLine />
                     </div>
 
                     <div
@@ -385,7 +386,7 @@ function HeaderScreen() {
                         ></Input>
 
                         <div className={clsx(style.header_search_icon_search)}>
-                          <SearchOutlined />
+                          <RiSearchLine />
                         </div>
 
                         <div
@@ -443,7 +444,7 @@ function HeaderScreen() {
               ></Input>
 
               <div className={clsx(style.header_search_icon_search)}>
-                <SearchOutlined />
+                <RiSearchLine />
               </div>
 
               <div

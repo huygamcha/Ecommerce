@@ -13,6 +13,7 @@ import { getAllTag } from "../../slices/tagSlice";
 import { getAllBrand } from "../../slices/brandSlice";
 import { getAllCategory } from "../../slices/categorySlice";
 import { useOutsideClick } from "../OutsideClick/index";
+import { RiSearchLine } from "react-icons/ri";
 
 function HeaderScreenMobile() {
   const currentUser = localStorage.getItem("userInfor")
@@ -108,7 +109,7 @@ function HeaderScreenMobile() {
                       ></Input>
 
                       <div className={clsx(style.header_search_icon_search)}>
-                        <SearchOutlined />
+                        <RiSearchLine />
                       </div>
 
                       <div

@@ -160,7 +160,8 @@ module.exports = {
   updateCategory: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const { name, description } = req.body;
+      const { name, description, pic } = req.body;
+      console.log("««««« pic »»»»»", pic);
       const payload = await Category.findById(id);
 
       const errors = [];
@@ -192,6 +193,7 @@ module.exports = {
         {
           name: name || this.name,
           description: description || this.description,
+          pic: pic || this.pic,
         },
         {
           new: true,

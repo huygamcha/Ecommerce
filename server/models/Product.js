@@ -107,7 +107,7 @@ const productSchema = new Schema(
       type: Number,
     },
     fakeNumber: {
-      type: String,
+      type: Number,
     },
   },
   {

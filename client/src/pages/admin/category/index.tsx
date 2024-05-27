@@ -40,7 +40,7 @@ const Category = (props: Props) => {
 
   useEffect(() => {
     setInitialRender(false);
-    dispatch(getAllCategory());
+    // if (categories.length === 0) dispatch(getAllCategory());
   }, [dispatch]);
 
   //set active modal
@@ -93,7 +93,7 @@ const Category = (props: Props) => {
         createForm.resetFields();
       }
     }
-    dispatch(getAllCategory());
+    if (categories.length === 0) dispatch(getAllCategory());
   }, [isActive]);
 
   const onFinish = async (values: any) => {
@@ -112,7 +112,13 @@ const Category = (props: Props) => {
   // update category modal
 
   const onUpdate = async (values: any) => {
-    await dispatch(updateCategory({ id: selectedCategory, values: values }));
+    console.log("««««« values »»»»»", picDetail);
+    await dispatch(
+      updateCategory({
+        id: selectedCategory,
+        values: { ...values, pic: picDetail },
+      })
+    );
     setPicDetail("");
     setIsActive(!isActive);
   };
@@ -302,13 +308,14 @@ const Category = (props: Props) => {
       {/* form edit và delete */}
       <Modal
         centered
+        confirmLoading={!isLoading}
         title="Chỉnh sửa danh mục"
         onCancel={() => {
           navigate(-1);
           setSelectedCategory(false);
         }}
         open={selectedCategory}
-        okText="Save changes"
+        okText="Lưu"
         onOk={() => {
           updateForm.submit();
         }}

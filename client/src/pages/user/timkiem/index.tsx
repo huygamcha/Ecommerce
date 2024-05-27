@@ -723,7 +723,10 @@ function Timkiem() {
                                   )}
                                 >
                                   {product.fakeNumber && (
-                                    <FakeNumber title={product.fakeNumber} />
+                                    <FakeNumber
+                                      fakeNumber={product.fakeNumber}
+                                      realNumber={product.sold}
+                                    />
                                   )}
                                 </Space>
                               </Flex>

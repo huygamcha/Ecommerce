@@ -171,7 +171,7 @@ function ProductScreen() {
               </Swiper>
             </Col>
             {/* sub Banner */}
-            <Col xs={24} sm={8}>
+            <Col xs={0} sm={8}>
               {/* style={{fontSize: 0}} để cho ảnh bằng với chiều dài của thẻ */}
               <div
                 style={{ fontSize: 0 }}
@@ -212,12 +212,12 @@ function ProductScreen() {
                 Danh mục nổi bật
               </Flex>
               <Row>
-                <Col xs={0} sm={24}>
+                <Col xs={24} sm={24}>
                   <Row gutter={[14, 14]}>
                     {categories && error.message === "" ? (
                       categories.map((category, index) => (
                         <React.Fragment key={index}>
-                          <Col lg={4} style={{}}>
+                          <Col xs={6} lg={4} style={{}}>
                             <Link
                               onClick={(e) => {
                                 handleSearchMenu(category._id, "");
@@ -232,13 +232,10 @@ function ProductScreen() {
                                 <Flex
                                   vertical
                                   justify="space-between"
-                                  style={{ padding: "20px" }}
+                                  // style={{ padding: "20px" }}
                                 >
                                   <Flex
-                                    className={clsx(
-                                      style.header_text,
-                                      style.header_text_category
-                                    )}
+                                    className={clsx(style.header_text_category)}
                                     vertical
                                     justify="center"
                                     align="center"
@@ -246,14 +243,15 @@ function ProductScreen() {
                                     {category.pic && (
                                       <img
                                         style={{
-                                          height: "24px",
-                                          width: "24px",
+                                          height: "60px",
+                                          width: "60px",
+                                          marginBottom: "6px",
                                         }}
                                         src={category.pic}
                                       ></img>
                                     )}
                                     <Space>{category.name}</Space>
-                                    <div
+                                    {/* <div
                                       style={{
                                         color: "#657384",
                                         fontSize: "13px",
@@ -261,7 +259,7 @@ function ProductScreen() {
                                       }}
                                     >
                                       {category.productCount} sản phẩm
-                                    </div>
+                                    </div> */}
                                   </Flex>
                                 </Flex>
                               </Flex>
@@ -278,7 +276,7 @@ function ProductScreen() {
                     )}
                   </Row>
                 </Col>
-                <Col xs={24} sm={0}>
+                {/* <Col xs={24} sm={0}>
                   <Swiper
                     modules={[Navigation, Pagination, Scrollbar, A11y]}
                     loop={true}
@@ -288,7 +286,6 @@ function ProductScreen() {
                         slidesPerView: 2,
                       },
                     }}
-                    style={{ backgroundColor: "#f7f8fc" }}
                   >
                     {categories && error.message === "" ? (
                       categories.map((category, index) => (
@@ -355,7 +352,7 @@ function ProductScreen() {
                       </SwiperSlide>
                     )}
                   </Swiper>
-                </Col>
+                </Col> */}
               </Row>
             </Col>
           </Row>
@@ -431,7 +428,10 @@ function ProductScreen() {
                                     )}
                                   >
                                     {product.fakeNumber && (
-                                      <FakeNumber title={product.fakeNumber} />
+                                      <FakeNumber
+                                        fakeNumber={product.fakeNumber}
+                                        realNumber={product.sold}
+                                      />
                                     )}
                                   </Space>
                                 </Flex>
@@ -541,7 +541,8 @@ function ProductScreen() {
                                     >
                                       {product.fakeNumber && (
                                         <FakeNumber
-                                          title={product.fakeNumber}
+                                          fakeNumber={product.fakeNumber}
+                                          realNumber={product.sold}
                                         />
                                       )}
                                     </Space>
@@ -966,7 +967,10 @@ function ProductScreen() {
                                     )}
                                   >
                                     {product.fakeNumber && (
-                                      <FakeNumber title={product.fakeNumber} />
+                                      <FakeNumber
+                                        fakeNumber={product.fakeNumber}
+                                        realNumber={product.sold}
+                                      />
                                     )}
                                   </Space>
                                 </Flex>
@@ -980,7 +984,10 @@ function ProductScreen() {
                                   </Space>
 
                                   {product.fakeNumber && (
-                                    <FakeNumber title={product.fakeNumber} />
+                                    <FakeNumber
+                                      fakeNumber={product.fakeNumber}
+                                      realNumber={product.sold}
+                                    />
                                   )}
                                   <Space
                                     className={clsx(style.header_discount)}
@@ -1176,7 +1183,10 @@ function ProductScreen() {
                                     )}
                                   >
                                     {product.fakeNumber && (
-                                      <FakeNumber title={product.fakeNumber} />
+                                      <FakeNumber
+                                        fakeNumber={product.fakeNumber}
+                                        realNumber={product.sold}
+                                      />
                                     )}
                                   </Space>
                                 </Flex>
@@ -1441,7 +1451,10 @@ function ProductScreen() {
                                     )}
                                   >
                                     {product.fakeNumber && (
-                                      <FakeNumber title={product.fakeNumber} />
+                                      <FakeNumber
+                                        fakeNumber={product.fakeNumber}
+                                        realNumber={product.sold}
+                                      />
                                     )}
                                   </Space>
                                 </Flex>
@@ -1618,7 +1631,10 @@ function ProductScreen() {
                                     )}
                                   >
                                     {product.fakeNumber && (
-                                      <FakeNumber title={product.fakeNumber} />
+                                      <FakeNumber
+                                        fakeNumber={product.fakeNumber}
+                                        realNumber={product.sold}
+                                      />
                                     )}
                                   </Space>
                                 </Flex>
@@ -1703,7 +1719,10 @@ function ProductScreen() {
                                     )}
                                   >
                                     {product.fakeNumber && (
-                                      <FakeNumber title={product.fakeNumber} />
+                                      <FakeNumber
+                                        fakeNumber={product.fakeNumber}
+                                        realNumber={product.sold}
+                                      />
                                     )}
                                   </Space>
                                 </Flex>
@@ -1851,7 +1870,8 @@ function ProductScreen() {
                                     >
                                       {product.fakeNumber && (
                                         <FakeNumber
-                                          title={product.fakeNumber}
+                                          fakeNumber={product.fakeNumber}
+                                          realNumber={product.sold}
                                         />
                                       )}
                                     </Space>

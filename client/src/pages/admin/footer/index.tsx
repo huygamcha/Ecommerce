@@ -327,7 +327,7 @@ const FooterAdmin = (props: Props) => {
                 options={[
                   { value: 1, label: "VỀ CHÚNG TÔI" },
                   { value: 2, label: "DANH MỤC" },
-                  { value: 3, label: "TÌM HIỂU THÊM" },
+                  { value: 3, label: "HƯỚNG DẪN" },
                   { value: 4, label: "TỔNG ĐÀI" },
                 ]}
               />

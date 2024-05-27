@@ -62,6 +62,7 @@ function ProductDetail() {
   const location = useLocation();
   const [quantity, setQuantity] = useState<number>(1);
   const [showMore, setShowMore] = useState<boolean>(false);
+  const [showMoreRight, setShowMoreRight] = useState<boolean>(false);
   const [messageApi, contextHolder] = message.useMessage();
 
   // random
@@ -175,6 +176,9 @@ function ProductDetail() {
 
   const handleShowMore = () => {
     setShowMore(!showMore);
+  };
+  const handleShowMoreRight = () => {
+    setShowMoreRight(!showMoreRight);
   };
 
   // go to detail
@@ -863,67 +867,299 @@ function ProductDetail() {
                     )}
                   >
                     <div
+                      style={{ background: "#eef0f3" }}
                       className={clsx(
                         style.product_wrapper,
-                        style.product_wrapper_show,
+                        // style.product_wrapper_show,
                         window.innerWidth > 1200 && style.showPc
                       )}
                     >
                       <Row>
-                        <Col className={clsx(style.product_detail_header)}>
-                          Mô tả sản phẩm
-                        </Col>
                         <Col
-                          className={clsx(style.product_detail, {
-                            [style.show]: showMore,
-                          })}
-                          dangerouslySetInnerHTML={{
-                            __html: product?.detail as string,
-                          }}
-                        ></Col>
-                        {!showMore ? (
-                          <Col
-                            onClick={handleShowMore}
-                            className={clsx(style.product_detail_show)}
-                          >
-                            <Flex align="center">
-                              <PiCaretDoubleDownBold />
-                            </Flex>
-                            <Space
-                              style={{
-                                marginLeft: "5px",
-                                fontSize: "14px",
-                                fontWeight: "600",
-                              }}
-                            >
-                              Xem thêm
-                            </Space>
-                          </Col>
-                        ) : (
-                          <Col
-                            onClick={handleShowMore}
-                            className={clsx(
-                              style.product_detail_show,
-                              {
+                          className={clsx(style.detail_left_wrapper)}
+                          xs={24}
+                          md={18}
+                        >
+                          <Row>
+                            <Col className={clsx(style.product_detail_header)}>
+                              Mô tả sản phẩm
+                            </Col>
+                            <Col
+                              className={clsx(style.product_detail, {
                                 [style.show]: showMore,
-                              },
-                              window.innerWidth > 1200 && style.showPc
-                            )}
-                          >
-                            <Flex align="center">
-                              <PiCaretDoubleUpBold />
-                            </Flex>
-                            <Space
-                              style={{
-                                marginLeft: "5px",
-                                fontSize: "14px",
-                                fontWeight: "600",
+                              })}
+                              dangerouslySetInnerHTML={{
+                                __html: product?.detail as string,
                               }}
-                            >
-                              Thu gọn
-                            </Space>
-                          </Col>
-                        )}
+                            ></Col>
+                            {!showMore ? (
+                              <Col
+                                onClick={handleShowMore}
+                                className={clsx(style.product_detail_show)}
+                              >
+                                <Flex align="center">
+                                  <PiCaretDoubleDownBold />
+                                </Flex>
+                                <Space
+                                  style={{
+                                    marginLeft: "5px",
+                                    fontSize: "14px",
+                                    fontWeight: "600",
+                                  }}
+                                >
+                                  Xem thêm
+                                </Space>
+                              </Col>
+                            ) : (
+                              <Col
+                                onClick={handleShowMore}
+                                className={clsx(
+                                  style.product_detail_show,
+                                  {
+                                    [style.show]: showMore,
+                                  },
+                                  window.innerWidth > 1200 && style.showPc
+                                )}
+                              >
+                                <Flex align="center">
+                                  <PiCaretDoubleUpBold />
+                                </Flex>
+                                <Space
+                                  style={{
+                                    marginLeft: "5px",
+                                    fontSize: "14px",
+                                    fontWeight: "600",
+                                  }}
+                                >
+                                  Thu gọn
+                                </Space>
+                              </Col>
+                            )}
+                          </Row>
+                        </Col>
+
+                        <Col
+                          className={clsx(style.detail_right_wrapper)}
+                          xs={0}
+                          md={6}
+                        >
+                          <Row
+                            className={clsx(style.product_detail_right, {
+                              [style.showRight]: showMoreRight,
+                            })}
+                          >
+                            <Col span={24}>
+                              <div className={clsx(style.detail_right_header)}>
+                                Có thể bạn quan tâm
+                              </div>
+                            </Col>
+                            {products &&
+                              products.length &&
+                              products.map((product, index) => {
+                                if (index < 3) {
+                                  return (
+                                    <Col span={24}>
+                                      <Link
+                                        onClick={() =>
+                                          handleDetail(
+                                            // product._id,
+                                            product._id,
+                                            product.categoryId
+                                          )
+                                        }
+                                        to={`/sanpham/${product.slug}`}
+                                        className={clsx(style.wrapper)}
+                                      >
+                                        <Flex
+                                          className={clsx(style.content)}
+                                          vertical
+                                        >
+                                          <Space
+                                            className={clsx(
+                                              style.content_discount
+                                            )}
+                                          >
+                                            <Discount
+                                              discount={product.discount}
+                                            ></Discount>
+                                          </Space>
+
+                                          <Space
+                                            className={clsx(
+                                              style.label_wrapper,
+                                              !product.stock && style.soldOut
+                                            )}
+                                          >
+                                            <Label
+                                              soldOut={
+                                                !product.stock ? true : false
+                                              }
+                                              title={product.category.name}
+                                            />
+                                          </Space>
+                                          {/* pic and fakeNumber */}
+                                          <Flex
+                                            className={clsx(
+                                              style.product_name_wrapper
+                                            )}
+                                            justify="center"
+                                          >
+                                            <img
+                                              src={product.pic}
+                                              className={clsx(
+                                                style.content_img
+                                              )}
+                                              alt=""
+                                            />
+                                            <Space
+                                              className={clsx(
+                                                style.product_name_fakeNumber
+                                              )}
+                                            >
+                                              {product.fakeNumber && (
+                                                <FakeNumber
+                                                  fakeNumber={
+                                                    product.fakeNumber
+                                                  }
+                                                  realNumber={product.sold}
+                                                />
+                                              )}
+                                            </Space>
+                                          </Flex>
+                                          <Flex
+                                            vertical
+                                            justify="space-between"
+                                            style={{
+                                              padding: "50px 20px 20px 20px",
+                                            }}
+                                          >
+                                            <Space
+                                              className={clsx(
+                                                style.header_text
+                                              )}
+                                            >
+                                              {product.name}
+                                            </Space>
+
+                                            <Space
+                                              className={clsx(
+                                                style.header_discount
+                                              )}
+                                            >
+                                              {product &&
+                                              product?.discount > 0 ? (
+                                                <>
+                                                  <Space>
+                                                    <div>
+                                                      {numeral(
+                                                        product?.total
+                                                      ).format("0,0$")}
+                                                      <span
+                                                        style={{
+                                                          margin: "0 4px",
+                                                        }}
+                                                      >
+                                                        &#47;
+                                                      </span>
+                                                      {product.unit}
+                                                    </div>
+                                                  </Space>
+                                                  <Space>
+                                                    {/* <del>
+                                          {numeral(product?.price).format("$0,0")}
+                                        </del> */}
+                                                  </Space>
+                                                </>
+                                              ) : (
+                                                <>
+                                                  <Space>
+                                                    <div>
+                                                      {numeral(
+                                                        product?.price
+                                                      ).format("0,0$")}
+                                                      <span
+                                                        style={{
+                                                          margin: "0 4px",
+                                                        }}
+                                                      >
+                                                        &#47;
+                                                      </span>
+                                                      {product?.unit}
+                                                    </div>
+                                                  </Space>
+                                                </>
+                                              )}
+                                            </Space>
+                                            {product &&
+                                            product?.discount > 0 ? (
+                                              <del
+                                                className={clsx(
+                                                  style.header_price
+                                                )}
+                                              >
+                                                {numeral(product.price).format(
+                                                  "0,0$"
+                                                )}
+                                              </del>
+                                            ) : (
+                                              <></>
+                                            )}
+                                            <Specifications
+                                              title={product.specifications}
+                                            />
+                                          </Flex>
+                                        </Flex>
+                                      </Link>
+                                    </Col>
+                                  );
+                                }
+                              })}
+
+                            {!showMoreRight ? (
+                              <Col
+                                onClick={handleShowMoreRight}
+                                className={clsx(
+                                  style.product_detail_show_right
+                                )}
+                              >
+                                <Flex align="center">
+                                  <PiCaretDoubleDownBold />
+                                </Flex>
+                                <Space
+                                  style={{
+                                    marginLeft: "5px",
+                                    fontSize: "14px",
+                                    fontWeight: "600",
+                                  }}
+                                >
+                                  Xem thêm
+                                </Space>
+                              </Col>
+                            ) : (
+                              <Col
+                                onClick={handleShowMoreRight}
+                                className={clsx(
+                                  style.product_detail_show_right,
+
+                                  window.innerWidth > 1200 && style.showPc
+                                )}
+                              >
+                                <Flex align="center">
+                                  <PiCaretDoubleUpBold />
+                                </Flex>
+                                <Space
+                                  style={{
+                                    marginLeft: "5px",
+                                    fontSize: "14px",
+                                    fontWeight: "600",
+                                  }}
+                                >
+                                  Thu gọn
+                                </Space>
+                              </Col>
+                            )}
+                          </Row>
+                        </Col>
                       </Row>
                     </div>
                   </div>
@@ -1173,7 +1409,10 @@ function ProductDetail() {
                                               >
                                                 {product.fakeNumber && (
                                                   <FakeNumber
-                                                    title={product.fakeNumber}
+                                                    fakeNumber={
+                                                      product.fakeNumber
+                                                    }
+                                                    realNumber={product.sold}
                                                   />
                                                 )}
                                               </Space>
@@ -1401,7 +1640,10 @@ function ProductDetail() {
                                               >
                                                 {product.fakeNumber && (
                                                   <FakeNumber
-                                                    title={product.fakeNumber}
+                                                    fakeNumber={
+                                                      product.fakeNumber
+                                                    }
+                                                    realNumber={product.sold}
                                                   />
                                                 )}
                                               </Space>

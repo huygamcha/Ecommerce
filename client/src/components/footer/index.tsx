@@ -446,8 +446,8 @@ function FooterScreen() {
             </h4>
           </Col>
           <ListRenderMobile title="chính sách" specificColumn={1} />
-          <ListRenderMobile title="hỗ trợ" specificColumn={2} />
-          <ListRenderMobile title="TÌM HIỂU THÊM" specificColumn={3} />
+          <ListRenderMobile title="danh mục" specificColumn={2} />
+          <ListRenderMobile title="hỗ trợ" specificColumn={3} />
 
           <Col style={{ textAlign: "center", margin: "30px 0px" }} span={24}>
             © 2024 Cửa hàng Pam

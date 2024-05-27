@@ -28,7 +28,7 @@ interface ProductsType {
   tagList: Array<string>;
   quantity: number;
   sold: number;
-  fakeNumber: string;
+  fakeNumber: number;
 }
 
 interface ProductSearchType {
@@ -61,7 +61,7 @@ const initialState: InitialType = {
   success: false,
   error: { message: "", errors: { name: "" } },
   product: {
-  fakeNumber: "",
+  fakeNumber: 0,
     sold: 0,
     quantity: 0,
     autoQuantity: 2,

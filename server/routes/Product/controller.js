@@ -442,6 +442,7 @@ module.exports = {
         fakeNumber,
       } = req.body;
 
+      // ĐẶT HÀNG
       if (!autoQuantity) {
         autoQuantity = 2;
       }
