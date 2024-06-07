@@ -122,11 +122,13 @@ function PageLocation() {
                   banners.map((banner, index) => {
                     if (banner.subBanner) {
                       return (
-                        <img
-                          src={banner.pic}
-                          className={clsx(style.content_img_subBanner)}
-                          alt=""
-                        />
+                        <Link to={banner.link}>
+                          <img
+                            src={banner.pic}
+                            className={clsx(style.content_img_subBanner)}
+                            alt=""
+                          />
+                        </Link>
                       );
                     }
                   })}
@@ -301,12 +303,16 @@ function PageLocation() {
                       if (banner.subBanner) {
                         return (
                           <SwiperSlide>
-                            <img
-                              key={index}
-                              src={banner.pic}
-                              className={clsx(style.content_img_subBanner_line)}
-                              alt=""
-                            />
+                            <Link to={banner.link}>
+                              <img
+                                key={index}
+                                src={banner.pic}
+                                className={clsx(
+                                  style.content_img_subBanner_line
+                                )}
+                                alt=""
+                              />
+                            </Link>
                           </SwiperSlide>
                         );
                       }

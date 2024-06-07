@@ -39,8 +39,8 @@ const initialState: InitialType = {
 };
 
 // tham số thứ 2 là tham số truyền vào gửi từ client
-const loginUser = createAsyncThunk<UserType, LoginType>(
-  "auth/loginUser",
+const registerUser = createAsyncThunk<UserType, LoginType>(
+  "auth/registerUser",
   async (values, { rejectWithValue }) => {
     try {
       console.log('«««««  »»»»»',  );
@@ -57,6 +57,9 @@ const loginUser = createAsyncThunk<UserType, LoginType>(
     }
   }
 );
+
+
+
 
 const authSlice = createSlice({
   name: "auth",
@@ -75,19 +78,19 @@ const authSlice = createSlice({
     }
   },
   extraReducers(builder) {
-    builder.addCase(loginUser.pending, (state) => {
+    builder.addCase(registerUser.pending, (state) => {
       state.loading = true;
       state.error = "";
       state.success = false;
     });
 
-    builder.addCase(loginUser.fulfilled, (state, action) => {
+    builder.addCase(registerUser.fulfilled, (state, action) => {
       state.success = true;
       state.loading = false;
       state.user = action.payload;
       localStorage.setItem("userInfor", JSON.stringify(state.user));
     });
-    builder.addCase(loginUser.rejected, (state, action) => {
+    builder.addCase(registerUser.rejected, (state, action) => {
       state.loading = false;
       const customErrors = action.payload as { message?: string; errors?: any };
       state.error = customErrors.message || "An unknown error occurred"; // Ensure a default message or fallback if action.error is undefined
@@ -98,5 +101,5 @@ const authSlice = createSlice({
 const { reducer, actions } = authSlice;
 
 export default reducer;
-export { loginUser };
+export { registerUser };
 export const {logout} = actions

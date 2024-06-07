@@ -7,6 +7,9 @@ const bannerSchema = new Schema(
     pic: {
       type: String,
     },
+    link: {
+      type: String,
+    },
     subBanner: {
       type: Boolean,
       default: false,

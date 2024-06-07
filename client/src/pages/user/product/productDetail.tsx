@@ -33,6 +33,9 @@ import {
   FaLocationCrosshairs,
   FaLocationDot,
 } from "react-icons/fa6";
+import { FaCartShopping, FaBars } from "react-icons/fa6";
+
+import { FiChevronRight } from "react-icons/fi";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 import "swiper/css";
@@ -944,6 +947,7 @@ function ProductDetail() {
                           md={6}
                         >
                           <Row
+                            style={{ margin: "0px 16px 0px 0px" }}
                             className={clsx(style.product_detail_right, {
                               [style.showRight]: showMoreRight,
                             })}
@@ -971,10 +975,13 @@ function ProductDetail() {
                                         className={clsx(style.wrapper)}
                                       >
                                         <Flex
-                                          className={clsx(style.content)}
+                                          className={clsx(
+                                            style.content,
+                                            style.content_youKnow
+                                          )}
                                           vertical
                                         >
-                                          <Space
+                                          {/* <Space
                                             className={clsx(
                                               style.content_discount
                                             )}
@@ -982,9 +989,9 @@ function ProductDetail() {
                                             <Discount
                                               discount={product.discount}
                                             ></Discount>
-                                          </Space>
+                                          </Space> */}
 
-                                          <Space
+                                          {/* <Space
                                             className={clsx(
                                               style.label_wrapper,
                                               !product.stock && style.soldOut
@@ -996,7 +1003,7 @@ function ProductDetail() {
                                               }
                                               title={product.category.name}
                                             />
-                                          </Space>
+                                          </Space> */}
                                           {/* pic and fakeNumber */}
                                           <Flex
                                             className={clsx(
@@ -1007,11 +1014,12 @@ function ProductDetail() {
                                             <img
                                               src={product.pic}
                                               className={clsx(
-                                                style.content_img
+                                                style.content_img,
+                                                style.content_img_youKnow
                                               )}
                                               alt=""
                                             />
-                                            <Space
+                                            {/* <Space
                                               className={clsx(
                                                 style.product_name_fakeNumber
                                               )}
@@ -1024,13 +1032,13 @@ function ProductDetail() {
                                                   realNumber={product.sold}
                                                 />
                                               )}
-                                            </Space>
+                                            </Space> */}
                                           </Flex>
                                           <Flex
                                             vertical
                                             justify="space-between"
                                             style={{
-                                              padding: "50px 20px 20px 20px",
+                                              padding: "10px 20px 0px 20px",
                                             }}
                                           >
                                             <Space
@@ -1040,8 +1048,40 @@ function ProductDetail() {
                                             >
                                               {product.name}
                                             </Space>
+                                            <Flex justify="space-between">
+                                              <div
+                                                style={{
+                                                  display: "flex",
+                                                  alignItems: "center",
+                                                }}
+                                                className={clsx(
+                                                  style.header_text
+                                                )}
+                                              >
+                                                <div>
+                                                  <FaCartShopping
+                                                    style={{
+                                                      color: "#AAAAAA",
+                                                      fontSize: "20px",
+                                                      marginRight: "4px",
+                                                    }}
+                                                  />
+                                                </div>
+                                                <div>
+                                                  {product.fakeNumber
+                                                    ? product.fakeNumber +
+                                                      product.sold
+                                                    : product.sold}
+                                                </div>
+                                              </div>
+                                              <Flex align="center">
+                                                <FiChevronRight
+                                                  style={{ fontSize: "20px" }}
+                                                />
+                                              </Flex>
+                                            </Flex>
 
-                                            <Space
+                                            {/* <Space
                                               className={clsx(
                                                 style.header_discount
                                               )}
@@ -1064,33 +1104,26 @@ function ProductDetail() {
                                                       {product.unit}
                                                     </div>
                                                   </Space>
-                                                  <Space>
-                                                    {/* <del>
-                                          {numeral(product?.price).format("$0,0")}
-                                        </del> */}
-                                                  </Space>
                                                 </>
                                               ) : (
-                                                <>
-                                                  <Space>
-                                                    <div>
-                                                      {numeral(
-                                                        product?.price
-                                                      ).format("0,0$")}
-                                                      <span
-                                                        style={{
-                                                          margin: "0 4px",
-                                                        }}
-                                                      >
-                                                        &#47;
-                                                      </span>
-                                                      {product?.unit}
-                                                    </div>
-                                                  </Space>
-                                                </>
+                                                <Space>
+                                                  <div>
+                                                    {numeral(
+                                                      product?.price
+                                                    ).format("0,0$")}
+                                                    <span
+                                                      style={{
+                                                        margin: "0 4px",
+                                                      }}
+                                                    >
+                                                      &#47;
+                                                    </span>
+                                                    {product?.unit}
+                                                  </div>
+                                                </Space>
                                               )}
-                                            </Space>
-                                            {product &&
+                                            </Space> */}
+                                            {/* {product &&
                                             product?.discount > 0 ? (
                                               <del
                                                 className={clsx(
@@ -1103,10 +1136,24 @@ function ProductDetail() {
                                               </del>
                                             ) : (
                                               <></>
-                                            )}
-                                            <Specifications
+                                            )} */}
+                                            {/* <Specifications
                                               title={product.specifications}
-                                            />
+                                            /> */}
+                                            {/* buy
+                                            <Flex justify="space-between">
+                                              <Space
+                                                // onClick={handleAddToCart}
+                                                className={clsx(
+                                                  style.buy_now_in_home,
+                                                  product &&
+                                                    !product.stock &&
+                                                    style.soldOut_disabled
+                                                )}
+                                              >
+                                                Chọn mua
+                                              </Space>
+                                            </Flex> */}
                                           </Flex>
                                         </Flex>
                                       </Link>
@@ -1498,6 +1545,20 @@ function ProductDetail() {
                                               <Specifications
                                                 title={product.specifications}
                                               />
+                                              {/* buy */}
+                                              <Flex justify="space-between">
+                                                <Space
+                                                  // onClick={handleAddToCart}
+                                                  className={clsx(
+                                                    style.buy_now_in_home,
+                                                    product &&
+                                                      !product.stock &&
+                                                      style.soldOut_disabled
+                                                  )}
+                                                >
+                                                  Chọn mua
+                                                </Space>
+                                              </Flex>
                                             </Flex>
                                           </Flex>
                                         </Link>
@@ -1729,6 +1790,20 @@ function ProductDetail() {
                                               <Specifications
                                                 title={product.specifications}
                                               />
+                                              {/* buy */}
+                                              <Flex justify="space-between">
+                                                <Space
+                                                  // onClick={handleAddToCart}
+                                                  className={clsx(
+                                                    style.buy_now_in_home,
+                                                    product &&
+                                                      !product.stock &&
+                                                      style.soldOut_disabled
+                                                  )}
+                                                >
+                                                  Chọn mua
+                                                </Space>
+                                              </Flex>
                                             </Flex>
                                           </Flex>
                                         </Link>

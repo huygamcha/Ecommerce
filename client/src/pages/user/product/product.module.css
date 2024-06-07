@@ -12,7 +12,7 @@
 /* label _ tag */
 .label_wrapper {
   position: absolute;
-  bottom: 150px;
+  bottom: 53%;
   left: 0px;
 }
 
@@ -44,14 +44,19 @@
   display: block;
 }
 
+.content_youKnow, 
 .content {
   background: #fff;
   border-radius: 12px;
   padding: 14px 0px;
   margin-top: 10px;
-  height: 332px;
+  height: 380px;
   position: relative;
   border: 1px solid #fff;
+}
+.content_youKnow{
+  height: auto;
+
 }
 
 .content_category {
@@ -102,7 +107,10 @@
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
-
+.content_img_youKnow {
+  height: 160px;
+  width: 250px;
+}
 .content_img_brand {
   height: 50px;
   width: 90px;
@@ -174,7 +182,7 @@
 }
 
 /* product detail */
-
+.buy_now_in_home,
 .add_to_cart {
   cursor: pointer;
   display: flex;
@@ -189,6 +197,13 @@
   color: #fff;
   border-radius: 30px;
   font-weight: 500;
+}
+.buy_now_in_home{
+  width: 100%;
+  padding: 12px;
+  font-weight: 600;
+  font-size: 16px;
+  margin-top: 16px;
 }
 
 .buy_now {
@@ -338,6 +353,8 @@
 .promotion_header_wrapper {
   padding: 8px 16px;
   background-color: #fff3e1;
+  border-top-right-radius: 12px;
+  border-top-left-radius: 12px;
 }
 
 .promotion_header {
@@ -795,14 +812,16 @@
 
 
 .wrapper_subBanner_line img:first-child {
-  margin-right: 10px;
   border-radius: 12px;
   height: 176px;
   width: calc(50% - 10px);
 }
+.wrapper_subBanner_line a:last-child{
+  margin-left: 20px;
+}
 
 .wrapper_subBanner_line img:last-child {
-  margin-left: 10px;
+  /* margin-left: 10px; */
   border-radius: 12px;
   height: 176px;
   width: calc(50% - 10px);
@@ -874,10 +893,19 @@
   .wrapper_subBanner_line{
     padding: 0px 16px;
   }
-  .wrapper_subBanner_line img:last-child, 
-  .wrapper_subBanner_line img:first-child  {
+ 
+  /* .wrapper_subBanner_line img:last-child {
+    margin-left: 10px;
     border-radius: 12px;
+    height: 176px;
+    width: calc(50% - 10px);
   }
+  .wrapper_subBanner_line img:first-child {
+    margin-right: 10px;
+    border-radius: 12px;
+    height: 176px;
+    width: calc(50% - 10px);
+  } */
  
   .policy_footer_wrapper{
     padding-top: 16px;
@@ -917,6 +945,9 @@
     padding: 0px 16px;
     margin-top: 20px;
     border-radius: 8%;
+  }
+  .content_img_banner{
+    height: 150px;
   }
   .content_img_subBanner{
     border-radius: 12px;
@@ -1215,7 +1246,7 @@
     padding-bottom: 16px;
   }
   .wrapper_subBanner{
-    padding: 0px 0px 40px 0px;
+    padding: 0px;
   }
 
   .top_sale {

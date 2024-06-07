@@ -73,6 +73,7 @@ const BannerAdmin = (props: Props) => {
   type FieldType = {
     pic?: string;
     subBanner: boolean;
+    link: boolean;
   };
 
   const [createForm] = Form.useForm<FieldType>();
@@ -199,6 +200,18 @@ const BannerAdmin = (props: Props) => {
       },
     },
     {
+      title: "Link",
+      dataIndex: "link",
+      key: "link",
+      render: (text: string, record: any) => {
+        return (
+          <a href={text} target="_blank" rel="noreferrer">
+            {text}
+          </a>
+        );
+      },
+    },
+    {
       title: "SubBanner",
       dataIndex: "subBanner",
       key: "subBanner",
@@ -282,7 +295,9 @@ const BannerAdmin = (props: Props) => {
               }}
             ></Input>
           </Form.Item>
-
+          <Form.Item<FieldType> name="link" label="Link">
+            <Input></Input>
+          </Form.Item>
           <Form.Item<FieldType> name="subBanner" label="Sub Banner">
             <Select
               options={[
@@ -345,7 +360,9 @@ const BannerAdmin = (props: Props) => {
                 }}
               ></Input>
             </Form.Item>
-
+            <Form.Item<FieldType> name="link" label="Link">
+              <Input></Input>
+            </Form.Item>
             <Form.Item<FieldType> name="subBanner" label="Sub Banner">
               <Select
                 options={[

@@ -70,6 +70,7 @@ const ListItemBrand = ({
                   onClick={(e) => {
                     // ngăn chặn việc gọi lên handleSearchMenu ở hàm, đánh đổi reload lại trang
                     e.stopPropagation();
+                    // e.preventDefault();
                     onClickBrand(categoryId, brand._id);
                   }}
                   className={clsx(style.brand_list_item)}
@@ -667,20 +668,24 @@ function HeaderScreen() {
                     </Col>
                   </Row>
 
-                  <Flex className={clsx(style.contactNowMobile_wrapper)}>
-                    <Flex className={clsx(style.contactNowMobile)}>
-                      <Space>
-                        <FaPhoneAlt
-                          className={clsx(style.contactNowMobile_phone_icon)}
-                        />
-                      </Space>
-                      <Space
-                        className={clsx(style.contactNowMobile_phone_text)}
-                      >
-                        Tư vấn: 1800 6928 (Miễn phí)
-                      </Space>
+                  <a href="https://zalo.me/0933110500">
+                    <Flex className={clsx(style.contactNowMobile_wrapper)}>
+                      <Flex className={clsx(style.contactNowMobile)}>
+                        <Space>
+                          <img
+                            className={clsx(style.contactNowMobile_phone_icon)}
+                            src="https://cdn1.nhathuoclongchau.com.vn/smalls/Logo_Zalo_979d41d52b.svg"
+                            alt="facebook"
+                          />
+                        </Space>
+                        <Space
+                          className={clsx(style.contactNowMobile_phone_text)}
+                        >
+                          Tư vấn qua Zalo 24/7
+                        </Space>
+                      </Flex>
                     </Flex>
-                  </Flex>
+                  </a>
                 </Flex>
               </div>
             )}
@@ -770,6 +775,7 @@ function HeaderScreen() {
                                 onClick={(e) => {
                                   // ngăn chặn việc gọi lên handleSearchMenu ở hàm, đánh đổi reload lại trang
                                   e.stopPropagation();
+                                  // e.preventDefault();
                                   handleSearchMenu(category._id, brand._id);
                                 }}
                                 className={clsx(style.brand_list_item)}

@@ -18,11 +18,12 @@ module.exports = {
 
   createBanner: async (req, res, next) => {
     try {
-      const { pic, subBanner } = req.body;
+      const { pic, subBanner, link } = req.body;
 
       const newBanner = new Banner({
         pic,
         subBanner,
+        link,
       });
 
       const payload = await newBanner.save();
@@ -64,7 +65,7 @@ module.exports = {
   updateBanner: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const { pic, subBanner } = req.body;
+      const { pic, subBanner, link } = req.body;
       const payload = await Banner.findById(id);
       console.log("««««« subBanner »»»»»", subBanner);
 
@@ -81,6 +82,7 @@ module.exports = {
         id,
         {
           pic: pic || this.pic,
+          link: link || this.link,
           subBanner: subBanner || this.subBanner,
         },
         {

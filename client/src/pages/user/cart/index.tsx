@@ -785,8 +785,7 @@ function CartScreen() {
                                                         </div>
                                                         <div>
                                                           Giảm ngay{" "}
-                                                          {cart.discount}% áp
-                                                          dụng đến 14/03
+                                                          {cart.discount}%
                                                         </div>
                                                       </Flex>
                                                       <div

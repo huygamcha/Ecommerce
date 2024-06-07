@@ -4,6 +4,7 @@ import axios from "axios";
 
 interface BannersType {
   pic: string;
+  link: string;
   _id: string;
   subBanner: boolean;
 }
@@ -28,6 +29,7 @@ const initialState: InitialType = {
     subBanner: false,
     _id: "",
     pic: "",
+    link: "",
   },
   loading: false,
   deleted: false,

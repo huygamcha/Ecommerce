@@ -755,6 +755,20 @@ function Timkiem() {
                                 <Specifications
                                   title={product.specifications}
                                 />
+                                {/* buy */}
+                                <Flex justify="space-between">
+                                  <Space
+                                    // onClick={handleAddToCart}
+                                    className={clsx(
+                                      style.buy_now_in_home,
+                                      product &&
+                                        !product.stock &&
+                                        style.soldOut_disabled
+                                    )}
+                                  >
+                                    Chọn mua
+                                  </Space>
+                                </Flex>
                               </Flex>
                             </Flex>
                           </Link>

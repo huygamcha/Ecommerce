@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from "react";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, ConfigProvider, Form, Input, Space, message } from "antd";
 import { useAppDispatch, useAppSelector } from "../../store";
-import { loginUser } from "../../slices/authSlice";
+import { registerUser } from "../../slices/authSlice";
 import { Link, useNavigate, Navigate, useLocation } from "react-router-dom";
 import { getCartFromCustomer } from "../../slices/cartSlice";
 import { getInforUser } from "../../slices/customerSlice";
@@ -51,7 +51,7 @@ const Login: React.FC = () => {
   }, [error, success]);
 
   const onFinish = async (values: any) => {
-    await dispatch(loginUser(values));
+    await dispatch(registerUser(values));
   };
 
   return (

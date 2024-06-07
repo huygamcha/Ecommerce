@@ -127,6 +127,12 @@
 }
 
 @media (max-width: 576px) {
+    .wrapper_subBanner_line{
+        padding: 0px 16px;
+        border-radius: 12px !important;
+        background-color: #fff;
+    }
+  
     .map, .contact {
         display: block;
     }
@@ -175,7 +181,6 @@
         width: 100% !important;
         margin-left: 0px !important;
         margin-right: 0px !important;
-        border-radius: 0px !important;
         /* padding: 0px 16px; */
         background-color: #fff;
     }
@@ -185,12 +190,9 @@
         width: 50%;
         border-radius: 10px;
     }
-
-
     .album_list {
         gap: 8px;
     }
-
     .album_item {
         object-fit: cover;
         width: 88px;
@@ -224,7 +226,7 @@
 /* Thiết lập padding cho sm */
 @media (min-width: 577px) and (max-width: 767.98px) {
 
-
+ 
     .wrapper_global_breadcrumb {
         padding: 12px;
     }
@@ -249,6 +251,7 @@
     .wrapper_global_breadcrumb {
         padding: 12px;
     }
+  
 }
 
 /* Thiết lập padding cho lg */

@@ -16,7 +16,11 @@ import {
   DatePicker,
 } from "antd";
 import { useEffect } from "react";
-import { getAllOrder, updateOrder } from "../../../slices/orderSlice";
+import {
+  deleteOrder,
+  getAllOrder,
+  updateOrder,
+} from "../../../slices/orderSlice";
 import { useAppSelector, useAppDispatch } from "../../../store";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -122,6 +126,7 @@ const Order = (props: Props) => {
           })
         );
       });
+    await dispatch(deleteOrder(values));
     // await dispatch(deleteOrder(values));
     dispatch(getAllOrder());
     onShowMessage("Xoá đơn đặt hàng thành công");
