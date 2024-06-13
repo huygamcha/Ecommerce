@@ -47,40 +47,40 @@ module.exports = {
             createdAt: -1,
           },
         },
-        {
-          $skip: skip,
-        },
-        {
-          $limit: limit,
-        },
+        // {
+        //   $skip: skip,
+        // },
+        // {
+        //   $limit: limit,
+        // },
         {
           $lookup: {
             from: "categories", // Make sure this matches the actual collection name for categories
-            localField: "category",
+            localField: "categoryId",
             foreignField: "_id",
             as: "category",
           },
         },
-        {
-          $lookup: {
-            from: "suppliers", // Make sure this matches the actual collection name for suppliers
-            localField: "supplier",
-            foreignField: "_id",
-            as: "supplier",
-          },
-        },
-        {
-          $unwind: {
-            path: "$category",
-            preserveNullAndEmptyArrays: true,
-          },
-        },
-        {
-          $unwind: {
-            path: "$supplier",
-            preserveNullAndEmptyArrays: true,
-          },
-        },
+        // {
+        //   $lookup: {
+        //     from: "suppliers", // Make sure this matches the actual collection name for suppliers
+        //     localField: "supplier",
+        //     foreignField: "_id",
+        //     as: "supplier",
+        //   },
+        // },
+        // {
+        //   $unwind: {
+        //     path: "$category",
+        //     preserveNullAndEmptyArrays: true,
+        //   },
+        // },
+        // {
+        //   $unwind: {
+        //     path: "$supplier",
+        //     preserveNullAndEmptyArrays: true,
+        //   },
+        // },
       ];
 
       const result = await Product.aggregate(pipeline).exec();
