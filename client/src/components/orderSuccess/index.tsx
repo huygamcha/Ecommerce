@@ -60,7 +60,7 @@ function OrderSuccess() {
                       <div>Thanh toán tiền mặt khi nhận hàng</div>
                     </Flex>
                   </Col>
-                  <Col className={clsx(style.payment_type_detail)} span={24}>
+                  {/* <Col className={clsx(style.payment_type_detail)} span={24}>
                     <Flex align="center">
                       <div>
                         <img
@@ -73,24 +73,25 @@ function OrderSuccess() {
                           alt=""
                         />
                       </div>
-                      {/* update with type */}
                       <div>Thanh toán bằng voucher</div>
                     </Flex>
-                  </Col>
+                  </Col> */}
                   <Col span={24}>
                     <Flex
                       className={clsx(style.buy_wrapper)}
-                      justify="space-between"
+                      // justify="space-between"
+                      justify="center"
                     >
-                      <Link to={"/cart"} className={clsx(style.detail_cart)}>
+                      {/* <Link to={"/cart"} className={clsx(style.detail_cart)}>
                         Chi tiết đơn hàng
-                      </Link>
+                      </Link> */}
                       <Link
                         to={"/"}
                         onClick={() => {
                           localStorage.removeItem("carts");
                         }}
-                        className={clsx(style.home)}
+                        // className={clsx(style.home)}
+                        className={clsx(style.detail_cart)}
                       >
                         Về trang chủ
                       </Link>

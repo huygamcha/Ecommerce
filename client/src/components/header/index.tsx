@@ -27,7 +27,6 @@ import {
 import { getAllTag, getTagByName } from "../../slices/tagSlice";
 import { getAllBrand } from "../../slices/brandSlice";
 import { getAllCategory } from "../../slices/categorySlice";
-import { useOutsideClick } from "../OutsideClick/index";
 
 const ListItemBrand = ({
   categoryId,
@@ -61,6 +60,7 @@ const ListItemBrand = ({
           borderRadius: "10px",
         }}
         vertical
+        className={clsx(style.brand_list_mobile)}
       >
         {brands.map((brand, index) => {
           if (brand.categoryId === categoryId && isShow) {
@@ -111,11 +111,6 @@ function HeaderScreen() {
   //  nếu không có thì bị lỗi ko thẻ chọn sản phẩm trên mobile được
   const [isMobile, setIsMobile] = useState<boolean>(false);
 
-  //  ẩn hiện thi click ra ngoài
-  const ref = useOutsideClick(() => {
-    console.log("Clicked outside of MyComponent");
-  });
-
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -160,6 +155,15 @@ function HeaderScreen() {
       setShow(true);
     }
   }, [add]);
+
+  // khi mở được thanh menu của mobile thì ngăn sự kiện lăn chuột ở sau modal
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     setIsList(false);
@@ -317,6 +321,7 @@ function HeaderScreen() {
                     {/* search result mobile */}
                     <Space
                       // ref={wrapperRef}
+
                       className={clsx(style.header_search_result, style.active)}
                     >
                       {isList &&
@@ -763,7 +768,13 @@ function HeaderScreen() {
                       </Flex>
                     </div>
 
-                    <Flex vertical className={clsx(style.brand_list)}>
+                    <Flex
+                      vertical
+                      className={clsx(
+                        style.brand_list,
+                        style.brand_list_mobile
+                      )}
+                    >
                       {brands.map((brand, index) => {
                         if (
                           brand.categoryId === category._id &&

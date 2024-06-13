@@ -1,21 +1,18 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 
-export const useOutsideClick = (callback: () => void) => {
-  const ref = useRef() as React.MutableRefObject<HTMLInputElement>;
-
+export default function useOutsideAlerter(ref: React.RefObject<any>) {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
-        callback();
+    function handleClickOutside(event: MouseEvent) {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setIsOpen(false);
+        console.log("««««« 555 »»»»»", 555);
       }
-    };
+    }
 
     document.addEventListener("mousedown", handleClickOutside);
-
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [callback]);
-
-  return ref;
-};
+  }, [ref]);
+}

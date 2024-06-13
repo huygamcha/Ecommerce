@@ -83,7 +83,7 @@
   background: #fff;
   border-radius: 12px;
   padding: 14px 0px;
-  height: 380px;
+  height: 325px;
   position: relative;
   border: 1px solid #fff;
 }
@@ -243,13 +243,19 @@
   font-weight: 500;
 }
 .buy_now_in_home{
-  width: 100%;
+  position: absolute;
+  width: 80%;
+  bottom: 10px;
+  /* width: 100%; */
   padding: 12px;
   font-weight: 600;
   font-size: 16px;
   margin-top: 16px;
 }
-
+.soldOut_disabled {
+  pointer-events: none;
+  opacity: 0.3;
+}
 
 /* Thiết lập padding cho xs */
 @media (max-width: 575.98px) {

@@ -144,9 +144,9 @@ function CartScreen() {
   };
 
   const onFinish = async (values: FieldType) => {
+    console.log("««««« value cart »»»»»", carts);
     carts &&
       carts.map(async (value: any) => {
-        console.log("««««« value cart »»»»»", value);
         await dispatch(
           updateProduct({
             id: value.id,

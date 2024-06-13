@@ -127,7 +127,6 @@ const Order = (props: Props) => {
         );
       });
     await dispatch(deleteOrder(values));
-    // await dispatch(deleteOrder(values));
     dispatch(getAllOrder());
     onShowMessage("Xoá đơn đặt hàng thành công");
   };

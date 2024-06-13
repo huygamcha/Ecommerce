@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Col, Flex, Input, Row, Space } from "antd";
 import clsx from "clsx";
 import style from "./header.module.css";
-import { SearchOutlined } from "@ant-design/icons";
 import { BsChevronLeft } from "react-icons/bs";
 
 import { TiDelete } from "react-icons/ti";
@@ -12,7 +11,6 @@ import { getAllProductSearch, hasList } from "../../slices/productSlice";
 import { getAllTag } from "../../slices/tagSlice";
 import { getAllBrand } from "../../slices/brandSlice";
 import { getAllCategory } from "../../slices/categorySlice";
-import { useOutsideClick } from "../OutsideClick/index";
 import { RiSearchLine } from "react-icons/ri";
 
 function HeaderScreenMobile() {
@@ -27,11 +25,6 @@ function HeaderScreenMobile() {
   const [isList, setIsList] = useState<boolean>(false);
   // tìm kiếm
   const [search, setSearch] = useState<string>();
-
-  //  ẩn hiện thi click ra ngoài
-  const ref = useOutsideClick(() => {
-    console.log("Clicked outside of MyComponent");
-  });
 
   const location = useLocation();
   const navigate = useNavigate();

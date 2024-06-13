@@ -12,12 +12,15 @@ function FakeNumber({
   realNumber: number;
 }) {
   return (
-    fakeNumber && (
-      <Flex align="center" className={clsx(style.wrapper, {})}>
-        <FaCartShopping style={{ marginRight: "2px" }} />
-        Đã bán: {fakeNumber + realNumber}
-      </Flex>
-    )
+    <Flex align="center" className={clsx(style.wrapper, {})}>
+      <FaCartShopping style={{ marginRight: "2px" }} />
+      Đã bán:{" "}
+      {!fakeNumber
+        ? realNumber
+        : !realNumber
+        ? fakeNumber
+        : realNumber + fakeNumber}
+    </Flex>
   );
 }
 

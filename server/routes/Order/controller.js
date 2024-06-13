@@ -111,7 +111,7 @@ module.exports = {
         typePayment,
         listProduct,
       } = req.body;
-      console.log("««««« req.body »»»»»", req.body);
+      // console.log("««««« req.body »»»»»", req.body);
       const newOrder = new Order({
         addressDetail,
         commune,
@@ -166,7 +166,6 @@ module.exports = {
   updateOrder: async (req, res, next) => {
     try {
       const { id } = req.params;
-      console.log("««««« id »»»»»", id);
       const {
         addressDetail,
         commune,
@@ -180,6 +179,7 @@ module.exports = {
         province,
         typePayment,
         listProduct,
+        status,
       } = req.body;
 
       const payload = await Order.findById(id);
@@ -201,6 +201,7 @@ module.exports = {
           nameOrder: nameOrder || this.nameOrder,
           notice: notice || this.notice,
           phone: phone || this.phone,
+          status: status || this.status,
           phoneOrder: phoneOrder || this.phoneOrder,
           province: province || this.province,
           typePayment: typePayment || this.typePayment,

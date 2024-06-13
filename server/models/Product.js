@@ -165,6 +165,14 @@ productSchema.pre("findOneAndUpdate", function (next) {
   next();
 });
 
+// trường ảo không thể sử dụng được trong câu lệnh query
+// productSchema.virtual("fakeAndRealSold").get(function () {
+//   const fakeNumber = this.fakeNumber ?? 0; // Use 0 if fakeNumber is undefined or null
+//   const sold = this.sold ?? 0; // Use 0 if sold is undefined or null
+//   console.log("««««« fakeNumber + sold »»»»»", fakeNumber + sold);
+//   return fakeNumber + sold;
+// });
+
 productSchema.set("toJSON", { virtuals: true });
 productSchema.set("toObject", { virtuals: true });
 //

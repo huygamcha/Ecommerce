@@ -7,6 +7,7 @@ import {
   getAllProduct,
   getAllProductSearch,
   getProductById,
+  ProductsType,
 } from "../../../slices/productSlice";
 import numeral from "numeral";
 import { getAllCategory } from "../../../slices/categorySlice";
@@ -35,13 +36,12 @@ import ButtonNavigation from "../../../components/buttonNavigation";
 import { Button } from "antd/es/radio";
 import { getAllBanner } from "../../../slices/bannerSlice";
 import MenuFooter from "../../../components/MenuFooter";
-import Label from "../../../components/label";
 import { PiCaretDoubleDownBold, PiCaretDoubleUpBold } from "react-icons/pi";
 import Specifications from "../../../components/specifications";
 import PolicyFooter from "../../../components/policyFooter";
 import FakeNumber from "../../../components/fakeNumber";
-import { FaCartShopping, FaFacebookMessenger } from "react-icons/fa6";
 import { addToCart } from "../../../slices/cartSlice";
+import BuyMobile from "../../../components/buyMobile";
 
 function ProductScreen() {
   const { products, error, product } = useAppSelector(
@@ -67,6 +67,10 @@ function ProductScreen() {
   const [searchSuaBot, setSeachSuaBot] = useState<string>(
     "65df3f646fc28fc99f7b4dad"
   );
+  const [quantity, setQuantity] = useState<number>(1);
+  const [activeBuyMobile, setActiveBuyMobile] = useState<boolean>(false);
+  //fix lỗi mua ngay trên sản phẩm khác, không phải dispatch search làm cho trang bị reload
+  const [specificProduct, setSpecificProduct] = useState<ProductsType>();
 
   // lưu vào lịch sử
   const histories = localStorage.getItem("histories")
@@ -74,7 +78,7 @@ function ProductScreen() {
     : [];
 
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    // window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
 
     if (products.length === 0) dispatch(getAllProduct({}));
     if (categories.length === 0) dispatch(getAllCategory());
@@ -111,11 +115,12 @@ function ProductScreen() {
   };
 
   const handleAddToCart = (e: any) => {
-    // e.stopPropagation();
-    //  tránh hiện tượng load trang, ngăn chặn mặc định của
-
+    // ngăn chặn mặc định của thẻ Link
     e.preventDefault();
-    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    //  tránh hiện tượng load trang(ko dispatch search product)
+    e.stopPropagation();
+
+    // window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
     messageApi.open({
       type: "success",
       content: "Thêm vào giỏ hàng thành công",
@@ -138,6 +143,40 @@ function ProductScreen() {
       })
     );
   };
+  const handleAddToCartTest = (e: any, product: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setSpecificProduct(product);
+    console.log("««««« product »»»»»", product);
+    console.log("««««« e »»»»»", e);
+
+    if (window.innerWidth < 576) {
+      setActiveBuyMobile(true);
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+      messageApi.open({
+        type: "success",
+        content: "Thêm vào giỏ hàng thành công",
+      });
+      dispatch(
+        addToCart({
+          id: product?._id,
+          name: product?.name,
+          quantity: quantity,
+          pic: product?.pic,
+          price: product?.price,
+          stock: product?.stock,
+          total: product?.total,
+          discount: product?.discount,
+          unit: product?.unit,
+          slug: product?.slug,
+          check: true,
+          categoryId: product?.categoryId,
+          sold: product?.sold,
+        })
+      );
+    }
+  };
   let count = 0;
 
   return (
@@ -157,8 +196,7 @@ function ProductScreen() {
           <div
             style={{
               borderRadius: "0px",
-              background:
-                "linear-gradient(126deg, rgba(255,210,96,1) 0%, rgba(246,156,231,1) 60%, rgba(245,246,253,1) 100%)",
+              background: "#f8f9fd",
               // background: rgb(255,210,96);
               // background: linear-gradient(126deg, rgba(255,210,96,1) 0%, rgba(246,156,231,1) 60%, rgba(245,246,253,1) 100%);
             }}
@@ -174,9 +212,9 @@ function ProductScreen() {
                 <Col xs={24} sm={16}>
                   <Swiper
                     loop={banners.length > 1 ? true : false}
-                    autoplay={{
-                      delay: 2000,
-                    }}
+                    // autoplay={{
+                    //   delay: 2000,
+                    // }}
                     modules={[
                       Navigation,
                       Pagination,
@@ -282,7 +320,7 @@ function ProductScreen() {
                         {categories && error.message === "" ? (
                           categories.map((category, index) => (
                             <React.Fragment key={index}>
-                              <Col xs={6} lg={6}>
+                              <Col xs={6} lg={4}>
                                 <Link
                                   onClick={(e) => {
                                     handleSearchMenu(category._id, "");
@@ -440,7 +478,7 @@ function ProductScreen() {
                   <Space className={clsx(style.topsale_banner)}>
                     <Space className={clsx(style.topsale_banner_img)}>
                       <img
-                        style={{ width: "320px", height: "41px" }}
+                        style={{ width: "325px", height: "41px" }}
                         src="https://cdn.nhathuoclongchau.com.vn/unsafe/640x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/smalls/san_pham_ban_chay_reponsive_282x36_3x_5b96131326.png"
                         alt=""
                       />
@@ -484,10 +522,10 @@ function ProductScreen() {
                                         !product.stock && style.soldOut
                                       )}
                                     >
-                                      <Label
+                                      {/* <Label
                                         soldOut={!product.stock ? true : false}
                                         title={product.category.name}
-                                      />
+                                      /> */}
                                     </Space>
 
                                     <Flex
@@ -506,19 +544,17 @@ function ProductScreen() {
                                           style.product_name_fakeNumber
                                         )}
                                       >
-                                        {product.fakeNumber && (
-                                          <FakeNumber
-                                            fakeNumber={product.fakeNumber}
-                                            realNumber={product.sold}
-                                          />
-                                        )}
+                                        <FakeNumber
+                                          fakeNumber={product.fakeNumber}
+                                          realNumber={product.sold}
+                                        />
                                       </Space>
                                     </Flex>
 
                                     <Flex
                                       vertical
                                       justify="space-between"
-                                      style={{ padding: "50px 20px 20px 20px" }}
+                                      style={{ padding: "20px 20px 10px 20px" }}
                                     >
                                       <Space
                                         className={clsx(style.header_text)}
@@ -578,7 +614,9 @@ function ProductScreen() {
                                       {/* buy  top sale*/}
                                       <Flex justify="space-between">
                                         <Space
-                                          onClick={handleAddToCart}
+                                          onClick={(e) =>
+                                            handleAddToCartTest(e, product)
+                                          }
                                           className={clsx(
                                             style.buy_now_in_home,
                                             product &&
@@ -627,12 +665,12 @@ function ProductScreen() {
                                           !product.stock && style.soldOut
                                         )}
                                       >
-                                        <Label
+                                        {/* <Label
                                           soldOut={
                                             !product.stock ? true : false
                                           }
                                           title={product.category.name}
-                                        />
+                                        /> */}
                                       </Space>
 
                                       {/* pic and fakeNumber */}
@@ -652,12 +690,10 @@ function ProductScreen() {
                                             style.product_name_fakeNumber
                                           )}
                                         >
-                                          {product.fakeNumber && (
-                                            <FakeNumber
-                                              fakeNumber={product.fakeNumber}
-                                              realNumber={product.sold}
-                                            />
-                                          )}
+                                          <FakeNumber
+                                            fakeNumber={product.fakeNumber}
+                                            realNumber={product.sold}
+                                          />
                                         </Space>
                                       </Flex>
 
@@ -665,7 +701,7 @@ function ProductScreen() {
                                         vertical
                                         justify="space-between"
                                         style={{
-                                          padding: "50px 20px 20px 20px",
+                                          padding: "20px 20px 10px 20px",
                                         }}
                                       >
                                         <Space
@@ -728,7 +764,9 @@ function ProductScreen() {
                                         {/* buy */}
                                         <Flex justify="space-between">
                                           <Space
-                                            onClick={handleAddToCart}
+                                            onClick={(e) =>
+                                              handleAddToCartTest(e, product)
+                                            }
                                             className={clsx(
                                               style.buy_now_in_home,
                                               product &&
@@ -1121,10 +1159,10 @@ function ProductScreen() {
                                         !product.stock && style.soldOut
                                       )}
                                     >
-                                      <Label
+                                      {/* <Label
                                         soldOut={!product.stock ? true : false}
                                         title={product.category.name}
-                                      />
+                                      /> */}
                                     </Space>
 
                                     {/* pic and fakeNumber */}
@@ -1144,18 +1182,16 @@ function ProductScreen() {
                                           style.product_name_fakeNumber
                                         )}
                                       >
-                                        {product.fakeNumber && (
-                                          <FakeNumber
-                                            fakeNumber={product.fakeNumber}
-                                            realNumber={product.sold}
-                                          />
-                                        )}
+                                        <FakeNumber
+                                          fakeNumber={product.fakeNumber}
+                                          realNumber={product.sold}
+                                        />
                                       </Space>
                                     </Flex>
                                     <Flex
                                       vertical
                                       justify="space-between"
-                                      style={{ padding: "50px 20px 20px 20px" }}
+                                      style={{ padding: "20px 20px 10px 20px" }}
                                     >
                                       <Space
                                         className={clsx(style.header_text)}
@@ -1163,12 +1199,10 @@ function ProductScreen() {
                                         {product.name}
                                       </Space>
 
-                                      {product.fakeNumber && (
-                                        <FakeNumber
-                                          fakeNumber={product.fakeNumber}
-                                          realNumber={product.sold}
-                                        />
-                                      )}
+                                      {/* <FakeNumber
+                                        fakeNumber={product.fakeNumber}
+                                        realNumber={product.sold}
+                                      /> */}
                                       <Space
                                         className={clsx(style.header_discount)}
                                       >
@@ -1221,7 +1255,9 @@ function ProductScreen() {
                                       {/* buy */}
                                       <Flex justify="space-between">
                                         <Space
-                                          onClick={handleAddToCart}
+                                          onClick={(e) =>
+                                            handleAddToCartTest(e, product)
+                                          }
                                           className={clsx(
                                             style.buy_now_in_home,
                                             product &&
@@ -1376,10 +1412,10 @@ function ProductScreen() {
                                         !product.stock && style.soldOut
                                       )}
                                     >
-                                      <Label
+                                      {/* <Label
                                         soldOut={!product.stock ? true : false}
                                         title={product.category.name}
-                                      />
+                                      /> */}
                                     </Space>
 
                                     {/* pic and fakeNumber */}
@@ -1399,18 +1435,16 @@ function ProductScreen() {
                                           style.product_name_fakeNumber
                                         )}
                                       >
-                                        {product.fakeNumber && (
-                                          <FakeNumber
-                                            fakeNumber={product.fakeNumber}
-                                            realNumber={product.sold}
-                                          />
-                                        )}
+                                        <FakeNumber
+                                          fakeNumber={product.fakeNumber}
+                                          realNumber={product.sold}
+                                        />
                                       </Space>
                                     </Flex>
                                     <Flex
                                       vertical
                                       justify="space-between"
-                                      style={{ padding: "50px 20px 20px 20px" }}
+                                      style={{ padding: "20px 20px 10px 20px" }}
                                     >
                                       <Space
                                         className={clsx(style.header_text)}
@@ -1470,7 +1504,9 @@ function ProductScreen() {
                                       {/* buy */}
                                       <Flex justify="space-between">
                                         <Space
-                                          onClick={handleAddToCart}
+                                          onClick={(e) =>
+                                            handleAddToCartTest(e, product)
+                                          }
                                           className={clsx(
                                             style.buy_now_in_home,
                                             product &&
@@ -1683,10 +1719,10 @@ function ProductScreen() {
                                         !product.stock && style.soldOut
                                       )}
                                     >
-                                      <Label
+                                      {/* <Label
                                         soldOut={!product.stock ? true : false}
                                         title={product.category.name}
-                                      />
+                                      /> */}
                                     </Space>
 
                                     {/* pic and fakeNumber */}
@@ -1706,19 +1742,17 @@ function ProductScreen() {
                                           style.product_name_fakeNumber
                                         )}
                                       >
-                                        {product.fakeNumber && (
-                                          <FakeNumber
-                                            fakeNumber={product.fakeNumber}
-                                            realNumber={product.sold}
-                                          />
-                                        )}
+                                        <FakeNumber
+                                          fakeNumber={product.fakeNumber}
+                                          realNumber={product.sold}
+                                        />
                                       </Space>
                                     </Flex>
 
                                     <Flex
                                       vertical
                                       justify="space-between"
-                                      style={{ padding: "50px 20px 20px 20px" }}
+                                      style={{ padding: "20px 20px 10px 20px" }}
                                     >
                                       <Space
                                         className={clsx(style.header_text)}
@@ -1778,7 +1812,9 @@ function ProductScreen() {
                                       {/* buy */}
                                       <Flex justify="space-between">
                                         <Space
-                                          onClick={handleAddToCart}
+                                          onClick={(e) =>
+                                            handleAddToCartTest(e, product)
+                                          }
                                           className={clsx(
                                             style.buy_now_in_home,
                                             product &&
@@ -1904,10 +1940,10 @@ function ProductScreen() {
                                         !product.stock && style.soldOut
                                       )}
                                     >
-                                      <Label
+                                      {/* <Label
                                         soldOut={!product.stock ? true : false}
                                         title={product.category.name}
-                                      />
+                                      /> */}
                                     </Space>
                                     {/* pic and fakeNumber */}
                                     <Flex
@@ -1926,18 +1962,16 @@ function ProductScreen() {
                                           style.product_name_fakeNumber
                                         )}
                                       >
-                                        {product.fakeNumber && (
-                                          <FakeNumber
-                                            fakeNumber={product.fakeNumber}
-                                            realNumber={product.sold}
-                                          />
-                                        )}
+                                        <FakeNumber
+                                          fakeNumber={product.fakeNumber}
+                                          realNumber={product.sold}
+                                        />
                                       </Space>
                                     </Flex>
                                     <Flex
                                       vertical
                                       justify="space-between"
-                                      style={{ padding: "50px 20px 20px 20px" }}
+                                      style={{ padding: "20px 20px 10px 20px" }}
                                     >
                                       <Space
                                         className={clsx(style.header_text)}
@@ -1969,7 +2003,9 @@ function ProductScreen() {
                                       {/* buy */}
                                       <Flex justify="space-between">
                                         <Space
-                                          onClick={handleAddToCart}
+                                          onClick={(e) =>
+                                            handleAddToCartTest(e, product)
+                                          }
                                           className={clsx(
                                             style.buy_now_in_home,
                                             product &&
@@ -2022,10 +2058,10 @@ function ProductScreen() {
                                         !product.stock && style.soldOut
                                       )}
                                     >
-                                      <Label
+                                      {/* <Label
                                         soldOut={!product.stock ? true : false}
                                         title={product.category.name}
-                                      />
+                                      /> */}
                                     </Space>
                                     {/* pic and fakeNumber */}
                                     <Flex
@@ -2044,18 +2080,16 @@ function ProductScreen() {
                                           style.product_name_fakeNumber
                                         )}
                                       >
-                                        {product.fakeNumber && (
-                                          <FakeNumber
-                                            fakeNumber={product.fakeNumber}
-                                            realNumber={product.sold}
-                                          />
-                                        )}
+                                        <FakeNumber
+                                          fakeNumber={product.fakeNumber}
+                                          realNumber={product.sold}
+                                        />
                                       </Space>
                                     </Flex>
                                     <Flex
                                       vertical
                                       justify="space-between"
-                                      style={{ padding: "50px 20px 20px 20px" }}
+                                      style={{ padding: "20px 20px 10px 20px" }}
                                     >
                                       <Space
                                         className={clsx(style.header_text)}
@@ -2087,7 +2121,9 @@ function ProductScreen() {
                                       {/* buy */}
                                       <Flex justify="space-between">
                                         <Space
-                                          onClick={handleAddToCart}
+                                          onClick={(e) =>
+                                            handleAddToCartTest(e, product)
+                                          }
                                           className={clsx(
                                             style.buy_now_in_home,
                                             product &&
@@ -2202,12 +2238,12 @@ function ProductScreen() {
                                           !product.stock && style.soldOut
                                         )}
                                       >
-                                        <Label
+                                        {/* <Label
                                           soldOut={
                                             !product.stock ? true : false
                                           }
                                           title={product.category.name}
-                                        />
+                                        /> */}
                                       </Space>
                                       {/* pic and fakeNumber */}
                                       <Flex
@@ -2226,19 +2262,17 @@ function ProductScreen() {
                                             style.product_name_fakeNumber
                                           )}
                                         >
-                                          {product.fakeNumber && (
-                                            <FakeNumber
-                                              fakeNumber={product.fakeNumber}
-                                              realNumber={product.sold}
-                                            />
-                                          )}
+                                          <FakeNumber
+                                            fakeNumber={product.fakeNumber}
+                                            realNumber={product.sold}
+                                          />
                                         </Space>
                                       </Flex>
                                       <Flex
                                         vertical
                                         justify="space-between"
                                         style={{
-                                          padding: " 50px 20px 20px 20px",
+                                          padding: " 20px 20px 10px 20px",
                                         }}
                                       >
                                         <Space
@@ -2308,7 +2342,10 @@ function ProductScreen() {
                                         {/* buy */}
                                         <Flex justify="space-between">
                                           <Space
-                                            onClick={handleAddToCart}
+                                            // onClick={handleAddToCart}
+                                            onClick={(e) =>
+                                              handleAddToCartTest(e, product)
+                                            }
                                             className={clsx(
                                               style.buy_now_in_home,
                                               product &&
@@ -2355,6 +2392,12 @@ function ProductScreen() {
               <MenuFooter />
             </Col>
           </Row>
+
+          <BuyMobile
+            product={specificProduct}
+            SetIsActive={setActiveBuyMobile}
+            active={activeBuyMobile}
+          />
         </>
       </ConfigProvider>
     </>

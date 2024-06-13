@@ -6,6 +6,7 @@ import {
   getAllProductSearch,
   getProductById,
   getProductBySlug,
+  ProductsType,
 } from "../../../slices/productSlice";
 import {
   Col,
@@ -51,6 +52,7 @@ import Label from "../../../components/label";
 import Specifications from "../../../components/specifications";
 import { FaCheckCircle } from "react-icons/fa";
 import FakeNumber from "../../../components/fakeNumber";
+import BuyMobile from "../../../components/buyMobile";
 // error searchById cần fix cái này
 function ProductDetail() {
   const param = useParams();
@@ -66,7 +68,9 @@ function ProductDetail() {
   const [quantity, setQuantity] = useState<number>(1);
   const [showMore, setShowMore] = useState<boolean>(false);
   const [showMoreRight, setShowMoreRight] = useState<boolean>(false);
+  const [activeBuyMobile, setActiveBuyMobile] = useState<boolean>(false);
   const [messageApi, contextHolder] = message.useMessage();
+  const [specificProduct, setSpecificProduct] = useState<ProductsType>();
 
   // random
   const [addedToCart, setAddedToCart] = useState<number>(
@@ -116,7 +120,11 @@ function ProductDetail() {
   // }, []);
 
   // add to cart
-  const handleAddToCart = () => {
+  const handleAddToCart = (e: any) => {
+    //  tránh hiện tượng load trang, ngăn chặn mặc định của link
+    e.preventDefault();
+    // ngăn chán hành động dispatch search product
+    e.stopPropagation();
     messageApi.open({
       type: "success",
       content: "Thêm vào giỏ hàng thành công",
@@ -138,6 +146,40 @@ function ProductDetail() {
         sold: product?.sold,
       })
     );
+  };
+  const handleAddToCartTest = (e: any, product: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setSpecificProduct(product);
+    console.log("««««« product »»»»»", product);
+    console.log("««««« e »»»»»", e);
+
+    if (window.innerWidth < 576) {
+      setActiveBuyMobile(true);
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+      messageApi.open({
+        type: "success",
+        content: "Thêm vào giỏ hàng thành công",
+      });
+      dispatch(
+        addToCart({
+          id: product?._id,
+          name: product?.name,
+          quantity: quantity,
+          pic: product?.pic,
+          price: product?.price,
+          stock: product?.stock,
+          total: product?.total,
+          discount: product?.discount,
+          unit: product?.unit,
+          slug: product?.slug,
+          check: true,
+          categoryId: product?.categoryId,
+          sold: product?.sold,
+        })
+      );
+    }
   };
   //  buy quickly
   const handleAddToCartNow = () => {
@@ -602,6 +644,7 @@ function ProductDetail() {
                             justify="space-between"
                           >
                             <Space
+                              // onClick={() => setActiveBuyMobile(true)}
                               onClick={handleAddToCart}
                               className={clsx(
                                 style.add_to_cart,
@@ -613,7 +656,7 @@ function ProductDetail() {
                               Thêm vào giỏ hàng
                             </Space>
                             <Space
-                              onClick={handleAddToCartNow}
+                              onClick={(e) => handleAddToCartTest(e, product)}
                               className={clsx(
                                 style.buy_now,
                                 product && !product.stock
@@ -1024,14 +1067,12 @@ function ProductDetail() {
                                                 style.product_name_fakeNumber
                                               )}
                                             >
-                                              {product.fakeNumber && (
-                                                <FakeNumber
-                                                  fakeNumber={
-                                                    product.fakeNumber
-                                                  }
-                                                  realNumber={product.sold}
-                                                />
-                                              )}
+                                             <FakeNumber
+                                                    fakeNumber={
+                                                      product.fakeNumber
+                                                    }
+                                                    realNumber={product.sold}
+                                                  />
                                             </Space> */}
                                           </Flex>
                                           <Flex
@@ -1143,7 +1184,7 @@ function ProductDetail() {
                                             {/* buy
                                             <Flex justify="space-between">
                                               <Space
-                                                // onClick={handleAddToCart}
+                                                // // onClick={handleAddToCart}
                                                 className={clsx(
                                                   style.buy_now_in_home,
                                                   product &&
@@ -1213,7 +1254,7 @@ function ProductDetail() {
                 )}
               </div>
 
-              {/* địa chỉ cửa hàn, theo category, theo lịch sử*/}
+              {/* địa chỉ cửa hàng, theo category, theo lịch sử*/}
               <div className={clsx(style.product_background)}>
                 {/* xem địa chỉ cửa hàng */}
                 {window.innerWidth <= 576 && (
@@ -1364,7 +1405,6 @@ function ProductDetail() {
                           <Space className={clsx(style.title_product_relate)}>
                             Sản phẩm liên quan
                           </Space>
-
                           <Swiper
                             modules={[Navigation, Pagination, Scrollbar, A11y]}
                             breakpoints={{
@@ -1428,12 +1468,12 @@ function ProductDetail() {
                                                 !product.stock && style.soldOut
                                               )}
                                             >
-                                              <Label
+                                              {/* <Label
                                                 soldOut={
                                                   !product.stock ? true : false
                                                 }
                                                 title={product.category.name}
-                                              />
+                                              /> */}
                                             </Space>
                                             {/* pic and fakeNumber */}
                                             <Flex
@@ -1454,21 +1494,19 @@ function ProductDetail() {
                                                   style.product_name_fakeNumber
                                                 )}
                                               >
-                                                {product.fakeNumber && (
-                                                  <FakeNumber
-                                                    fakeNumber={
-                                                      product.fakeNumber
-                                                    }
-                                                    realNumber={product.sold}
-                                                  />
-                                                )}
+                                                <FakeNumber
+                                                  fakeNumber={
+                                                    product.fakeNumber
+                                                  }
+                                                  realNumber={product.sold}
+                                                />
                                               </Space>
                                             </Flex>
                                             <Flex
                                               vertical
                                               justify="space-between"
                                               style={{
-                                                padding: "50px 20px 20px 20px",
+                                                padding: "20px 20px 10px 20px",
                                               }}
                                             >
                                               <Space
@@ -1548,7 +1586,12 @@ function ProductDetail() {
                                               {/* buy */}
                                               <Flex justify="space-between">
                                                 <Space
-                                                  // onClick={handleAddToCart}
+                                                  onClick={(e) =>
+                                                    handleAddToCartTest(
+                                                      e,
+                                                      product
+                                                    )
+                                                  }
                                                   className={clsx(
                                                     style.buy_now_in_home,
                                                     product &&
@@ -1673,12 +1716,12 @@ function ProductDetail() {
                                                 !product.stock && style.soldOut
                                               )}
                                             >
-                                              <Label
+                                              {/* <Label
                                                 soldOut={
                                                   !product.stock ? true : false
                                                 }
                                                 title={product.category.name}
-                                              />
+                                              /> */}
                                             </Space>
                                             {/* pic and fakeNumber */}
                                             <Flex
@@ -1699,21 +1742,19 @@ function ProductDetail() {
                                                   style.product_name_fakeNumber
                                                 )}
                                               >
-                                                {product.fakeNumber && (
-                                                  <FakeNumber
-                                                    fakeNumber={
-                                                      product.fakeNumber
-                                                    }
-                                                    realNumber={product.sold}
-                                                  />
-                                                )}
+                                                <FakeNumber
+                                                  fakeNumber={
+                                                    product.fakeNumber
+                                                  }
+                                                  realNumber={product.sold}
+                                                />
                                               </Space>
                                             </Flex>
                                             <Flex
                                               vertical
                                               justify="space-between"
                                               style={{
-                                                padding: " 50px 20px 20px 20px",
+                                                padding: " 20px 20px 10px 20px",
                                               }}
                                             >
                                               <Space
@@ -1793,7 +1834,15 @@ function ProductDetail() {
                                               {/* buy */}
                                               <Flex justify="space-between">
                                                 <Space
-                                                  // onClick={handleAddToCart}
+                                                  onClick={(e) =>
+                                                    handleAddToCartTest(
+                                                      e,
+                                                      product
+                                                    )
+                                                  }
+                                                  // onClick={() =>
+                                                  //   setActiveBuyMobile(true)
+                                                  // }
                                                   className={clsx(
                                                     style.buy_now_in_home,
                                                     product &&
@@ -1835,7 +1884,8 @@ function ProductDetail() {
                   </a>
                 </Space>
                 <Space
-                  onClick={handleAddToCart}
+                  onClick={(e) => handleAddToCartTest(e, product)}
+                  // onClick={handleAddToCart}
                   className={clsx(
                     style.add_to_cart,
                     product && !product.stock && style.soldOut_disabled
@@ -1853,6 +1903,11 @@ function ProductDetail() {
                   Mua ngay
                 </Space>
               </Flex>
+              <BuyMobile
+                product={specificProduct}
+                SetIsActive={setActiveBuyMobile}
+                active={activeBuyMobile}
+              />
             </>
           ) : (
             <Skeleton active></Skeleton>

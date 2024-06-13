@@ -9,9 +9,9 @@ const protect = async (req, res, next) => {
   ) {
     try {
       token = req.headers.authorization.split(" ")[1];
-      console.log("««««« token »»»»»", token);
+      // console.log("««««« token »»»»»", token);
       const decoded = jwt.verify(token, process.env.SECRET);
-      console.log("««««« decoded »»»»»", decoded);
+      // console.log("««««« decoded »»»»»", decoded);
       const expirationTime = decoded.exp * 1000; // Chuyển đổi thời gian hết hạn từ giây sang mili giây
       const currentTime = Date.now();
 
@@ -35,14 +35,13 @@ const protect = async (req, res, next) => {
       if (exitEmployee) req.user = exitEmployee;
       next();
     } catch (e) {
-      console.log("««««« e »»»»»", e);
       return res.send(400, {
         message: "Không có quyền truy cập",
       });
     }
   }
   if (!token) {
-    console.log("««««« token »»»»»", token);
+    // console.log("««««« token »»»»»", token);
     return res.send(400, {
       message: "Không có quyền truy cập!",
     });

@@ -3,43 +3,140 @@ const { fuzzySearch, asyncForEach } = require("../../utils");
 const unidecode = require("unidecode");
 
 module.exports = {
+  // v2/getAllProduct
+
   getAllProduct: async (req, res, next) => {
     try {
-      const total = await Product.find();
+      // Get total count of products for pagination
+      const total = await Product.countDocuments();
 
-      const { page, pageSize } = req.query;
+      const { page = 1, pageSize = 12, search = "" } = req.query;
 
-      const limit = pageSize || 12;
-      const skip = limit * (page - 1) || 0;
+      const limit = parseInt(pageSize);
+      const skip = limit * (page - 1);
 
-      // search theo tag
-      let { search } = req.query;
-      if (!search) {
-        search = "";
-      }
-      const result = await Product.find({ slug: fuzzySearch(search) })
-        .populate("category")
-        .populate("supplier")
-        .sort({ sold: -1, createdAt: -1 })
-        .lean({ virtuals: true });
+      // Aggregate to calculate fakeNumber + sold and sort
+      const pipeline = [
+        {
+          $match: {
+            slug: { $regex: search, $options: "i" }, // Perform a fuzzy search on the slug
+          },
+        },
+        {
+          $addFields: {
+            // Ensure fakeNumber and sold are treated as numbers and replace undefined with 0
+            fakeNumber: { $ifNull: [{ $toDouble: "$fakeNumber" }, 0] },
+            sold: { $ifNull: [{ $toDouble: "$sold" }, 0] },
+            totalSold: {
+              $add: [
+                { $ifNull: [{ $toDouble: "$fakeNumber" }, 0] },
+                { $ifNull: [{ $toDouble: "$sold" }, 0] },
+              ],
+            }, // Calculate fakeNumber + sold
+          },
+        },
+        {
+          $sort: {
+            totalSold: -1,
+            createdAt: -1,
+          },
+        },
+        // {
+        //   $skip: skip,
+        // },
+        // {
+        //   $limit: limit,
+        // },
+        // {
+        //   $lookup: {
+        //     from: "categories", // Make sure this matches the actual collection name for categories
+        //     localField: "category",
+        //     foreignField: "_id",
+        //     as: "category",
+        //   },
+        // },
+        // {
+        //   $lookup: {
+        //     from: "suppliers", // Make sure this matches the actual collection name for suppliers
+        //     localField: "supplier",
+        //     foreignField: "_id",
+        //     as: "supplier",
+        //   },
+        // },
+        // {
+        //   $unwind: {
+        //     path: "$category",
+        //     preserveNullAndEmptyArrays: true,
+        //   },
+        // },
+        // {
+        //   $unwind: {
+        //     path: "$supplier",
+        //     preserveNullAndEmptyArrays: true,
+        //   },
+        // },
+      ];
+
+      const result = await Product.aggregate(pipeline).exec();
+
       if (result.length > 0) {
-        return res.send(200, {
+        return res.status(200).send({
           message: "Lấy thông tin sản phẩm thành công",
           payload: result,
-          total: total.length,
+          total: total,
         });
       } else {
-        return res.send(200, {
+        return res.status(200).send({
           message: "Không có sản phẩm nào trùng khớp",
         });
       }
     } catch (error) {
       console.log("««««« error »»»»»", error);
-      return res.send(400, {
+      return res.status(400).send({
         message: "Lấy thông tin sản phẩm không thành công",
       });
     }
   },
+
+  // v1/getAllProduct
+  // getAllProduct: async (req, res, next) => {
+  //   try {
+  //     const total = await Product.find();
+
+  //     const { page, pageSize } = req.query;
+
+  //     const limit = pageSize || 12;
+  //     const skip = limit * (page - 1) || 0;
+
+  //     // search theo tag
+  //     let { search } = req.query;
+  //     if (!search) {
+  //       search = "";
+  //     }
+  //     const result = await Product.find({ slug: fuzzySearch(search) })
+  //       // nếu sử dụng ui là tag nhãn thì populate thêm category
+  //       // .populate("category")
+  //       // .populate("supplier")
+  //       .sort({ fakeAndRealSold: 1, createdAt: -1 })
+  //       .lean({ virtuals: true });
+  //     if (result.length > 0) {
+  //       return res.send(200, {
+  //         message: "Lấy thông tin sản phẩm thành công",
+  //         payload: result,
+  //         total: total.length,
+  //       });
+  //     } else {
+  //       return res.send(200, {
+  //         message: "Không có sản phẩm nào trùng khớp",
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.log("««««« error »»»»»", error);
+  //     return res.send(400, {
+  //       message: "Lấy thông tin sản phẩm không thành công",
+  //     });
+  //   }
+  // },
 
   getAllProductSearch: async (req, res, next) => {
     try {
@@ -415,6 +512,8 @@ module.exports = {
 
   updateProduct: async (req, res, next) => {
     try {
+      console.log("««««« oke »»»»»");
+
       const { id } = req.params;
       let {
         name,
@@ -497,8 +596,16 @@ module.exports = {
           message: "Không tìm thấy sản phẩm",
         });
       }
+      // console.log("««««« oke »»»»»");
       // 2 == update bth, 3 === tang so luong(khong mua) , 1 === tru so luong stock(mua)
       console.log("««««« autoQuantity check »»»»»", autoQuantity);
+      console.log(
+        "««««« sold, stock , sold before »»»»»",
+        stock,
+        quantity,
+        sold
+      );
+
       if (autoQuantity === 1) {
         stock = payload.stock - quantity;
         sold = payload.sold + quantity;
@@ -507,14 +614,21 @@ module.exports = {
         stock = payload.stock + quantity;
         sold = payload.sold - quantity;
       }
-      console.log("««««« sold, stock »»»»»", this.stock, stock, quantity);
+      console.log(
+        "««««« sold, stock , sold after »»»»»",
+        stock,
+        quantity,
+        sold
+      );
+      console.log("««««« sold, this.sold »»»»»", sold, this.sold);
       const result = await Product.findByIdAndUpdate(
         id,
         {
           name: name || this.name,
           price: price || this.price,
-          stock: stock || this.stock,
-          sold: sold || this.sold,
+          stock: stock !== undefined ? stock : this.stock,
+          // vì 0 rơi vào trường hợp là falsy, nó sẽ ngăn chặn việc gọi tới 0, nên sẽ lấy giá trị tồn tại sẵn trước đó
+          sold: sold !== undefined ? sold : this.sold,
           description: description || this.description,
           categoryId: categoryId || this.categoryId,
           supplierId: supplierId || this.supplierId,
@@ -539,6 +653,7 @@ module.exports = {
         }
       );
 
+      console.log("««««« result »»»»»", result);
       return res.send(200, {
         message: "Cập nhật sản phẩm thành công",
         payload: result,
