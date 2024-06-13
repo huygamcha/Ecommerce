@@ -22,6 +22,7 @@ import {
   Radio,
   Empty,
   Breadcrumb,
+  Spin,
 } from "antd";
 import numeral from "numeral";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -63,6 +64,7 @@ function CartScreen() {
   const { carts, totalPrice, checkAll, totalOriginal, totalCheck } =
     useAppSelector((state) => state.carts);
   const { location, locations } = useAppSelector((state) => state.locations);
+  const { loading } = useAppSelector((state) => state.orders);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -575,6 +577,16 @@ function CartScreen() {
                                 >
                                   Mua hàng {totalCheck ? `(${totalCheck})` : ""}
                                 </button>
+                                <Space
+                                  style={{
+                                    marginTop: "12px",
+                                    lineHeight: "19px",
+                                  }}
+                                >
+                                  Bằng việc tiến hành đặt mua hàng, bạn đồng ý
+                                  với Điều khoản dịch vụ và Chính sách xử lý dữ
+                                  liệu cá nhân của Shop Min
+                                </Space>
                               </Col>
 
                               <Col xs={0} sm={24}></Col>
@@ -1489,17 +1501,33 @@ function CartScreen() {
                                   </Flex>
                                 </Col>
                                 <Col span={24}>
-                                  <button
-                                    type="submit"
-                                    // onClick={() => setBuy(true)}
-                                    className={clsx(
-                                      style.button_payment,
-                                      !totalCheck ? style.disable : ""
-                                    )}
-                                  >
-                                    Hoàn tất{" "}
-                                    {totalCheck ? `(${totalCheck})` : ""}
-                                  </button>
+                                  {loading ? (
+                                    <Spin />
+                                  ) : (
+                                    <Flex vertical>
+                                      <button
+                                        type="submit"
+                                        // onClick={() => setBuy(true)}
+                                        className={clsx(
+                                          style.button_payment,
+                                          !totalCheck ? style.disable : ""
+                                        )}
+                                      >
+                                        Hoàn tất
+                                        {totalCheck ? `(${totalCheck})` : ""}
+                                      </button>
+                                      <Space
+                                        style={{
+                                          marginTop: "12px",
+                                          lineHeight: "19px",
+                                        }}
+                                      >
+                                        Bằng việc tiến hành đặt mua hàng, bạn
+                                        đồng ý với Điều khoản dịch vụ và Chính
+                                        sách xử lý dữ liệu cá nhân của Shop Min
+                                      </Space>
+                                    </Flex>
+                                  )}
                                 </Col>
                               </Row>
                             </div>

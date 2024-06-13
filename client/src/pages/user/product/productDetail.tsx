@@ -656,7 +656,7 @@ function ProductDetail() {
                               Thêm vào giỏ hàng
                             </Space>
                             <Space
-                              onClick={(e) => handleAddToCartTest(e, product)}
+                              onClick={handleAddToCartNow}
                               className={clsx(
                                 style.buy_now,
                                 product && !product.stock

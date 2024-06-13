@@ -33,6 +33,12 @@ module.exports = {
                 { $ifNull: [{ $toDouble: "$sold" }, 0] },
               ],
             }, // Calculate fakeNumber + sold
+            total: {
+              $multiply: [
+                { $toDouble: "$price" },
+                { $divide: [{ $subtract: [100, "$discount"] }, 100] },
+              ],
+            }, // Calculate total as price * ((100 - discount) / 100)
           },
         },
         {
@@ -41,40 +47,40 @@ module.exports = {
             createdAt: -1,
           },
         },
-        // {
-        //   $skip: skip,
-        // },
-        // {
-        //   $limit: limit,
-        // },
-        // {
-        //   $lookup: {
-        //     from: "categories", // Make sure this matches the actual collection name for categories
-        //     localField: "category",
-        //     foreignField: "_id",
-        //     as: "category",
-        //   },
-        // },
-        // {
-        //   $lookup: {
-        //     from: "suppliers", // Make sure this matches the actual collection name for suppliers
-        //     localField: "supplier",
-        //     foreignField: "_id",
-        //     as: "supplier",
-        //   },
-        // },
-        // {
-        //   $unwind: {
-        //     path: "$category",
-        //     preserveNullAndEmptyArrays: true,
-        //   },
-        // },
-        // {
-        //   $unwind: {
-        //     path: "$supplier",
-        //     preserveNullAndEmptyArrays: true,
-        //   },
-        // },
+        {
+          $skip: skip,
+        },
+        {
+          $limit: limit,
+        },
+        {
+          $lookup: {
+            from: "categories", // Make sure this matches the actual collection name for categories
+            localField: "category",
+            foreignField: "_id",
+            as: "category",
+          },
+        },
+        {
+          $lookup: {
+            from: "suppliers", // Make sure this matches the actual collection name for suppliers
+            localField: "supplier",
+            foreignField: "_id",
+            as: "supplier",
+          },
+        },
+        {
+          $unwind: {
+            path: "$category",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $unwind: {
+            path: "$supplier",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
       ];
 
       const result = await Product.aggregate(pipeline).exec();
@@ -117,7 +123,7 @@ module.exports = {
   //       // nếu sử dụng ui là tag nhãn thì populate thêm category
   //       // .populate("category")
   //       // .populate("supplier")
-  //       .sort({ fakeAndRealSold: 1, createdAt: -1 })
+  //       .sort({ createdAt: -1 })
   //       .lean({ virtuals: true });
   //     if (result.length > 0) {
   //       return res.send(200, {
