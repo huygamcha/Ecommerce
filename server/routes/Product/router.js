@@ -33,8 +33,6 @@ router
   .delete(protect, admin, validateSchema(checkId), deleteProduct)
   .get(validateSchema(checkId), getDetailProduct)
   .patch(
-    protect,
-    admin,
     validateSchema(checkId),
     validateSchema(checkUpdateProduct),
     updateProduct

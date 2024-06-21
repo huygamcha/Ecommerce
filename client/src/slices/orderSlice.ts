@@ -16,7 +16,6 @@ interface detailProduct {
     unit: string
     categoryId: string
     id: string
-
 }
 
 interface OrdersType {

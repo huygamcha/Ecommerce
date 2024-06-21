@@ -33,6 +33,7 @@ import PolicyFooter from "../../../components/policyFooter";
 import FakeNumber from "../../../components/fakeNumber";
 import { addToCart } from "../../../slices/cartSlice";
 import BuyMobile from "../../../components/buyMobile";
+
 function Timkiem() {
   const filter = localStorage.getItem("filter")
     ? JSON.parse(localStorage.getItem("filter")!)
@@ -825,7 +826,9 @@ function Timkiem() {
                                       src={product.pic}
                                       className={clsx(style.content_img)}
                                       alt=""
+                                      loading="lazy"
                                     />
+
                                     <Space
                                       className={clsx(
                                         style.product_name_fakeNumber

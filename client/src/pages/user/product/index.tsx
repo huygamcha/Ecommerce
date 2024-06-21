@@ -42,6 +42,7 @@ import PolicyFooter from "../../../components/policyFooter";
 import FakeNumber from "../../../components/fakeNumber";
 import { addToCart } from "../../../slices/cartSlice";
 import BuyMobile from "../../../components/buyMobile";
+// import { LazyLoadImage } from "react-lazy-load-image-component";
 
 function ProductScreen() {
   const { products, error, product } = useAppSelector(
@@ -538,6 +539,7 @@ function ProductScreen() {
                                         src={product.pic}
                                         className={clsx(style.content_img)}
                                         alt=""
+                                        loading="lazy"
                                       />
                                       <Space
                                         className={clsx(

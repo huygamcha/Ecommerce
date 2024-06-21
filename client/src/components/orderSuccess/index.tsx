@@ -3,12 +3,19 @@ import style from "./orderSuccess.module.css";
 import { Col, Flex, Row, Space } from "antd";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../store";
 
 function OrderSuccess() {
+  const dispatch = useAppDispatch();
+  const { loading, order } = useAppSelector((state) => state.orders);
+
   const location = useLocation();
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   }, [location]);
+  // Using type assertion
+  const orderId = (order as any as { payload: { _id: string } })?.payload?._id;
+
   return (
     <div
       style={{
@@ -36,6 +43,9 @@ function OrderSuccess() {
                 <Row style={{ padding: "16px" }}>
                   <Col className={clsx(style.header_success)} span={24}>
                     Đặt hàng thành công
+                  </Col>
+                  <Col span={24} className={clsx(style.header_code)}>
+                    Mã đơn hàng của bạn: #{orderId.slice(18)}
                   </Col>
                   <Col className={clsx(style.header_des)} span={24}>
                     Shop sẽ liên hệ với bạn để xác nhận đơn hàng

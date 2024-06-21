@@ -577,16 +577,15 @@ function CartScreen() {
                                 >
                                   Mua hàng {totalCheck ? `(${totalCheck})` : ""}
                                 </button>
-                                <Space
-                                  style={{
-                                    marginTop: "12px",
-                                    lineHeight: "19px",
-                                  }}
-                                >
+                                <div className={clsx(style.policy_payment)}>
                                   Bằng việc tiến hành đặt mua hàng, bạn đồng ý
-                                  với Điều khoản dịch vụ và Chính sách xử lý dữ
-                                  liệu cá nhân của Shop Min
-                                </Space>
+                                  với <Link to={"/"}>Điều khoản dịch vụ </Link>
+                                  và{" "}
+                                  <Link to={"/"}>
+                                    Chính sách xử lý dữ liệu cá nhân{" "}
+                                  </Link>
+                                  của Shop Min
+                                </div>
                               </Col>
 
                               <Col xs={0} sm={24}></Col>
@@ -1514,18 +1513,22 @@ function CartScreen() {
                                         )}
                                       >
                                         Hoàn tất
-                                        {totalCheck ? `(${totalCheck})` : ""}
+                                        {/* {totalCheck ? `(${totalCheck})` : ""} */}
                                       </button>
-                                      <Space
-                                        style={{
-                                          marginTop: "12px",
-                                          lineHeight: "19px",
-                                        }}
+                                      <div
+                                        className={clsx(style.policy_payment)}
                                       >
                                         Bằng việc tiến hành đặt mua hàng, bạn
-                                        đồng ý với Điều khoản dịch vụ và Chính
-                                        sách xử lý dữ liệu cá nhân của Shop Min
-                                      </Space>
+                                        đồng ý với{" "}
+                                        <Link to={"/"}>
+                                          Điều khoản dịch vụ{" "}
+                                        </Link>
+                                        và{" "}
+                                        <Link to={"/"}>
+                                          Chính sách xử lý dữ liệu cá nhân{" "}
+                                        </Link>
+                                        của Shop Min
+                                      </div>
                                     </Flex>
                                   )}
                                 </Col>
@@ -1606,7 +1609,8 @@ function CartScreen() {
                                         <Radio value="vnPay">
                                           <Flex align="center">
                                             <img
-                                              src="https://s3-sgn09.fptcloud.com/lc-public/app-lc/payment/vnpay.png"
+                                              // src="https://s3-sgn09.fptcloud.com/lc-public/app-lc/payment/vnpay.png"
+                                              src="https://s3-sgn09.fptcloud.com/lc-public/app-lc/payment/card.png"
                                               alt=""
                                               style={{
                                                 width: "40px",
@@ -1619,7 +1623,7 @@ function CartScreen() {
                                           </Flex>
                                         </Radio>
                                       </Col>
-                                      <Col span={24}>
+                                      {/* <Col span={24}>
                                         <Radio value="visa">
                                           <Flex align="center">
                                             <img
@@ -1636,8 +1640,8 @@ function CartScreen() {
                                             ApplePay)
                                           </Flex>
                                         </Radio>
-                                      </Col>
-                                      <Col span={24}>
+                                      </Col> */}
+                                      {/* <Col span={24}>
                                         <Radio value="zaloPay">
                                           <Flex align="center">
                                             <img
@@ -1668,7 +1672,7 @@ function CartScreen() {
                                             Thanh toán bằng ví MoMo
                                           </Flex>
                                         </Radio>
-                                      </Col>
+                                      </Col> */}
                                     </Radio.Group>
                                   </Form.Item>
                                 </Row>

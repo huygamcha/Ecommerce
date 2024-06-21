@@ -52,6 +52,8 @@ function ProfileScreen() {
   useEffect(() => {
     if (!currentUser) {
       navigate("/auth/login");
+    } else {
+      navigate("/admin");
     }
   }, [currentUser]);
 

@@ -379,10 +379,17 @@
 .policy_footer_wrapper{
   padding-top: 30px;
 }
+.policy_payment{
+  margin-top: 12px;
+  line-height: 19px;
+}
 
 
 
 @media (max-width: 575.98px) {
+  .policy_payment{
+    margin-top: 0px;
+  }
   .wrapper_content{
     border-radius: 0px;
   }
@@ -420,7 +427,7 @@
   }
 
   .button_payment {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
 
   .wrapper_content_mobile_preBuy {
