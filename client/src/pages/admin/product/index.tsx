@@ -51,7 +51,6 @@ const Product = (props: Props) => {
   const [value, setValue] = useState("");
   const reactQuillRef = useRef<ReactQuill>(null);
   const imageHandler = useCallback(() => {
-    console.log("««««« 3223232 »»»»»", 3223232);
     const input = document.createElement("input");
     input.setAttribute("type", "file");
     input.setAttribute("accept", "image/*");
@@ -59,7 +58,9 @@ const Product = (props: Props) => {
     input.onchange = async () => {
       if (input !== null && input.files !== null) {
         const file = input.files[0];
-        const url = await uploadToCloudinary(file);
+
+        const url = await uploadToCloudflare(file);
+
         const quill = reactQuillRef.current;
         if (quill) {
           const range = quill.getEditorSelection();
@@ -69,20 +70,27 @@ const Product = (props: Props) => {
     };
   }, []);
 
-  const uploadToCloudinary = async (file: File): Promise<string> => {
+  const uploadToCloudflare = async (file: File): Promise<string> => {
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", "pbl3_chatbot");
-    const res = await fetch(
-      "https://api.cloudinary.com/v1_1/drqphlfn6/image/upload",
-      {
-        method: "post",
-        body: formData,
-      }
-    );
-    const data = await res.json();
-    const url = data.url;
-    return url;
+    const response = await fetch(`${process.env.REACT_APP_BACKEND}/upload`, {
+      method: "POST",
+      body: formData,
+    });
+    const result = await response.text();
+    return result;
+    // formData.append("upload_preset", "pbl3_chatbot");
+    // const res = await fetch(
+    //   "https://api.cloudinary.com/v1_1/drqphlfn6/image/upload",
+    //   {
+    //     method: "post",
+    //     body: formData,
+    //   }
+    // );
+    // const data = await res.json();
+    // const url = data.url;
+    // console.log("««««« url »»»»»", url);
+    // return url;
   };
 
   const { products, error } = useAppSelector((state) => state.products);
@@ -175,6 +183,7 @@ const Product = (props: Props) => {
 
   const onFinish = async (values: any) => {
     await dispatch(createProduct({ ...values, album: albumCreate }));
+    setPic("");
     setIsActive(!isActive);
   };
 
@@ -225,8 +234,9 @@ const Product = (props: Props) => {
 
   // image screen with add
   const [picAdd, setPicAdd] = useState<string>();
-  // image screen with add
-  const handleImageAdd = (pics: any) => {
+
+  // thêm 1 ảnh vào album
+  const handleImageAdd = async (pics: any) => {
     if (pics === undefined) {
       return;
     }
@@ -235,28 +245,39 @@ const Product = (props: Props) => {
       pics.type === "image/png" ||
       pics.type === "image/webp"
     ) {
+      // setIsLoading(false);
+      // const data = new FormData();
+      // data.append("file", pics);
+      // data.append("upload_preset", "pbl3_chatbot");
+      // data.append("cloud_name", "drqphlfn6");
+      // fetch("https://api.cloudinary.com/v1_1/drqphlfn6/image/upload", {
+      //   method: "post",
+      //   body: data,
+      // })
+      //   .then((res) => res.json())
+      //   .then((data) => {
+      //     setPicAdd(data.url.toString());
+      //     setIsLoading(true);
+      //     setAlbumUpdate([...albumUpdate, data.url.toString()]);
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
+
       setIsLoading(false);
       const data = new FormData();
       data.append("file", pics);
-      data.append("upload_preset", "pbl3_chatbot");
-      data.append("cloud_name", "drqphlfn6");
-      fetch("https://api.cloudinary.com/v1_1/drqphlfn6/image/upload", {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND}/upload`, {
         method: "post",
         body: data,
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setPicAdd(data.url.toString());
-          setIsLoading(true);
-          setAlbumUpdate([...albumUpdate, data.url.toString()]);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      });
+      const result = await response.text();
+      setIsLoading(true);
+      setPicAdd(result);
+      setAlbumUpdate([...albumUpdate, result]);
     } else {
       return;
     }
-    console.log("««««« pic »»»»»", pic);
   };
 
   // table
@@ -388,8 +409,8 @@ const Product = (props: Props) => {
   // image album
   const [albumCreate, setAlbumCreate] = useState<Array<string>>([]);
 
-  // upload screen image
-  const postDetails = (pics: any, infor: string) => {
+  // upload hình ảnh đại diện cho sản phẩm
+  const postDetails = async (pics: any, infor: string) => {
     if (pics === undefined) {
       return;
     }
@@ -401,32 +422,25 @@ const Product = (props: Props) => {
       setIsLoading(false);
       const data = new FormData();
       data.append("file", pics);
-      data.append("upload_preset", "pbl3_chatbot");
-      data.append("cloud_name", "drqphlfn6");
-      fetch("https://api.cloudinary.com/v1_1/drqphlfn6/image/upload", {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND}/upload`, {
         method: "post",
         body: data,
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (infor === "create") {
-            setPic(data.url.toString());
-            createForm.setFieldValue("pic", data.url.toString());
-          } else {
-            setPicDetail(data.url.toString());
-          }
-          setIsLoading(true);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      });
+      const result = await response.text();
+      setIsLoading(true);
+      if (infor === "create") {
+        setPic(result);
+        createForm.setFieldValue("pic", result);
+      } else {
+        setPicDetail(result);
+      }
     } else {
       return;
     }
     console.log("««««« pic »»»»»", pic);
   };
 
-  // upload album
+  // upload nhiều ảnh vào album
   const handleUploadAlbum = async (albums: any, infor: string) => {
     if (albums === undefined) {
       return;
@@ -435,33 +449,55 @@ const Product = (props: Props) => {
     const asArrayAlbum = Object.entries(albums);
     const resultAlbum: string[] = [];
     await Promise.all(
-      asArrayAlbum.map((album: any, index: number) => {
+      asArrayAlbum.map(async (album: any, index: number) => {
         setIsLoading(false);
-        if (album[1].type === "image/jpeg" || album[1].type === "image/png") {
+        if (
+          album[1].type === "image/jpeg" ||
+          album[1].type === "image/png" ||
+          album[1].type === "image/webp"
+        ) {
           setIsLoading(false);
           const data = new FormData();
           data.append("file", album[1]);
-          data.append("upload_preset", "pbl3_chatbot");
-          data.append("cloud_name", "drqphlfn6");
-          fetch("https://api.cloudinary.com/v1_1/drqphlfn6/image/upload", {
-            method: "post",
-            body: data,
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              if (infor === "create") {
-                resultAlbum.push(data.url.toString());
-                if (index === asArrayAlbum.length - 1) {
-                  setAlbumCreate(resultAlbum);
-                  setIsLoading(true);
-                }
-              } else {
-                setPicDetail(data.url.toString());
-              }
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+          const response = await fetch(
+            `${process.env.REACT_APP_BACKEND}/upload`,
+            {
+              method: "post",
+              body: data,
+            }
+          );
+          const result = await response.text();
+          if (infor === "create") {
+            resultAlbum.push(result);
+            if (index === asArrayAlbum.length - 1) {
+              setAlbumCreate(resultAlbum);
+              setIsLoading(true);
+            }
+          } else {
+            setPicDetail(result);
+          }
+
+          // data.append("upload_preset", "pbl3_chatbot");
+          // data.append("cloud_name", "drqphlfn6");
+          // fetch("https://api.cloudinary.com/v1_1/drqphlfn6/image/upload", {
+          //   method: "post",
+          //   body: data,
+          // })
+          //   .then((res) => res.json())
+          //   .then((data) => {
+          //     if (infor === "create") {
+          //       resultAlbum.push(data.url.toString());
+          //       if (index === asArrayAlbum.length - 1) {
+          //         setAlbumCreate(resultAlbum);
+          //         setIsLoading(true);
+          //       }
+          //     } else {
+          //       setPicDetail(data.url.toString());
+          //     }
+          //   })
+          //   .catch((err) => {
+          //     console.log(err);
+          //   });
         } else {
           return;
         }
@@ -971,6 +1007,7 @@ const Product = (props: Props) => {
                     }
                   }}
                 ></Input>
+
                 {albumUpdate &&
                   albumUpdate.map((item: any, index: number) => (
                     <div

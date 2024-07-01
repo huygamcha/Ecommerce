@@ -48,6 +48,7 @@ import LocationAdmin from "./pages/admin/location";
 import PolicyAdmin from "./pages/admin/policy";
 import PolicyScreen from "./pages/user/policy";
 import PageLocation from "./components/pageLocation";
+import TestCloudfare from "./pages/user/image";
 const { Sider, Content } = Layout;
 numeral.locale("vi");
 
@@ -70,6 +71,11 @@ const router = createBrowserRouter([
         element: <Register />,
       },
     ],
+  },
+
+  {
+    path: "/upload",
+    element: <TestCloudfare />,
   },
 
   {

@@ -58,11 +58,37 @@ app.use("/banners", bannerRouter);
 app.use("/locations", LocationRouter);
 app.use("/policies", PolicyRouter);
 app.use("/", authRouter);
-app.use("/tesst", (req, res) => {
-  res.send("123");
-});
 
-// app.use("/users", usersRouter);
+const multer = require("multer");
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+const storage = multer.memoryStorage();
+const upload = multer({
+  storage,
+});
+app.post("/upload", upload.single("file"), async (req, res) => {
+  const S3 = new S3Client({
+    region: "auto",
+    endpoint: process.env.ENDPOINT,
+    credentials: {
+      accessKeyId: process.env.R2_ACCESS_KEY_ID,
+      secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
+    },
+  });
+  const fileKey = req.file.originalname;
+
+  await S3.send(
+    new PutObjectCommand({
+      Body: req.file.buffer,
+      Bucket: "min",
+      Key: fileKey,
+      ContentType: req.file.mimetype,
+      ACL: "public-read", // Cho phép truy cập công khai
+    })
+  );
+  // URL của tệp đã tải lên
+  const fileUrl = `https://pub-50bb58cfabdd4b93abb4e154d0eada9e.r2.dev/${fileKey}`;
+  res.send(`${fileUrl}`);
+});
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

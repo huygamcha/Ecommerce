@@ -75,7 +75,7 @@ const Register: React.FC = () => {
 
   // upload avatar
   const [pic, setPic] = useState<string>();
-  const postDetails = (pics: any) => {
+  const postDetails = async (pics: any) => {
     if (pics === undefined) {
       return;
     }
@@ -86,20 +86,12 @@ const Register: React.FC = () => {
     ) {
       const data = new FormData();
       data.append("file", pics);
-      data.append("upload_preset", "pbl3_chatbot");
-      data.append("cloud_name", "drqphlfn6");
-      fetch("https://api.cloudinary.com/v1_1/drqphlfn6/image/upload", {
-        method: "post",
+      const response = await fetch(`${process.env.REACT_APP_BACKEND}/upload`, {
+        method: "POST",
         body: data,
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setPic(data.url.toString());
-          console.log(data.url.toString());
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      });
+      const result = await response.text();
+      setPic(result);
     } else {
       return;
     }

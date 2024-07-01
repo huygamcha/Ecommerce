@@ -1062,7 +1062,8 @@ function ProductScreen() {
                   >
                     {brands &&
                       brands.map((brand, index) => {
-                        if (brand.categoryId === "65c1a957dcdd1e4eceaa3cf3") {
+                        // 65c1a957dcdd1e4eceaa3cf3
+                        if (brand.categoryId === "66820fbc02a225bad3e709df") {
                           return (
                             <div
                               key={index}

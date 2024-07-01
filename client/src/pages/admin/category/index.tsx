@@ -98,7 +98,7 @@ const Category = (props: Props) => {
 
   const onFinish = async (values: any) => {
     await dispatch(createCategory(values));
-    // setInitialRender(false);
+    setPic("");
     setIsActive(!isActive);
   };
 
@@ -133,7 +133,8 @@ const Category = (props: Props) => {
   const [picDetail, setPicDetail] = useState<string>();
   const [pic, setPic] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const postDetails = (pics: any, infor: string) => {
+
+  const postDetails = async (pics: any, infor: string) => {
     if (pics === undefined) {
       return;
     }
@@ -145,30 +146,21 @@ const Category = (props: Props) => {
       setIsLoading(false);
       const data = new FormData();
       data.append("file", pics);
-      data.append("upload_preset", "pbl3_chatbot");
-      data.append("cloud_name", "drqphlfn6");
-      fetch("https://api.cloudinary.com/v1_1/drqphlfn6/image/upload", {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND}/upload`, {
         method: "post",
         body: data,
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setIsLoading(true);
-          if (infor === "create") {
-            setPic(data.url.toString());
-            createForm.setFieldValue("pic", data.url.toString());
-          } else {
-            setPicDetail(data.url.toString());
-          }
-          console.log(data.url.toString());
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      });
+      const result = await response.text();
+      setIsLoading(true);
+      if (infor === "create") {
+        setPic(result);
+        createForm.setFieldValue("pic", result);
+      } else {
+        setPicDetail(result);
+      }
     } else {
       return;
     }
-    console.log("««««« pic »»»»»", pic);
   };
 
   // table
@@ -293,7 +285,7 @@ const Category = (props: Props) => {
           <Form.Item wrapperCol={{ offset: 6 }}>
             {isLoading ? (
               <Button type="primary" htmlType="submit">
-                Thêm danh mục
+                Thêm
               </Button>
             ) : (
               <Spin />

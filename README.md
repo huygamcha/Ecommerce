@@ -2,8 +2,8 @@ sau khi kết nối với server linux/ubuntu trên google cloud
 Bước 1: cài đặt git
 sudo apt update
 sudo apt install git
-git config --global user.name "Your Name"
-git config --global user.email "your.email@example.com"
+git config --global user.name "huygamcha"
+git config --global user.email "lehuynhhuy2002@gmail.com"
 
 Bước 2: Cài đặt node và npm
 sudo apt update
@@ -17,10 +17,10 @@ Bước 3: cấu hình nginx, pm2, ssl
 sudo apt update
 sudo apt install nginx
 sudo systemctl status nginx
-sudo nano /etc/nginx/sites-available/example.com
+sudo nano /etc/nginx/sites-available/min.com
 server {
 listen 80;
-server_name example.com;
+server_name phpdev.cfd www.phpdev.cfd;
 
     location / {
         proxy_pass http://localhost:3000;
@@ -37,17 +37,17 @@ server_name example.com;
     }
 
 }
-sudo ln -s /etc/nginx/sites-available/example.com /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/min.com /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl restart nginx
 
 Bước 3.2: Chạy pm2:
-npm install -g pm2
+sudo npm install -g pm2
 pm2 start app.js
 pm2 startup
 pm2 save
 
 Bước 3.3: Cấu hình ssl
 sudo apt install certbot python3-certbot-nginx
-sudo certbot --nginx -d example.com -d www.example.com
+sudo certbot --nginx -d phpdev.cfd -d www.phpdev.cfd
 sudo certbot renew --dry-run
