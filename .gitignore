@@ -1,0 +1,11 @@
+# Ignore the entire be folder
+# /client/
+
+# Ignore the entire fe folder
+# /server/
+
+# Alternatively, ignore specific files or folders in be and fe
+/client/node_modules/
+/client/.env
+/server/node_modules/
+/server/.env
