@@ -53,6 +53,7 @@ import Specifications from "../../../components/specifications";
 import { FaCheckCircle } from "react-icons/fa";
 import FakeNumber from "../../../components/fakeNumber";
 import BuyMobile from "../../../components/buyMobile";
+import { GrDirections } from "react-icons/gr";
 // error searchById cần fix cái này
 function ProductDetail() {
   const param = useParams();
@@ -386,7 +387,10 @@ function ProductDetail() {
                             >
                               {product?.album &&
                                 product?.album.map((item, index) => (
-                                  <SwiperSlide key={index}>
+                                  <SwiperSlide
+                                    className={clsx(style.wrapper_album)}
+                                    key={index}
+                                  >
                                     <Image
                                       className={clsx(style.album_item)}
                                       src={item}
@@ -1371,7 +1375,7 @@ function ProductDetail() {
                                         rel="noreferrer"
                                       >
                                         <Flex align="center">
-                                          <FaLocationCrosshairs
+                                          <GrDirections
                                             style={{
                                               fontSize: "15px",
                                               marginRight: "3px",
@@ -1402,9 +1406,12 @@ function ProductDetail() {
                     <div>
                       <Row>
                         <Col span={24}>
-                          <Space className={clsx(style.title_product_relate)}>
-                            Sản phẩm liên quan
-                          </Space>
+                          {productsSearch.length > 1 && (
+                            <Space className={clsx(style.title_product_relate)}>
+                              Sản phẩm liên quan
+                            </Space>
+                          )}
+
                           <Swiper
                             modules={[Navigation, Pagination, Scrollbar, A11y]}
                             breakpoints={{

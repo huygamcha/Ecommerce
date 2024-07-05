@@ -609,13 +609,7 @@ const Product = (props: Props) => {
               <InputNumber style={{ width: "100%" }} defaultValue={0} min={0} />
             </Form.Item>
 
-            <Form.Item<FieldType>
-              rules={[
-                { required: true, message: "Vui lòng nhập giảm giá sản phẩm!" },
-              ]}
-              label="Giảm giá"
-              name="discount"
-            >
+            <Form.Item<FieldType> label="Giảm giá" name="discount">
               <InputNumber
                 style={{ width: "100%" }}
                 defaultValue={0}
@@ -802,7 +796,7 @@ const Product = (props: Props) => {
 
         {/* form edit và delete */}
         <Modal
-          width={"200vh"}
+          width={"150vh"}
           centered
           title="Chỉnh sửa sản phẩm"
           onCancel={() => {

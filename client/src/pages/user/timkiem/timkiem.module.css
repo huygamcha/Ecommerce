@@ -109,7 +109,7 @@
 
 .content_img {
   height: 128px;
-  width: 128px;
+  /* width: 128px; */
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }

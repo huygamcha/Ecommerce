@@ -428,7 +428,7 @@ const LocationAdmin = (props: Props) => {
           updateForm.submit();
         }}
         confirmLoading={!isLoading}
-        width={"200vh"}
+        width={"150vh"}
       >
         <Card style={{ width: "100%" }}>
           <Form

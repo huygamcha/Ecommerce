@@ -4,7 +4,7 @@ import axios from "axios";
 
 interface CategoriesType {
   name: string;
-  description: string;
+  no: number;
   _id: string;
   productCount: number;
   slug: string;
@@ -31,7 +31,7 @@ const initialState: InitialType = {
     slug: '',
     _id: '',
     name: "",
-    description: "",
+    no: 0,
     productCount: 0
   },
   loading: false,

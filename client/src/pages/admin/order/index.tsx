@@ -407,7 +407,7 @@ const Order = (props: Props) => {
       <Modal
         centered
         title="Chỉnh sửa đơn đặt hàng"
-        width={"200vh"}
+        width={"150vh"}
         onCancel={() => {
           navigate(-1);
           setSelectedOrder(false);

@@ -265,8 +265,6 @@
   font-weight: 500;
   line-height: 20px;
 }
-
-
 /* promotion */
 .promotion_wrapper {
   background-color: #eef0f3;
@@ -383,8 +381,9 @@
   margin-top: 12px;
   line-height: 19px;
 }
-
-
+.wrapper_product_list > div:last-child  .wrapper_detail{
+  border-bottom: 0px;
+}
 
 @media (max-width: 575.98px) {
   .policy_payment{

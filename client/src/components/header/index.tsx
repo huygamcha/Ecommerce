@@ -271,9 +271,9 @@ function HeaderScreen() {
                   </Space>
                 </Col>
                 <Col xs={20} sm={0}>
-                  <Link to="/" className={clsx(style.header_text)}>
+                  <Link to="/" className={clsx(style.header_image)}>
                     <img
-                      src="https://cms-prod.s3-sgn09.fptcloud.com/smalls/Logo_LC_Default_2e36f42b6b.svg"
+                      src="https://pub-50bb58cfabdd4b93abb4e154d0eada9e.r2.dev/fff.png"
                       alt=""
                     />
                   </Link>
@@ -431,9 +431,9 @@ function HeaderScreen() {
 
           {/* pc */}
           <Col xs={0} sm={2} md={2} lg={5}>
-            <Link to="/" className={clsx(style.header_text)}>
+            <Link to="/" className={clsx(style.header_image)}>
               <img
-                src="https://cms-prod.s3-sgn09.fptcloud.com/smalls/Logo_LC_Default_2e36f42b6b.svg"
+                src="https://pub-50bb58cfabdd4b93abb4e154d0eada9e.r2.dev/fff.png"
                 alt=""
               />
             </Link>
@@ -594,10 +594,10 @@ function HeaderScreen() {
                     <Link
                       onClick={() => setIsOpen(false)}
                       to="/"
-                      className={clsx(style.header_text)}
+                      className={clsx(style.header_image)}
                     >
                       <img
-                        src="https://cms-prod.s3-sgn09.fptcloud.com/smalls/Logo_LC_Default_2e36f42b6b.svg"
+                        src="https://pub-50bb58cfabdd4b93abb4e154d0eada9e.r2.dev/LOGO%20xanh.png"
                         alt=""
                       />
                     </Link>

@@ -449,9 +449,15 @@
 .hethongcuahang:hover {
   color: #020b27;
 }
+.header_image > img {
+  width: 200px;
+}
 
 /* Thiết lập padding cho mobile */
 @media (max-width: 575px) {
+  .header_image > img {
+    width: 150px;
+  }
   .hethongcuahang {
     color: #020b27;
     cursor: pointer;

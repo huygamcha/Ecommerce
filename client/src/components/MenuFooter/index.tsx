@@ -9,6 +9,8 @@ import { getAllCart } from "../../slices/cartSlice";
 import { PiShoppingCartLight } from "react-icons/pi";
 import { PiUserThin } from "react-icons/pi";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
+import { GrDirections } from "react-icons/gr";
+import { PiMapPinThin } from "react-icons/pi";
 function MenuFooter() {
   const dispatch = useAppDispatch();
 
@@ -51,10 +53,15 @@ function MenuFooter() {
         </Flex>
 
         <Flex vertical>
-          <Flex justify="center">
-            <PiUserThin className={clsx(style.icon)} />
-          </Flex>
-          <Space className={clsx(style.text)}>Tài khoản</Space>
+          <Link to={"/hethongcuahang"}>
+            <Flex justify="center">
+              <PiMapPinThin
+                style={{ color: "#2e2f32" }}
+                className={clsx(style.icon)}
+              />
+            </Flex>
+            <Space className={clsx(style.text)}>Địa chỉ</Space>
+          </Link>
         </Flex>
       </Flex>
     </div>

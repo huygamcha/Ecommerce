@@ -450,7 +450,9 @@ function FooterScreen() {
           <ListRenderMobile title="hỗ trợ" specificColumn={3} />
 
           <Col style={{ textAlign: "center", margin: "30px 0px" }} span={24}>
-            © 2024 Cửa hàng Pam
+            © 2024 Hộ Kinh Doanh Min Baby. Số ĐKKD 33A8018207 cấp ngày
+            27/06/2024 tại Phòng Tài Chính - Kế Hoạch Thành Phố Tam Kỳ, Quảng
+            Nam
           </Col>
         </Row>
       </div>

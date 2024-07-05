@@ -103,7 +103,7 @@
 
 .content_img {
   height: 128px;
-  width: 128px;
+  /* width: 128px; */
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
@@ -351,7 +351,7 @@
   width: 100%;
   border: 1px solid rgb(228, 232, 237);
   border-radius: 12px;
-  margin-bottom: 35px;
+  margin-bottom: 15px;
 }
 
 .promotion_header_wrapper {
@@ -726,9 +726,9 @@
 
 .album_item {
   padding: 12px;
-  border: 1px solid rgb(243, 242, 243);
+  /* border: 1px solid rgb(243, 242, 243); */
   height: 110px !important;
-  width: 120px !important;
+  /* width: 120px !important; */
   border-radius: 12px !important;
 }
 
@@ -759,7 +759,7 @@
 
 .img_product {
   border-radius: 12px;
-  width: 372px !important;
+  /* width: 372px !important; */
   height: 372px !important;
 }
 
@@ -887,6 +887,11 @@
   text-align: center;
   font-weight: 600;
   font-size: 20px;
+}
+.wrapper_album{
+   border: 0.5px solid rgb(243, 242, 243);
+  display: flex !important;
+  justify-content: center !important;
 }
 /* Thiết lập padding cho xs */
 @media (max-width: 575.98px) {

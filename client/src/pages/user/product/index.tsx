@@ -244,32 +244,26 @@ function ProductScreen() {
                       <ButtonNavigation />
                     </Flex>
 
-                    {banners ? (
-                      banners.map((banner, index) => (
-                        <>
-                          <SwiperSlide key={index}>
-                            <Link
-                              to={banner.link}
-                              className={clsx(style.wrapper)}
-                            >
-                              <img
-                                src={banner.pic}
-                                className={clsx(style.content_img_banner)}
-                                alt=""
-                              />
-                            </Link>
-                          </SwiperSlide>
-                        </>
-                      ))
-                    ) : (
-                      <SwiperSlide>
-                        <Col xs={24} sm={24} style={{ marginBottom: "25px" }}>
-                          <Empty
-                            description={<span>Không có sản phẩm nào</span>}
-                          />
-                        </Col>
-                      </SwiperSlide>
-                    )}
+                    {banners &&
+                      banners.map((banner, index) => {
+                        if (!banner.subBanner)
+                          return (
+                            <>
+                              <SwiperSlide key={index}>
+                                <Link
+                                  to={banner.link}
+                                  className={clsx(style.wrapper)}
+                                >
+                                  <img
+                                    src={banner.pic}
+                                    className={clsx(style.content_img_banner)}
+                                    alt=""
+                                  />
+                                </Link>
+                              </SwiperSlide>
+                            </>
+                          );
+                      })}
                   </Swiper>
                 </Col>
                 {/* sub Banner */}
@@ -934,7 +928,7 @@ function ProductScreen() {
                                     alt=""
                                   />
                                 </Flex>
-                                <Flex
+                                {/* <Flex
                                   vertical
                                   justify="space-between"
                                   style={{ padding: "20px 20px 0px 20px" }}
@@ -944,7 +938,7 @@ function ProductScreen() {
                                   >
                                     {brand.name}
                                   </Space>
-                                </Flex>
+                                </Flex> */}
                               </Flex>
                             </Link>
                           </SwiperSlide>

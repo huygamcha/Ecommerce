@@ -35,13 +35,7 @@ const checkCreateProduct = yup.object({
     discount: yup
       .number()
       .max(75, "Giảm giá sản phẩm không được lớn hơn 75")
-      .min(0, "Giảm giá sản phẩm không được âm")
-      .test({
-        name: "required",
-        message: "Giảm giá sản phẩm không được bỏ trống",
-        test: (value) => value !== undefined && value !== null && value !== "",
-      }),
-
+      .min(0, "Giảm giá sản phẩm không được âm"),
     categoryId: yup
       .string()
       .test(

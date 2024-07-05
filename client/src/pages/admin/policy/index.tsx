@@ -314,7 +314,7 @@ const PolicyAdmin = (props: Props) => {
 
       {/* form edit và delete */}
       <Modal
-        width={"200vh"}
+        width={"150vh"}
         centered
         title="Chỉnh sửa chính sách"
         onCancel={() => {

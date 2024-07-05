@@ -101,10 +101,14 @@ const getDetailFooter = createAsyncThunk<FooterType, string>(
 const deleteFooter = createAsyncThunk<FooterType, string>(
   "footer/deleteFooter",
   async (id, { rejectWithValue }) => {
+    const currentUser = localStorage.getItem("userInfor")
+    ? JSON.parse(localStorage.getItem("userInfor")!)
+    : null;
     try {
       const config = {
         headers: {
           "Content-type": "application/json",
+          Authorization: `Bearer ${currentUser.token}`,
         },
       };
       const response = await axios.delete(
@@ -256,6 +260,7 @@ const footerSlice = createSlice({
       state.loading = false;
     });
     builder.addCase(deleteFooter.rejected, (state, action) => {
+      console.log('««««« action »»»»»', action);
       state.loading = false;
       const customErrors = action.payload as {
         message: string;

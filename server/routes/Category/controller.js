@@ -23,10 +23,11 @@ module.exports = {
             name: 1,
             pic: 1,
             productCount: { $size: "$products" },
+            no: 1,
           },
         },
         {
-          $sort: { createdAt: 1 },
+          $sort: { no: 1 },
         },
       ]);
 
@@ -99,7 +100,7 @@ module.exports = {
 
   createCategory: async (req, res, next) => {
     try {
-      const { name, description, pic } = req.body;
+      const { name, no, pic } = req.body;
 
       const error = [];
 
@@ -117,7 +118,7 @@ module.exports = {
 
       const newCategory = new Category({
         name,
-        description,
+        no,
         pic,
       });
 
@@ -160,7 +161,7 @@ module.exports = {
   updateCategory: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const { name, description, pic } = req.body;
+      const { name, no, pic } = req.body;
       console.log("««««« pic »»»»»", pic);
       const payload = await Category.findById(id);
 
@@ -192,7 +193,7 @@ module.exports = {
         id,
         {
           name: name || this.name,
-          description: description || this.description,
+          no: no || this.no,
           pic: pic || this.pic,
         },
         {

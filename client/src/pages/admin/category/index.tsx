@@ -12,6 +12,7 @@ import {
   Modal,
   Image,
   Spin,
+  InputNumber,
 } from "antd";
 import { useEffect } from "react";
 import {
@@ -67,7 +68,7 @@ const Category = (props: Props) => {
   // form
   type FieldType = {
     name?: string;
-    description?: string;
+    no?: number;
     pic?: string;
   };
 
@@ -175,14 +176,14 @@ const Category = (props: Props) => {
       },
     },
     {
-      title: "Name",
+      title: "Tên",
       dataIndex: "name",
       key: "name",
     },
     {
-      title: "Description",
-      dataIndex: "description",
-      key: "description",
+      title: "Số thứ tự",
+      dataIndex: "no",
+      key: "no",
     },
 
     {
@@ -278,8 +279,8 @@ const Category = (props: Props) => {
             ></Input>
           </Form.Item>
 
-          <Form.Item<FieldType> label="Mô  tả" name="description">
-            <Input.TextArea rows={3} />
+          <Form.Item<FieldType> label="Số thứ tự" name="no">
+            <InputNumber style={{ width: "100%" }} min={0} />
           </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 6 }}>
@@ -318,7 +319,7 @@ const Category = (props: Props) => {
             name="update-form"
             labelCol={{ span: 8 }}
             wrapperCol={{ span: 12 }}
-            initialValues={{ name: "", description: "" }}
+            initialValues={{ name: "", no: "" }}
             onFinish={onUpdate}
             autoComplete="off"
           >
@@ -332,9 +333,10 @@ const Category = (props: Props) => {
             >
               <Input />
             </Form.Item>
-            <Form.Item<FieldType> label="Mô tả" name="description">
-              <Input.TextArea rows={3} />
+            <Form.Item<FieldType> label="Số thứ tự" name="no">
+              <InputNumber style={{ width: "100%" }} min={0} />
             </Form.Item>
+
             <Form.Item<FieldType> name="pic" label="Hình ảnh">
               <Image height={100} src={picDetail}></Image>
               <Input

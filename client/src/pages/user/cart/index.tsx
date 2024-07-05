@@ -53,6 +53,7 @@ import NoCart from "../../../components/noCart";
 import { getAllLocation } from "../../../slices/locationSlice";
 import { FaClock, FaLocationCrosshairs, FaLocationDot } from "react-icons/fa6";
 import PolicyFooter from "../../../components/policyFooter";
+import { GrDirections } from "react-icons/gr";
 
 function CartScreen() {
   const locationPath = useLocation();
@@ -247,7 +248,7 @@ function CartScreen() {
                               </Col>
                               <Col span={2}></Col>
                             </Row>
-                            <Row>
+                            <Row className={clsx(style.wrapper_product_list)}>
                               {carts.map((cart, index) => (
                                 <React.Fragment key={index}>
                                   <Col span={24}>
@@ -527,8 +528,20 @@ function CartScreen() {
                                   )}
                                   justify="space-between"
                                 >
-                                  <Space>Tiết kiệm được</Space>
-                                  <Space>
+                                  <Space
+                                    style={{
+                                      color: "#1251dc",
+                                      fontWeight: "500",
+                                    }}
+                                  >
+                                    Tiết kiệm được
+                                  </Space>
+                                  <Space
+                                    style={{
+                                      color: "#1251dc",
+                                      fontWeight: "500",
+                                    }}
+                                  >
                                     {" "}
                                     {numeral(totalOriginal - totalPrice).format(
                                       "0,0$"
@@ -834,9 +847,9 @@ function CartScreen() {
                                       fontSize: 15,
                                       borderRadius: 15,
                                     },
-                                    Form: {
-                                      itemMarginBottom: 10,
-                                    },
+                                    // Form: {
+                                    //   itemMarginBottom: 10,
+                                    // },
                                   },
                                 }}
                               >
@@ -1352,7 +1365,7 @@ function CartScreen() {
                                                                 rel="noreferrer"
                                                               >
                                                                 <Flex align="center">
-                                                                  <FaLocationCrosshairs
+                                                                  <GrDirections
                                                                     style={{
                                                                       fontSize:
                                                                         "15px",
@@ -1460,9 +1473,20 @@ function CartScreen() {
                                     )}
                                     justify="space-between"
                                   >
-                                    <Space>Tiết kiệm được</Space>
-                                    <Space>
-                                      {" "}
+                                    <Space
+                                      style={{
+                                        color: "#1251dc",
+                                        fontWeight: "500",
+                                      }}
+                                    >
+                                      Tiết kiệm được
+                                    </Space>
+                                    <Space
+                                      style={{
+                                        color: "#1251dc",
+                                        fontWeight: "500",
+                                      }}
+                                    >
                                       {numeral(
                                         totalOriginal - totalPrice
                                       ).format("0,0$")}
@@ -1571,6 +1595,7 @@ function CartScreen() {
                               <div className={clsx(style.wrapper_content)}>
                                 <Row>
                                   <Form.Item<FieldType>
+                                    style={{ marginBottom: "0px" }}
                                     rules={[
                                       {
                                         required: true,

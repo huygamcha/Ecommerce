@@ -10,9 +10,8 @@ const categorySchema = new Schema(
       maxLength: [50, "Tên danh mục không được vượt quá 50 kí tự"],
       unique: [true, "Tên danh mục không được trùng"],
     },
-    description: {
-      type: String,
-      maxLength: [500, "Mô tả danh mục không được vượt quá 500 kí tự"],
+    no: {
+      type: Number,
     },
     isDeleted: {
       type: Boolean,
