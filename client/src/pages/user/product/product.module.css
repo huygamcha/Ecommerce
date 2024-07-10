@@ -67,7 +67,7 @@
 .content_brand {
   background: #fff;
   /* border-radius: 10px; */
-  padding: 24px 0px;
+  padding: 5px 0px;
   /* height: 260px; */
   position: relative;
   border: 1px solid #eaeaea;
@@ -112,8 +112,8 @@
   width: 250px;
 }
 .content_img_brand {
-  height: 50px;
-  width: 90px;
+  height: 75px;
+  width: 135px;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }

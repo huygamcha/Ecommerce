@@ -118,7 +118,7 @@ const BannerAdmin = (props: Props) => {
 
   // update banner modal
   const onUpdate = async (values: any) => {
-    console.log("««««« values »»»»»", values);
+    // console.log("««««« values »»»»»", values);
     await dispatch(
       updateBanner({
         id: selectedBanner,

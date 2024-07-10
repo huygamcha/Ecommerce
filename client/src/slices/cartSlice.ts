@@ -213,7 +213,7 @@ const cartSlice = createSlice({
     builder.addCase(
       createCartFromCustomer.fulfilled,
       (state, action) => {
-        console.log('««««« action »»»»»', action);
+        // console.log('««««« action »»»»»', action);
         state.loading = false;
         state.error = "";
       }

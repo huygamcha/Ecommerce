@@ -104,6 +104,8 @@ module.exports = {
     try {
       const { id } = req.params;
       const { name, url, column, optional } = req.body;
+      // console.log("««««« this.optional »»»»»", this.optional);
+
       const payload = await Footer.findById(id);
 
       const errors = {};
@@ -126,14 +128,13 @@ module.exports = {
           message: "Không tìm thấy footer",
         });
       }
-
       const result = await Footer.findByIdAndUpdate(
         id,
         {
           name: name || this.name,
           url: url || this.url,
           column: column || this.column,
-          optional: optional || this.optional,
+          optional: optional != undefined ? optional : "",
         },
         {
           new: true,

@@ -24,7 +24,7 @@ module.exports = {
       const payload = await Cart.findOne({ userId: id }).lean({
         virtual: true,
       });
-      console.log("««««« payload »»»»»");
+      // console.log("««««« payload »»»»»");
       if (payload) {
         return res.send(200, payload.cartList);
       } else {
@@ -50,7 +50,7 @@ module.exports = {
       }
 
       const exitCart = await Cart.findOneAndUpdate({ userId: userId });
-      console.log("««««« exitCart »»»»»", exitCart);
+      // console.log("««««« exitCart »»»»»", exitCart);
       if (!exitCart) {
         const newCart = new Cart({
           userId,

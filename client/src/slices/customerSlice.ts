@@ -160,7 +160,7 @@ const customerSlice = createSlice({
     });
 
     builder.addCase(updateUser.fulfilled, (state, action) => {
-      console.log('««««« action »»»»»', action);
+      // console.log('««««« action »»»»»', action);
       state.loading = false;
       state.success = true;
       state.customer = action.payload

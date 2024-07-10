@@ -284,7 +284,7 @@ module.exports = {
   getDetailProductSlug: async (req, res, next) => {
     try {
       const { slug } = req.params;
-      console.log("««««« slug »»»»»", slug);
+      // console.log("««««« slug »»»»»", slug);
       const payload = await Product.findOne({ slug: fuzzySearch(slug) })
         .populate("category")
         .populate("tag")
@@ -518,7 +518,7 @@ module.exports = {
 
   updateProduct: async (req, res, next) => {
     try {
-      console.log("««««« oke »»»»»");
+      // console.log("««««« oke »»»»»");
 
       const { id } = req.params;
       let {
@@ -604,13 +604,13 @@ module.exports = {
       }
       // console.log("««««« oke »»»»»");
       // 2 == update bth, 3 === tang so luong(khong mua) , 1 === tru so luong stock(mua)
-      console.log("««««« autoQuantity check »»»»»", autoQuantity);
-      console.log(
-        "««««« sold, stock , sold before »»»»»",
-        stock,
-        quantity,
-        sold
-      );
+      // console.log("««««« autoQuantity check »»»»»", autoQuantity);
+      // console.log(
+      //   "««««« sold, stock , sold before »»»»»",
+      //   stock,
+      //   quantity,
+      //   sold
+      // );
 
       if (autoQuantity === 1) {
         stock = payload.stock - quantity;
@@ -620,13 +620,13 @@ module.exports = {
         stock = payload.stock + quantity;
         sold = payload.sold - quantity;
       }
-      console.log(
-        "««««« sold, stock , sold after »»»»»",
-        stock,
-        quantity,
-        sold
-      );
-      console.log("««««« sold, this.sold »»»»»", sold, this.sold);
+      // console.log(
+      //   "««««« sold, stock , sold after »»»»»",
+      //   stock,
+      //   quantity,
+      //   sold
+      // );
+      // console.log("««««« sold, this.sold »»»»»", sold, this.sold);
       const result = await Product.findByIdAndUpdate(
         id,
         {
@@ -659,7 +659,7 @@ module.exports = {
         }
       );
 
-      console.log("««««« result »»»»»", result);
+      // console.log("««««« result »»»»»", result);
       return res.send(200, {
         message: "Cập nhật sản phẩm thành công",
         payload: result,

@@ -147,7 +147,7 @@ function CartScreen() {
   };
 
   const onFinish = async (values: FieldType) => {
-    console.log("««««« value cart »»»»»", carts);
+    // console.log("««««« value cart »»»»»", carts);
     carts &&
       carts.map(async (value: any) => {
         await dispatch(
@@ -651,7 +651,7 @@ function CartScreen() {
                                 style.wrapper_left
                               )}
                             >
-                              <Row>
+                              <Row className={clsx(style.wrapper_product_list)}>
                                 {carts.map(
                                   (cart, index) =>
                                     cart.check && (
@@ -749,7 +749,7 @@ function CartScreen() {
                                               span={24}
                                             >
                                               {/* promotion */}
-                                              {cart && cart.discount && (
+                                              {cart && cart.discount ? (
                                                 <Flex
                                                   vertical
                                                   className={clsx(
@@ -823,6 +823,8 @@ function CartScreen() {
                                                     </Flex>
                                                   </Space>
                                                 </Flex>
+                                              ) : (
+                                                <></>
                                               )}
                                             </Col>
                                           </Row>

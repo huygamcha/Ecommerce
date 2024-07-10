@@ -43,7 +43,7 @@ const registerUser = createAsyncThunk<UserType, LoginType>(
   "auth/registerUser",
   async (values, { rejectWithValue }) => {
     try {
-      console.log('«««««  »»»»»',  );
+      // console.log('«««««  »»»»»',  );
       // const response = await axios.post("http://localhost:4000/login", values);
       const response = await axios.post(`${process.env.REACT_APP_BACKEND}/login`, values);
       const data: UserType = response.data.payload;

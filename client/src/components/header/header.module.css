@@ -283,6 +283,12 @@
   border-radius: 10px !important;
 }
 
+.header_search_items_img + div:hover {
+ opacity: 0 !important;
+}
+
+
+
 .header_search_icon_search {
   padding: 10px;
   border-radius: 50px;

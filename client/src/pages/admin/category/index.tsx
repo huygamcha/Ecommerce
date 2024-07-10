@@ -113,7 +113,7 @@ const Category = (props: Props) => {
   // update category modal
 
   const onUpdate = async (values: any) => {
-    console.log("««««« values »»»»»", picDetail);
+    // console.log("««««« values »»»»»", picDetail);
     await dispatch(
       updateCategory({
         id: selectedCategory,

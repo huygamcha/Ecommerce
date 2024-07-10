@@ -19,7 +19,7 @@ function Payment() {
   useEffect(() => {
     if (!success) {
       const intervalId = setInterval(() => {
-        console.log("««««« success »»»»»", success);
+        // console.log("««««« success »»»»»", success);
         apiPayment();
       }, 5000);
 
@@ -44,7 +44,7 @@ function Payment() {
       const data = await response.json();
       const successPay = data.data[data.data.length - 1];
 
-      console.log("««««« successPay »»»»»", successPay);
+      // console.log("««««« successPay »»»»»", successPay);
 
       if (
         successPay["Giá trị"] >= totalPrice &&
@@ -54,7 +54,7 @@ function Payment() {
         setSuccess(true);
         setIsCountinue(!isCountinue);
       } else {
-        console.log("««««« chưa thanh toán  »»»»»");
+        // console.log("««««« chưa thanh toán  »»»»»");
         setIsCountinue(!isCountinue);
       }
     } catch (error) {

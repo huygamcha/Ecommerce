@@ -93,7 +93,7 @@ const createOrder = createAsyncThunk<OrdersType, OrdersType>(
           const config = {
             headers: {
               "Content-type": "application/json",
-              Authorization: `Bearer ${currentUser.token}`,
+            //   Authorization: `Bearer ${currentUser.token}`,
             },
           };
             const response = await axios.post(

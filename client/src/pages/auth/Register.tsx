@@ -95,7 +95,7 @@ const Register: React.FC = () => {
     } else {
       return;
     }
-    console.log("««««« pic »»»»»", pic);
+    // console.log("««««« pic »»»»»", pic);
   };
 
   return (

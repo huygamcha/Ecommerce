@@ -162,7 +162,7 @@ module.exports = {
     try {
       const { id } = req.params;
       const { name, no, pic } = req.body;
-      console.log("««««« pic »»»»»", pic);
+      // console.log("««««« pic »»»»»", pic);
       const payload = await Category.findById(id);
 
       const errors = [];

@@ -88,7 +88,7 @@ employeeSchema.pre("save", async function (next) {
 
 employeeSchema.methods.isValidPass = async function (password) {
   try {
-    console.log("««««« password, this.password »»»»»", password, this.password);
+    // console.log("««««« password, this.password »»»»»", password, this.password);
     return await bcrypt.compare(password, this.password);
   } catch (err) {
     throw new Error(err);

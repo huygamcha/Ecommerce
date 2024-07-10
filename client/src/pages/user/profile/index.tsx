@@ -129,10 +129,10 @@ function ProfileScreen() {
     } else {
       return;
     }
-    console.log("««««« pic »»»»»", pic);
+    // console.log("««««« pic »»»»»", pic);
   };
 
-  console.log("««««« customer »»»»»", customer);
+  // console.log("««««« customer »»»»»", customer);
 
   return (
     <>

@@ -18,7 +18,7 @@ function TestCloudfare() {
     });
 
     const message = await response.text();
-    console.log("message", message);
+    // console.log("message", message);
   };
 
   return (

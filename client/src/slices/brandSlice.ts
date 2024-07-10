@@ -181,7 +181,7 @@ const brandSlice = createSlice({
     builder.addCase(
       createBrand.rejected,
       (state, action) => {
-        console.log('««««« action »»»»»', action);
+        // console.log('««««« action »»»»»', action);
         // custom lại lỗi error trả về như postman
         // redux chỉ hỗ trợ gọi tới action.payload
         // nếu gọi thêm action.payload.errors để trả rả như postman thì 
@@ -228,7 +228,7 @@ const brandSlice = createSlice({
     builder.addCase(
       updateBrand.rejected,
       (state, action) => {
-        console.log('««««« action »»»»»', action);
+        // console.log('««««« action »»»»»', action);
         const customErrors = action.payload as { message?: string, errors?: {name: string} }
         state.loading = false;
         state.error = customErrors; // Ensure a default message or fallback if action.error is undefined

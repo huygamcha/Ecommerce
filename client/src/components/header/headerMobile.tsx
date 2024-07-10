@@ -97,7 +97,7 @@ function HeaderScreenMobile() {
                         value={search}
                         onInput={handleSearch}
                         className={clsx(style.header_search_input)}
-                        placeholder="Tìm kiếm sản phẩm"
+                        placeholder="Tìm kiếm sản phẩm "
                         // onFocus={handleSearch}
                       ></Input>
 

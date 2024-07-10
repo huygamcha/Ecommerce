@@ -14,7 +14,7 @@ app.use(
   })
 );
 
-console.log(`${process.env.CONNECTION_STRING}${process.env.DB_NAME}`);
+// console.log(`${process.env.CONNECTION_STRING}${process.env.DB_NAME}`);
 mongoose.connect(`${process.env.CONNECTION_STRING}${process.env.DB_NAME}`);
 
 var categoryRouter = require("./routes/Category/router.js");

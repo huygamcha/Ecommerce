@@ -155,7 +155,7 @@ const supplierSlice = createSlice({
     builder.addCase(
       createSupplier.rejected,
       (state, action) => {
-        console.log('««««« action »»»»»', action);
+        // console.log('««««« action »»»»»', action);
         // custom lại lỗi error trả về như postman
         // redux chỉ hỗ trợ gọi tới action.payload
         // nếu gọi thêm action.payload.errors để trả rả như postman thì 

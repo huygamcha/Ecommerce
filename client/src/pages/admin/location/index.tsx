@@ -93,7 +93,7 @@ const LocationAdmin = (props: Props) => {
   }, [isActive]);
 
   const onFinish = async (values: any) => {
-    console.log("««««« values »»»»»", values, albumCreate);
+    // console.log("««««« values »»»»»", values, albumCreate);
     await dispatch(createLocation({ ...values, album: albumCreate }));
     // setInitialRender(false);
     setIsActive(!isActive);
@@ -183,7 +183,7 @@ const LocationAdmin = (props: Props) => {
     } else {
       return;
     }
-    console.log("««««« pic »»»»»", pic);
+    // console.log("««««« pic »»»»»", pic);
   };
   const handleUploadAlbum = async (albums: any, infor: string) => {
     if (albums === undefined) {
@@ -209,7 +209,7 @@ const LocationAdmin = (props: Props) => {
             .then((res) => res.json())
             .then((data) => {
               if (infor === "create") {
-                console.log("««««« resultAlbum »»»»»", resultAlbum);
+                // console.log("««««« resultAlbum »»»»»", resultAlbum);
                 resultAlbum.push(data.url.toString());
                 if (index === asArrayAlbum.length - 1) {
                   setAlbumCreate(resultAlbum);

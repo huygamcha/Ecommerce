@@ -79,7 +79,7 @@ function BuyMobile({
       })
     );
   };
-  console.log("«««««  hereee»»»»»");
+  // console.log("«««««  hereee»»»»»");
   return (
     <ConfigProvider
       theme={{
@@ -94,7 +94,7 @@ function BuyMobile({
       <div className={clsx(style.wrapper_global)}>
         <div
           style={{ display: active ? "block" : "none" }}
-          className={clsx(style.wrapper)}
+          className={clsx(style.wrapper, style.active)}
         >
           <div>
             <div className={clsx(style.header)}>

@@ -35,7 +35,7 @@ function NoCart() {
                     Chưa có sản phẩm nào trong giỏ hàng
                   </Col>
                   <Col className={clsx(style.header_des)} span={24}>
-                    Cùng mua sắm hàng ngàn sản phẩm tại nhà thuốc shop Min nhé!
+                    Cùng mua sắm hàng ngàn sản phẩm tại shop Min nhé!
                   </Col>
                   <Col span={24}>
                     <Flex className={clsx(style.buy_wrapper)} justify="center">

@@ -62,12 +62,8 @@ function ProductScreen() {
   const [searchTag, setSearchTag] = useState<string>(
     "65d8b631214ed285ba4bc016"
   );
-  const [searchBimTa, setSearchBimTa] = useState<string>(
-    "663edce82873fdc0f099a6c0"
-  );
-  const [searchSuaBot, setSeachSuaBot] = useState<string>(
-    "65df3f646fc28fc99f7b4dad"
-  );
+  const [searchBimTa, setSearchBimTa] = useState<string>("all");
+  const [searchSuaBot, setSearchSuaBot] = useState<string>("all");
   const [quantity, setQuantity] = useState<number>(1);
   const [activeBuyMobile, setActiveBuyMobile] = useState<boolean>(false);
   //fix lỗi mua ngay trên sản phẩm khác, không phải dispatch search làm cho trang bị reload
@@ -114,7 +110,7 @@ function ProductScreen() {
       JSON.stringify({ categoryId: categoryId, brandId: brandId })
     );
   };
-
+  // console.log("««««« searchSuaBot »»»»»", searchSuaBot);
   const handleAddToCart = (e: any) => {
     // ngăn chặn mặc định của thẻ Link
     e.preventDefault();
@@ -148,8 +144,8 @@ function ProductScreen() {
     e.preventDefault();
     e.stopPropagation();
     setSpecificProduct(product);
-    console.log("««««« product »»»»»", product);
-    console.log("««««« e »»»»»", e);
+    // console.log("««««« product »»»»»", product);
+    // console.log("««««« e »»»»»", e);
 
     if (window.innerWidth < 576) {
       setActiveBuyMobile(true);
@@ -179,7 +175,7 @@ function ProductScreen() {
     }
   };
   let count = 0;
-
+  // console.log("««««« searchBimTa »»»»»", searchBimTa);
   return (
     <>
       <ConfigProvider
@@ -1054,6 +1050,27 @@ function ProductScreen() {
                       style.filter_select__tag_wrapper
                     )}
                   >
+                    <Button
+                      style={{
+                        marginRight: "10px",
+                        borderColor:
+                          searchBimTa === "all" ? " #1250dc" : "#a9b2be",
+                        color: searchBimTa === "all" ? "#1250dc" : "#4a4f63",
+                      }}
+                      onClick={() => setSearchBimTa("all")}
+                      className={clsx(style.filter_select_tag)}
+                    >
+                      Tất cả
+                      <Space
+                        className={clsx(
+                          searchBimTa === "all"
+                            ? style.filter_label_tag
+                            : { display: "none" }
+                        )}
+                      >
+                        <div style={{ display: "none" }}>1</div>
+                      </Space>
+                    </Button>
                     {brands &&
                       brands.map((brand, index) => {
                         // 65c1a957dcdd1e4eceaa3cf3
@@ -1125,7 +1142,10 @@ function ProductScreen() {
 
                     {products ? (
                       products.map((product) => {
-                        if (product.brandId === searchBimTa) {
+                        if (
+                          product.brandId === searchBimTa &&
+                          searchBimTa !== "all"
+                        ) {
                           return (
                             <>
                               <SwiperSlide>
@@ -1271,6 +1291,161 @@ function ProductScreen() {
                               </SwiperSlide>
                             </>
                           );
+                        } else {
+                          if (
+                            searchBimTa === "all" &&
+                            product.categoryId === "66820fbc02a225bad3e709df"
+                          ) {
+                            return (
+                              <>
+                                <SwiperSlide>
+                                  <Link
+                                    onClick={() =>
+                                      handleDetail(
+                                        product._id,
+                                        product.categoryId
+                                      )
+                                    }
+                                    to={`/sanpham/${product.slug}`}
+                                    className={clsx(style.wrapper)}
+                                  >
+                                    <Flex
+                                      className={clsx(style.content)}
+                                      vertical
+                                    >
+                                      <Space
+                                        className={clsx(style.content_discount)}
+                                      >
+                                        <Discount
+                                          discount={product.discount}
+                                        ></Discount>
+                                      </Space>
+                                      <Space
+                                        className={clsx(
+                                          style.label_wrapper,
+                                          !product.stock && style.soldOut
+                                        )}
+                                      >
+                                        {/* <Label
+                                            soldOut={!product.stock ? true : false}
+                                            title={product.category.name}
+                                          /> */}
+                                      </Space>
+
+                                      {/* pic and fakeNumber */}
+                                      <Flex
+                                        className={clsx(
+                                          style.product_name_wrapper
+                                        )}
+                                        justify="center"
+                                      >
+                                        <img
+                                          src={product.pic}
+                                          className={clsx(style.content_img)}
+                                          alt=""
+                                        />
+                                        <Space
+                                          className={clsx(
+                                            style.product_name_fakeNumber
+                                          )}
+                                        >
+                                          <FakeNumber
+                                            fakeNumber={product.fakeNumber}
+                                            realNumber={product.sold}
+                                          />
+                                        </Space>
+                                      </Flex>
+                                      <Flex
+                                        vertical
+                                        justify="space-between"
+                                        style={{
+                                          padding: "20px 20px 10px 20px",
+                                        }}
+                                      >
+                                        <Space
+                                          className={clsx(style.header_text)}
+                                        >
+                                          {product.name}
+                                        </Space>
+
+                                        {/* <FakeNumber
+                                            fakeNumber={product.fakeNumber}
+                                            realNumber={product.sold}
+                                          /> */}
+                                        <Space
+                                          className={clsx(
+                                            style.header_discount
+                                          )}
+                                        >
+                                          {product && product?.discount > 0 ? (
+                                            <>
+                                              <Space>
+                                                <div>
+                                                  {numeral(
+                                                    product?.total
+                                                  ).format("0,0$")}
+                                                  <span
+                                                    style={{ margin: "0 2px" }}
+                                                  >
+                                                    &#47;
+                                                  </span>
+                                                  {product.unit}
+                                                </div>
+                                              </Space>
+                                            </>
+                                          ) : (
+                                            <>
+                                              <Space>
+                                                <div>
+                                                  {numeral(
+                                                    product?.price
+                                                  ).format("0,0$")}
+                                                  <span
+                                                    style={{ margin: "0 2px" }}
+                                                  >
+                                                    &#47;
+                                                  </span>
+                                                  {product?.unit}
+                                                </div>
+                                              </Space>
+                                            </>
+                                          )}
+                                        </Space>
+                                        {product && product?.discount > 0 && (
+                                          <del
+                                            className={clsx(style.header_price)}
+                                          >
+                                            {numeral(product.price).format(
+                                              "0,0$"
+                                            )}
+                                          </del>
+                                        )}
+                                        <Specifications
+                                          title={product.specifications}
+                                        />
+                                        {/* buy */}
+                                        <Flex justify="space-between">
+                                          <Space
+                                            onClick={(e) =>
+                                              handleAddToCartTest(e, product)
+                                            }
+                                            className={clsx(
+                                              style.buy_now_in_home,
+                                              product &&
+                                                !product.stock &&
+                                                style.soldOut_disabled
+                                            )}
+                                          >
+                                            Chọn mua
+                                          </Space>
+                                        </Flex>
+                                      </Flex>
+                                    </Flex>
+                                  </Link>
+                                </SwiperSlide>
+                              </>
+                            );
+                          }
                         }
                       })
                     ) : (
@@ -1308,6 +1483,27 @@ function ProductScreen() {
                       style.filter_select__tag_wrapper
                     )}
                   >
+                    <Button
+                      style={{
+                        marginRight: "10px",
+                        borderColor:
+                          searchSuaBot === "all" ? " #1250dc" : "#a9b2be",
+                        color: searchSuaBot === "all" ? "#1250dc" : "#4a4f63",
+                      }}
+                      onClick={() => setSearchSuaBot("all")}
+                      className={clsx(style.filter_select_tag)}
+                    >
+                      Tất cả
+                      <Space
+                        className={clsx(
+                          searchSuaBot === "all"
+                            ? style.filter_label_tag
+                            : { display: "none" }
+                        )}
+                      >
+                        <div style={{ display: "none" }}>1</div>
+                      </Space>
+                    </Button>
                     {brands &&
                       brands.map((brand, index) => {
                         if (brand.categoryId === "65c1b7ec667c58db30291bee") {
@@ -1327,7 +1523,7 @@ function ProductScreen() {
                                       ? "#1250dc"
                                       : "#4a4f63",
                                 }}
-                                onClick={() => setSeachSuaBot(brand._id)}
+                                onClick={() => setSearchSuaBot(brand._id)}
                                 className={clsx(style.filter_select_tag)}
                               >
                                 {brand.name}
@@ -1378,7 +1574,10 @@ function ProductScreen() {
 
                     {products ? (
                       products.map((product) => {
-                        if (product.brandId === searchSuaBot) {
+                        if (
+                          product.brandId === searchSuaBot &&
+                          searchSuaBot !== "all"
+                        ) {
                           return (
                             <>
                               <SwiperSlide>
@@ -1449,6 +1648,157 @@ function ProductScreen() {
                                         {product.name}
                                       </Space>
 
+                                      <Space
+                                        className={clsx(style.header_discount)}
+                                      >
+                                        {product && product?.discount > 0 ? (
+                                          <>
+                                            <Space>
+                                              <div>
+                                                {numeral(product?.total).format(
+                                                  "0,0$"
+                                                )}
+                                                <span
+                                                  style={{ margin: "0 2px" }}
+                                                >
+                                                  &#47;
+                                                </span>
+                                                {product.unit}
+                                              </div>
+                                            </Space>
+                                          </>
+                                        ) : (
+                                          <>
+                                            <Space>
+                                              <div>
+                                                {numeral(product?.price).format(
+                                                  "0,0$"
+                                                )}
+                                                <span
+                                                  style={{ margin: "0 2px" }}
+                                                >
+                                                  &#47;
+                                                </span>
+                                                {product?.unit}
+                                              </div>
+                                            </Space>
+                                          </>
+                                        )}
+                                      </Space>
+                                      {product && product?.discount > 0 && (
+                                        <del
+                                          className={clsx(style.header_price)}
+                                        >
+                                          {numeral(product.price).format(
+                                            "0,0$"
+                                          )}
+                                        </del>
+                                      )}
+                                      <Specifications
+                                        title={product.specifications}
+                                      />
+                                      {/* buy */}
+                                      <Flex justify="space-between">
+                                        <Space
+                                          onClick={(e) =>
+                                            handleAddToCartTest(e, product)
+                                          }
+                                          className={clsx(
+                                            style.buy_now_in_home,
+                                            product &&
+                                              !product.stock &&
+                                              style.soldOut_disabled
+                                          )}
+                                        >
+                                          Chọn mua
+                                        </Space>
+                                      </Flex>
+                                    </Flex>
+                                  </Flex>
+                                </Link>
+                              </SwiperSlide>
+                            </>
+                          );
+                        } else if (
+                          searchSuaBot === "all" &&
+                          product.categoryId === "65c1b7ec667c58db30291bee"
+                        ) {
+                          return (
+                            <>
+                              <SwiperSlide>
+                                <Link
+                                  onClick={() =>
+                                    handleDetail(
+                                      product._id,
+                                      product.categoryId
+                                    )
+                                  }
+                                  to={`/sanpham/${product.slug}`}
+                                  className={clsx(style.wrapper)}
+                                >
+                                  <Flex
+                                    className={clsx(style.content)}
+                                    vertical
+                                  >
+                                    <Space
+                                      className={clsx(style.content_discount)}
+                                    >
+                                      <Discount
+                                        discount={product.discount}
+                                      ></Discount>
+                                    </Space>
+                                    <Space
+                                      className={clsx(
+                                        style.label_wrapper,
+                                        !product.stock && style.soldOut
+                                      )}
+                                    >
+                                      {/* <Label
+                                          soldOut={!product.stock ? true : false}
+                                          title={product.category.name}
+                                        /> */}
+                                    </Space>
+
+                                    {/* pic and fakeNumber */}
+                                    <Flex
+                                      className={clsx(
+                                        style.product_name_wrapper
+                                      )}
+                                      justify="center"
+                                    >
+                                      <img
+                                        src={product.pic}
+                                        className={clsx(style.content_img)}
+                                        alt=""
+                                      />
+                                      <Space
+                                        className={clsx(
+                                          style.product_name_fakeNumber
+                                        )}
+                                      >
+                                        <FakeNumber
+                                          fakeNumber={product.fakeNumber}
+                                          realNumber={product.sold}
+                                        />
+                                      </Space>
+                                    </Flex>
+                                    <Flex
+                                      vertical
+                                      justify="space-between"
+                                      style={{
+                                        padding: "20px 20px 10px 20px",
+                                      }}
+                                    >
+                                      <Space
+                                        className={clsx(style.header_text)}
+                                      >
+                                        {product.name}
+                                      </Space>
+
+                                      {/* <FakeNumber
+                                          fakeNumber={product.fakeNumber}
+                                          realNumber={product.sold}
+                                        /> */}
                                       <Space
                                         className={clsx(style.header_discount)}
                                       >

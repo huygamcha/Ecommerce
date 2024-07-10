@@ -152,8 +152,8 @@ function ProductDetail() {
     e.preventDefault();
     e.stopPropagation();
     setSpecificProduct(product);
-    console.log("««««« product »»»»»", product);
-    console.log("««««« e »»»»»", e);
+    // console.log("««««« product »»»»»", product);
+    // console.log("««««« e »»»»»", e);
 
     if (window.innerWidth < 576) {
       setActiveBuyMobile(true);

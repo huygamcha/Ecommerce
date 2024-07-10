@@ -471,6 +471,9 @@
   .wrapper_left {
     margin-right: 0px;
   }
+  .wrapper_left > div > div:last-child  .wrapper_detail {
+    border-bottom: 0px !important;
+  }
 
   .button_back_cart {
     margin-top: 20px;

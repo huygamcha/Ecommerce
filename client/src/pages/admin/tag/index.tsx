@@ -120,7 +120,7 @@ const Tag = (props: Props) => {
   // console.log("««««« tag »»»»»", tag);
   // console.log("««««« tags »»»»»", tags);
   // console.log("««««« error »»»»»", error);
-  console.log("««««« initialRender »»»»»", initialRender);
+  // console.log("««««« initialRender »»»»»", initialRender);
 
   // table
   const columns = [

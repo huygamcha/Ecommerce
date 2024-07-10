@@ -143,7 +143,7 @@ module.exports = {
         avatar,
       } = req.body;
 
-      console.log("««««« password  update»»»»»", avatar);
+      // console.log("««««« password  update»»»»»", avatar);
 
       const errors = {};
       const exitPhoneNumber = await Customer.findOne({

@@ -67,7 +67,7 @@ module.exports = {
       const { id } = req.params;
       const { pic, subBanner, link } = req.body;
       const payload = await Banner.findById(id);
-      console.log("««««« subBanner »»»»»", subBanner);
+      // console.log("««««« subBanner »»»»»", subBanner);
 
       if (subBanner === false) {
         this.subBanner = false;
@@ -89,7 +89,7 @@ module.exports = {
           new: true,
         }
       );
-      console.log("««««« result »»»»»", result);
+      // console.log("««««« result »»»»»", result);
       return res.send(200, {
         message: "Cập nhật ảnh bìa thành công",
         payload: result,

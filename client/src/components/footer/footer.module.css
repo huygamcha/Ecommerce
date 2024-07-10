@@ -108,6 +108,7 @@
 
 /* mobile */
 @media (max-width: 575.98px) {
+  
   .global_wrapper_direction {
     margin-bottom: 0px !important;
     display: flex;
@@ -133,7 +134,7 @@
 
   .global_wrapper {
     padding: 16px;
-    margin-bottom: 160px;
+    margin-bottom: 60px;
   }
 
   .items {

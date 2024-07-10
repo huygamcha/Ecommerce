@@ -189,7 +189,7 @@ const Product = (props: Props) => {
 
   // update product modal
   const onUpdate = async (values: any) => {
-    console.log("««««« albumUpdate »»»»»", albumUpdate);
+    // console.log("««««« albumUpdate »»»»»", albumUpdate);
     await dispatch(
       updateProduct({
         id: selectedProduct,
@@ -437,7 +437,7 @@ const Product = (props: Props) => {
     } else {
       return;
     }
-    console.log("««««« pic »»»»»", pic);
+    // console.log("««««« pic »»»»»", pic);
   };
 
   // upload nhiều ảnh vào album

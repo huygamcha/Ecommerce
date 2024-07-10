@@ -43,7 +43,7 @@ module.exports = {
   getDetailByName: async (req, res, next) => {
     try {
       const { name } = req.params;
-      console.log("««««« name »»»»»", name);
+      // console.log("««««« name »»»»»", name);
       const payload = await Brand.findOne({ name: name }).populate("category");
       if (!payload) {
         return res.send(404, {
@@ -127,7 +127,7 @@ module.exports = {
       const { id } = req.params;
       const { name, categoryId, pic } = req.body;
       const payload = await Brand.findById(id);
-      console.log("««««« payload »»»»»", payload);
+      // console.log("««««« payload »»»»»", payload);
 
       const errors = {};
       const exitName = await Brand.findOne({ name, _id: { $ne: id } });

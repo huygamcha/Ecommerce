@@ -6,7 +6,7 @@ export default function useOutsideAlerter(ref: React.RefObject<any>) {
     function handleClickOutside(event: MouseEvent) {
       if (ref.current && !ref.current.contains(event.target)) {
         setIsOpen(false);
-        console.log("««««« 555 »»»»»", 555);
+        // console.log("««««« 555 »»»»»", 555);
       }
     }
 

@@ -138,7 +138,7 @@ const getAllProductSearch = createAsyncThunk<ProductsType[], ProductSearchType>(
       : undefined;
 
     let { searchTag, priceFrom, priceTo, ageFrom, ageTo, categoryId, brandId, search } = arg;
-    console.log('««««« arg search tim kiem »»»»»', arg);
+    // console.log('««««« arg search tim kiem »»»»»', arg);
 
     if (!search) {
       search = ''
@@ -202,7 +202,7 @@ const getProductByCategories = createAsyncThunk<
   if (!id) {
     id = categoryId.id
   }
-  console.log('««««« id »»»»»', id);
+  // console.log('««««« id »»»»»', id);
   const response = await axios.get(
     `${process.env.REACT_APP_BACKEND}/products/byCategories?id=${id}`
   );
@@ -240,7 +240,7 @@ const getProductBySlug = createAsyncThunk<ProductsType, string | undefined>(
       `${process.env.REACT_APP_BACKEND}/products/slug/${slug}`
     );
     const data: ProductsType = response.data.payload;
-    console.log('««««« data »»»»»', data);
+    // console.log('««««« data »»»»»', data);
     return data; 
   }
 );
@@ -313,7 +313,7 @@ const updateProduct = createAsyncThunk<
     const config = {
       headers: {
         "Content-type": "application/json",
-        Authorization: `Bearer ${currentUser.token}`,
+        // Authorization: `Bearer ${currentUser.token}`,
       },
     };
     const response = await axios.patch(
@@ -366,7 +366,7 @@ const productSlice = createSlice({
       state.products = action.payload;
     });
     builder.addCase(getAllProduct.rejected, (state, action) => {
-      console.log("««««« action »»»»»", action);
+      // console.log("««««« action »»»»»", action);
       state.loading = false;
 
       if (action.payload) {
@@ -386,12 +386,12 @@ const productSlice = createSlice({
     });
 
     builder.addCase(getAllProductSearch.fulfilled, (state, action) => {
-      console.log("««««« action »»»»»", action);
+      // console.log("««««« action »»»»»", action);
       state.loading = false;
       state.productsSearch = action.payload;
     });
     builder.addCase(getAllProductSearch.rejected, (state, action) => {
-      console.log("««««« action »»»»»", action);
+      // console.log("««««« action »»»»»", action);
       state.loading = false;
       if (action.payload) {
         const customErrors = action.payload as {
@@ -452,7 +452,7 @@ const productSlice = createSlice({
       state.product = action.payload;
     });
     builder.addCase(getProductById.rejected, (state, action) => {
-      console.log("««««« action »»»»»", action);
+      // console.log("««««« action »»»»»", action);
       state.loading = false;
       if (action.payload) { // Check if payload exists
         const customErrors = action.payload as { message?: string; errors?: any };
@@ -496,7 +496,7 @@ const productSlice = createSlice({
       state.product = action.payload;
     });
     builder.addCase(createProduct.rejected, (state, action) => {
-      console.log("««««« action »»»»»", action);
+      // console.log("««««« action »»»»»", action);
       // custom lại lỗi error trả về như postman
       // redux chỉ hỗ trợ gọi tới action.payload
       // nếu gọi thêm action.payload.errors để trả rả như postman thì
@@ -543,6 +543,7 @@ const productSlice = createSlice({
       state.product = action.payload;
     });
     builder.addCase(updateProduct.rejected, (state, action) => {
+      // console.log('««««« action »»»»»', action);
       state.loading = false;
       if (action.payload) { // Check if payload exists
         const customErrors = action.payload as { message?: string; errors?: any };

@@ -40,7 +40,7 @@ const Login: React.FC = () => {
     }
     if (success) {
       onShowMessage(`Đăng nhập thành công`, "success");
-      console.log("««««« location.pathname »»»»»", location.pathname);
+      // console.log("««««« location.pathname »»»»»", location.pathname);
       dispatch(getCartFromCustomer());
       if (location.pathname === "/notPermit") {
         navigate("/admin");

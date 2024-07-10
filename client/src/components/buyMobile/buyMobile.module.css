@@ -6,6 +6,17 @@
   background-color: red;
 }
 
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 .wrapper {
   width: 100%;
   background-color: #fff;
@@ -15,8 +26,12 @@
   box-shadow: rgba(0, 39, 102, 0.5) 0px 0px 16px -4px, rgba(0, 39, 102, 0.3) 0px 0px 6px -2px;
   border-top-right-radius: 20px;
   border-top-left-radius: 20px;
-  /* transition: 1s linear; */
-  /* display: none; */
+  /* transition: transform 0.3s ease-in-out; */
+}
+
+.wrapper.active {
+  /* forwards giữ lại các thuộc tính sau khi hoàn thành */
+  animation: slideUp 0.3s forwards;
 }
 
 .wrapper_content {

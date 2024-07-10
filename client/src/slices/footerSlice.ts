@@ -236,7 +236,7 @@ const footerSlice = createSlice({
     });
 
     builder.addCase(updateFooter.fulfilled, (state, action) => {
-      console.log("««««« action »»»»»", action);
+      // console.log("««««« action »»»»»", action);
       state.loading = false;
       state.success = true;
       state.footer = action.payload;
@@ -260,7 +260,7 @@ const footerSlice = createSlice({
       state.loading = false;
     });
     builder.addCase(deleteFooter.rejected, (state, action) => {
-      console.log('««««« action »»»»»', action);
+      // console.log('««««« action »»»»»', action);
       state.loading = false;
       const customErrors = action.payload as {
         message: string;

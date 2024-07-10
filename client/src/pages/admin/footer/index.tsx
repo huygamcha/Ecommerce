@@ -95,7 +95,7 @@ const FooterAdmin = (props: Props) => {
   }, [isActive]);
 
   const onFinish = async (values: any) => {
-    console.log("««««« values »»»»»", values);
+    // console.log("««««« values »»»»»", values);
     await dispatch(createFooter(values));
     // setInitialRender(false);
     setIsActive(!isActive);
@@ -110,10 +110,10 @@ const FooterAdmin = (props: Props) => {
   // update category modal
 
   const onUpdate = async (values: any) => {
-    console.log("««««« { id: selectedFooter, values: values } »»»»»", {
-      id: selectedFooter,
-      values: values,
-    });
+    // console.log("««««« { id: selectedFooter, values: values } »»»»»", {
+    //   id: selectedFooter,
+    //   values: values,
+    // });
     await dispatch(updateFooter({ id: selectedFooter, values: values }));
     setIsActive(!isActive);
   };
@@ -292,7 +292,7 @@ const FooterAdmin = (props: Props) => {
           setSelectedFooter(false);
         }}
         open={selectedFooter}
-        okText="Save changes"
+        okText="Lưu"
         onOk={() => {
           updateForm.submit();
         }}
