@@ -326,11 +326,11 @@ function AdminRouter() {
               icon: <SafetyOutlined />,
               label: "Thương hiệu",
             },
-            {
-              key: "/admin/suppliers",
-              icon: <VideoCameraOutlined />,
-              label: "Nhà cung cấp",
-            },
+            // {
+            //   key: "/admin/suppliers",
+            //   icon: <VideoCameraOutlined />,
+            //   label: "Nhà cung cấp",
+            // },
             {
               key: "/admin/tags",
               icon: <TagOutlined />,
@@ -403,9 +403,11 @@ function AdminRouter() {
 function App() {
   return (
     // <HelmetProvider context={helmetContext}>
-    <React.StrictMode>
+    // <React.StrictMode>
+    <>
       <RouterProvider router={router} />
-    </React.StrictMode>
+    </>
+    // </React.StrictMode>
     // </HelmetProvider>
   );
 }

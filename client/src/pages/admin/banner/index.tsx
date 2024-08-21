@@ -44,8 +44,8 @@ const BannerAdmin = (props: Props) => {
 
   useEffect(() => {
     setInitialRender(false);
-    dispatch(getAllBanner());
-    dispatch(getAllCategory());
+    if (banners.length === 0) dispatch(getAllBanner());
+    if (categories.length === 0) dispatch(getAllCategory());
   }, [dispatch]);
 
   //set active modal
@@ -95,10 +95,10 @@ const BannerAdmin = (props: Props) => {
           navigate(-1);
           setSelectedBanner(false);
         }
+        dispatch(getAllBanner());
         createForm.resetFields();
       }
     }
-    dispatch(getAllBanner());
   }, [isActive]);
 
   const onFinish = async (values: any) => {

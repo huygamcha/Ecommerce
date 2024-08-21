@@ -134,9 +134,9 @@ const ListRender = ({
                       key={index}
                       to={`${footer.url}`}
                       className={clsx(style.text_item)}
-                      // target="_blank"
-                      // href={footer.url}
-                      // rel="noreferrer"
+                    // target="_blank"
+                    // href={footer.url}
+                    // rel="noreferrer"
                     >
                       {footer.name}
                     </Link>
@@ -262,9 +262,9 @@ const ListRenderMobile = ({
                       key={index}
                       to={`${footer.url}`}
                       className={clsx(style.text_item_mobile)}
-                      // target="_blank"
-                      // href={footer.url}
-                      // rel="noreferrer"
+                    // target="_blank"
+                    // href={footer.url}
+                    // rel="noreferrer"
                     >
                       {footer.name}
                     </Link>

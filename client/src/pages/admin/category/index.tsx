@@ -41,7 +41,7 @@ const Category = (props: Props) => {
 
   useEffect(() => {
     setInitialRender(false);
-    // if (categories.length === 0) dispatch(getAllCategory());
+    if (categories.length === 0) dispatch(getAllCategory());
   }, [dispatch]);
 
   //set active modal
@@ -91,10 +91,10 @@ const Category = (props: Props) => {
           navigate(-1);
           setSelectedCategory(false);
         }
+        dispatch(getAllCategory());
         createForm.resetFields();
       }
     }
-    if (categories.length === 0) dispatch(getAllCategory());
   }, [isActive]);
 
   const onFinish = async (values: any) => {

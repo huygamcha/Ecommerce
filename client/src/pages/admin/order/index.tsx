@@ -51,8 +51,8 @@ const Order = (props: Props) => {
 
   useEffect(() => {
     setInitialRender(false);
-    dispatch(getAllOrder());
-    dispatch(getAllCategory());
+    if (orders.length === 0) dispatch(getAllOrder());
+    if (categories.length === 0) dispatch(getAllCategory());
   }, [dispatch]);
 
   //set active modal
@@ -101,11 +101,8 @@ const Order = (props: Props) => {
         onShowMessage("Cập nhật đơn đặt hàng thành công", "success");
         navigate(-1);
         setSelectedOrder(false);
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
-        // window.location.reload();
       }
+      dispatch(getAllOrder());
       createForm.resetFields();
     }
   }, [isActive]);

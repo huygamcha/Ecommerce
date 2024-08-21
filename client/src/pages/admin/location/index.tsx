@@ -87,9 +87,9 @@ const LocationAdmin = (props: Props) => {
         navigate(-1);
         setSelectedLocation(false);
       }
+      dispatch(getAllLocation());
       createForm.resetFields();
     }
-    dispatch(getAllLocation());
   }, [isActive]);
 
   const onFinish = async (values: any) => {

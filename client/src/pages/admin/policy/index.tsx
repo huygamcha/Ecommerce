@@ -123,10 +123,10 @@ const PolicyAdmin = (props: Props) => {
           navigate(-1);
           setSelectedPolicy(false);
         }
+        dispatch(getAllPolicy());
         createForm.resetFields();
       }
     }
-    dispatch(getAllPolicy());
   }, [isActive]);
 
   const onFinish = async (values: any) => {

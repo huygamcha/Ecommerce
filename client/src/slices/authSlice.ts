@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-
 interface LoginType {
   name: string;
   password: string;
@@ -43,9 +42,10 @@ const registerUser = createAsyncThunk<UserType, LoginType>(
   "auth/registerUser",
   async (values, { rejectWithValue }) => {
     try {
-      // console.log('«««««  »»»»»',  );
-      // const response = await axios.post("http://localhost:4000/login", values);
-      const response = await axios.post(`${process.env.REACT_APP_BACKEND}/login`, values);
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND}/login`,
+        values
+      );
       const data: UserType = response.data.payload;
       return data;
     } catch (error: any) {
@@ -58,24 +58,20 @@ const registerUser = createAsyncThunk<UserType, LoginType>(
   }
 );
 
-
-
-
 const authSlice = createSlice({
   name: "auth",
   initialState: initialState,
   reducers: {
-
     logout: (state) => {
       state.user = {
-        id: '',
-        fullName: '',
-        token: '',
-        refreshToken: '',
-      }
+        id: "",
+        fullName: "",
+        token: "",
+        refreshToken: "",
+      };
       state.success = false;
-      localStorage.clear()
-    }
+      localStorage.clear();
+    },
   },
   extraReducers(builder) {
     builder.addCase(registerUser.pending, (state) => {
@@ -89,6 +85,11 @@ const authSlice = createSlice({
       state.loading = false;
       state.user = action.payload;
       localStorage.setItem("userInfor", JSON.stringify(state.user));
+      localStorage.setItem("accessToken", JSON.stringify(state.user.token));
+      localStorage.setItem(
+        "refreshToken",
+        JSON.stringify(state.user.refreshToken)
+      );
     });
     builder.addCase(registerUser.rejected, (state, action) => {
       state.loading = false;
@@ -102,4 +103,4 @@ const { reducer, actions } = authSlice;
 
 export default reducer;
 export { registerUser };
-export const {logout} = actions
+export const { logout } = actions;

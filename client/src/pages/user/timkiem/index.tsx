@@ -730,7 +730,7 @@ function Timkiem() {
                                     : { display: "none" }
                                 )}
                               >
-                                <div style={{ display: "none" }}>2</div>
+                                <div  style={{ display: "none" }}>2</div>
                               </Space>
                             </Button>
                           </Col>
@@ -844,7 +844,7 @@ function Timkiem() {
                                   <Flex
                                     vertical
                                     justify="space-between"
-                                    style={{ padding: "20px 20px 10px 20px" }}
+                                    className={clsx(style.customPadding)}
                                   >
                                     <Space className={clsx(style.header_text)}>
                                       {product.name}

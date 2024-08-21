@@ -17,6 +17,7 @@ import {
   getAllTag,
   deleteTag,
   updateTag,
+  resetState,
 } from "../../../slices/tagSlice";
 import { useAppSelector, useAppDispatch } from "../../../store";
 import { useForm } from "antd/es/form/Form";
@@ -34,12 +35,18 @@ const Tag = (props: Props) => {
   // get from database
   const dispatch = useAppDispatch();
 
-  const { tags, error } = useAppSelector((state) => state.tags);
+  const { tags, error, isSuccessCreate } = useAppSelector(
+    (state) => state.tags
+  );
 
   useEffect(() => {
     setInitialRender(false);
-    dispatch(getAllTag());
+    if (tags.length === 0) dispatch(getAllTag());
   }, [dispatch]);
+
+  // useEffect(() => {
+  //   if (isSuccessCreate) dispatch(getAllTag());
+  // }, [isSuccessCreate]);
 
   //set active modal
   const [selectedTag, setSelectedTag] = useState<any>(); // boolean or record._id
@@ -86,14 +93,15 @@ const Tag = (props: Props) => {
           navigate(-1);
           setSelectedTag(false);
         }
+        dispatch(getAllTag());
         createForm.resetFields();
       }
     }
-    dispatch(getAllTag());
   }, [isActive]);
 
   const onFinish = async (values: any) => {
     await dispatch(createTag(values));
+    dispatch(resetState());
     // setInitialRender(false);
     setIsActive(!isActive);
   };

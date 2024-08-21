@@ -12,6 +12,7 @@ import { getAllTag } from "../../slices/tagSlice";
 import { getAllBrand } from "../../slices/brandSlice";
 import { getAllCategory } from "../../slices/categorySlice";
 import { RiSearchLine } from "react-icons/ri";
+import useDebounceCustom from "../../hooks/useDebounce";
 
 function HeaderScreenMobile() {
   const currentUser = localStorage.getItem("userInfor")
@@ -24,7 +25,7 @@ function HeaderScreenMobile() {
   // hiển thị danh sách tìm kiém
   const [isList, setIsList] = useState<boolean>(false);
   // tìm kiếm
-  const [search, setSearch] = useState<string>();
+  const [search, setSearch] = useState<string>("");
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -36,13 +37,24 @@ function HeaderScreenMobile() {
   const { brands } = useAppSelector((state) => state.brands);
   const { tags } = useAppSelector((state) => state.tags);
 
+  // khi search thay đổi thì debouncedSearchItem sẽ được gọi
+  const debouncedSearchItem = useDebounceCustom({
+    inputValue: search,
+    delay: 400,
+  });
+  useEffect(() => {
+    if (debouncedSearchItem) {
+      dispatch(getAllProductSearch({ search: debouncedSearchItem }));
+    }
+  }, [debouncedSearchItem, dispatch]);
+
   const handleSearch = (e: any) => {
     setSearch(e.target.value);
     if (e.target.value === "") {
       dispatch(hasList({ isList: false }));
     } else {
       dispatch(hasList({ isList: true }));
-      dispatch(getAllProductSearch({ search: e.target.value }));
+      // dispatch(getAllProductSearch({ search: e.target.value }));
     }
   };
 

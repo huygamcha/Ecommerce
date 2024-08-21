@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-
+import authorizedAxiosInstance from "../utils/axiosCustom";
 
 interface PoliciesType {
   name: string;
@@ -12,7 +12,7 @@ interface PoliciesType {
 
 interface InitialType {
   success: boolean;
-  error: { message: string; errors: { name : string}  } ;
+  error: { message: string; errors: { name: string } };
   policy: PoliciesType;
   loading: boolean;
   deleted: boolean;
@@ -24,14 +24,14 @@ const initialState: InitialType = {
   success: false,
   error: {
     message: "",
-    errors: { name: ""},
+    errors: { name: "" },
   },
   policy: {
-    slug: '',
+    slug: "",
     _id: "",
     name: "",
-    content: '',
-    link: ''
+    content: "",
+    link: "",
   },
   loading: false,
   deleted: false,
@@ -39,11 +39,16 @@ const initialState: InitialType = {
   policies: [],
 };
 
-const getAllPolicy = createAsyncThunk<PoliciesType[]>("policy/getAll", async () => {
-  const response = await axios.get(`${process.env.REACT_APP_BACKEND}/policies`);
-  const data: PoliciesType[] = response.data.payload;
-  return data; 
-});
+const getAllPolicy = createAsyncThunk<PoliciesType[]>(
+  "policy/getAll",
+  async () => {
+    const response = await axios.get(
+      `${process.env.REACT_APP_BACKEND}/policies`
+    );
+    const data: PoliciesType[] = response.data.payload;
+    return data;
+  }
+);
 
 const getPolicyById = createAsyncThunk<PoliciesType, string | undefined>(
   "policy/getPolicyById",
@@ -60,18 +65,14 @@ const getPolicyById = createAsyncThunk<PoliciesType, string | undefined>(
 const createPolicy = createAsyncThunk<PoliciesType, PoliciesType>(
   "policy/createPolicy",
   async (name, { rejectWithValue }) => {
-    const currentUser =  localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
+    const currentUser = localStorage.getItem("userInfor")
+      ? JSON.parse(localStorage.getItem("userInfor")!)
+      : undefined;
 
     try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${currentUser.token}`,
-        },
-      };
-      const response = await axios.post(
+      const response = await authorizedAxiosInstance.post(
         `${process.env.REACT_APP_BACKEND}/policies`,
-        name,config
+        name
       );
       const data: PoliciesType = response.data;
       return data;
@@ -88,18 +89,13 @@ const createPolicy = createAsyncThunk<PoliciesType, PoliciesType>(
 const deletePolicy = createAsyncThunk<PoliciesType, string>(
   "policy/deletePolicy",
   async (id, { rejectWithValue }) => {
-    const currentUser =  localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
+    const currentUser = localStorage.getItem("userInfor")
+      ? JSON.parse(localStorage.getItem("userInfor")!)
+      : undefined;
 
     try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${currentUser.token}`,
-        },
-      };
-      const response = await axios.delete(
-        `${process.env.REACT_APP_BACKEND}/policies/${id}`,
-        config
+      const response = await authorizedAxiosInstance.delete(
+        `${process.env.REACT_APP_BACKEND}/policies/${id}`
       );
       const data = response.data;
       return data;
@@ -113,35 +109,36 @@ const deletePolicy = createAsyncThunk<PoliciesType, string>(
   }
 );
 
-const updatePolicy = createAsyncThunk<PoliciesType, { id: string; values: PoliciesType }>(
-  "policy/updatePolicy",
-  async ({ id, values }, { rejectWithValue }) => {
-    const currentUser =  localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
+const updatePolicy = createAsyncThunk<
+  PoliciesType,
+  { id: string; values: PoliciesType }
+>("policy/updatePolicy", async ({ id, values }, { rejectWithValue }) => {
+  const currentUser = localStorage.getItem("userInfor")
+    ? JSON.parse(localStorage.getItem("userInfor")!)
+    : undefined;
 
-    try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${currentUser.token}`,
-        },
-      };
-      const response = await axios.patch(
-        `${process.env.REACT_APP_BACKEND}/policies/${id}`,
-        values,
-        config
-      );
+  try {
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${currentUser.token}`,
+      },
+    };
+    const response = await authorizedAxiosInstance.patch(
+      `${process.env.REACT_APP_BACKEND}/policies/${id}`,
+      values
+    );
 
-      const data = response.data;
-      return data;
-    } catch (error: any) {
-      if (error.response && error.response.data) {
-        return rejectWithValue(error.response.data);
-      } else {
-        throw error;
-      }
+    const data = response.data;
+    return data;
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      return rejectWithValue(error.response.data);
+    } else {
+      throw error;
     }
   }
-);
+});
 
 const policySlice = createSlice({
   name: "policy",
@@ -158,7 +155,7 @@ const policySlice = createSlice({
     });
     builder.addCase(getAllPolicy.rejected, (state, action) => {
       state.loading = false;
-      state.error = { message: "", errors: { name : ''} };// Ensure a default message or fallback if action.error is undefined
+      state.error = { message: "", errors: { name: "" } }; // Ensure a default message or fallback if action.error is undefined
     });
 
     // create
@@ -170,20 +167,21 @@ const policySlice = createSlice({
     builder.addCase(createPolicy.fulfilled, (state, action) => {
       state.loading = false;
       state.policy = action.payload;
-      state.error = { message: "", errors: { name : ''}  };
-
+      state.error = { message: "", errors: { name: "" } };
     });
     builder.addCase(createPolicy.rejected, (state, action) => {
       state.loading = false;
-      const customErrors = action.payload as { message: string; errors: { name : string} };
+      const customErrors = action.payload as {
+        message: string;
+        errors: { name: string };
+      };
       state.error = customErrors; // Ensure a default message or fallback if action.error is undefined
     });
 
     //delete
     builder.addCase(deletePolicy.pending, (state) => {
       state.loading = true;
-      state.error = { message: "", errors: { name : ''}};
-
+      state.error = { message: "", errors: { name: "" } };
     });
 
     builder.addCase(deletePolicy.fulfilled, (state, action) => {
@@ -191,7 +189,10 @@ const policySlice = createSlice({
       state.policy = action.payload;
     });
     builder.addCase(deletePolicy.rejected, (state, action) => {
-      const customErrors = action.payload as { message: string; errors: { name : string} };
+      const customErrors = action.payload as {
+        message: string;
+        errors: { name: string };
+      };
       state.loading = false;
       state.error = customErrors; // Ensure a default message or fallback if action.error is undefined
     });
@@ -199,7 +200,7 @@ const policySlice = createSlice({
     //update
     builder.addCase(updatePolicy.pending, (state) => {
       state.loading = true;
-      state.error = { message: "", errors: { name : ''}};
+      state.error = { message: "", errors: { name: "" } };
     });
 
     builder.addCase(updatePolicy.fulfilled, (state, action) => {
@@ -209,34 +210,47 @@ const policySlice = createSlice({
 
     builder.addCase(updatePolicy.rejected, (state, action) => {
       state.loading = false;
-      const customErrors = action.payload as { message: string; errors: { name : string} };
-      state.error = customErrors ; // Ensure a default message or fallback if action.error is undefined
+      const customErrors = action.payload as {
+        message: string;
+        errors: { name: string };
+      };
+      state.error = customErrors; // Ensure a default message or fallback if action.error is undefined
     });
 
-      //get by id
-      builder.addCase(getPolicyById.pending, (state) => {
-        state.loading = true;
-      });
-  
-      builder.addCase(getPolicyById.fulfilled, (state, action) => {
-        state.loading = false;
-        state.policy = action.payload;
-      });
+    //get by id
+    builder.addCase(getPolicyById.pending, (state) => {
+      state.loading = true;
+    });
 
-      builder.addCase(getPolicyById.rejected, (state, action) => {
-        state.loading = false;
-        if (action.payload) { // Check if payload exists
-          const customErrors = action.payload as { message?: string; errors?: any };
-          state.error = customErrors.errors || undefined;
-        } else {
-          // Handle the case where there's no payload (optional)
-          state.error = { message: "", errors: { name: "" } };
-        }
-      });
+    builder.addCase(getPolicyById.fulfilled, (state, action) => {
+      state.loading = false;
+      state.policy = action.payload;
+    });
+
+    builder.addCase(getPolicyById.rejected, (state, action) => {
+      state.loading = false;
+      if (action.payload) {
+        // Check if payload exists
+        const customErrors = action.payload as {
+          message?: string;
+          errors?: any;
+        };
+        state.error = customErrors.errors || undefined;
+      } else {
+        // Handle the case where there's no payload (optional)
+        state.error = { message: "", errors: { name: "" } };
+      }
+    });
   },
 });
 
 const { reducer } = policySlice;
 
 export default reducer;
-export { getAllPolicy, createPolicy, deletePolicy, updatePolicy , getPolicyById};
+export {
+  getAllPolicy,
+  createPolicy,
+  deletePolicy,
+  updatePolicy,
+  getPolicyById,
+};

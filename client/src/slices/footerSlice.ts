@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import authorizedAxiosInstance from "../utils/axiosCustom";
 
 interface FooterType {
   name: string;
@@ -17,7 +18,6 @@ interface InitialType {
   updated: boolean;
   footers: FooterType[];
 }
-
 
 const initialState: InitialType = {
   success: false,
@@ -41,18 +41,12 @@ const createFooter = createAsyncThunk<FooterType, FooterType>(
   "footer/createFooter",
   async (values, { rejectWithValue }) => {
     const currentUser = localStorage.getItem("userInfor")
-    ? JSON.parse(localStorage.getItem("userInfor")!)
-    : null;
-  try {
-    const config = {
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${currentUser.token}`,
-      },
-    };
-      const response = await axios.post(
+      ? JSON.parse(localStorage.getItem("userInfor")!)
+      : null;
+    try {
+      const response = await authorizedAxiosInstance.post(
         `${process.env.REACT_APP_BACKEND}/footers`,
-        values, config
+        values
       );
       const data: FooterType = response.data;
       return data;
@@ -102,18 +96,11 @@ const deleteFooter = createAsyncThunk<FooterType, string>(
   "footer/deleteFooter",
   async (id, { rejectWithValue }) => {
     const currentUser = localStorage.getItem("userInfor")
-    ? JSON.parse(localStorage.getItem("userInfor")!)
-    : null;
+      ? JSON.parse(localStorage.getItem("userInfor")!)
+      : null;
     try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${currentUser.token}`,
-        },
-      };
-      const response = await axios.delete(
-        `${process.env.REACT_APP_BACKEND}/footers/${id}`,
-        config
+      const response = await authorizedAxiosInstance.delete(
+        `${process.env.REACT_APP_BACKEND}/footers/${id}`
       );
       const data = response.data;
       return data;
@@ -131,7 +118,6 @@ const updateFooter = createAsyncThunk<
   FooterType,
   { id: string; values: FooterType }
 >("footer/updateFooter", async ({ id, values }, { rejectWithValue }) => {
-
   const currentUser = localStorage.getItem("userInfor")
     ? JSON.parse(localStorage.getItem("userInfor")!)
     : null;
@@ -142,10 +128,9 @@ const updateFooter = createAsyncThunk<
         Authorization: `Bearer ${currentUser.token}`,
       },
     };
-    const response = await axios.patch(
+    const response = await authorizedAxiosInstance.patch(
       `${process.env.REACT_APP_BACKEND}/footers/${id}`,
-      values,
-      config
+      values
     );
 
     const data: FooterType = response.data.payload;
@@ -273,4 +258,10 @@ const footerSlice = createSlice({
 
 const { reducer } = footerSlice;
 export default reducer;
-export { createFooter, getDetailFooter, updateFooter, getAllFooter, deleteFooter };
+export {
+  createFooter,
+  getDetailFooter,
+  updateFooter,
+  getAllFooter,
+  deleteFooter,
+};

@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import authorizedAxiosInstance from "../utils/axiosCustom";
 
 interface LocationsType {
   _id: string;
@@ -10,7 +11,6 @@ interface LocationsType {
   iframe: string;
   description: string;
   album: Array<string>;
-  
 }
 
 interface InitialType {
@@ -28,9 +28,9 @@ const initialState: InitialType = {
   error: "",
   location: {
     album: [],
-    iframe: '',
-    description: '',
-    name: '',
+    iframe: "",
+    description: "",
+    name: "",
     _id: "",
     time: "",
     address: "",
@@ -42,27 +42,28 @@ const initialState: InitialType = {
   locations: [],
 };
 
-const getAllLocation = createAsyncThunk<LocationsType[]>("location/getAll", async () => {
-  const response = await axios.get(`${process.env.REACT_APP_BACKEND}/locations`);
-  const data: LocationsType[] = response.data.payload;
-  return data; 
-});
+const getAllLocation = createAsyncThunk<LocationsType[]>(
+  "location/getAll",
+  async () => {
+    const response = await axios.get(
+      `${process.env.REACT_APP_BACKEND}/locations`
+    );
+    const data: LocationsType[] = response.data.payload;
+    return data;
+  }
+);
 
 // tham số thứ 2 là tham số truyền vào gửi từ client
 const createLocation = createAsyncThunk<LocationsType, LocationsType>(
   "location/createLocation",
   async (name, { rejectWithValue }) => {
-    const currentUser = localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
+    const currentUser = localStorage.getItem("userInfor")
+      ? JSON.parse(localStorage.getItem("userInfor")!)
+      : undefined;
     try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${currentUser.token}`,
-        },
-      };
-      const response = await axios.post(
+      const response = await authorizedAxiosInstance.post(
         `${process.env.REACT_APP_BACKEND}/locations`,
-        name, config
+        name
       );
       const data: LocationsType = response.data;
       return data;
@@ -79,17 +80,12 @@ const createLocation = createAsyncThunk<LocationsType, LocationsType>(
 const deleteLocation = createAsyncThunk<LocationsType, string>(
   "location/deleteLocation",
   async (id, { rejectWithValue }) => {
-    const currentUser = localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
+    const currentUser = localStorage.getItem("userInfor")
+      ? JSON.parse(localStorage.getItem("userInfor")!)
+      : undefined;
     try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${currentUser.token}`,
-        },
-      };
-      const response = await axios.delete(
-        `${process.env.REACT_APP_BACKEND}/locations/${id}`,
-        config
+      const response = await authorizedAxiosInstance.delete(
+        `${process.env.REACT_APP_BACKEND}/locations/${id}`
       );
       const data = response.data;
       return data;
@@ -103,34 +99,35 @@ const deleteLocation = createAsyncThunk<LocationsType, string>(
   }
 );
 
-const updateLocation = createAsyncThunk<LocationsType, { id: string; values: LocationsType }>(
-  "location/updateLocation",
-  async ({ id, values }, { rejectWithValue }) => {
-    const currentUser = localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
-    try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${currentUser.token}`,
-        },
-      };
-      const response = await axios.patch(
-        `${process.env.REACT_APP_BACKEND}/locations/${id}`,
-        values,
-        config
-      );
+const updateLocation = createAsyncThunk<
+  LocationsType,
+  { id: string; values: LocationsType }
+>("location/updateLocation", async ({ id, values }, { rejectWithValue }) => {
+  const currentUser = localStorage.getItem("userInfor")
+    ? JSON.parse(localStorage.getItem("userInfor")!)
+    : undefined;
+  try {
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${currentUser.token}`,
+      },
+    };
+    const response = await authorizedAxiosInstance.patch(
+      `${process.env.REACT_APP_BACKEND}/locations/${id}`,
+      values
+    );
 
-      const data = response.data;
-      return data;
-    } catch (error: any) {
-      if (error.response && error.response.data) {
-        return rejectWithValue(error.response.data);
-      } else {
-        throw error;
-      }
+    const data = response.data;
+    return data;
+  } catch (error: any) {
+    if (error.response && error.response.data) {
+      return rejectWithValue(error.response.data);
+    } else {
+      throw error;
     }
   }
-);
+});
 
 const locationSlice = createSlice({
   name: "location",
@@ -161,7 +158,7 @@ const locationSlice = createSlice({
     });
     builder.addCase(createLocation.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.error.message
+      state.error = action.error.message;
     });
 
     //delete
@@ -175,7 +172,7 @@ const locationSlice = createSlice({
     });
     builder.addCase(deleteLocation.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.error.message
+      state.error = action.error.message;
     });
 
     //update
@@ -190,7 +187,7 @@ const locationSlice = createSlice({
 
     builder.addCase(updateLocation.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.error.message
+      state.error = action.error.message;
     });
   },
 });

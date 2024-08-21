@@ -37,7 +37,7 @@ const FooterAdmin = (props: Props) => {
 
   useEffect(() => {
     setInitialRender(false);
-    dispatch(getAllFooter());
+   if (footers.length === 0) dispatch(getAllFooter());
   }, [dispatch]);
 
   //set active modal
@@ -88,10 +88,10 @@ const FooterAdmin = (props: Props) => {
           navigate(-1);
           setSelectedFooter(false);
         }
+        dispatch(getAllFooter());
         createForm.resetFields();
       }
     }
-    dispatch(getAllFooter());
   }, [isActive]);
 
   const onFinish = async (values: any) => {

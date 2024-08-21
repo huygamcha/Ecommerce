@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import authorizedAxiosInstance from "../utils/axiosCustom";
 
 export interface ProductsType {
   _id: string;
@@ -61,15 +62,15 @@ const initialState: InitialType = {
   success: false,
   error: { message: "", errors: { name: "" } },
   product: {
-  fakeNumber: 0,
+    fakeNumber: 0,
     sold: 0,
     quantity: 0,
     autoQuantity: 2,
     tagList: [],
-    album: [''],
+    album: [""],
     brand: {},
     category: {},
-    brandId: '',
+    brandId: "",
     slug: "",
     _id: "",
     name: "",
@@ -80,14 +81,14 @@ const initialState: InitialType = {
     stock: 0,
     total: 0,
     pic: "",
-    fromBrand: '',
-    supplierHome: '',
-    country: '',
-    ingredient: '',
-    detail: '',
-    specifications: '',
-    unit: '',
-    age: 0
+    fromBrand: "",
+    supplierHome: "",
+    country: "",
+    ingredient: "",
+    detail: "",
+    specifications: "",
+    unit: "",
+    age: 0,
   },
   loading: false,
   deleted: false,
@@ -95,7 +96,7 @@ const initialState: InitialType = {
   isList: false,
   products: [],
   productsSearch: [],
-  productsHistory: []
+  productsHistory: [],
 };
 
 const getAllProduct = createAsyncThunk<ProductsType[], ProductSearchType>(
@@ -137,15 +138,24 @@ const getAllProductSearch = createAsyncThunk<ProductsType[], ProductSearchType>(
       ? JSON.parse(localStorage.getItem("searchAge")!)
       : undefined;
 
-    let { searchTag, priceFrom, priceTo, ageFrom, ageTo, categoryId, brandId, search } = arg;
+    let {
+      searchTag,
+      priceFrom,
+      priceTo,
+      ageFrom,
+      ageTo,
+      categoryId,
+      brandId,
+      search,
+    } = arg;
     // console.log('««««« arg search tim kiem »»»»»', arg);
 
     if (!search) {
-      search = ''
+      search = "";
     }
 
     if (!searchTag) {
-      searchTag = ''
+      searchTag = "";
     }
     if (filter && filter.searchTag) {
       searchTag = filter.searchTag;
@@ -183,7 +193,11 @@ const getAllProductSearch = createAsyncThunk<ProductsType[], ProductSearchType>(
       ageTo = 100;
     }
     const response = await axios.get(
-      `${process.env.REACT_APP_BACKEND}/products/search?${categoryId ? `categoryId=${categoryId}` : ''}${searchTag ? `&searchTag=${searchTag}` : ''}${brandId ? `&brandId=${brandId}` : ''}&priceFrom=${priceFrom}&priceTo=${priceTo}&ageFrom=${ageFrom}&ageTo=${ageTo}&search=${search}`
+      `${process.env.REACT_APP_BACKEND}/products/search?${
+        categoryId ? `categoryId=${categoryId}` : ""
+      }${searchTag ? `&searchTag=${searchTag}` : ""}${
+        brandId ? `&brandId=${brandId}` : ""
+      }&priceFrom=${priceFrom}&priceTo=${priceTo}&ageFrom=${ageFrom}&ageTo=${ageTo}&search=${search}`
     );
     const data: ProductsType[] = response.data.payload;
     return data; // Assuming products are in the `data` property of the response
@@ -194,13 +208,12 @@ const getProductByCategories = createAsyncThunk<
   ProductsType[],
   string | undefined
 >("product/getProductByCategories", async (id) => {
-
   const categoryId = localStorage.getItem("searchCategory")
     ? JSON.parse(localStorage.getItem("searchCategory")!)
     : undefined;
 
   if (!id) {
-    id = categoryId.id
+    id = categoryId.id;
   }
   // console.log('««««« id »»»»»', id);
   const response = await axios.get(
@@ -214,7 +227,6 @@ const getProductBySuppliers = createAsyncThunk<
   ProductsType[],
   string | undefined
 >("product/getProductBySuppliers", async (id) => {
-
   const response = await axios.get(
     `${process.env.REACT_APP_BACKEND}/products/BySuppliers?id=${id}`
   );
@@ -241,28 +253,22 @@ const getProductBySlug = createAsyncThunk<ProductsType, string | undefined>(
     );
     const data: ProductsType = response.data.payload;
     // console.log('««««« data »»»»»', data);
-    return data; 
+    return data;
   }
 );
-
-
 
 // tham số thứ 2 là tham số truyền vào gửi từ client
 const createProduct = createAsyncThunk<ProductsType, ProductsType>(
   "product/createProduct",
   async (name, { rejectWithValue }) => {
-    const currentUser = localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
+    const currentUser = localStorage.getItem("userInfor")
+      ? JSON.parse(localStorage.getItem("userInfor")!)
+      : undefined;
 
     try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${currentUser.token}`,
-        },
-      };
-      const response = await axios.post(
+      const response = await authorizedAxiosInstance.post(
         `${process.env.REACT_APP_BACKEND}/products`,
-        name, config
+        name
       );
       const data: ProductsType = response.data;
       return data;
@@ -279,18 +285,13 @@ const createProduct = createAsyncThunk<ProductsType, ProductsType>(
 const deleteProduct = createAsyncThunk<ProductsType, string>(
   "product/deleteProduct",
   async (id, { rejectWithValue }) => {
-    const currentUser = localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
+    const currentUser = localStorage.getItem("userInfor")
+      ? JSON.parse(localStorage.getItem("userInfor")!)
+      : undefined;
 
     try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${currentUser.token}`,
-        },
-      };
-      const response = await axios.delete(
-        `${process.env.REACT_APP_BACKEND}/products/${id}`,
-        config
+      const response = await authorizedAxiosInstance.delete(
+        `${process.env.REACT_APP_BACKEND}/products/${id}`
       );
       const data = response.data;
       return data;
@@ -308,7 +309,9 @@ const updateProduct = createAsyncThunk<
   ProductsType,
   { id: string; values: ProductsType }
 >("product/updateProduct", async ({ id, values }, { rejectWithValue }) => {
-  const currentUser = localStorage.getItem('userInfor') ? JSON.parse(localStorage.getItem('userInfor')!) : undefined;
+  const currentUser = localStorage.getItem("userInfor")
+    ? JSON.parse(localStorage.getItem("userInfor")!)
+    : undefined;
   try {
     const config = {
       headers: {
@@ -316,10 +319,9 @@ const updateProduct = createAsyncThunk<
         // Authorization: `Bearer ${currentUser.token}`,
       },
     };
-    const response = await axios.patch(
+    const response = await authorizedAxiosInstance.patch(
       `${process.env.REACT_APP_BACKEND}/products/${id}`,
-      values,
-      config
+      values
     );
 
     const data = response.data;
@@ -346,13 +348,11 @@ const productSlice = createSlice({
 
     hasList: (state, action) => {
       if (action.payload.isList) {
-        state.isList = true
+        state.isList = true;
+      } else {
+        state.isList = false;
       }
-      else {
-        state.isList = false
-      }
-    }
-
+    },
   },
   extraReducers(builder) {
     //get all
@@ -431,8 +431,12 @@ const productSlice = createSlice({
     });
     builder.addCase(getProductBySuppliers.rejected, (state, action) => {
       state.loading = false;
-      if (action.payload) { // Check if payload exists
-        const customErrors = action.payload as { message?: string; errors?: any };
+      if (action.payload) {
+        // Check if payload exists
+        const customErrors = action.payload as {
+          message?: string;
+          errors?: any;
+        };
         state.error = customErrors.errors || undefined;
       } else {
         // Handle the case where there's no payload (optional)
@@ -454,8 +458,12 @@ const productSlice = createSlice({
     builder.addCase(getProductById.rejected, (state, action) => {
       // console.log("««««« action »»»»»", action);
       state.loading = false;
-      if (action.payload) { // Check if payload exists
-        const customErrors = action.payload as { message?: string; errors?: any };
+      if (action.payload) {
+        // Check if payload exists
+        const customErrors = action.payload as {
+          message?: string;
+          errors?: any;
+        };
         state.error = customErrors.errors || undefined;
       } else {
         // Handle the case where there's no payload (optional)
@@ -476,8 +484,12 @@ const productSlice = createSlice({
     });
     builder.addCase(getProductBySlug.rejected, (state, action) => {
       state.loading = false;
-      if (action.payload) { // Check if payload exists
-        const customErrors = action.payload as { message?: string; errors?: any };
+      if (action.payload) {
+        // Check if payload exists
+        const customErrors = action.payload as {
+          message?: string;
+          errors?: any;
+        };
         state.error = customErrors.errors || undefined;
       } else {
         // Handle the case where there's no payload (optional)
@@ -502,8 +514,12 @@ const productSlice = createSlice({
       // nếu gọi thêm action.payload.errors để trả rả như postman thì
       // redux không chắc rằng errors có phải là một object không nên nó không lưu => lỗi
       state.loading = false;
-      if (action.payload) { // Check if payload exists
-        const customErrors = action.payload as { message?: string; errors?: any };
+      if (action.payload) {
+        // Check if payload exists
+        const customErrors = action.payload as {
+          message?: string;
+          errors?: any;
+        };
         state.error = customErrors.errors || undefined;
       } else {
         // Handle the case where there's no payload (optional)
@@ -523,8 +539,12 @@ const productSlice = createSlice({
     });
     builder.addCase(deleteProduct.rejected, (state, action) => {
       state.loading = false;
-      if (action.payload) { // Check if payload exists
-        const customErrors = action.payload as { message?: string; errors?: any };
+      if (action.payload) {
+        // Check if payload exists
+        const customErrors = action.payload as {
+          message?: string;
+          errors?: any;
+        };
         state.error = customErrors.errors || undefined;
       } else {
         // Handle the case where there's no payload (optional)
@@ -545,8 +565,12 @@ const productSlice = createSlice({
     builder.addCase(updateProduct.rejected, (state, action) => {
       // console.log('««««« action »»»»»', action);
       state.loading = false;
-      if (action.payload) { // Check if payload exists
-        const customErrors = action.payload as { message?: string; errors?: any };
+      if (action.payload) {
+        // Check if payload exists
+        const customErrors = action.payload as {
+          message?: string;
+          errors?: any;
+        };
         state.error = customErrors.errors || undefined;
       } else {
         // Handle the case where there's no payload (optional)
@@ -568,7 +592,7 @@ export {
   getProductBySuppliers,
   getProductById,
   getAllProductSearch,
-  getProductBySlug
+  getProductBySlug,
 };
 
-export const { hasList } = actions
+export const { hasList } = actions;

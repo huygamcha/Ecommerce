@@ -28,6 +28,7 @@ import {
 import { getAllTag, getTagByName } from "../../slices/tagSlice";
 import { getAllBrand } from "../../slices/brandSlice";
 import { getAllCategory } from "../../slices/categorySlice";
+import useDebounceCustom from "../../hooks/useDebounce";
 
 const ListItemBrand = ({
   categoryId,
@@ -100,7 +101,7 @@ function HeaderScreen() {
   // hiển thị danh sách tìm kiém
   const [isList, setIsList] = useState<boolean>(false);
   // tìm kiếm
-  const [search, setSearch] = useState<string>();
+  const [search, setSearch] = useState<string>("");
   // xác định phần tử con nào được liệt kê
   const [categoryActive, setCategoryActive] = useState<string>("");
   // thông báo về mua sản phẩm
@@ -124,10 +125,21 @@ function HeaderScreen() {
   const { tags } = useAppSelector((state) => state.tags);
   const { carts } = useAppSelector((state) => state.carts);
 
+  // khi search thay đổi thì debouncedSearchItem sẽ được gọi
+  const debouncedSearchItem = useDebounceCustom({
+    inputValue: search,
+    delay: 400,
+  });
+  useEffect(() => {
+    if (debouncedSearchItem) {
+      dispatch(getAllProductSearch({ search: debouncedSearchItem }));
+    }
+  }, [debouncedSearchItem, dispatch]);
+
   const handleSearch = (e: any) => {
     // fix lỗi gọi api khi click vào
     if (e.type !== "focus") {
-      dispatch(getAllProductSearch({ search: e.target.value }));
+      // dispatch(getAllProductSearch({ search: e.target.value }));
       setIsList(true);
       setSearch(e.target.value);
       if (e.target.value === "") {
@@ -176,7 +188,8 @@ function HeaderScreen() {
   useEffect(() => {
     if (tags.length === 0) dispatch(getAllTag());
     if (brands.length === 0) dispatch(getAllBrand());
-    if (categories.length === 0) dispatch(getAllCategory());
+    // huyg bên mobile đã gọi rồi nên ở đây ẩn lại
+    // if (categories.length === 0) dispatch(getAllCategory());
     if (carts.length === 0) dispatch(getAllCart());
   }, []);
 
@@ -442,6 +455,7 @@ function HeaderScreen() {
               />
             </Link>
           </Col>
+
           <Col xs={0} sm={14} md={13} lg={13}>
             <Flex>
               <Input
@@ -507,6 +521,7 @@ function HeaderScreen() {
               </Space>
             </Flex>
           </Col>
+
           <Col xs={0} sm={8} md={9} lg={6}>
             <Flex justify="end">
               {currentUser ? (

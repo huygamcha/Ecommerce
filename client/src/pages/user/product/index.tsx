@@ -326,7 +326,7 @@ function ProductScreen() {
                                     <Flex
                                       vertical
                                       justify="space-between"
-                                      // style={{ padding: "20px" }}
+                                    // style={{ padding: "20px" }}
                                     >
                                       <Flex
                                         className={clsx(
@@ -546,7 +546,7 @@ function ProductScreen() {
                                     <Flex
                                       vertical
                                       justify="space-between"
-                                      style={{ padding: "20px 20px 10px 20px" }}
+                                      className={clsx(style.customPadding)}
                                     >
                                       <Space
                                         className={clsx(style.header_text)}
@@ -612,8 +612,8 @@ function ProductScreen() {
                                           className={clsx(
                                             style.buy_now_in_home,
                                             product &&
-                                              !product.stock &&
-                                              style.soldOut_disabled
+                                            !product.stock &&
+                                            style.soldOut_disabled
                                           )}
                                         >
                                           Chọn mua
@@ -692,9 +692,7 @@ function ProductScreen() {
                                       <Flex
                                         vertical
                                         justify="space-between"
-                                        style={{
-                                          padding: "20px 20px 10px 20px",
-                                        }}
+                                        className={clsx(style.customPadding)}
                                       >
                                         <Space
                                           className={clsx(style.header_text)}
@@ -762,8 +760,8 @@ function ProductScreen() {
                                             className={clsx(
                                               style.buy_now_in_home,
                                               product &&
-                                                !product.stock &&
-                                                style.soldOut_disabled
+                                              !product.stock &&
+                                              style.soldOut_disabled
                                             )}
                                           >
                                             Chọn mua
@@ -1208,7 +1206,7 @@ function ProductScreen() {
                                     <Flex
                                       vertical
                                       justify="space-between"
-                                      style={{ padding: "20px 20px 10px 20px" }}
+                                      className={clsx(style.customPadding)}
                                     >
                                       <Space
                                         className={clsx(style.header_text)}
@@ -1278,8 +1276,8 @@ function ProductScreen() {
                                           className={clsx(
                                             style.buy_now_in_home,
                                             product &&
-                                              !product.stock &&
-                                              style.soldOut_disabled
+                                            !product.stock &&
+                                            style.soldOut_disabled
                                           )}
                                         >
                                           Chọn mua
@@ -1358,9 +1356,7 @@ function ProductScreen() {
                                       <Flex
                                         vertical
                                         justify="space-between"
-                                        style={{
-                                          padding: "20px 20px 10px 20px",
-                                        }}
+                                        className={clsx(style.customPadding)}
                                       >
                                         <Space
                                           className={clsx(style.header_text)}
@@ -1432,8 +1428,8 @@ function ProductScreen() {
                                             className={clsx(
                                               style.buy_now_in_home,
                                               product &&
-                                                !product.stock &&
-                                                style.soldOut_disabled
+                                              !product.stock &&
+                                              style.soldOut_disabled
                                             )}
                                           >
                                             Chọn mua
@@ -1640,7 +1636,7 @@ function ProductScreen() {
                                     <Flex
                                       vertical
                                       justify="space-between"
-                                      style={{ padding: "20px 20px 10px 20px" }}
+                                      className={clsx(style.customPadding)}
                                     >
                                       <Space
                                         className={clsx(style.header_text)}
@@ -1706,8 +1702,8 @@ function ProductScreen() {
                                           className={clsx(
                                             style.buy_now_in_home,
                                             product &&
-                                              !product.stock &&
-                                              style.soldOut_disabled
+                                            !product.stock &&
+                                            style.soldOut_disabled
                                           )}
                                         >
                                           Chọn mua
@@ -1785,9 +1781,7 @@ function ProductScreen() {
                                     <Flex
                                       vertical
                                       justify="space-between"
-                                      style={{
-                                        padding: "20px 20px 10px 20px",
-                                      }}
+                                      className={clsx(style.customPadding)}
                                     >
                                       <Space
                                         className={clsx(style.header_text)}
@@ -1857,8 +1851,8 @@ function ProductScreen() {
                                           className={clsx(
                                             style.buy_now_in_home,
                                             product &&
-                                              !product.stock &&
-                                              style.soldOut_disabled
+                                            !product.stock &&
+                                            style.soldOut_disabled
                                           )}
                                         >
                                           Chọn mua
@@ -2099,7 +2093,7 @@ function ProductScreen() {
                                     <Flex
                                       vertical
                                       justify="space-between"
-                                      style={{ padding: "20px 20px 10px 20px" }}
+                                      className={clsx(style.customPadding)}
                                     >
                                       <Space
                                         className={clsx(style.header_text)}
@@ -2165,8 +2159,8 @@ function ProductScreen() {
                                           className={clsx(
                                             style.buy_now_in_home,
                                             product &&
-                                              !product.stock &&
-                                              style.soldOut_disabled
+                                            !product.stock &&
+                                            style.soldOut_disabled
                                           )}
                                         >
                                           Chọn mua
@@ -2318,7 +2312,7 @@ function ProductScreen() {
                                     <Flex
                                       vertical
                                       justify="space-between"
-                                      style={{ padding: "20px 20px 10px 20px" }}
+                                      className={clsx(style.customPadding)}
                                     >
                                       <Space
                                         className={clsx(style.header_text)}
@@ -2332,7 +2326,7 @@ function ProductScreen() {
                                         {numeral(
                                           (product.price *
                                             (100 - product.discount)) /
-                                            100
+                                          100
                                         ).format("0,0$")}
                                       </Space>
                                       {product && product?.discount > 0 && (
@@ -2356,8 +2350,8 @@ function ProductScreen() {
                                           className={clsx(
                                             style.buy_now_in_home,
                                             product &&
-                                              !product.stock &&
-                                              style.soldOut_disabled
+                                            !product.stock &&
+                                            style.soldOut_disabled
                                           )}
                                         >
                                           Chọn mua
@@ -2436,7 +2430,7 @@ function ProductScreen() {
                                     <Flex
                                       vertical
                                       justify="space-between"
-                                      style={{ padding: "20px 20px 10px 20px" }}
+                                      className={clsx(style.customPadding)}
                                     >
                                       <Space
                                         className={clsx(style.header_text)}
@@ -2450,7 +2444,7 @@ function ProductScreen() {
                                         {numeral(
                                           (product.price *
                                             (100 - product.discount)) /
-                                            100
+                                          100
                                         ).format("0,0$")}
                                       </Space>
                                       {product && product?.discount > 0 && (
@@ -2474,8 +2468,8 @@ function ProductScreen() {
                                           className={clsx(
                                             style.buy_now_in_home,
                                             product &&
-                                              !product.stock &&
-                                              style.soldOut_disabled
+                                            !product.stock &&
+                                            style.soldOut_disabled
                                           )}
                                         >
                                           Chọn mua
@@ -2618,9 +2612,7 @@ function ProductScreen() {
                                       <Flex
                                         vertical
                                         justify="space-between"
-                                        style={{
-                                          padding: " 20px 20px 10px 20px",
-                                        }}
+                                        className={clsx(style.customPadding)}
                                       >
                                         <Space
                                           className={clsx(style.header_text)}
@@ -2696,8 +2688,8 @@ function ProductScreen() {
                                             className={clsx(
                                               style.buy_now_in_home,
                                               product &&
-                                                !product.stock &&
-                                                style.soldOut_disabled
+                                              !product.stock &&
+                                              style.soldOut_disabled
                                             )}
                                           >
                                             Chọn mua

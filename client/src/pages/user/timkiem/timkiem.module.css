@@ -257,6 +257,10 @@
   opacity: 0.3;
 }
 
+.customPadding {
+  padding: 20px 20px 10px 20px;
+}
+
 /* Thiết lập padding cho xs */
 @media (max-width: 575.98px) {
   .policy_footer_wrapper{

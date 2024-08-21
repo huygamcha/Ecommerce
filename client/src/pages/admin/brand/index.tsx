@@ -43,8 +43,8 @@ const Brand = (props: Props) => {
 
   useEffect(() => {
     setInitialRender(false);
-    dispatch(getAllBrand());
-    dispatch(getAllCategory());
+    if (brands.length === 0) dispatch(getAllBrand());
+    if (categories.length === 0) dispatch(getAllCategory());
   }, [dispatch]);
 
   //set active modal
@@ -94,10 +94,10 @@ const Brand = (props: Props) => {
           navigate(-1);
           setSelectedBrand(false);
         }
+        dispatch(getAllBrand());
         createForm.resetFields();
       }
     }
-    dispatch(getAllBrand());
   }, [isActive]);
 
   const onFinish = async (values: any) => {
@@ -126,7 +126,7 @@ const Brand = (props: Props) => {
     onShowMessage("Xoá thương hiệu thành công");
   };
 
-  console.log("««««« initialRender »»»»»", initialRender);
+  // console.log("««««« initialRender »»»»»", initialRender);
 
   // upload image
   const [picDetail, setPicDetail] = useState<string>();

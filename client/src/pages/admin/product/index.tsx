@@ -94,18 +94,16 @@ const Product = (props: Props) => {
   };
 
   const { products, error } = useAppSelector((state) => state.products);
-  const { suppliers } = useAppSelector((state) => state.suppliers);
   const { categories } = useAppSelector((state) => state.categories);
   const { brands } = useAppSelector((state) => state.brands);
   const { tags } = useAppSelector((state) => state.tags);
 
   useEffect(() => {
     setInitialRender(false);
-    dispatch(getAllProduct({}));
-    dispatch(getAllSupplier());
-    dispatch(getAllCategory());
-    dispatch(getAllTag());
-    dispatch(getAllBrand());
+    if (products.length === 0) dispatch(getAllProduct({}));
+    if (categories.length === 0) dispatch(getAllCategory());
+    if (tags.length === 0) dispatch(getAllTag());
+    if (brands.length === 0) dispatch(getAllBrand());
   }, []);
 
   //set active modal
@@ -167,6 +165,7 @@ const Product = (props: Props) => {
         } else {
           onShowMessage(`${error.errors?.name}`, "error");
         }
+        dispatch(getAllProduct({}));
       } else {
         if (!param.id) {
           onShowMessage("Tạo sản phẩm thành công", "success");
@@ -175,10 +174,10 @@ const Product = (props: Props) => {
           navigate(-1);
           setSelectedProduct(false);
         }
+        dispatch(getAllProduct({}));
         createForm.resetFields();
       }
     }
-    dispatch(getAllProduct({}));
   }, [isActive]);
 
   const onFinish = async (values: any) => {
