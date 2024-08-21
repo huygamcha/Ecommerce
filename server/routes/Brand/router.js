@@ -1,32 +1,31 @@
-var express = require("express");
+var express = require('express')
 const {
   getAllBrand,
   createBrand,
   deleteBrand,
   getDetailBrand,
   updateBrand,
-  getDetailByName,
-} = require("./controller");
-const { checkCreateBrand, checkUpdateBrand } = require("./validation");
-const { checkId, validateSchema } = require("../../utils");
-const { admin, protect } = require("../../authentication/checkRole");
-var router = express.Router();
+  getDetailByName
+} = require('./controller')
+const { checkCreateBrand, checkUpdateBrand } = require('./validation')
+const { checkId, validateSchema } = require('../../utils')
+const { admin, protect } = require('../../authentication/checkRole')
+const isAuthorized = require('../../authentication/authMiddleware')
+var router = express.Router()
 
-router.route("/").get(getAllBrand);
+router.route('/').get(getAllBrand)
+router.route('/').post(isAuthorized, admin, validateSchema(checkCreateBrand), createBrand)
+router.route('/name/:name').get(getDetailByName)
 router
-  .route("/")
-  .post(protect, admin, validateSchema(checkCreateBrand), createBrand);
-router.route("/name/:name").get(getDetailByName);
-router
-  .route("/:id")
-  .delete(protect, admin, validateSchema(checkId), deleteBrand)
+  .route('/:id')
+  .delete(isAuthorized, admin, validateSchema(checkId), deleteBrand)
   .get(validateSchema(checkId), getDetailBrand)
   .patch(
-    protect,
+    isAuthorized,
     admin,
     validateSchema(checkId),
     validateSchema(checkUpdateBrand),
     updateBrand
-  );
+  )
 
-module.exports = router;
+module.exports = router

@@ -518,7 +518,6 @@ module.exports = {
 
   updateProduct: async (req, res, next) => {
     try {
-      // console.log("««««« oke »»»»»");
 
       const { id } = req.params;
       let {

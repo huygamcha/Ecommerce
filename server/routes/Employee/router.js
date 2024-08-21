@@ -11,6 +11,7 @@ const { checkId, validateSchema } = require("../../utils");
 var router = express.Router();
 
 router.route("/").get(getAllEmployee);
+router.route("/getMe").get(getAllEmployee);
 router.route("/").post(validateSchema(checkCreateEmployee), createEmployee);
 router
   .route("/:id")

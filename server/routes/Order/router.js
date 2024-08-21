@@ -8,6 +8,7 @@ const {
 } = require("./controller");
 const { checkId, validateSchema } = require("../../utils");
 const { admin, protect } = require("../../authentication/checkRole");
+const isAuthorized = require("../../authentication/authMiddleware");
 var router = express.Router();
 
 router.route("/").get(getAllOrder);
@@ -15,13 +16,13 @@ router.route("/").get(getAllOrder);
 router.route("/").post(createOrder);
 router
   .route("/:id")
-  .delete(protect, admin, validateSchema(checkId), deleteOrder)
+  .delete(isAuthorized, admin, validateSchema(checkId), deleteOrder)
   .get(validateSchema(checkId), getDetailOrder)
   // .patch(
   //   validateSchema(checkId),
   //   validateSchema(checkUpdateOrder),
   //   updateOrder
   // );
-  .patch(protect, admin, validateSchema(checkId), updateOrder);
+  .patch(isAuthorized, admin, validateSchema(checkId), updateOrder);
 
 module.exports = router;

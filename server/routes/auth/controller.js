@@ -1,129 +1,78 @@
-const JWT = require("jsonwebtoken");
-
-const {
-  generateToken,
-  generateRefreshToken,
-} = require("../../utils/jwtHelper");
-const { Customer, Employee } = require("../../models");
+const JWT = require('jsonwebtoken')
+const { StatusCodes } = require('http-status-codes')
+const { generateToken, verifyToken } = require('../../utils/jwtHelper')
+const { Customer, Employee } = require('../../models')
 
 module.exports = {
   login: async (req, res, next) => {
     try {
-      let user;
-      const { email, password } = req.body;
-      const userEmployee = Employee.findOne({ email: email });
-      const userCustomer = Customer.findOne({ email: email });
-      const [exitEmployee, exitCustomer] = await Promise.all([
-        userEmployee,
-        userCustomer,
-      ]);
+      let user
+      const { email, password } = req.body
+      const exitEmployee = await Employee.findOne({ email: email })
+      // const userCustomer = Customer.findOne({ email: email });
+      // const [exitEmployee, exitCustomer] = await Promise.all([
+      //   userEmployee,
+      //   userCustomer,
+      // ]);
 
-      if (exitCustomer) user = exitCustomer;
-      if (exitEmployee) user = exitEmployee;
+      // if (exitCustomer) user = exitCustomer;
+      if (exitEmployee) user = exitEmployee
 
       if (user && (await user.isValidPass(password))) {
+        const token = await generateToken(
+          user,
+          process.env.ACCESS_TOKEN_SECRET_SIGNATURE,
+          process.env.EXPIRATION_ACCESS_TOKEN
+          // 5
+          // '1h'
+        )
+        const refreshToken = await generateToken(
+          user,
+          process.env.REFRESH_TOKEN_SECRET_SIGNATURE,
+          process.env.EXPIRATION_REFRESH_TOKEN
+          // 15
+        )
         return res.send(200, {
-          message: "Đăng nhập thành công",
+          message: 'Đăng nhập thành công',
           payload: {
             id: user._id,
             name: user.lastName,
             isAdmin: user.isAdmin,
-            token: generateToken(user),
-            refreshToken: generateRefreshToken(user._id),
-          },
-        });
+            token: token,
+            refreshToken: refreshToken
+          }
+        })
       } else {
         return res.send(404, {
-          message: "Sai mật khẩu hoặc email",
-        });
+          message: 'Sai mật khẩu hoặc email'
+        })
       }
     } catch (err) {
-      return res.send(500, { code: 500, error: err });
+      return res.send(500, { code: 500, error: err })
     }
   },
 
-  checkRefreshToken: async (req, res, next) => {
+  refreshToken: async (req, res) => {
     try {
-      const { refreshToken } = req.body;
+      const refreshTokenFromBody = req.body.refreshToken
+      // Kiểm tra thời hạn của refreshToken
+      // const accessTokenDecoded = await JwtProvider.verifyToken(refreshTokenFromCookies, REFRESH_TOKEN_SECRET_SIGNATURE)
+      const accessTokenDecoded = await verifyToken(
+        refreshTokenFromBody,
+        process.env.REFRESH_TOKEN_SECRET_SIGNATURE
+      )
 
-      JWT.verify(refreshToken, process.env.SECRET, async (err, payload) => {
-        if (err) {
-          return res.status(401).json({
-            message: "refreshToken is invalid",
-          });
-        } else {
-          const { id } = payload;
+      const accessToken = await generateToken(
+        accessTokenDecoded.user,
+        process.env.ACCESS_TOKEN_SECRET_SIGNATURE,
+        process.env.EXPIRATION_ACCESS_TOKEN
+        
+        // '1h'
+      )
 
-          const customer = await Customer.findOne({
-            _id: id,
-            isDeleted: false,
-          })
-            .select("-password")
-            .lean();
-
-          if (customer) {
-            const {
-              _id,
-              firstName,
-              lastName,
-              phoneNumber,
-              address,
-              email,
-              birthday,
-              updatedAt,
-            } = customer;
-
-            const token = generateToken({
-              _id,
-              firstName,
-              lastName,
-              phoneNumber,
-              address,
-              email,
-              birthday,
-              updatedAt,
-            });
-
-            return res.status(200).json({ token });
-          }
-          return res.sendStatus(401);
-        }
-      });
-    } catch (err) {
-      console.log("««««« err »»»»»", err);
-      res.status(400).json({
-        statusCode: 400,
-        message: "Lỗi",
-      });
+      res.status(StatusCodes.OK).json({ accessToken })
+    } catch (error) {
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error)
     }
-  },
-
-  basicLogin: async (req, res, next) => {
-    try {
-      const user = await Customer.findById(req.user._id)
-        .select("-password")
-        .lean();
-      const token = generateToken(user);
-      // const refreshToken = generateRefreshToken(user._id);
-
-      res.json({
-        token,
-        // refreshToken,
-      });
-    } catch (err) {
-      console.log("««««« err »»»»»", err);
-      res.sendStatus(400);
-    }
-  },
-
-  getMe: async (req, res, next) => {
-    try {
-      res.status(200).json({
-        message: "Lấy thông tin thành công",
-        payload: req.user,
-      });
-    } catch (err) {
-      res.sendStatus(500);
-    }
-  },
-};
+  }
+}

@@ -1,30 +1,32 @@
-const JWT = require("jsonwebtoken");
+const JWT = require('jsonwebtoken')
 
-const generateToken = (user) => {
-  const expiresIn = "24h";
-  const algorithm = "HS25s6";
+const generateToken = async (user, secretSignature, tokenLife) => {
+  const ALGORITHM_JWT = process.env.ALGORITHM_JWT
+  try {
+    return JWT.sign({ user }, secretSignature, {
+      algorithm: ALGORITHM_JWT,
+      expiresIn: tokenLife
+    })
+  } catch (error) {
+    throw new Error(error)
+  }
+}
 
-  return JWT.sign(
-    {
-      iat: Math.floor(Date.now() / 1000),
-      user,
-      algorithm,
-    },
-    process.env.SECRET,
-    // "ADB57C459465E3ED43C6C6231E3C9",
-    {
-      expiresIn,
-    }
-  );
-};
+const verifyToken = async (token, secretSignature) => {
+  try {
+    return JWT.verify(token, secretSignature)
+  } catch (error) {
+    throw new Error(error)
+  }
+}
 
 const generateRefreshToken = (id) => {
-  const expiresIn = "30d";
-
-  return JWT.sign({ id }, process.env.SECRET, { expiresIn });
-};
+  const EXPIRATION_REFRESH_TOKEN = process.env.EXPIRATION_REFRESH_TOKEN
+  return JWT.sign({ id }, process.env.REFRESH_TOKEN_SECRET_SIGNATURE, { EXPIRATION_REFRESH_TOKEN })
+}
 
 module.exports = {
   generateToken,
   generateRefreshToken,
-};
+  verifyToken
+}

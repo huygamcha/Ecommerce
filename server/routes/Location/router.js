@@ -1,30 +1,29 @@
-var express = require("express");
+var express = require('express')
 const {
   getAllLocation,
   createLocation,
   deleteLocation,
   updateLocation,
-  getDetailLocation,
-} = require("./controller");
-const { checkCreateLocation, checkUpdateLocation } = require("./validation");
-const { checkId, validateSchema } = require("../../utils");
-const { admin, protect } = require("../../authentication/checkRole");
-var router = express.Router();
+  getDetailLocation
+} = require('./controller')
+const { checkCreateLocation, checkUpdateLocation } = require('./validation')
+const { checkId, validateSchema } = require('../../utils')
+const { admin, protect } = require('../../authentication/checkRole')
+const isAuthorized = require('../../authentication/authMiddleware')
+var router = express.Router()
 
-router.route("/").get(getAllLocation);
+router.route('/').get(getAllLocation)
+router.route('/').post(isAuthorized, admin, validateSchema(checkCreateLocation), createLocation)
 router
-  .route("/")
-  .post(protect, admin, validateSchema(checkCreateLocation), createLocation);
-router
-  .route("/:id")
-  .delete(protect, admin, validateSchema(checkId), deleteLocation)
-  .get(protect, admin, validateSchema(checkId), getDetailLocation)
+  .route('/:id')
+  .delete(isAuthorized, admin, validateSchema(checkId), deleteLocation)
+  .get(validateSchema(checkId), getDetailLocation)
   .patch(
-    protect,
+    isAuthorized,
     admin,
     validateSchema(checkId),
     validateSchema(checkUpdateLocation),
     updateLocation
-  );
+  )
 
-module.exports = router;
+module.exports = router

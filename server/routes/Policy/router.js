@@ -9,19 +9,20 @@ const {
 const { checkCreatePolicy, checkUpdatePolicy } = require("./validation");
 const { checkId, validateSchema } = require("../../utils");
 const { protect, admin } = require("../../authentication/checkRole");
+const isAuthorized = require("../../authentication/authMiddleware");
 var router = express.Router();
 
 router.route("/").get(getAllPolicy);
 router
   .route("/")
-  .post(protect, admin, validateSchema(checkCreatePolicy), createPolicy);
+  .post(isAuthorized, admin, validateSchema(checkCreatePolicy), createPolicy);
 
 router.route("/:search").get(getDetailPolicy);
 router
   .route("/:id")
-  .delete(protect, admin, validateSchema(checkId), deletePolicy)
+  .delete(isAuthorized, admin, validateSchema(checkId), deletePolicy)
   .patch(
-    protect,
+    isAuthorized,
     admin,
     validateSchema(checkId),
     validateSchema(checkUpdatePolicy),

@@ -1,30 +1,29 @@
-var express = require("express");
+var express = require('express')
 const {
   getAllFooter,
   createFooter,
   deleteFooter,
   getDetailFooter,
-  updateFooter,
-} = require("./controller");
-const { checkCreateFooter, checkUpdateFooter } = require("./validation");
-const { checkId, validateSchema } = require("../../utils");
-const { admin, protect } = require("../../authentication/checkRole");
-var router = express.Router();
+  updateFooter
+} = require('./controller')
+const { checkCreateFooter, checkUpdateFooter } = require('./validation')
+const { checkId, validateSchema } = require('../../utils')
+const { admin, protect } = require('../../authentication/checkRole')
+const isAuthorized = require('../../authentication/authMiddleware')
+var router = express.Router()
 
-router.route("/").get(getAllFooter);
+router.route('/').get(getAllFooter)
+router.route('/').post(isAuthorized, admin, validateSchema(checkCreateFooter), createFooter)
 router
-  .route("/")
-  .post(protect, admin, validateSchema(checkCreateFooter), createFooter);
-router
-  .route("/:id")
-  .delete(protect, admin, validateSchema(checkId), deleteFooter)
-  .get(validateSchema(checkId), protect, admin, getDetailFooter)
+  .route('/:id')
+  .delete(isAuthorized, admin, validateSchema(checkId), deleteFooter)
+  .get(validateSchema(checkId), getDetailFooter)
   .patch(
-    protect,
+    isAuthorized,
     admin,
     validateSchema(checkId),
     validateSchema(checkUpdateFooter),
     updateFooter
-  );
+  )
 
-module.exports = router;
+module.exports = router
