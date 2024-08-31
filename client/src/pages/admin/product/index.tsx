@@ -27,7 +27,6 @@ import {
 import { useAppSelector, useAppDispatch } from "../../../store";
 import { CopyOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { getAllSupplier } from "../../../slices/supplierSlice";
 import { getAllCategory } from "../../../slices/categorySlice";
 import numeral from "numeral";
 import { getAllTag } from "../../../slices/tagSlice";

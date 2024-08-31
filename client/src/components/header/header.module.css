@@ -412,6 +412,7 @@
 
 .brand_list_item {
   background-color: #fff;
+  z-index: 9999999999;
   width: 180px;
   padding: 10px;
   font-size: 14px;

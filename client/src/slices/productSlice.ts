@@ -29,7 +29,7 @@ export interface ProductsType {
   tagList: Array<string>;
   quantity: number;
   sold: number;
-  fakeNumber: number;
+  totalSold: number;
 }
 
 interface ProductSearchType {
@@ -62,7 +62,7 @@ const initialState: InitialType = {
   success: false,
   error: { message: "", errors: { name: "" } },
   product: {
-    fakeNumber: 0,
+    totalSold: 0,
     sold: 0,
     quantity: 0,
     autoQuantity: 2,
@@ -115,9 +115,29 @@ const getAllProduct = createAsyncThunk<ProductsType[], ProductSearchType>(
 
     // trả về response rồi lấy ra, để tránh lỗi A non-serializable value was detected in an action, in the path: `payload.headers`
     //https://chat.openai.com/c/48f823af-3e96-48aa-8df3-fe6e306aef10
-    const response = await axios.get(
-      `${process.env.REACT_APP_BACKEND}/products?search=${search}&page=${page}&pageSize=${pageSize}`
-    );
+
+    const currentUser = localStorage.getItem("userInfor")
+      ? JSON.parse(localStorage.getItem("userInfor")!)
+      : undefined;
+    let response: any;
+    if (currentUser) {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${currentUser.token}`,
+        },
+      };
+      response = await axios.get(
+        `${process.env.REACT_APP_BACKEND}/products?search=${search}&page=${page}&pageSize=${pageSize}`,
+        config
+      );
+    } else {
+      response = await axios.get(
+        `${process.env.REACT_APP_BACKEND}/products?search=${search}&page=${page}&pageSize=${pageSize}`
+        // config
+      );
+    }
+
     const data: ProductsType[] = response.data.payload;
     return data; // Assuming products are in the `data` property of the response
   }
@@ -192,6 +212,7 @@ const getAllProductSearch = createAsyncThunk<ProductsType[], ProductSearchType>(
     } else if (!ageTo && !searchAgeInfor) {
       ageTo = 100;
     }
+
     const response = await axios.get(
       `${process.env.REACT_APP_BACKEND}/products/search?${
         categoryId ? `categoryId=${categoryId}` : ""
@@ -215,7 +236,6 @@ const getProductByCategories = createAsyncThunk<
   if (!id) {
     id = categoryId.id;
   }
-  // console.log('««««« id »»»»»', id);
   const response = await axios.get(
     `${process.env.REACT_APP_BACKEND}/products/byCategories?id=${id}`
   );
@@ -261,10 +281,6 @@ const getProductBySlug = createAsyncThunk<ProductsType, string | undefined>(
 const createProduct = createAsyncThunk<ProductsType, ProductsType>(
   "product/createProduct",
   async (name, { rejectWithValue }) => {
-    const currentUser = localStorage.getItem("userInfor")
-      ? JSON.parse(localStorage.getItem("userInfor")!)
-      : undefined;
-
     try {
       const response = await authorizedAxiosInstance.post(
         `${process.env.REACT_APP_BACKEND}/products`,
@@ -285,10 +301,6 @@ const createProduct = createAsyncThunk<ProductsType, ProductsType>(
 const deleteProduct = createAsyncThunk<ProductsType, string>(
   "product/deleteProduct",
   async (id, { rejectWithValue }) => {
-    const currentUser = localStorage.getItem("userInfor")
-      ? JSON.parse(localStorage.getItem("userInfor")!)
-      : undefined;
-
     try {
       const response = await authorizedAxiosInstance.delete(
         `${process.env.REACT_APP_BACKEND}/products/${id}`
@@ -309,16 +321,7 @@ const updateProduct = createAsyncThunk<
   ProductsType,
   { id: string; values: ProductsType }
 >("product/updateProduct", async ({ id, values }, { rejectWithValue }) => {
-  const currentUser = localStorage.getItem("userInfor")
-    ? JSON.parse(localStorage.getItem("userInfor")!)
-    : undefined;
   try {
-    const config = {
-      headers: {
-        "Content-type": "application/json",
-        // Authorization: `Bearer ${currentUser.token}`,
-      },
-    };
     const response = await authorizedAxiosInstance.patch(
       `${process.env.REACT_APP_BACKEND}/products/${id}`,
       values

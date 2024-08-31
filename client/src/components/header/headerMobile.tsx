@@ -1,86 +1,70 @@
-import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Col, Flex, Input, Row, Space } from "antd";
-import clsx from "clsx";
-import style from "./header.module.css";
-import { BsChevronLeft } from "react-icons/bs";
+import { useEffect, useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Col, Flex, Input, Row, Space } from 'antd'
+import clsx from 'clsx'
+import style from './header.module.css'
+import { BsChevronLeft } from 'react-icons/bs'
 
-import { TiDelete } from "react-icons/ti";
-import { useAppDispatch, useAppSelector } from "../../store";
-import { getAllProductSearch, hasList } from "../../slices/productSlice";
-import { getAllTag } from "../../slices/tagSlice";
-import { getAllBrand } from "../../slices/brandSlice";
-import { getAllCategory } from "../../slices/categorySlice";
-import { RiSearchLine } from "react-icons/ri";
-import useDebounceCustom from "../../hooks/useDebounce";
+import { TiDelete } from 'react-icons/ti'
+import { useAppDispatch, useAppSelector } from '../../store'
+import { getAllProductSearch, hasList } from '../../slices/productSlice'
+import { getAllTag } from '../../slices/tagSlice'
+import { getAllBrand } from '../../slices/brandSlice'
+import { getAllCategory } from '../../slices/categorySlice'
+import { RiSearchLine } from 'react-icons/ri'
+import useDebounceCustom from '../../hooks/useDebounce'
 
 function HeaderScreenMobile() {
-  const currentUser = localStorage.getItem("userInfor")
-    ? JSON.parse(localStorage.getItem("userInfor")!)
-    : undefined;
-
-  const filter = localStorage.getItem("filter")
-    ? JSON.parse(localStorage.getItem("filter")!)
-    : undefined;
   // hiển thị danh sách tìm kiém
-  const [isList, setIsList] = useState<boolean>(false);
   // tìm kiếm
-  const [search, setSearch] = useState<string>("");
+  const [search, setSearch] = useState<string>('')
 
-  const location = useLocation();
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { products, productsSearch } = useAppSelector(
-    (state) => state.products
-  );
-  const { categories } = useAppSelector((state) => state.categories);
-  const { brands } = useAppSelector((state) => state.brands);
-  const { tags } = useAppSelector((state) => state.tags);
+  const navigate = useNavigate()
+  const dispatch = useAppDispatch()
+  const { categories } = useAppSelector((state) => state.categories)
+  const { brands } = useAppSelector((state) => state.brands)
+  const { tags } = useAppSelector((state) => state.tags)
 
   // khi search thay đổi thì debouncedSearchItem sẽ được gọi
   const debouncedSearchItem = useDebounceCustom({
     inputValue: search,
-    delay: 400,
-  });
+    delay: 400
+  })
   useEffect(() => {
     if (debouncedSearchItem) {
-      dispatch(getAllProductSearch({ search: debouncedSearchItem }));
+      dispatch(getAllProductSearch({ search: debouncedSearchItem }))
     }
-  }, [debouncedSearchItem, dispatch]);
+  }, [debouncedSearchItem, dispatch])
 
   const handleSearch = (e: any) => {
-    setSearch(e.target.value);
-    if (e.target.value === "") {
-      dispatch(hasList({ isList: false }));
+    setSearch(e.target.value)
+    if (e.target.value === '') {
+      dispatch(hasList({ isList: false }))
     } else {
-      dispatch(hasList({ isList: true }));
+      dispatch(hasList({ isList: true }))
       // dispatch(getAllProductSearch({ search: e.target.value }));
     }
-  };
+  }
 
   // search
   const handleSearchTag = (e: string) => {
-    localStorage.setItem("filter", JSON.stringify({ searchTag: e }));
-  };
+    localStorage.setItem('filter', JSON.stringify({ searchTag: e }))
+  }
 
   useEffect(() => {
-    setIsList(false);
-  }, [location]);
-
-  useEffect(() => {
-    if (tags.length === 0) dispatch(getAllTag());
-    if (brands.length === 0) dispatch(getAllBrand());
-    if (categories.length === 0) dispatch(getAllCategory());
-  }, []);
+    if (tags.length === 0) dispatch(getAllTag())
+    if (brands.length === 0) dispatch(getAllBrand())
+    if (categories.length === 0) dispatch(getAllCategory())
+  }, [])
 
   return (
     // 5 16 0 3
     <>
       <div
         style={{
-          background: "#256cdf",
-          display: "flex",
-          justifyContent: "center",
+          background: '#256cdf',
+          display: 'flex',
+          justifyContent: 'center'
         }}
       >
         <Row justify="end" className={clsx(style.wrapper_try)}>
@@ -88,11 +72,11 @@ function HeaderScreenMobile() {
             <Row>
               <Col
                 style={{
-                  transition: ".3s linear",
+                  transition: '.3s linear'
                 }}
                 span={24}
               >
-                <Row style={{ display: "flex", alignItems: "center" }}>
+                <Row style={{ display: 'flex', alignItems: 'center' }}>
                   <Col xs={2} sm={0}>
                     <Space>
                       <BsChevronLeft
@@ -119,8 +103,7 @@ function HeaderScreenMobile() {
 
                       <div
                         onClick={() => {
-                          setSearch("");
-                          setIsList(false);
+                          setSearch('')
                         }}
                         className={clsx(style.header_search_icon_delete)}
                       >
@@ -138,24 +121,18 @@ function HeaderScreenMobile() {
       {/* tag */}
       <div
         style={{
-          background: "#256cdf",
-          display: "flex",
-          justifyContent: "center",
+          background: '#256cdf',
+          display: 'flex',
+          justifyContent: 'center'
         }}
       >
         <Row
-          style={{ paddingTop: "0px", zIndex: 1 }}
+          style={{ paddingTop: '0px', zIndex: 1 }}
           justify="end"
           className={clsx(style.wrapper_try, style.wrapper_try_tag)}
         >
           <Col xs={0} sm={2} md={2} lg={5}></Col>
-          <Col
-            xs={0}
-            sm={14}
-            md={13}
-            lg={13}
-            className={clsx(style.wrapper_try_tag)}
-          >
+          <Col xs={0} sm={14} md={13} lg={13} className={clsx(style.wrapper_try_tag)}>
             <Flex className={clsx(style.wrapper_try_tag_display)}>
               {tags &&
                 tags.map((tag, index) => (
@@ -175,7 +152,7 @@ function HeaderScreenMobile() {
         </Row>
       </div>
     </>
-  );
+  )
 }
 
-export default HeaderScreenMobile;
+export default HeaderScreenMobile

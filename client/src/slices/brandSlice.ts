@@ -45,9 +45,7 @@ const getAllBrand = createAsyncThunk<BrandsType[]>("brand/getAll", async () => {
 const createBrand = createAsyncThunk<BrandsType, BrandsType>(
   "brand/createBrand",
   async (value, { rejectWithValue }) => {
-    const currentUser = localStorage.getItem("userInfor")
-      ? JSON.parse(localStorage.getItem("userInfor")!)
-      : undefined;
+    
 
     try {
       const response = await authorizedAxiosInstance.post(
@@ -69,9 +67,7 @@ const createBrand = createAsyncThunk<BrandsType, BrandsType>(
 const deleteBrand = createAsyncThunk<BrandsType, string>(
   "brand/deleteBrand",
   async (id, { rejectWithValue }) => {
-    const currentUser = localStorage.getItem("userInfor")
-      ? JSON.parse(localStorage.getItem("userInfor")!)
-      : undefined;
+    
 
     try {
       const response = await authorizedAxiosInstance.delete(
@@ -93,21 +89,10 @@ const updateBrand = createAsyncThunk<
   BrandsType,
   { id: string; values: BrandsType }
 >("brand/updateBrand", async ({ id, values }, { rejectWithValue }) => {
-  const currentUser = localStorage.getItem("userInfor")
-    ? JSON.parse(localStorage.getItem("userInfor")!)
-    : undefined;
+ 
   try {
-    const config = {
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${currentUser.token}`,
-      },
-    };
-    // const response = await axios.patch(
-    //   `${process.env.REACT_APP_BACKEND}/brands/${id}`,
-    //   values,
-    //   config
-    // );
+
+  
     const response = await authorizedAxiosInstance.patch(
       `${process.env.REACT_APP_BACKEND}/brands/${id}`,
       values

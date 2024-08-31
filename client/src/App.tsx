@@ -2,53 +2,63 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import numeral from "numeral";
 import "numeral/locales/vi";
-
-import Category from "./pages/admin/category";
-import Supplier from "./pages/admin/supplier";
-import Product from "./pages/admin/product";
 import {
   createBrowserRouter,
   RouterProvider,
   useNavigate,
   Outlet,
 } from "react-router-dom";
-import { HelmetProvider } from "react-helmet-async";
-
 import {
   ProductOutlined,
   SafetyOutlined,
   TagOutlined,
   UploadOutlined,
   UserOutlined,
-  VideoCameraOutlined,
 } from "@ant-design/icons";
 import { LiaProductHunt } from "react-icons/lia";
 import { Layout, Menu, theme, message } from "antd";
 import { IoHomeOutline } from "react-icons/io5";
-import ProductScreen from "./pages/user/product";
-import CartScreen from "./pages/user/cart";
-import MainLayOut from "./pages/layout/mainLayout";
-import HomeScreen from "./pages/user/home";
-import ProfileScreen from "./pages/user/profile";
-import ProductDetail from "./pages/user/product/productDetail";
-import LoginLayout from "./pages/layout/loginLayout";
-import Login from "./pages/auth/Login";
-import Register from "./pages/auth/Register";
-import Payment from "./pages/user/payment";
-import FooterAdmin from "./pages/admin/footer";
-import Tag from "./pages/admin/tag";
-import Timkiem from "./pages/user/timkiem";
-import Brand from "./pages/admin/brand";
-import BannerAdmin from "./pages/admin/banner";
-import Order from "./pages/admin/order";
-import OrderSuccess from "./components/orderSuccess";
-import SearchMobile from "./pages/layout/searchMobile";
-import MobileResultSearch from "./pages/user/mobile/resultSearch";
-import LocationAdmin from "./pages/admin/location";
-import PolicyAdmin from "./pages/admin/policy";
-import PolicyScreen from "./pages/user/policy";
-import PageLocation from "./components/pageLocation";
-import TestCloudfare from "./pages/user/image";
+import Fallback from "./components/fallback/Fallback";
+
+// Admin components
+const Category = React.lazy(() => import("./pages/admin/category"));
+const Product = React.lazy(() => import("./pages/admin/product"));
+const FooterAdmin = React.lazy(() => import("./pages/admin/footer"));
+const Tag = React.lazy(() => import("./pages/admin/tag"));
+const Brand = React.lazy(() => import("./pages/admin/brand"));
+const BannerAdmin = React.lazy(() => import("./pages/admin/banner"));
+const Order = React.lazy(() => import("./pages/admin/order"));
+const LocationAdmin = React.lazy(() => import("./pages/admin/location"));
+const PolicyAdmin = React.lazy(() => import("./pages/admin/policy"));
+
+// User components
+const ProductScreen = React.lazy(() => import("./pages/user/product"));
+const CartScreen = React.lazy(() => import("./pages/user/cart"));
+const ProfileScreen = React.lazy(() => import("./pages/user/profile"));
+const ProductDetail = React.lazy(
+  () => import("./pages/user/product/productDetail")
+);
+const Payment = React.lazy(() => import("./pages/user/payment"));
+const PolicyScreen = React.lazy(() => import("./pages/user/policy"));
+const TestCloudfare = React.lazy(() => import("./pages/user/image"));
+
+// Layout components
+const MainLayOut = React.lazy(() => import("./pages/layout/mainLayout"));
+const LoginLayout = React.lazy(() => import("./pages/layout/loginLayout"));
+const SearchMobile = React.lazy(() => import("./pages/layout/searchMobile"));
+
+// Auth components
+const Login = React.lazy(() => import("./pages/auth/Login"));
+const Register = React.lazy(() => import("./pages/auth/Register"));
+
+// Other components
+const OrderSuccess = React.lazy(() => import("./components/orderSuccess"));
+const MobileResultSearch = React.lazy(
+  () => import("./pages/user/mobile/resultSearch")
+);
+const PageLocation = React.lazy(() => import("./components/pageLocation"));
+
+const Timkiem = React.lazy(() => import("./pages/user/timkiem"));
 const { Sider, Content } = Layout;
 numeral.locale("vi");
 
@@ -126,7 +136,12 @@ const router = createBrowserRouter([
       },
       {
         path: "/timkiem",
+        // lazy: () => import("./pages/user/timkiem"),
         element: <Timkiem />,
+        // async lazy() {
+        //   let  Timkiem  = await import("./pages/user/timkiem");
+        //   return { Component: Timkiem };
+        // }
       },
     ],
   },
@@ -198,16 +213,7 @@ const router = createBrowserRouter([
           },
         ],
       },
-      {
-        path: "/admin/suppliers",
-        element: <Supplier />,
-        children: [
-          {
-            path: "/admin/suppliers/:id",
-            element: <Supplier />,
-          },
-        ],
-      },
+
       {
         path: "/admin/footers",
         element: <FooterAdmin />,
@@ -262,9 +268,6 @@ const router = createBrowserRouter([
   },
 ]);
 
-// If you are using react-helmet-async on server side
-const helmetContext = {};
-
 function AdminRouter() {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
@@ -272,14 +275,6 @@ function AdminRouter() {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
   const currentUser = JSON.parse(localStorage.getItem("userInfor")!);
-  const [messageApi, contextHolder] = message.useMessage();
-
-  const MESSAGE_TYPE = {
-    SUCCESS: "success",
-    INFO: "info",
-    WARNING: "warning",
-    ERROR: "error",
-  };
 
   useEffect(() => {
     if (!currentUser) {
@@ -405,7 +400,9 @@ function App() {
     // <HelmetProvider context={helmetContext}>
     // <React.StrictMode>
     <>
-      <RouterProvider router={router} />
+      <React.Suspense fallback={<Fallback />}>
+        <RouterProvider router={router} />
+      </React.Suspense>
     </>
     // </React.StrictMode>
     // </HelmetProvider>

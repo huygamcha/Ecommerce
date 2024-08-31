@@ -57,9 +57,7 @@ const getAllLocation = createAsyncThunk<LocationsType[]>(
 const createLocation = createAsyncThunk<LocationsType, LocationsType>(
   "location/createLocation",
   async (name, { rejectWithValue }) => {
-    const currentUser = localStorage.getItem("userInfor")
-      ? JSON.parse(localStorage.getItem("userInfor")!)
-      : undefined;
+    
     try {
       const response = await authorizedAxiosInstance.post(
         `${process.env.REACT_APP_BACKEND}/locations`,
@@ -80,9 +78,7 @@ const createLocation = createAsyncThunk<LocationsType, LocationsType>(
 const deleteLocation = createAsyncThunk<LocationsType, string>(
   "location/deleteLocation",
   async (id, { rejectWithValue }) => {
-    const currentUser = localStorage.getItem("userInfor")
-      ? JSON.parse(localStorage.getItem("userInfor")!)
-      : undefined;
+    
     try {
       const response = await authorizedAxiosInstance.delete(
         `${process.env.REACT_APP_BACKEND}/locations/${id}`
@@ -103,16 +99,9 @@ const updateLocation = createAsyncThunk<
   LocationsType,
   { id: string; values: LocationsType }
 >("location/updateLocation", async ({ id, values }, { rejectWithValue }) => {
-  const currentUser = localStorage.getItem("userInfor")
-    ? JSON.parse(localStorage.getItem("userInfor")!)
-    : undefined;
+ 
   try {
-    const config = {
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${currentUser.token}`,
-      },
-    };
+   
     const response = await authorizedAxiosInstance.patch(
       `${process.env.REACT_APP_BACKEND}/locations/${id}`,
       values
