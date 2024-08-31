@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import { getAllCart } from "../../../slices/cartSlice";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 function Payment() {
   const navigate = useNavigate();
@@ -64,7 +65,8 @@ function Payment() {
 
   return (
     <Flex justify="center">
-      <img
+      <LazyLoadImage
+        effect="blur"
         style={{ width: "500px" }}
         src={`https://img.vietqr.io/image/970422-0703414500-print.png?amount=${totalPrice}&addInfo=chuyenkhoan&accountName=LE HUYNH HUY`}
         alt="payment"

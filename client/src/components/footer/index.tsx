@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { FaLocationCrosshairs, FaLocationDot } from "react-icons/fa6";
 import { getAllLocation } from "../../slices/locationSlice";
 import { GrDirections } from "react-icons/gr";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const ListRender = ({
   title,
@@ -66,40 +67,47 @@ const ListRender = ({
 
           <h4 className={clsx(style.text_heading)}>Hỗ trợ thanh toán</h4>
           <div style={{ display: "flex", flexWrap: "wrap" }}>
-            <img
+            <LazyLoadImage
+              effect="blur"
               className={clsx(style.payment_list)}
               src="https://cdn1.nhathuoclongchau.com.vn/visa_fdc3324c35.svg"
-              alt=""
-            />{" "}
-            <img
+              alt="visa"
+            />
+            <LazyLoadImage
+              effect="blur"
               className={clsx(style.payment_list)}
               src="https://cdn1.nhathuoclongchau.com.vn/mtc_1ed684ff7c.svg"
-              alt=""
+              alt="Payment method 1"
             />
-            <img
+            <LazyLoadImage
+              effect="blur"
               className={clsx(style.payment_list)}
               src="https://cdn1.nhathuoclongchau.com.vn/jcb_7655e615ce.svg"
-              alt=""
+              alt="Payment method 2"
             />
-            <img
+            <LazyLoadImage
+              effect="blur"
               className={clsx(style.payment_list)}
               src="https://cdn1.nhathuoclongchau.com.vn/amex_2610a984a5.svg"
-              alt=""
+              alt="Payment method 3"
             />
-            <img
+            <LazyLoadImage
+              effect="blur"
               className={clsx(style.payment_list)}
               src="https://cdn1.nhathuoclongchau.com.vn/smalls/vnpay_1f73f546c4.svg"
-              alt=""
+              alt="Payment method 4"
             />
-            <img
+            <LazyLoadImage
+              effect="blur"
               className={clsx(style.payment_list)}
               src="https://cdn1.nhathuoclongchau.com.vn/zalopay_884e503cf9.svg"
-              alt=""
+              alt="Payment method 5"
             />
-            <img
+            <LazyLoadImage
+              effect="blur"
               className={clsx(style.payment_list)}
               src="https://cdn1.nhathuoclongchau.com.vn/smalls/momo_ebbd8eb9b0.svg"
-              alt=""
+              alt="Payment method 6"
             />
           </div>
         </>
@@ -134,9 +142,9 @@ const ListRender = ({
                       key={index}
                       to={`${footer.url}`}
                       className={clsx(style.text_item)}
-                    // target="_blank"
-                    // href={footer.url}
-                    // rel="noreferrer"
+                      // target="_blank"
+                      // href={footer.url}
+                      // rel="noreferrer"
                     >
                       {footer.name}
                     </Link>
@@ -262,9 +270,9 @@ const ListRenderMobile = ({
                       key={index}
                       to={`${footer.url}`}
                       className={clsx(style.text_item_mobile)}
-                    // target="_blank"
-                    // href={footer.url}
-                    // rel="noreferrer"
+                      // target="_blank"
+                      // href={footer.url}
+                      // rel="noreferrer"
                     >
                       {footer.name}
                     </Link>
@@ -344,17 +352,19 @@ function FooterScreen() {
             <h4 className={clsx(style.text_heading)}>KẾT NỐI VỚI CHÚNG TÔI</h4>
             <Flex className={clsx(style.items)}>
               <a href="https://www.facebook.com/lehuynhhuy.taa">
-                <img
+                <LazyLoadImage
+                  effect="blur"
                   style={{ width: "30px", height: "30px" }}
                   src="http://res.cloudinary.com/drqphlfn6/image/upload/v1707809091/vrvzmcykp5acusyvrvoa.png"
                   alt="facebook"
                 />
               </a>
               <a href="https://zalo.me/0933110500">
-                <img
+                <LazyLoadImage
+                  effect="blur"
                   style={{ width: "30px", height: "30px" }}
                   src="https://cdn1.nhathuoclongchau.com.vn/smalls/Logo_Zalo_979d41d52b.svg"
-                  alt="facebook"
+                  alt="zalo"
                 />
               </a>
             </Flex>
@@ -371,40 +381,47 @@ function FooterScreen() {
               </Flex>
             </h4>
             <Flex style={{ flexWrap: "wrap" }}>
-              <img
+              <LazyLoadImage
+                effect="blur"
                 className={clsx(style.payment_list)}
                 src="https://cdn1.nhathuoclongchau.com.vn/visa_fdc3324c35.svg"
-                alt=""
-              />{" "}
-              <img
+                alt="Visa"
+              />
+              <LazyLoadImage
+                effect="blur"
                 className={clsx(style.payment_list)}
                 src="https://cdn1.nhathuoclongchau.com.vn/mtc_1ed684ff7c.svg"
-                alt=""
+                alt="MTC"
               />
-              <img
+              <LazyLoadImage
+                effect="blur"
                 className={clsx(style.payment_list)}
                 src="https://cdn1.nhathuoclongchau.com.vn/jcb_7655e615ce.svg"
-                alt=""
+                alt="JCB"
               />
-              <img
+              <LazyLoadImage
+                effect="blur"
                 className={clsx(style.payment_list)}
                 src="https://cdn1.nhathuoclongchau.com.vn/amex_2610a984a5.svg"
-                alt=""
+                alt="Amex"
               />
-              <img
+              <LazyLoadImage
+                effect="blur"
                 className={clsx(style.payment_list)}
                 src="https://cdn1.nhathuoclongchau.com.vn/smalls/vnpay_1f73f546c4.svg"
-                alt=""
+                alt="VNPAY"
               />
-              <img
+              <LazyLoadImage
+                effect="blur"
                 className={clsx(style.payment_list)}
                 src="https://cdn1.nhathuoclongchau.com.vn/zalopay_884e503cf9.svg"
-                alt=""
+                alt="ZaloPay"
               />
-              <img
+              <LazyLoadImage
+                effect="blur"
                 className={clsx(style.payment_list)}
                 src="https://cdn1.nhathuoclongchau.com.vn/smalls/momo_ebbd8eb9b0.svg"
-                alt=""
+                alt="MoMo"
               />
             </Flex>
           </Col>
@@ -420,7 +437,8 @@ function FooterScreen() {
                   )}
                 >
                   <a href="https://www.facebook.com/lehuynhhuy.taa">
-                    <img
+                    <LazyLoadImage
+                      effect="blur"
                       style={{
                         width: "30px",
                         height: "30px",
@@ -431,14 +449,15 @@ function FooterScreen() {
                     />
                   </a>
                   <a href="https://zalo.me/0933110500">
-                    <img
+                    <LazyLoadImage
+                      effect="blur"
                       style={{
                         width: "30px",
                         height: "30px",
                         borderRadius: "10px",
                       }}
                       src="https://cdn1.nhathuoclongchau.com.vn/smalls/Logo_Zalo_979d41d52b.svg"
-                      alt="facebook"
+                      alt="zalo"
                     />
                   </a>
                 </Flex>

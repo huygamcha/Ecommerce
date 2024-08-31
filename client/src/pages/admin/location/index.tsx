@@ -22,6 +22,7 @@ import {
 import { useAppSelector, useAppDispatch } from "../../../store";
 import { CopyOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 type Props = {};
 
@@ -516,11 +517,13 @@ const LocationAdmin = (props: Props) => {
                     key={index}
                     style={{ display: "inline-block", marginRight: 8 }}
                   >
-                    <img
+                    <LazyLoadImage
+                      effect="blur"
                       style={{ width: "100px", height: "100px" }}
                       src={item}
-                      alt=""
+                      alt="albumUpdate"
                     />
+
                     <Button
                       onClick={() => handleImageRemove(index)}
                       type="link"

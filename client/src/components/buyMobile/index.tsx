@@ -10,6 +10,7 @@ import { BsX } from "react-icons/bs";
 import { useAppDispatch } from "../../store";
 import { addToCart } from "../../slices/cartSlice";
 import { useNavigate } from "react-router-dom";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 function BuyMobile({
   product,
@@ -112,9 +113,11 @@ function BuyMobile({
               <Flex vertical>
                 <Flex gap={8}>
                   <Space className={clsx(style.wrapper_img)}>
-                    <img
+                    <LazyLoadImage
+                      effect="blur"
                       className={clsx(style.content_img)}
                       src={product && product.pic}
+                      alt="product"
                     />
                   </Space>
                   <Flex vertical>

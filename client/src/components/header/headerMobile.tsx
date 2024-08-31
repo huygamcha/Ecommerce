@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Col, Flex, Input, Row, Space } from 'antd'
 import clsx from 'clsx'
 import style from './header.module.css'

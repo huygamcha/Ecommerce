@@ -4,6 +4,7 @@ import { Col, Flex, Row, Space } from "antd";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../store";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 function OrderSuccess() {
   const dispatch = useAppDispatch();
@@ -30,9 +31,10 @@ function OrderSuccess() {
             <Row>
               <Col span={24}>
                 <Flex justify="center">
-                  <img
+                  <LazyLoadImage
+                    effect="blur"
                     src="https://nhathuoclongchau.com.vn/estore-images/dat-hang-thanh-cong.svg"
-                    alt=""
+                    alt="dat-hang-thanh-cong"
                   />
                 </Flex>
               </Col>
@@ -56,14 +58,15 @@ function OrderSuccess() {
                   <Col className={clsx(style.payment_type_detail)} span={24}>
                     <Flex align="center">
                       <div>
-                        <img
+                        <LazyLoadImage
+                          effect="blur"
                           style={{
                             width: "40px",
                             height: "40px",
                             marginRight: "12px",
                           }}
                           src="https://s3-sgn09.fptcloud.com/lc-public/app-lc/payment/cod.png"
-                          alt=""
+                          alt="payment"
                         />
                       </div>
                       {/* update with type */}

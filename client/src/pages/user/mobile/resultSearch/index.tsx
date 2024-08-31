@@ -12,6 +12,7 @@ import {
   getAllProductSearch,
   getProductById,
 } from "../../../../slices/productSlice";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 function MobileResultSearch() {
   const currentUser = localStorage.getItem("userInfor")
@@ -65,10 +66,12 @@ function MobileResultSearch() {
                   >
                     <Flex>
                       <Space style={{ marginRight: "10px" }}>
-                        <Image
+                        <LazyLoadImage
+                          effect="blur"
                           className={clsx(style.header_search_items_img)}
                           src={product?.pic}
-                        ></Image>
+                          alt="product"
+                        />
                       </Space>
                       <Flex vertical>
                         <div className={clsx(style.header_name)}>

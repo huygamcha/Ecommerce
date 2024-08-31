@@ -54,6 +54,7 @@ import { getAllLocation } from "../../../slices/locationSlice";
 import { FaClock, FaLocationCrosshairs, FaLocationDot } from "react-icons/fa6";
 import PolicyFooter from "../../../components/policyFooter";
 import { GrDirections } from "react-icons/gr";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 function CartScreen() {
   const locationPath = useLocation();
@@ -269,11 +270,13 @@ function CartScreen() {
                                                 style.wrapper_img
                                               )}
                                             >
-                                              <Image
+                                              <LazyLoadImage
+                                                effect="blur"
                                                 width="52px"
                                                 height="52px"
                                                 src={cart?.pic}
-                                              ></Image>
+                                                alt="product"
+                                              />
                                             </Space>
                                             <Flex vertical>
                                               <Link
@@ -669,11 +672,13 @@ function CartScreen() {
                                                     style.wrapper_img
                                                   )}
                                                 >
-                                                  <Image
+                                                  <LazyLoadImage
+                                                    effect="blur"
                                                     width="52px"
                                                     height="52px"
                                                     src={cart?.pic}
-                                                  ></Image>
+                                                    alt="product"
+                                                  />
                                                 </Flex>
                                               </Flex>
                                             </Col>
@@ -799,12 +804,13 @@ function CartScreen() {
                                                             style.promotion_content_img_wrapper
                                                           )}
                                                         >
-                                                          <img
+                                                          <LazyLoadImage
+                                                            effect="blur"
                                                             className={clsx(
                                                               style.promotion_content_img
                                                             )}
                                                             src="https://s3-sgn09.fptcloud.com/lc-public/web-lc/default/promotion_used.webp"
-                                                            alt=""
+                                                            alt="promotion"
                                                           />
                                                         </div>
                                                         <div>
@@ -907,13 +913,14 @@ function CartScreen() {
                                               style={{ marginBottom: "10px" }}
                                               align="center"
                                             >
-                                              <img
+                                              <LazyLoadImage
+                                                effect="blur"
                                                 style={{
                                                   width: "24px",
                                                   height: "24px",
                                                 }}
                                                 src="https://nhathuoclongchau.com.vn/estore-images/user.png"
-                                                alt=""
+                                                alt="estore"
                                               />
                                               <Space
                                                 className={clsx(
@@ -990,13 +997,14 @@ function CartScreen() {
                                               span={24}
                                             >
                                               <Flex align="center">
-                                                <img
+                                                <LazyLoadImage
+                                                  effect="blur"
                                                   style={{
                                                     width: "24px",
                                                     height: "24px",
                                                   }}
                                                   src="https://nhathuoclongchau.com.vn/estore-images/pin.png"
-                                                  alt=""
+                                                  alt="estore"
                                                 />
                                                 <Space
                                                   className={clsx(
@@ -1244,13 +1252,14 @@ function CartScreen() {
                                               span={24}
                                             >
                                               <Flex align="center">
-                                                <img
+                                                <LazyLoadImage
+                                                  effect="blur"
                                                   style={{
                                                     width: "24px",
                                                     height: "24px",
                                                   }}
                                                   src="https://nhathuoclongchau.com.vn/estore-images/pin.png"
-                                                  alt=""
+                                                  alt="estore"
                                                 />
                                                 <Space
                                                   className={clsx(
@@ -1619,9 +1628,10 @@ function CartScreen() {
                                       <Col span={24}>
                                         <Radio value="shipCode">
                                           <Flex align="center">
-                                            <img
+                                            <LazyLoadImage
+                                              effect="blur"
                                               src="https://s3-sgn09.fptcloud.com/lc-public/app-lc/payment/cod.png"
-                                              alt=""
+                                              alt="cash"
                                               style={{
                                                 width: "40px",
                                                 height: "40px",
@@ -1635,10 +1645,10 @@ function CartScreen() {
                                       <Col span={24}>
                                         <Radio value="vnPay">
                                           <Flex align="center">
-                                            <img
-                                              // src="https://s3-sgn09.fptcloud.com/lc-public/app-lc/payment/vnpay.png"
+                                            <LazyLoadImage
+                                              effect="blur"
                                               src="https://s3-sgn09.fptcloud.com/lc-public/app-lc/payment/card.png"
-                                              alt=""
+                                              alt="atm"
                                               style={{
                                                 width: "40px",
                                                 height: "40px",

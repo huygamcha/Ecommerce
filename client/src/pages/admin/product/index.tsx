@@ -31,6 +31,7 @@ import { getAllCategory } from "../../../slices/categorySlice";
 import numeral from "numeral";
 import { getAllTag } from "../../../slices/tagSlice";
 import { getAllBrand } from "../../../slices/brandSlice";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 type Props = {};
 
@@ -306,7 +307,6 @@ const Product = (props: Props) => {
       dataIndex: "pic",
       key: "pic",
       render: (text: any, record: any) => (
-        // <img style={{ height: "30px" }} src={text} alt="" />
         <Image style={{ width: "100px", height: "100px" }} src={text} />
       ),
     },
@@ -1006,10 +1006,11 @@ const Product = (props: Props) => {
                       key={index}
                       style={{ display: "inline-block", marginRight: 8 }}
                     >
-                      <img
+                      <LazyLoadImage
+                        effect="blur"
                         style={{ width: "100px", height: "100px" }}
                         src={item}
-                        alt=""
+                        alt="albumUpdate"
                       />
                       <Button
                         onClick={() => handleImageRemove(index)}
