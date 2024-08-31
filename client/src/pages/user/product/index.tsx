@@ -11,7 +11,6 @@ import {
 } from "../../../slices/productSlice";
 import numeral from "numeral";
 import { getAllCategory } from "../../../slices/categorySlice";
-import { getAllSupplier } from "../../../slices/supplierSlice";
 import clsx from "clsx";
 import style from "./product.module.css";
 import Discount from "../../../components/discount";
@@ -79,7 +78,6 @@ function ProductScreen() {
 
     if (products.length === 0) dispatch(getAllProduct({}));
     if (categories.length === 0) dispatch(getAllCategory());
-    if (suppliers.length === 0) dispatch(getAllSupplier());
     if (banners.length === 0) dispatch(getAllBanner());
   }, []);
 
@@ -326,7 +324,7 @@ function ProductScreen() {
                                     <Flex
                                       vertical
                                       justify="space-between"
-                                    // style={{ padding: "20px" }}
+                                      // style={{ padding: "20px" }}
                                     >
                                       <Flex
                                         className={clsx(
@@ -537,8 +535,7 @@ function ProductScreen() {
                                         )}
                                       >
                                         <FakeNumber
-                                          fakeNumber={product.fakeNumber}
-                                          realNumber={product.sold}
+                                          number={product.totalSold}
                                         />
                                       </Space>
                                     </Flex>
@@ -612,8 +609,8 @@ function ProductScreen() {
                                           className={clsx(
                                             style.buy_now_in_home,
                                             product &&
-                                            !product.stock &&
-                                            style.soldOut_disabled
+                                              !product.stock &&
+                                              style.soldOut_disabled
                                           )}
                                         >
                                           Chọn mua
@@ -683,8 +680,7 @@ function ProductScreen() {
                                           )}
                                         >
                                           <FakeNumber
-                                            fakeNumber={product.fakeNumber}
-                                            realNumber={product.sold}
+                                            number={product.totalSold}
                                           />
                                         </Space>
                                       </Flex>
@@ -760,8 +756,8 @@ function ProductScreen() {
                                             className={clsx(
                                               style.buy_now_in_home,
                                               product &&
-                                              !product.stock &&
-                                              style.soldOut_disabled
+                                                !product.stock &&
+                                                style.soldOut_disabled
                                             )}
                                           >
                                             Chọn mua
@@ -1198,8 +1194,7 @@ function ProductScreen() {
                                         )}
                                       >
                                         <FakeNumber
-                                          fakeNumber={product.fakeNumber}
-                                          realNumber={product.sold}
+                                          number={product.totalSold}
                                         />
                                       </Space>
                                     </Flex>
@@ -1214,10 +1209,9 @@ function ProductScreen() {
                                         {product.name}
                                       </Space>
 
-                                      {/* <FakeNumber
-                                        fakeNumber={product.fakeNumber}
-                                        realNumber={product.sold}
-                                      /> */}
+                                      {/*   <FakeNumber
+                                          number={product.totalSold}
+                                        /> */}
                                       <Space
                                         className={clsx(style.header_discount)}
                                       >
@@ -1276,8 +1270,8 @@ function ProductScreen() {
                                           className={clsx(
                                             style.buy_now_in_home,
                                             product &&
-                                            !product.stock &&
-                                            style.soldOut_disabled
+                                              !product.stock &&
+                                              style.soldOut_disabled
                                           )}
                                         >
                                           Chọn mua
@@ -1348,8 +1342,7 @@ function ProductScreen() {
                                           )}
                                         >
                                           <FakeNumber
-                                            fakeNumber={product.fakeNumber}
-                                            realNumber={product.sold}
+                                            number={product.totalSold}
                                           />
                                         </Space>
                                       </Flex>
@@ -1364,10 +1357,9 @@ function ProductScreen() {
                                           {product.name}
                                         </Space>
 
-                                        {/* <FakeNumber
-                                            fakeNumber={product.fakeNumber}
-                                            realNumber={product.sold}
-                                          /> */}
+                                        {/*   <FakeNumber
+                                          number={product.totalSold}
+                                        /> */}
                                         <Space
                                           className={clsx(
                                             style.header_discount
@@ -1428,8 +1420,8 @@ function ProductScreen() {
                                             className={clsx(
                                               style.buy_now_in_home,
                                               product &&
-                                              !product.stock &&
-                                              style.soldOut_disabled
+                                                !product.stock &&
+                                                style.soldOut_disabled
                                             )}
                                           >
                                             Chọn mua
@@ -1457,7 +1449,7 @@ function ProductScreen() {
                 </Col>
               </Row>
 
-              {/* Sữa bột */}
+              {/* sữa tươi */}
               <Row>
                 <Col span={24}>
                   <Flex
@@ -1469,7 +1461,7 @@ function ProductScreen() {
                       src="https://cdn1.concung.com/img/res/menu-mobile/10-sua-bot-1682043498.png"
                       alt=""
                     />
-                    Sữa bột
+                    Sữa tươi
                   </Flex>
                 </Col>
                 <Col span={24}>
@@ -1502,7 +1494,7 @@ function ProductScreen() {
                     </Button>
                     {brands &&
                       brands.map((brand, index) => {
-                        if (brand.categoryId === "65c1b7ec667c58db30291bee") {
+                        if (brand.categoryId === "6682100b02a225bad3e709e9") {
                           return (
                             <div
                               key={index}
@@ -1628,8 +1620,7 @@ function ProductScreen() {
                                         )}
                                       >
                                         <FakeNumber
-                                          fakeNumber={product.fakeNumber}
-                                          realNumber={product.sold}
+                                          number={product.totalSold}
                                         />
                                       </Space>
                                     </Flex>
@@ -1702,8 +1693,8 @@ function ProductScreen() {
                                           className={clsx(
                                             style.buy_now_in_home,
                                             product &&
-                                            !product.stock &&
-                                            style.soldOut_disabled
+                                              !product.stock &&
+                                              style.soldOut_disabled
                                           )}
                                         >
                                           Chọn mua
@@ -1717,7 +1708,7 @@ function ProductScreen() {
                           );
                         } else if (
                           searchSuaBot === "all" &&
-                          product.categoryId === "65c1b7ec667c58db30291bee"
+                          product.categoryId === "6682100b02a225bad3e709e9"
                         ) {
                           return (
                             <>
@@ -1773,8 +1764,7 @@ function ProductScreen() {
                                         )}
                                       >
                                         <FakeNumber
-                                          fakeNumber={product.fakeNumber}
-                                          realNumber={product.sold}
+                                          number={product.totalSold}
                                         />
                                       </Space>
                                     </Flex>
@@ -1789,9 +1779,8 @@ function ProductScreen() {
                                         {product.name}
                                       </Space>
 
-                                      {/* <FakeNumber
-                                          fakeNumber={product.fakeNumber}
-                                          realNumber={product.sold}
+                                      {/*   <FakeNumber
+                                          number={product.totalSold}
                                         /> */}
                                       <Space
                                         className={clsx(style.header_discount)}
@@ -1851,8 +1840,8 @@ function ProductScreen() {
                                           className={clsx(
                                             style.buy_now_in_home,
                                             product &&
-                                            !product.stock &&
-                                            style.soldOut_disabled
+                                              !product.stock &&
+                                              style.soldOut_disabled
                                           )}
                                         >
                                           Chọn mua
@@ -2084,8 +2073,7 @@ function ProductScreen() {
                                         )}
                                       >
                                         <FakeNumber
-                                          fakeNumber={product.fakeNumber}
-                                          realNumber={product.sold}
+                                          number={product.totalSold}
                                         />
                                       </Space>
                                     </Flex>
@@ -2159,8 +2147,8 @@ function ProductScreen() {
                                           className={clsx(
                                             style.buy_now_in_home,
                                             product &&
-                                            !product.stock &&
-                                            style.soldOut_disabled
+                                              !product.stock &&
+                                              style.soldOut_disabled
                                           )}
                                         >
                                           Chọn mua
@@ -2304,8 +2292,7 @@ function ProductScreen() {
                                         )}
                                       >
                                         <FakeNumber
-                                          fakeNumber={product.fakeNumber}
-                                          realNumber={product.sold}
+                                          number={product.totalSold}
                                         />
                                       </Space>
                                     </Flex>
@@ -2326,7 +2313,7 @@ function ProductScreen() {
                                         {numeral(
                                           (product.price *
                                             (100 - product.discount)) /
-                                          100
+                                            100
                                         ).format("0,0$")}
                                       </Space>
                                       {product && product?.discount > 0 && (
@@ -2350,8 +2337,8 @@ function ProductScreen() {
                                           className={clsx(
                                             style.buy_now_in_home,
                                             product &&
-                                            !product.stock &&
-                                            style.soldOut_disabled
+                                              !product.stock &&
+                                              style.soldOut_disabled
                                           )}
                                         >
                                           Chọn mua
@@ -2422,8 +2409,7 @@ function ProductScreen() {
                                         )}
                                       >
                                         <FakeNumber
-                                          fakeNumber={product.fakeNumber}
-                                          realNumber={product.sold}
+                                          number={product.totalSold}
                                         />
                                       </Space>
                                     </Flex>
@@ -2444,7 +2430,7 @@ function ProductScreen() {
                                         {numeral(
                                           (product.price *
                                             (100 - product.discount)) /
-                                          100
+                                            100
                                         ).format("0,0$")}
                                       </Space>
                                       {product && product?.discount > 0 && (
@@ -2468,8 +2454,8 @@ function ProductScreen() {
                                           className={clsx(
                                             style.buy_now_in_home,
                                             product &&
-                                            !product.stock &&
-                                            style.soldOut_disabled
+                                              !product.stock &&
+                                              style.soldOut_disabled
                                           )}
                                         >
                                           Chọn mua
@@ -2604,8 +2590,7 @@ function ProductScreen() {
                                           )}
                                         >
                                           <FakeNumber
-                                            fakeNumber={product.fakeNumber}
-                                            realNumber={product.sold}
+                                            number={product.totalSold}
                                           />
                                         </Space>
                                       </Flex>
@@ -2688,8 +2673,8 @@ function ProductScreen() {
                                             className={clsx(
                                               style.buy_now_in_home,
                                               product &&
-                                              !product.stock &&
-                                              style.soldOut_disabled
+                                                !product.stock &&
+                                                style.soldOut_disabled
                                             )}
                                           >
                                             Chọn mua

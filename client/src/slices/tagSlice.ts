@@ -45,9 +45,7 @@ const getAllTag = createAsyncThunk<TagsType[]>("tag/getAll", async () => {
 const createTag = createAsyncThunk<TagsType, TagsType>(
   "tag/createTag",
   async (name, { rejectWithValue }) => {
-    const currentUser = localStorage.getItem("userInfor")
-      ? JSON.parse(localStorage.getItem("userInfor")!)
-      : undefined;
+    
 
     try {
       // const response = await axios.post(
@@ -74,9 +72,7 @@ const createTag = createAsyncThunk<TagsType, TagsType>(
 const deleteTag = createAsyncThunk<TagsType, string>(
   "tag/deleteTag",
   async (id, { rejectWithValue }) => {
-    const currentUser = localStorage.getItem("userInfor")
-      ? JSON.parse(localStorage.getItem("userInfor")!)
-      : undefined;
+    
 
     try {
       // const response = await axios.delete(
@@ -101,12 +97,10 @@ const deleteTag = createAsyncThunk<TagsType, string>(
 const updateTag = createAsyncThunk<TagsType, { id: string; values: TagsType }>(
   "tag/updateTag",
   async ({ id, values }, { rejectWithValue }) => {
-    const currentUser = localStorage.getItem("userInfor")
-      ? JSON.parse(localStorage.getItem("userInfor")!)
-      : undefined;
+    
 
     try {
-      const response = await axios.patch(
+      const response = await authorizedAxiosInstance.patch(
         `${process.env.REACT_APP_BACKEND}/tags/${id}`,
         values
       );

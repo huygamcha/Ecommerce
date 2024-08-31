@@ -65,9 +65,7 @@ const getPolicyById = createAsyncThunk<PoliciesType, string | undefined>(
 const createPolicy = createAsyncThunk<PoliciesType, PoliciesType>(
   "policy/createPolicy",
   async (name, { rejectWithValue }) => {
-    const currentUser = localStorage.getItem("userInfor")
-      ? JSON.parse(localStorage.getItem("userInfor")!)
-      : undefined;
+    
 
     try {
       const response = await authorizedAxiosInstance.post(
@@ -89,9 +87,7 @@ const createPolicy = createAsyncThunk<PoliciesType, PoliciesType>(
 const deletePolicy = createAsyncThunk<PoliciesType, string>(
   "policy/deletePolicy",
   async (id, { rejectWithValue }) => {
-    const currentUser = localStorage.getItem("userInfor")
-      ? JSON.parse(localStorage.getItem("userInfor")!)
-      : undefined;
+    
 
     try {
       const response = await authorizedAxiosInstance.delete(
@@ -113,17 +109,10 @@ const updatePolicy = createAsyncThunk<
   PoliciesType,
   { id: string; values: PoliciesType }
 >("policy/updatePolicy", async ({ id, values }, { rejectWithValue }) => {
-  const currentUser = localStorage.getItem("userInfor")
-    ? JSON.parse(localStorage.getItem("userInfor")!)
-    : undefined;
+ 
 
   try {
-    const config = {
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${currentUser.token}`,
-      },
-    };
+   
     const response = await authorizedAxiosInstance.patch(
       `${process.env.REACT_APP_BACKEND}/policies/${id}`,
       values

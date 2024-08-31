@@ -1,0 +1,11 @@
+.wrapper {
+    position: relative;
+    height: 100vh;
+    background-color: #eceff1;
+}
+.wrapper_child {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+}

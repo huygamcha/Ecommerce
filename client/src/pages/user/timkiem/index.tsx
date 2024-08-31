@@ -21,7 +21,10 @@ import {
   getProductById,
   ProductsType,
 } from "../../../slices/productSlice";
-import { getCategoryByName } from "../../../slices/categorySlice";
+import {
+  getAllCategory,
+  getCategoryByName,
+} from "../../../slices/categorySlice";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { LuAlignCenter } from "react-icons/lu";
 import MenuFooter from "../../../components/MenuFooter";
@@ -49,6 +52,7 @@ function Timkiem() {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
+  const [firstRender, setFirstRender] = useState(true);
 
   // set active search
   const [activePrice, setActivePrice] = useState<number>(0);
@@ -199,7 +203,8 @@ function Timkiem() {
         );
       }
     }
-  }, [tag, category, brand]);
+    if (categories.length === 0) dispatch(getAllCategory());
+  }, []);
 
   //search category
   const handleSearchCategory = (id: string, name: string) => {
@@ -249,41 +254,10 @@ function Timkiem() {
     dispatch(getAllProductSearch({ ageFrom: ageFrom, ageTo: ageTo }));
   };
 
-  const handleAddToCart = (e: any) => {
-    //  tránh hiện tượng load trang, ngăn chặn mặc định của link
-    e.preventDefault();
-    // ngăn chán hành động dispatch search product
-    e.stopPropagation();
-    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-    messageApi.open({
-      type: "success",
-      content: "Thêm vào giỏ hàng thành công",
-    });
-    dispatch(
-      addToCart({
-        id: product?._id,
-        name: product?.name,
-        quantity: 1,
-        pic: product?.pic,
-        price: product?.price,
-        stock: product?.stock,
-        total: product?.total,
-        discount: product?.discount,
-        unit: product?.unit,
-        slug: product?.slug,
-        check: true,
-        categoryId: product?.categoryId,
-        sold: product?.sold,
-      })
-    );
-  };
-
   const handleAddToCartTest = (e: any, product: any) => {
     e.preventDefault();
     e.stopPropagation();
     setSpecificProduct(product);
-    // console.log("««««« product »»»»»", product);
-    // console.log("««««« e »»»»»", e);
 
     if (window.innerWidth < 576) {
       setActiveBuyMobile(true);
@@ -730,7 +704,7 @@ function Timkiem() {
                                     : { display: "none" }
                                 )}
                               >
-                                <div  style={{ display: "none" }}>2</div>
+                                <div style={{ display: "none" }}>2</div>
                               </Space>
                             </Button>
                           </Col>
@@ -834,10 +808,7 @@ function Timkiem() {
                                         style.product_name_fakeNumber
                                       )}
                                     >
-                                      <FakeNumber
-                                        fakeNumber={product.fakeNumber}
-                                        realNumber={product.sold}
-                                      />
+                                      <FakeNumber number={product.totalSold} />
                                     </Space>
                                   </Flex>
 
@@ -897,7 +868,9 @@ function Timkiem() {
                           </Col>
                         )
                       ) : (
-                        <Skeleton active></Skeleton>
+                        <>
+                          <Skeleton active></Skeleton>
+                        </>
                       )}
 
                       <Col xs={24}></Col>

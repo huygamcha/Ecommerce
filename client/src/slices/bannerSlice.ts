@@ -55,9 +55,7 @@ const getAllBanner = createAsyncThunk<BannersType[]>(
 const createBanner = createAsyncThunk<BannersType, BannersType>(
   "banner/createBanner",
   async (name, { rejectWithValue }) => {
-    const currentUser = localStorage.getItem("userInfor")
-      ? JSON.parse(localStorage.getItem("userInfor")!)
-      : undefined;
+    
     try {
       const response = await authorizedAxiosInstance.post(
         `${process.env.REACT_APP_BACKEND}/banners`,
@@ -78,9 +76,7 @@ const createBanner = createAsyncThunk<BannersType, BannersType>(
 const deleteBanner = createAsyncThunk<BannersType, string>(
   "banner/deleteBanner",
   async (id, { rejectWithValue }) => {
-    const currentUser = localStorage.getItem("userInfor")
-      ? JSON.parse(localStorage.getItem("userInfor")!)
-      : undefined;
+    
     try {
       const response = await authorizedAxiosInstance.delete(
         `${process.env.REACT_APP_BACKEND}/banners/${id}`
@@ -101,16 +97,9 @@ const updateBanner = createAsyncThunk<
   BannersType,
   { id: string; values: BannersType }
 >("banner/updateBanner", async ({ id, values }, { rejectWithValue }) => {
-  const currentUser = localStorage.getItem("userInfor")
-    ? JSON.parse(localStorage.getItem("userInfor")!)
-    : undefined;
+  
   try {
-    const config = {
-      headers: {
-        "Content-type": "application/json",
-        Authorization: `Bearer ${currentUser.token}`,
-      },
-    };
+ 
     const response = await authorizedAxiosInstance.patch(
       `${process.env.REACT_APP_BACKEND}/banners/${id}`,
       values
