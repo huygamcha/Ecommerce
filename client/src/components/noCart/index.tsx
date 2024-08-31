@@ -3,6 +3,7 @@ import style from "./noCart.module.css";
 import { Col, Flex, Row, Space } from "antd";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 function NoCart() {
   const location = useLocation();
@@ -23,9 +24,10 @@ function NoCart() {
             <Row>
               <Col span={24}>
                 <Flex justify="center">
-                  <img
+                  <LazyLoadImage
+                    effect="blur"
                     src="https://nhathuoclongchau.com.vn/estore-images/empty-cart.png"
-                    alt=""
+                    alt="empty-cart"
                   />
                 </Flex>
               </Col>

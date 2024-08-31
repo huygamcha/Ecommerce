@@ -41,7 +41,7 @@ import PolicyFooter from "../../../components/policyFooter";
 import FakeNumber from "../../../components/fakeNumber";
 import { addToCart } from "../../../slices/cartSlice";
 import BuyMobile from "../../../components/buyMobile";
-// import { LazyLoadImage } from "react-lazy-load-image-component";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 function ProductScreen() {
   const { products, error, product } = useAppSelector(
@@ -248,11 +248,17 @@ function ProductScreen() {
                                   to={banner.link}
                                   className={clsx(style.wrapper)}
                                 >
-                                  <img
+                                  <LazyLoadImage
+                                    effect="blur"
+                                    src={banner.pic}
+                                    className={clsx(style.content_img_banner)}
+                                    alt="banner"
+                                  />
+                                  {/* <img
                                     src={banner.pic}
                                     className={clsx(style.content_img_banner)}
                                     alt=""
-                                  />
+                                  /> */}
                                 </Link>
                               </SwiperSlide>
                             </>
@@ -271,14 +277,15 @@ function ProductScreen() {
                     )}
                   >
                     {banners &&
-                      banners.map((banner, index) => {
+                      banners.map((banner) => {
                         if (banner.subBanner) {
                           return (
                             <Link to={banner.link}>
-                              <img
+                              <LazyLoadImage
+                                effect="blur"
                                 src={banner.pic}
                                 className={clsx(style.content_img_subBanner)}
-                                alt=""
+                                alt="banner"
                               />
                             </Link>
                           );
@@ -295,11 +302,12 @@ function ProductScreen() {
                     align="center"
                     className={clsx(style.title_product_category_top)}
                   >
-                    <img
-                      className={clsx(style.icon_header)}
-                      style={{ height: "28px", width: "28px" }}
+                    <LazyLoadImage
+                      effect="blur"
                       src="https://cdn.nhathuoclongchau.com.vn/unsafe/28x28/https://cms-prod.s3-sgn09.fptcloud.com/smalls/danh_muc_noi_bat_d03496597a.png"
-                      alt=""
+                      className={clsx(style.content_img_banner)}
+                      style={{ height: "28px", width: "28px" }}
+                      alt="danh_muc_noi_bat"
                     />
                     Danh mục nổi bật
                   </Flex>
@@ -335,14 +343,16 @@ function ProductScreen() {
                                         align="center"
                                       >
                                         {category.pic && (
-                                          <img
+                                          <LazyLoadImage
+                                            effect="blur"
+                                            src={category.pic}
                                             style={{
                                               height: "60px",
                                               width: "60px",
                                               marginBottom: "6px",
                                             }}
-                                            src={category.pic}
-                                          ></img>
+                                            alt="category"
+                                          />
                                         )}
                                         <Space style={{ textAlign: "center" }}>
                                           {category.name}
@@ -466,10 +476,11 @@ function ProductScreen() {
                 <Col xs={24} sm={24}>
                   <Space className={clsx(style.topsale_banner)}>
                     <Space className={clsx(style.topsale_banner_img)}>
-                      <img
+                      <LazyLoadImage
+                        effect="blur"
                         style={{ width: "325px", height: "41px" }}
                         src="https://cdn.nhathuoclongchau.com.vn/unsafe/640x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/smalls/san_pham_ban_chay_reponsive_282x36_3x_5b96131326.png"
-                        alt=""
+                        alt="san_pham_ban_chay"
                       />
                       <Space className={clsx(style.topsale_banner_text)}>
                         Sản phẩm bán chạy
@@ -523,11 +534,11 @@ function ProductScreen() {
                                       )}
                                       justify="center"
                                     >
-                                      <img
+                                      <LazyLoadImage
+                                        effect="blur"
                                         src={product.pic}
                                         className={clsx(style.content_img)}
-                                        alt=""
-                                        loading="lazy"
+                                        alt="product"
                                       />
                                       <Space
                                         className={clsx(
@@ -669,10 +680,11 @@ function ProductScreen() {
                                         )}
                                         justify="center"
                                       >
-                                        <img
+                                        <LazyLoadImage
+                                          effect="blur"
                                           src={product.pic}
                                           className={clsx(style.content_img)}
-                                          alt=""
+                                          alt="product"
                                         />
                                         <Space
                                           className={clsx(
@@ -856,11 +868,12 @@ function ProductScreen() {
                     align="center"
                     className={clsx(style.title_product_brand_favorite)}
                   >
-                    <img
+                    <LazyLoadImage
+                      effect="blur"
                       className={clsx(style.icon_header)}
                       style={{ width: "28px", height: "28px" }}
                       src="https://cdn.nhathuoclongchau.com.vn/unsafe/64x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/smalls/thuong_hieu_yeu_thich_e0c23dded6.png"
-                      alt=""
+                      alt="thuong_hieu_yeu_thich"
                     />
                     <Space>Thương hiệu yêu thích</Space>
                   </Flex>
@@ -912,10 +925,11 @@ function ProductScreen() {
                                 vertical
                               >
                                 <Flex justify="center">
-                                  <img
+                                  <LazyLoadImage
+                                    effect="blur"
                                     src={brand.pic}
                                     className={clsx(style.content_img_brand)}
-                                    alt=""
+                                    alt="brand"
                                   />
                                 </Flex>
                                 {/* <Flex
@@ -962,11 +976,12 @@ function ProductScreen() {
                     if (banner.subBanner) {
                       return (
                         <Link style={{ display: "inline" }} to={banner.link}>
-                          <img
+                          <LazyLoadImage
+                            effect="blur"
                             key={index}
                             src={banner.pic}
-                            alt=""
                             className={clsx(style.content_img_subBanner_line)}
+                            alt="banner"
                           />
                         </Link>
                       );
@@ -993,13 +1008,13 @@ function ProductScreen() {
                         return (
                           <Link to={banner.link}>
                             <SwiperSlide>
-                              <img
-                                key={index}
+                              <LazyLoadImage
+                                effect="blur"
                                 src={banner.pic}
                                 className={clsx(
                                   style.content_img_subBanner_line
                                 )}
-                                alt=""
+                                alt="banner"
                               />
                             </SwiperSlide>
                           </Link>
@@ -1029,10 +1044,11 @@ function ProductScreen() {
                     align="center"
                     className={clsx(style.title_product_relate)}
                   >
-                    <img
+                    <LazyLoadImage
+                      effect="blur"
                       className={clsx(style.icon_header)}
                       src="https://cdn1.concung.com/img/res/menu-mobile/14-14-2bimta-1666343914-1682043548.png"
-                      alt=""
+                      alt="bim_ta"
                     />
                     Bỉm tã
                   </Flex>
@@ -1183,10 +1199,11 @@ function ProductScreen() {
                                       )}
                                       justify="center"
                                     >
-                                      <img
+                                      <LazyLoadImage
+                                        effect="blur"
                                         src={product.pic}
                                         className={clsx(style.content_img)}
-                                        alt=""
+                                        alt="product"
                                       />
                                       <Space
                                         className={clsx(
@@ -1331,10 +1348,11 @@ function ProductScreen() {
                                         )}
                                         justify="center"
                                       >
-                                        <img
+                                        <LazyLoadImage
+                                          effect="blur"
                                           src={product.pic}
                                           className={clsx(style.content_img)}
-                                          alt=""
+                                          alt="product"
                                         />
                                         <Space
                                           className={clsx(
@@ -1456,10 +1474,11 @@ function ProductScreen() {
                     align="center"
                     className={clsx(style.title_product_relate)}
                   >
-                    <img
+                    <LazyLoadImage
+                      effect="blur"
                       className={clsx(style.icon_header)}
                       src="https://cdn1.concung.com/img/res/menu-mobile/10-sua-bot-1682043498.png"
-                      alt=""
+                      alt="sua_tuoi"
                     />
                     Sữa tươi
                   </Flex>
@@ -1609,10 +1628,11 @@ function ProductScreen() {
                                       )}
                                       justify="center"
                                     >
-                                      <img
+                                      <LazyLoadImage
+                                        effect="blur"
                                         src={product.pic}
                                         className={clsx(style.content_img)}
-                                        alt=""
+                                        alt="product"
                                       />
                                       <Space
                                         className={clsx(
@@ -1753,10 +1773,11 @@ function ProductScreen() {
                                       )}
                                       justify="center"
                                     >
-                                      <img
+                                      <LazyLoadImage
+                                        effect="blur"
                                         src={product.pic}
                                         className={clsx(style.content_img)}
-                                        alt=""
+                                        alt="product"
                                       />
                                       <Space
                                         className={clsx(
@@ -1875,10 +1896,11 @@ function ProductScreen() {
                     align="center"
                     className={clsx(style.title_product_relate)}
                   >
-                    <img
+                    <LazyLoadImage
+                      effect="blur"
                       className={clsx(style.icon_header)}
                       src="https://cdn.nhathuoclongchau.com.vn/unsafe/28x28/https://cms-prod.s3-sgn09.fptcloud.com/smalls/san_pham_theo_doi_tuong_d7e7ffa80f.png"
-                      alt=""
+                      alt="san_pham_theo_do_tuoi"
                     />
                     Sản phẩm theo độ tuổi
                   </Flex>
@@ -2062,10 +2084,11 @@ function ProductScreen() {
                                       )}
                                       justify="center"
                                     >
-                                      <img
+                                      <LazyLoadImage
+                                        effect="blur"
                                         src={product.pic}
                                         className={clsx(style.content_img)}
-                                        alt=""
+                                        alt="product"
                                       />
                                       <Space
                                         className={clsx(
@@ -2182,11 +2205,12 @@ function ProductScreen() {
                     align="center"
                     className={clsx(style.title_product_relate)}
                   >
-                    <img
+                    <LazyLoadImage
+                      effect="blur"
                       className={clsx(style.icon_header)}
                       style={{ height: "28px", width: "28px" }}
                       src="https://cdn.nhathuoclongchau.com.vn/unsafe/28x28/https://cms-prod.s3-sgn09.fptcloud.com/smalls/icon_goi_y_hom_nay_c96e303244.png"
-                      alt=""
+                      alt="goi_y_hom_nay"
                     />
                     Gợi ý hôm nay
                   </Flex>
@@ -2281,10 +2305,11 @@ function ProductScreen() {
                                       )}
                                       justify="center"
                                     >
-                                      <img
+                                      <LazyLoadImage
+                                        effect="blur"
                                         src={product.pic}
                                         className={clsx(style.content_img)}
-                                        alt=""
+                                        alt="product"
                                       />
                                       <Space
                                         className={clsx(
@@ -2398,10 +2423,11 @@ function ProductScreen() {
                                       )}
                                       justify="center"
                                     >
-                                      <img
+                                      <LazyLoadImage
+                                        effect="blur"
                                         src={product.pic}
                                         className={clsx(style.content_img)}
-                                        alt=""
+                                        alt="product"
                                       />
                                       <Space
                                         className={clsx(
@@ -2499,10 +2525,11 @@ function ProductScreen() {
                       align="center"
                       className={clsx(style.title_product_relate)}
                     >
-                      <img
+                      <LazyLoadImage
+                        effect="blur"
                         className={clsx(style.icon_header)}
                         src="https://nhathuoclongchau.com.vn/estore-images/icon-service/recently-product-watched-icon.svg"
-                        alt=""
+                        alt="san_pham_vua_xem"
                       />
                       Sản phẩm vừa xem
                     </Flex>
@@ -2579,10 +2606,11 @@ function ProductScreen() {
                                         )}
                                         justify="center"
                                       >
-                                        <img
+                                        <LazyLoadImage
+                                          effect="blur"
                                           src={product.pic}
                                           className={clsx(style.content_img)}
-                                          alt=""
+                                          alt="product"
                                         />
                                         <Space
                                           className={clsx(

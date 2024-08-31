@@ -2,6 +2,7 @@ import React from "react";
 import style from "./policyFooter.module.css";
 import { Col, Flex, Row, Space } from "antd";
 import clsx from "clsx";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 function PolicyFooter() {
   return (
@@ -201,10 +202,11 @@ function PolicyFooter() {
           <Space>
             <Flex>
               <div className={clsx(style.policy_img)}>
-                <img
+                <LazyLoadImage
+                  effect="blur"
                   style={{ height: "40px", width: "40px" }}
                   src="http://res.cloudinary.com/drqphlfn6/image/upload/v1715837305/ox41lfvy54bupve3ayk3.png"
-                  alt=""
+                  alt="policy_img"
                 />
               </div>
               <Flex vertical>
@@ -397,10 +399,11 @@ function PolicyFooter() {
             <div>
               <Flex vertical align="center">
                 <div className={clsx(style.policy_img)}>
-                  <img
+                  <LazyLoadImage
+                    effect="blur"
                     style={{ height: "40px", width: "40px" }}
                     src="http://res.cloudinary.com/drqphlfn6/image/upload/v1715837305/ox41lfvy54bupve3ayk3.png"
-                    alt=""
+                    alt="policy_img"
                   />
                 </div>
                 <Flex vertical>

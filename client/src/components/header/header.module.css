@@ -462,7 +462,7 @@
 
 /* Thiết lập padding cho mobile */
 @media (max-width: 575px) {
-  .header_image > img {
+  .header_image > span > img {
     width: 150px;
   }
   .hethongcuahang {

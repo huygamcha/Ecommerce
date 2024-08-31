@@ -28,7 +28,6 @@ import {
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { LuAlignCenter } from "react-icons/lu";
 import MenuFooter from "../../../components/MenuFooter";
-import Label from "../../../components/label";
 import Specifications from "../../../components/specifications";
 import { getTagByName } from "../../../slices/tagSlice";
 import { getBrandByName } from "../../../slices/brandSlice";
@@ -36,6 +35,7 @@ import PolicyFooter from "../../../components/policyFooter";
 import FakeNumber from "../../../components/fakeNumber";
 import { addToCart } from "../../../slices/cartSlice";
 import BuyMobile from "../../../components/buyMobile";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 function Timkiem() {
   const filter = localStorage.getItem("filter")
@@ -52,7 +52,6 @@ function Timkiem() {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
-  const [firstRender, setFirstRender] = useState(true);
 
   // set active search
   const [activePrice, setActivePrice] = useState<number>(0);
@@ -796,11 +795,11 @@ function Timkiem() {
                                     className={clsx(style.product_name_wrapper)}
                                     justify="center"
                                   >
-                                    <img
+                                    <LazyLoadImage
+                                      effect="blur"
                                       src={product.pic}
                                       className={clsx(style.content_img)}
-                                      alt=""
-                                      loading="lazy"
+                                      alt="product_name_fakeNumber"
                                     />
 
                                     <Space

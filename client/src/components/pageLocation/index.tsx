@@ -28,6 +28,7 @@ import "swiper/css/scrollbar";
 import "swiper/css/autoplay";
 import PolicyFooter from "../policyFooter";
 import { FaFacebookMessenger } from "react-icons/fa6";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 function PageLocation() {
   const dispatch = useAppDispatch();
   const { banners } = useAppSelector((state) => state.banners);
@@ -123,10 +124,11 @@ function PageLocation() {
                     if (banner.subBanner) {
                       return (
                         <Link to={banner.link}>
-                          <img
+                          <LazyLoadImage
+                            effect="blur"
                             src={banner.pic}
                             className={clsx(style.content_img_subBanner)}
-                            alt=""
+                            alt="banner"
                           />
                         </Link>
                       );
@@ -272,11 +274,11 @@ function PageLocation() {
                       <Flex className={clsx(style.album_list)}>
                         {location.album &&
                           location.album.map((item, index) => (
-                            <img
+                            <LazyLoadImage
+                              effect="blur"
                               className={clsx(style.album_item)}
-                              key={index}
                               src={item}
-                              alt=""
+                              alt="location"
                             />
                           ))}
                       </Flex>
@@ -304,13 +306,14 @@ function PageLocation() {
                         return (
                           <SwiperSlide>
                             <Link to={banner.link}>
-                              <img
+                              <LazyLoadImage
+                                effect="blur"
                                 key={index}
                                 src={banner.pic}
                                 className={clsx(
                                   style.content_img_subBanner_line
                                 )}
-                                alt=""
+                                alt="banner"
                               />
                             </Link>
                           </SwiperSlide>
