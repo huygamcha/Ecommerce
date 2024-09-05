@@ -115,6 +115,8 @@ function ProfileScreen() {
     }
     if (
       pics.type === "image/jpeg" ||
+      pics.type === "image/jpg" ||
+      pics.type === "image/svg+xml" ||
       pics.type === "image/png" ||
       pics.type === "image/webp"
     ) {

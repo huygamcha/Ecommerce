@@ -376,7 +376,7 @@ function ProductScreen() {
                         ) : (
                           <Col xs={24} sm={24} style={{ marginBottom: "25px" }}>
                             <Empty
-                              description={<span>Không có sản phẩm nào</span>}
+                              description={<span>Không có danh mục nào</span>}
                             />
                           </Col>
                         )}
