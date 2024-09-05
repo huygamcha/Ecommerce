@@ -456,7 +456,7 @@
 .hethongcuahang:hover {
   color: #020b27;
 }
-.header_image > img {
+.header_image > span > img {
   width: 200px;
 }
 

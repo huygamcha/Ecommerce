@@ -814,11 +814,16 @@
   padding-left: 12px;
 }
 
+.wrapper_subBanner_line > a > span {
+  width: calc(50% - 10px);
+}
+
 
 .wrapper_subBanner_line img:first-child {
   border-radius: 12px;
   height: 176px;
-  width: calc(50% - 10px);
+  /* width: calc(50% - 10px); */
+  width: 100%;
 }
 .wrapper_subBanner_line a:last-child{
   margin-left: 20px;
@@ -828,7 +833,9 @@
   /* margin-left: 10px; */
   border-radius: 12px;
   height: 176px;
-  width: calc(50% - 10px);
+  width: 100%;
+
+  /* width: calc(50% - 10px); */
 }
 .wrapper_subBanner_header img:first-child{
   margin-bottom: 12px;
@@ -909,19 +916,6 @@
   .wrapper_subBanner_line{
     padding: 0px 16px;
   }
- 
-  /* .wrapper_subBanner_line img:last-child {
-    margin-left: 10px;
-    border-radius: 12px;
-    height: 176px;
-    width: calc(50% - 10px);
-  }
-  .wrapper_subBanner_line img:first-child {
-    margin-right: 10px;
-    border-radius: 12px;
-    height: 176px;
-    width: calc(50% - 10px);
-  } */
  
   .policy_footer_wrapper{
     padding-top: 16px;
