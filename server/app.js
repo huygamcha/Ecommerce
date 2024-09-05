@@ -59,11 +59,16 @@ app.use('/policies', PolicyRouter)
 app.use('/', authRouter)
 
 const multer = require('multer')
+const sharp = require('sharp')
+
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3')
+const { fromBuffer } = require('file-type')
+
 const storage = multer.memoryStorage()
 const upload = multer({
   storage
 })
+
 app.post('/upload', upload.single('file'), async (req, res) => {
   const S3 = new S3Client({
     region: 'auto',
@@ -73,19 +78,21 @@ app.post('/upload', upload.single('file'), async (req, res) => {
       secretAccessKey: process.env.R2_SECRET_ACCESS_KEY
     }
   })
-  const fileKey = req.file.originalname
-
+  // const fileKey = req.file.originalname
+  const webpFileBuffer = await sharp(req.file.buffer).webp({ quality: 75 }).toBuffer()
+  const fileInfo = await fromBuffer(webpFileBuffer)
+  const { name } = path.parse(req.file.originalname)
   await S3.send(
     new PutObjectCommand({
-      Body: req.file.buffer,
+      Body: webpFileBuffer,
       Bucket: 'min',
-      Key: fileKey,
-      ContentType: req.file.mimetype,
+      Key: `${name}.${fileInfo.ext}`,
+      ContentType: fileInfo.mime,
       ACL: 'public-read' // Cho phép truy cập công khai
     })
   )
   // URL của tệp đã tải lên
-  const fileUrl = `https://pub-50bb58cfabdd4b93abb4e154d0eada9e.r2.dev/${fileKey}`
+  const fileUrl = `https://pub-50bb58cfabdd4b93abb4e154d0eada9e.r2.dev/${name}.webp`
   res.send(`${fileUrl}`)
 })
 
