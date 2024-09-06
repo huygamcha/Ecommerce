@@ -37,7 +37,7 @@ const FooterAdmin = (props: Props) => {
 
   useEffect(() => {
     setInitialRender(false);
-   if (footers.length === 0) dispatch(getAllFooter());
+    if (footers.length === 0) dispatch(getAllFooter());
   }, [dispatch]);
 
   //set active modal
@@ -123,11 +123,6 @@ const FooterAdmin = (props: Props) => {
     dispatch(getAllFooter());
     onShowMessage("Xoá footer thành công");
   };
-
-  // console.log("««««« category »»»»»", category);
-  // console.log("««««« footers »»»»»", footers);
-  // console.log("««««« error »»»»»", error);
-  console.log("««««« initialRender »»»»»", initialRender);
 
   // table
   const columns = [

@@ -94,12 +94,9 @@ const LocationAdmin = (props: Props) => {
   }, [isActive]);
 
   const onFinish = async (values: any) => {
-    // console.log("««««« values »»»»»", values, albumCreate);
     await dispatch(createLocation({ ...values, album: albumCreate }));
-    // setInitialRender(false);
     setIsActive(!isActive);
     setAlbumCreate([]);
-    setAlbumUpdate([]);
     setPic("");
     setPicDetail("");
     setPicAdd("");
@@ -110,12 +107,11 @@ const LocationAdmin = (props: Props) => {
     await dispatch(
       updateLocation({
         id: selectedLocation,
-        values: { ...values, album: albumUpdate },
+        values: { ...values, album: albumCreate },
       })
     );
     setIsActive(!isActive);
     setAlbumCreate([]);
-    setAlbumUpdate([]);
     setPic("");
     setPicDetail("");
     setPicAdd("");
@@ -126,7 +122,6 @@ const LocationAdmin = (props: Props) => {
     dispatch(getAllLocation());
     onShowMessage("Xoá location thành công");
     setAlbumCreate([]);
-    setAlbumUpdate([]);
     setPic("");
     setPicDetail("");
     setPicAdd("");
@@ -139,55 +134,18 @@ const LocationAdmin = (props: Props) => {
     );
     setIsActive(!isActive);
     setAlbumCreate([]);
-    setAlbumUpdate([]);
     setPic("");
     setPicDetail("");
     setPicAdd("");
   };
 
   // album
-  const [albumUpdate, setAlbumUpdate] = useState<(string | undefined)[]>([]);
   const [albumCreate, setAlbumCreate] = useState<(string | undefined)[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [picDetail, setPicDetail] = useState<string>();
   const [picAdd, setPicAdd] = useState<string>();
   const [pic, setPic] = useState<string>();
 
-  // image screen with add
-  const handleImageAdd = (pics: any) => {
-    if (pics === undefined) {
-      return;
-    }
-    if (
-      pics.type === "image/jpeg" ||
-      pics.type === "image/jpg" ||
-      pics.type === "image/svg+xml" ||
-      pics.type === "image/png" ||
-      pics.type === "image/webp"
-    ) {
-      setIsLoading(false);
-      const data = new FormData();
-      data.append("file", pics);
-      data.append("upload_preset", "pbl3_chatbot");
-      data.append("cloud_name", "drqphlfn6");
-      fetch("https://api.cloudinary.com/v1_1/drqphlfn6/image/upload", {
-        method: "post",
-        body: data,
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setPicAdd(data.url.toString());
-          setIsLoading(true);
-          setAlbumUpdate([...albumUpdate, data.url.toString()]);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      return;
-    }
-    // console.log("««««« pic »»»»»", pic);
-  };
   const handleUploadAlbum = async (albums: any, infor: string) => {
     if (albums === undefined) {
       return;
@@ -196,46 +154,47 @@ const LocationAdmin = (props: Props) => {
     const asArrayAlbum = Object.entries(albums);
     const resultAlbum: string[] = [];
     await Promise.all(
-      asArrayAlbum.map((album: any, index: number) => {
+      asArrayAlbum.map(async (album: any, index: number) => {
         setIsLoading(false);
         //  khi chuyển sang array thì phần tử thứ 2 mới là đường link
-        if (album[1].type === "image/jpeg" || album[1].type === "image/png") {
+        if (
+          album[1].type === "image/jpeg" ||
+          album[1].type === "image/jpg" ||
+          album[1].type === "image/svg+xml" ||
+          album[1].type === "image/png" ||
+          album[1].type === "image/webp"
+        ) {
           setIsLoading(false);
           const data = new FormData();
           data.append("file", album[1]);
-          data.append("upload_preset", "pbl3_chatbot");
-          data.append("cloud_name", "drqphlfn6");
-          fetch("https://api.cloudinary.com/v1_1/drqphlfn6/image/upload", {
-            method: "post",
-            body: data,
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              if (infor === "create") {
-                // console.log("««««« resultAlbum »»»»»", resultAlbum);
-                resultAlbum.push(data.url.toString());
-                if (index === asArrayAlbum.length - 1) {
-                  setAlbumCreate(resultAlbum);
-                  setIsLoading(true);
-                }
-              } else {
-                setPicDetail(data.url.toString());
-              }
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+          const response = await fetch(
+            `${process.env.REACT_APP_BACKEND}/upload`,
+            {
+              method: "post",
+              body: data,
+            }
+          );
+          const result = await response.text();
+          if (infor === "create") {
+            resultAlbum.push(result);
+            if (index === asArrayAlbum.length - 1) {
+              setAlbumCreate((prev) => [...prev, ...resultAlbum]);
+              setIsLoading(true);
+            }
+          } else {
+            setPicDetail(result);
+          }
         } else {
           return;
         }
       })
     );
   };
+
   // xoa anh ra khoi album
   const handleImageRemove = (index: number) => {
-    const updatedImages = [...albumUpdate];
-    updatedImages.splice(index, 1);
-    setAlbumUpdate(updatedImages);
+    const updatedImages = albumCreate.filter((_, id) => id !== index);
+    setAlbumCreate(updatedImages);
   };
 
   // table
@@ -289,7 +248,7 @@ const LocationAdmin = (props: Props) => {
                 onClick={() => {
                   setSelectedLocation(record._id);
                   updateForm.setFieldsValue(record);
-                  setAlbumUpdate(record.album ? record.album : []);
+                  setAlbumCreate(record.album ? record.album : []);
                   setPicDetail(record.pic);
                 }}
               ></Button>
@@ -424,6 +383,7 @@ const LocationAdmin = (props: Props) => {
         onCancel={() => {
           navigate(-1);
           setSelectedLocation(false);
+          setAlbumCreate([]);
         }}
         open={selectedLocation}
         okText="Lưu"
@@ -505,16 +465,17 @@ const LocationAdmin = (props: Props) => {
               )}
               <Input
                 type="file"
+                multiple={true}
                 accept="image/*"
                 onChange={(e) => {
-                  const selectedFile = e.target.files && e.target.files[0];
-                  if (selectedFile) {
-                    handleImageAdd(selectedFile);
+                  const albumProduct = e.target.files;
+                  if (albumProduct) {
+                    handleUploadAlbum(albumProduct, "create");
                   }
                 }}
               ></Input>
-              {albumUpdate &&
-                albumUpdate.map((item: any, index: number) => (
+              {albumCreate &&
+                albumCreate.map((item: any, index: number) => (
                   <div
                     key={index}
                     style={{ display: "inline-block", marginRight: 8 }}
@@ -523,7 +484,7 @@ const LocationAdmin = (props: Props) => {
                       effect="blur"
                       style={{ width: "100px", height: "100px" }}
                       src={item}
-                      alt="albumUpdate"
+                      alt="setAlbumCreate"
                     />
 
                     <Button

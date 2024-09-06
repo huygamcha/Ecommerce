@@ -237,7 +237,7 @@ const Tag = (props: Props) => {
           setSelectedTag(false);
         }}
         open={selectedTag}
-        okText="Save changes"
+        okText="Lưu"
         onOk={() => {
           updateForm.submit();
         }}

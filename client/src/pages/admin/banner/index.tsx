@@ -24,7 +24,6 @@ import { useAppSelector, useAppDispatch } from "../../../store";
 import { CopyOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { getAllCategory } from "../../../slices/categorySlice";
-import { render } from "@testing-library/react";
 import { IoCheckmarkCircle } from "react-icons/io5";
 
 type Props = {};
@@ -151,7 +150,7 @@ const BannerAdmin = (props: Props) => {
       pics.type === "image/svg+xml" ||
       pics.type === "image/png" ||
       pics.type === "image/webp"
-    ){
+    ) {
       setIsLoading(false);
       const data = new FormData();
       data.append("file", pics);

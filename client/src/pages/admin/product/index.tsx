@@ -192,7 +192,7 @@ const Product = (props: Props) => {
     await dispatch(
       updateProduct({
         id: selectedProduct,
-        values: { ...values, pic: picDetail, album: albumUpdate },
+        values: { ...values, pic: picDetail, album: albumCreate },
       })
     );
     setPicDetail("");
@@ -226,60 +226,12 @@ const Product = (props: Props) => {
 
   // xoa anh ra khoi album
   const handleImageRemove = (index: number) => {
-    const updatedImages = [...albumUpdate];
-    updatedImages.splice(index, 1);
-    setAlbumUpdate(updatedImages);
+    const updatedImages = albumCreate.filter((_, id) => id !== index);
+    setAlbumCreate(updatedImages);
   };
 
   // image screen with add
   const [picAdd, setPicAdd] = useState<string>();
-
-  // thêm 1 ảnh vào album
-  const handleImageAdd = async (pics: any) => {
-    if (pics === undefined) {
-      return;
-    }
-    if (
-      pics.type === "image/jpeg" ||
-      pics.type === "image/jpg" ||
-      pics.type === "image/svg+xml" ||
-      pics.type === "image/png" ||
-      pics.type === "image/webp"
-    ) {
-      // setIsLoading(false);
-      // const data = new FormData();
-      // data.append("file", pics);
-      // data.append("upload_preset", "pbl3_chatbot");
-      // data.append("cloud_name", "drqphlfn6");
-      // fetch("https://api.cloudinary.com/v1_1/drqphlfn6/image/upload", {
-      //   method: "post",
-      //   body: data,
-      // })
-      //   .then((res) => res.json())
-      //   .then((data) => {
-      //     setPicAdd(data.url.toString());
-      //     setIsLoading(true);
-      //     setAlbumUpdate([...albumUpdate, data.url.toString()]);
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //   });
-
-      setIsLoading(false);
-      const data = new FormData();
-      data.append("file", pics);
-      const response = await fetch(`${process.env.REACT_APP_BACKEND}/upload`, {
-        method: "post",
-        body: data,
-      });
-      const result = await response.text();
-      setIsLoading(true);
-      setPicAdd(result);
-      setAlbumUpdate([...albumUpdate, result]);
-    } else {
-      return;
-    }
-  };
 
   // table
   const columns = [
@@ -380,7 +332,7 @@ const Product = (props: Props) => {
                   setSelectedProduct(record._id);
                   updateForm.setFieldsValue(record);
                   setPicDetail(record.pic);
-                  setAlbumUpdate(record.album ? record.album : []);
+                  setAlbumCreate(record.album ? record.album : []);
                   setValue(record.detail);
                 }}
               ></Button>
@@ -453,6 +405,8 @@ const Product = (props: Props) => {
         setIsLoading(false);
         if (
           album[1].type === "image/jpeg" ||
+          album[1].type === "image/jpg" ||
+          album[1].type === "image/svg+xml" ||
           album[1].type === "image/png" ||
           album[1].type === "image/webp"
         ) {
@@ -470,7 +424,7 @@ const Product = (props: Props) => {
           if (infor === "create") {
             resultAlbum.push(result);
             if (index === asArrayAlbum.length - 1) {
-              setAlbumCreate(resultAlbum);
+              setAlbumCreate((prev) => [...prev, ...resultAlbum]);
               setIsLoading(true);
             }
           } else {
@@ -802,6 +756,7 @@ const Product = (props: Props) => {
           onCancel={() => {
             navigate(-1);
             setSelectedProduct(false);
+            setAlbumCreate([]);
           }}
           open={selectedProduct}
           okText="Lưu"
@@ -993,17 +948,18 @@ const Product = (props: Props) => {
                 )}
                 <Input
                   type="file"
+                  multiple={true}
                   accept="image/*"
                   onChange={(e) => {
-                    const selectedFile = e.target.files && e.target.files[0];
-                    if (selectedFile) {
-                      handleImageAdd(selectedFile);
+                    const albumProduct = e.target.files;
+                    if (albumProduct) {
+                      handleUploadAlbum(albumProduct, "create");
                     }
                   }}
                 ></Input>
 
-                {albumUpdate &&
-                  albumUpdate.map((item: any, index: number) => (
+                {albumCreate &&
+                  albumCreate.map((item: any, index: number) => (
                     <div
                       key={index}
                       style={{ display: "inline-block", marginRight: 8 }}
@@ -1012,7 +968,7 @@ const Product = (props: Props) => {
                         effect="blur"
                         style={{ width: "100px", height: "100px" }}
                         src={item}
-                        alt="albumUpdate"
+                        alt="albumCreate"
                       />
                       <Button
                         onClick={() => handleImageRemove(index)}

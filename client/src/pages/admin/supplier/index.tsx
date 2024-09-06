@@ -266,7 +266,7 @@ const Supplier = (props: Props) => {
           setSelectedSupplier(false);
         }}
         open={selectedSupplier}
-        okText="Save changes"
+        okText="Lưu"
         onOk={() => {
           updateForm.submit();
         }}

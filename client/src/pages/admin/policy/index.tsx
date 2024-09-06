@@ -54,7 +54,7 @@ const PolicyAdmin = (props: Props) => {
     input.onchange = async () => {
       if (input !== null && input.files !== null) {
         const file = input.files[0];
-        const url = await uploadToCloudinary(file);
+        const url = await uploadToCloudflare(file);
         const quill = reactQuillRef.current;
         if (quill) {
           const range = quill.getEditorSelection();
@@ -63,20 +63,16 @@ const PolicyAdmin = (props: Props) => {
       }
     };
   }, []);
-  const uploadToCloudinary = async (file: File): Promise<string> => {
+
+  const uploadToCloudflare = async (file: File): Promise<string> => {
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", "pbl3_chatbot");
-    const res = await fetch(
-      "https://api.cloudinary.com/v1_1/drqphlfn6/image/upload",
-      {
-        method: "post",
-        body: formData,
-      }
-    );
-    const data = await res.json();
-    const url = data.url;
-    return url;
+    const response = await fetch(`${process.env.REACT_APP_BACKEND}/upload`, {
+      method: "POST",
+      body: formData,
+    });
+    const result = await response.text();
+    return result;
   };
 
   const [messageApi, contextHolder] = message.useMessage();
@@ -322,7 +318,7 @@ const PolicyAdmin = (props: Props) => {
           setSelectedPolicy(false);
         }}
         open={selectedPolicy}
-        okText="Save changes"
+        okText="Lưu"
         onOk={() => {
           updateForm.submit();
         }}
