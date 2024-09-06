@@ -93,9 +93,9 @@ const productSchema = new Schema(
 
     pic: {
       type: String,
-      default:
-        'http://res.cloudinary.com/drqphlfn6/image/upload/v1708647316/ws1meb2jitqwlqcwara3.jpg'
+      default: ''
     },
+
     sold: {
       type: Number,
       default: 0
