@@ -355,7 +355,7 @@ function FooterScreen() {
                 <LazyLoadImage
                   effect="blur"
                   style={{ width: "30px", height: "30px" }}
-                  src="http://res.cloudinary.com/drqphlfn6/image/upload/v1707809091/vrvzmcykp5acusyvrvoa.png"
+                  src="https://pub-50bb58cfabdd4b93abb4e154d0eada9e.r2.dev/fb.webp"
                   alt="facebook"
                 />
               </a>
@@ -444,7 +444,7 @@ function FooterScreen() {
                         height: "30px",
                         borderRadius: "10px",
                       }}
-                      src="http://res.cloudinary.com/drqphlfn6/image/upload/v1707809091/vrvzmcykp5acusyvrvoa.png"
+                      src="https://pub-50bb58cfabdd4b93abb4e154d0eada9e.r2.dev/fb.webp"
                       alt="facebook"
                     />
                   </a>
@@ -469,9 +469,37 @@ function FooterScreen() {
           <ListRenderMobile title="hỗ trợ" specificColumn={3} />
 
           <Col style={{ textAlign: "center", margin: "30px 0px" }} span={24}>
-            © 2024 Hộ Kinh Doanh Min Baby. Số ĐKKD 33A8018207 cấp ngày
-            27/06/2024 tại Phòng Tài Chính - Kế Hoạch Thành Phố Tam Kỳ, Quảng
-            Nam
+            <Space>
+              © 2024 Hộ Kinh Doanh Min Baby. Số ĐKKD 33A8018207 cấp ngày
+              27/06/2024 tại Phòng Tài Chính - Kế Hoạch Thành Phố Tam Kỳ, Quảng
+              Nam
+            </Space>
+            <Space>
+              <ul className={clsx(style.location_footer)}>
+                <li>
+                  Địa chỉ: 17 Lê Độ, KP 5, Phường An Sơn, thành phố Tam Kỳ, tỉnh
+                  Quảng Nam
+                </li>
+                <li>
+                  Hotline:{" "}
+                  <a
+                    className={clsx(style.location_footer_text)}
+                    href="https://zalo.me/0933110500"
+                  >
+                    0933 110 500
+                  </a>
+                </li>
+                <li>
+                  Email:{" "}
+                  <a
+                    className={clsx(style.location_footer_text)}
+                    href="mailto:huynhvy7994@gmail.com"
+                  >
+                    huynhvy7994@gmail.com
+                  </a>
+                </li>
+              </ul>
+            </Space>
           </Col>
         </Row>
       </div>

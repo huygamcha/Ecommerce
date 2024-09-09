@@ -205,8 +205,8 @@ function PolicyFooter() {
                 <LazyLoadImage
                   effect="blur"
                   style={{ height: "40px", width: "40px" }}
-                  src="http://res.cloudinary.com/drqphlfn6/image/upload/v1715837305/ox41lfvy54bupve3ayk3.png"
-                  alt="policy_img"
+                  src="https://pub-50bb58cfabdd4b93abb4e154d0eada9e.r2.dev/like.webp"
+                  alt="like"
                 />
               </div>
               <Flex vertical>
@@ -402,7 +402,7 @@ function PolicyFooter() {
                   <LazyLoadImage
                     effect="blur"
                     style={{ height: "40px", width: "40px" }}
-                    src="http://res.cloudinary.com/drqphlfn6/image/upload/v1715837305/ox41lfvy54bupve3ayk3.png"
+                    src="https://pub-50bb58cfabdd4b93abb4e154d0eada9e.r2.dev/like.webp"
                     alt="policy_img"
                   />
                 </div>

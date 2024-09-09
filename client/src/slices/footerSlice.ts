@@ -10,6 +10,10 @@ interface FooterType {
 }
 
 interface InitialType {
+  isSuccessCreate: boolean;
+  isErrorCreate: boolean;
+  isSuccessUpdate: boolean;
+  isErrorUpdate: boolean;
   success: boolean;
   error: { message: string; errors: { name: string } };
   footer: FooterType;
@@ -20,6 +24,10 @@ interface InitialType {
 }
 
 const initialState: InitialType = {
+  isSuccessCreate: false,
+  isSuccessUpdate: false,
+  isErrorCreate: false,
+  isErrorUpdate: false,
   success: false,
   error: {
     message: "",
@@ -132,7 +140,22 @@ const updateFooter = createAsyncThunk<
 const footerSlice = createSlice({
   name: "footer",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    resetState: (state) => {
+      state.isSuccessCreate = false;
+      state.isSuccessUpdate = false;
+      state.isErrorCreate = false;
+      state.isErrorUpdate = false;
+      state.success = false;
+      state.error = {
+        message: "",
+        errors: { name: "" },
+      };
+      state.loading = false;
+      state.deleted = false;
+      state.updated = false;
+    },
+  },
   extraReducers(builder) {
     builder.addCase(createFooter.pending, (state) => {
       state.success = false;
@@ -144,16 +167,17 @@ const footerSlice = createSlice({
       state.loading = false;
       state.success = true;
       state.footer = action.payload;
+      state.isSuccessCreate = true;
     });
     builder.addCase(createFooter.rejected, (state, action) => {
       state.loading = false;
       state.success = false;
-
       const customErrors = action.payload as {
         message: string;
         errors: { name: "" };
       };
       state.error = customErrors;
+      state.isErrorCreate = true;
     });
 
     //get all Footer
@@ -165,7 +189,6 @@ const footerSlice = createSlice({
 
     builder.addCase(getAllFooter.fulfilled, (state, action) => {
       state.loading = false;
-      // state.success = true;
       state.footers = action.payload;
     });
     builder.addCase(getAllFooter.rejected, (state, action) => {
@@ -186,7 +209,6 @@ const footerSlice = createSlice({
 
     builder.addCase(getDetailFooter.fulfilled, (state, action) => {
       state.loading = false;
-      // state.success = true;
       state.footer = action.payload;
     });
     builder.addCase(getDetailFooter.rejected, (state, action) => {
@@ -206,10 +228,10 @@ const footerSlice = createSlice({
     });
 
     builder.addCase(updateFooter.fulfilled, (state, action) => {
-      // console.log("««««« action »»»»»", action);
       state.loading = false;
       state.success = true;
       state.footer = action.payload;
+      state.isSuccessUpdate = true;
     });
     builder.addCase(updateFooter.rejected, (state, action) => {
       state.loading = false;
@@ -218,6 +240,7 @@ const footerSlice = createSlice({
         errors: { name: "" };
       };
       state.error = customErrors;
+      state.isErrorUpdate = true;
     });
 
     //delete
@@ -243,6 +266,7 @@ const footerSlice = createSlice({
 
 const { reducer } = footerSlice;
 export default reducer;
+export const { resetState } = footerSlice.actions;
 export {
   createFooter,
   getDetailFooter,

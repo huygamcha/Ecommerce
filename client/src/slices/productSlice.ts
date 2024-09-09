@@ -47,6 +47,10 @@ interface ProductSearchType {
 
 interface InitialType {
   success: boolean;
+  isSuccessCreate: boolean;
+  isErrorCreate: boolean;
+  isSuccessUpdate: boolean;
+  isErrorUpdate: boolean;
   error: { message?: string; errors?: { name: string } };
   product: ProductsType | undefined;
   loading: boolean;
@@ -60,6 +64,10 @@ interface InitialType {
 
 const initialState: InitialType = {
   success: false,
+  isSuccessCreate: false,
+  isSuccessUpdate: false,
+  isErrorCreate: false,
+  isErrorUpdate: false,
   error: { message: "", errors: { name: "" } },
   product: {
     totalSold: 0,
@@ -342,12 +350,20 @@ const productSlice = createSlice({
   name: "product",
   initialState: initialState,
   reducers: {
-    // addToHistory: (state, action) => {
-    //   const specificItem = state.productsHistory.find(item => item._id === action.payload.id)
-    //   if (!specificItem) {
-    //     state.productsHistory.push(action.payload.id)
-    //   }
-    // }
+    resetState: (state) => {
+      state.isSuccessCreate = false;
+      state.isSuccessUpdate = false;
+      state.isErrorCreate = false;
+      state.isErrorUpdate = false;
+      state.success = false;
+      state.error = {
+        message: "",
+        errors: { name: "" },
+      };
+      state.loading = false;
+      state.deleted = false;
+      state.updated = false;
+    },
 
     hasList: (state, action) => {
       if (action.payload.isList) {
@@ -389,12 +405,10 @@ const productSlice = createSlice({
     });
 
     builder.addCase(getAllProductSearch.fulfilled, (state, action) => {
-      // console.log("««««« action »»»»»", action);
       state.loading = false;
       state.productsSearch = action.payload;
     });
     builder.addCase(getAllProductSearch.rejected, (state, action) => {
-      // console.log("««««« action »»»»»", action);
       state.loading = false;
       if (action.payload) {
         const customErrors = action.payload as {
@@ -403,7 +417,6 @@ const productSlice = createSlice({
         };
         state.error = customErrors;
       }
-      // Ensure a default message or fallback if action.error is undefined
     });
 
     //get by category
@@ -509,6 +522,7 @@ const productSlice = createSlice({
     builder.addCase(createProduct.fulfilled, (state, action) => {
       state.loading = false;
       state.product = action.payload;
+      state.isSuccessCreate = true;
     });
     builder.addCase(createProduct.rejected, (state, action) => {
       // console.log("««««« action »»»»»", action);
@@ -528,6 +542,7 @@ const productSlice = createSlice({
         // Handle the case where there's no payload (optional)
         state.error = { message: "", errors: { name: "" } };
       }
+      state.isErrorCreate = true;
     });
 
     //delete
@@ -564,6 +579,7 @@ const productSlice = createSlice({
     builder.addCase(updateProduct.fulfilled, (state, action) => {
       state.loading = false;
       state.product = action.payload;
+      state.isSuccessUpdate = true;
     });
     builder.addCase(updateProduct.rejected, (state, action) => {
       // console.log('««««« action »»»»»', action);
@@ -579,6 +595,7 @@ const productSlice = createSlice({
         // Handle the case where there's no payload (optional)
         state.error = { message: "", errors: { name: "" } };
       }
+      state.isErrorUpdate = true;
     });
   },
 });
@@ -598,4 +615,4 @@ export {
   getProductBySlug,
 };
 
-export const { hasList } = actions;
+export const { hasList, resetState } = actions;

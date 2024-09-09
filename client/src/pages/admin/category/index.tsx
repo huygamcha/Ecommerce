@@ -1,7 +1,6 @@
-import React, { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import {
   Button,
-  Checkbox,
   Form,
   Input,
   Card,
@@ -20,9 +19,9 @@ import {
   getAllCategory,
   deleteCategory,
   updateCategory,
+  resetState,
 } from "../../../slices/categorySlice";
 import { useAppSelector, useAppDispatch } from "../../../store";
-import { useForm } from "antd/es/form/Form";
 import { CopyOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
@@ -31,23 +30,58 @@ type Props = {};
 const Category = (props: Props) => {
   const navigate = useNavigate();
   const param = useParams();
-  // không hiển thị khi lần đầu load trang
-  const [initialRender, setInitialRender] = useState<boolean>(true);
-  const [isActive, setIsActive] = useState<boolean>(false);
-  // get from database
-  const dispatch = useAppDispatch();
 
-  const { categories, error } = useAppSelector((state) => state.categories);
-
-  useEffect(() => {
-    setInitialRender(false);
-    if (categories.length === 0) dispatch(getAllCategory());
-  }, [dispatch]);
-
-  //set active modal
+  const firstRender = useRef<boolean>(true);
   const [selectedCategory, setSelectedCategory] = useState<any>(); // boolean or record._id
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const [messageApi, contextHolder] = message.useMessage();
+
+  const [createForm] = Form.useForm<FieldType>();
+  const [updateForm] = Form.useForm<FieldType>();
+
+  const dispatch = useAppDispatch();
+  const {
+    categories,
+    isSuccessCreate,
+    isSuccessUpdate,
+    isErrorCreate,
+    isErrorUpdate,
+  } = useAppSelector((state) => state.categories);
+
+  useEffect(() => {
+    firstRender.current = false;
+    if (categories.length === 0) dispatch(getAllCategory());
+  }, []);
+
+  useEffect(() => {
+    if (!firstRender.current) {
+      if (isErrorUpdate || isErrorCreate) {
+        if (!param.id && isErrorCreate) {
+          onShowMessage(`Tạo danh mục không thành công`, "error");
+        } else {
+          onShowMessage(`Cập nhật danh mục không thành công`, "error");
+          navigate(-1);
+          setSelectedCategory(false);
+        }
+        updateForm.resetFields();
+        dispatch(getAllCategory());
+        dispatch(resetState());
+      }
+      if (isSuccessUpdate || isSuccessCreate) {
+        if (!param.id && isSuccessCreate) {
+          onShowMessage("Tạo danh mục thành công", "success");
+        } else {
+          onShowMessage("Cập nhật danh mục thành công", "success");
+          navigate(-1);
+          setSelectedCategory(false);
+        }
+        createForm.resetFields();
+        dispatch(getAllCategory());
+        dispatch(resetState());
+      }
+    }
+  }, [isSuccessCreate, isSuccessUpdate, isErrorCreate, isErrorUpdate]);
 
   const MESSAGE_TYPE = {
     SUCCESS: "success",
@@ -55,6 +89,7 @@ const Category = (props: Props) => {
     WARNING: "warning",
     ERROR: "error",
   };
+
   const onShowMessage = useCallback(
     (content: any, type: any = MESSAGE_TYPE.SUCCESS) => {
       messageApi.open({
@@ -72,35 +107,8 @@ const Category = (props: Props) => {
     pic?: string;
   };
 
-  const [createForm] = Form.useForm<FieldType>();
-  const [updateForm] = Form.useForm<FieldType>();
-
-  useEffect(() => {
-    if (!initialRender) {
-      if (error) {
-        if (!param.id) {
-          onShowMessage("Tạo danh mục không thành công", "error");
-        } else {
-          onShowMessage("Cập nhật danh mục không thành công", "error");
-        }
-      } else {
-        if (!param.id) {
-          onShowMessage("Tạo danh mục thành công", "success");
-        } else {
-          onShowMessage("Cập nhật danh mục thành công", "success");
-          navigate(-1);
-          setSelectedCategory(false);
-        }
-        dispatch(getAllCategory());
-        createForm.resetFields();
-      }
-    }
-  }, [isActive]);
-
   const onFinish = async (values: any) => {
     await dispatch(createCategory(values));
-    setPic("");
-    setIsActive(!isActive);
   };
 
   //copy
@@ -108,20 +116,16 @@ const Category = (props: Props) => {
     await dispatch(
       createCategory({ ...values, name: `${values.name} (copy)` })
     );
-    setIsActive(!isActive);
   };
   // update category modal
 
   const onUpdate = async (values: any) => {
-    // console.log("««««« values »»»»»", picDetail);
     await dispatch(
       updateCategory({
         id: selectedCategory,
-        values: { ...values, pic: picDetail },
+        values,
       })
     );
-    setPicDetail("");
-    setIsActive(!isActive);
   };
 
   const onDelete = async (values: any) => {
@@ -131,9 +135,6 @@ const Category = (props: Props) => {
   };
 
   // upload image
-  const [picDetail, setPicDetail] = useState<string>();
-  const [pic, setPic] = useState<string>();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const postDetails = async (pics: any, infor: string) => {
     if (pics === undefined) {
@@ -156,10 +157,9 @@ const Category = (props: Props) => {
       const result = await response.text();
       setIsLoading(true);
       if (infor === "create") {
-        setPic(result);
         createForm.setFieldValue("pic", result);
       } else {
-        setPicDetail(result);
+        updateForm.setFieldValue("pic", result);
       }
     } else {
       return;
@@ -215,7 +215,6 @@ const Category = (props: Props) => {
                 onClick={() => {
                   setSelectedCategory(record._id);
                   updateForm.setFieldsValue(record);
-                  setPicDetail(record.pic);
                 }}
               ></Button>
             </Link>
@@ -234,6 +233,7 @@ const Category = (props: Props) => {
       },
     },
   ];
+
   return (
     <div>
       {contextHolder}
@@ -262,13 +262,16 @@ const Category = (props: Props) => {
           >
             <Input />
           </Form.Item>
+
+          <Form.Item<FieldType> label="Số thứ tự" name="no">
+            <InputNumber style={{ width: "100%" }} min={0} />
+          </Form.Item>
+
           <Form.Item<FieldType>
             rules={[{ required: true, message: "Vui lòng chọn hình ảnh!" }]}
             name="pic"
             label="Hình ảnh"
           >
-            {pic ? <Image height={100} src={pic}></Image> : <Space></Space>}
-            {/* <Space>{pic}</Space> */}
             <Input
               type="file"
               accept="image/*"
@@ -279,10 +282,9 @@ const Category = (props: Props) => {
                 }
               }}
             ></Input>
-          </Form.Item>
-
-          <Form.Item<FieldType> label="Số thứ tự" name="no">
-            <InputNumber style={{ width: "100%" }} min={0} />
+            {createForm.getFieldValue("pic") && (
+              <Image height={100} src={createForm.getFieldValue("pic")}></Image>
+            )}
           </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 6 }}>
@@ -340,7 +342,7 @@ const Category = (props: Props) => {
             </Form.Item>
 
             <Form.Item<FieldType> name="pic" label="Hình ảnh">
-              <Image height={100} src={picDetail}></Image>
+              <Image height={100} src={updateForm.getFieldValue("pic")}></Image>
               <Input
                 type="file"
                 accept="image/*"

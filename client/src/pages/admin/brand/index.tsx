@@ -1,4 +1,5 @@
-import { useCallback, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useCallback, useRef, useState } from "react";
 import {
   Button,
   Form,
@@ -19,6 +20,7 @@ import {
   getAllBrand,
   deleteBrand,
   updateBrand,
+  resetState,
 } from "../../../slices/brandSlice";
 import { useAppSelector, useAppDispatch } from "../../../store";
 import { CopyOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
@@ -31,26 +33,59 @@ type Props = {};
 const Brand = (props: Props) => {
   const navigate = useNavigate();
   const param = useParams();
-  // không hiển thị khi lần đầu load trang
-  const [initialRender, setInitialRender] = useState<boolean>(true);
-  const [isActive, setIsActive] = useState<boolean>(false);
-
-  // get from database
   const dispatch = useAppDispatch();
 
-  const { brands, error } = useAppSelector((state) => state.brands);
+  const [createForm] = Form.useForm<FieldType>();
+  const [updateForm] = Form.useForm<FieldType>();
+
+  const firstRender = useRef<boolean>(true);
+  const [selectedBrand, setSelectedBrand] = useState<any>();
+  const [messageApi, contextHolder] = message.useMessage();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
   const { categories } = useAppSelector((state) => state.categories);
+  const {
+    brands,
+    isSuccessCreate,
+    isSuccessUpdate,
+    isErrorCreate,
+    isErrorUpdate,
+  } = useAppSelector((state) => state.brands);
 
   useEffect(() => {
-    setInitialRender(false);
+    firstRender.current = false;
     if (brands.length === 0) dispatch(getAllBrand());
     if (categories.length === 0) dispatch(getAllCategory());
-  }, [dispatch]);
+  }, []);
 
-  //set active modal
-  const [selectedBrand, setSelectedBrand] = useState<any>(); // boolean or record._id
-
-  const [messageApi, contextHolder] = message.useMessage();
+  useEffect(() => {
+    if (!firstRender.current) {
+      if (isErrorUpdate || isErrorCreate) {
+        if (!param.id && isErrorCreate) {
+          onShowMessage(`Tạo thương hiêu không thành công`, "error");
+        } else {
+          onShowMessage(`Cập nhật thương hiêu không thành công`, "error");
+          navigate(-1);
+          setSelectedBrand(false);
+        }
+        updateForm.resetFields();
+        dispatch(getAllBrand());
+        dispatch(resetState());
+      }
+      if (isSuccessUpdate || isSuccessCreate) {
+        if (!param.id && isSuccessCreate) {
+          onShowMessage("Tạo thương hiệu thành công", "success");
+        } else {
+          onShowMessage("Cập nhật thương hiệu thành công", "success");
+          navigate(-1);
+          setSelectedBrand(false);
+        }
+        createForm.resetFields();
+        dispatch(getAllBrand());
+        dispatch(resetState());
+      }
+    }
+  }, [isSuccessCreate, isSuccessUpdate, isErrorCreate, isErrorUpdate]);
 
   const MESSAGE_TYPE = {
     SUCCESS: "success",
@@ -58,6 +93,7 @@ const Brand = (props: Props) => {
     WARNING: "warning",
     ERROR: "error",
   };
+
   const onShowMessage = useCallback(
     (content: any, type: any = MESSAGE_TYPE.SUCCESS) => {
       messageApi.open({
@@ -75,49 +111,16 @@ const Brand = (props: Props) => {
     pic?: string;
   };
 
-  const [createForm] = Form.useForm<FieldType>();
-  const [updateForm] = Form.useForm<FieldType>();
-
-  useEffect(() => {
-    if (!initialRender) {
-      if (error.message !== "") {
-        if (!param.id) {
-          onShowMessage(`${error.errors?.name}`, "error");
-        } else {
-          onShowMessage(`${error.errors?.name}`, "error");
-        }
-      } else {
-        if (!param.id) {
-          onShowMessage("Tạo thương hiệu thành công", "success");
-        } else {
-          onShowMessage("Cập nhật thương hiệu thành công", "success");
-          navigate(-1);
-          setSelectedBrand(false);
-        }
-        dispatch(getAllBrand());
-        createForm.resetFields();
-      }
-    }
-  }, [isActive]);
-
   const onFinish = async (values: any) => {
-    await dispatch(createBrand({ ...values, pic: pic }));
-    setPic("");
-    setIsActive(!isActive);
+    await dispatch(createBrand(values));
   };
-  //copy
+
   const handleCopy = async (values: any) => {
     await dispatch(createBrand({ ...values, name: `${values.name} (copy)` }));
-    setIsActive(!isActive);
   };
 
-  // update brand modal
   const onUpdate = async (values: any) => {
-    await dispatch(
-      updateBrand({ id: selectedBrand, values: { ...values, pic: picDetail } })
-    );
-    setPicDetail("");
-    setIsActive(!isActive);
+    await dispatch(updateBrand({ id: selectedBrand, values: { ...values } }));
   };
 
   const onDelete = async (values: any) => {
@@ -125,13 +128,6 @@ const Brand = (props: Props) => {
     dispatch(getAllBrand());
     onShowMessage("Xoá thương hiệu thành công");
   };
-
-  // console.log("««««« initialRender »»»»»", initialRender);
-
-  // upload image
-  const [picDetail, setPicDetail] = useState<string>();
-  const [pic, setPic] = useState<string>();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const postDetails = async (pics: any, infor: string) => {
     if (pics === undefined) {
@@ -154,17 +150,15 @@ const Brand = (props: Props) => {
       const result = await response.text();
       setIsLoading(true);
       if (infor === "create") {
-        setPic(result);
         createForm.setFieldValue("pic", result);
       } else {
-        setPicDetail(result);
+        updateForm.setFieldValue("pic", result);
       }
     } else {
       return;
     }
   };
 
-  // table
   const columns = [
     {
       title: "No.",
@@ -220,7 +214,6 @@ const Brand = (props: Props) => {
                 onClick={() => {
                   setSelectedBrand(record._id);
                   updateForm.setFieldsValue(record);
-                  setPicDetail(record.pic);
                 }}
               ></Button>
             </Link>
@@ -239,6 +232,7 @@ const Brand = (props: Props) => {
       },
     },
   ];
+
   return (
     <div>
       {contextHolder}
@@ -288,8 +282,6 @@ const Brand = (props: Props) => {
             name="pic"
             label="Hình ảnh"
           >
-            {pic ? <Image height={100} src={pic}></Image> : <Space></Space>}
-            {/* <Space>{pic}</Space> */}
             <Input
               type="file"
               accept="image/*"
@@ -300,6 +292,9 @@ const Brand = (props: Props) => {
                 }
               }}
             ></Input>
+            {createForm.getFieldValue("pic") && (
+              <Image height={100} src={createForm.getFieldValue("pic")}></Image>
+            )}
           </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 6 }}>
@@ -370,7 +365,7 @@ const Brand = (props: Props) => {
             </Form.Item>
 
             <Form.Item<FieldType> name="pic" label="Hình ảnh">
-              <Image height={100} src={picDetail}></Image>
+              <Image height={100} src={updateForm.getFieldValue("pic")}></Image>
               <Input
                 type="file"
                 accept="image/*"

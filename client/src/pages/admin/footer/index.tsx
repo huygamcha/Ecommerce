@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import {
   Button,
   Form,
@@ -19,6 +19,7 @@ import {
   createFooter,
   deleteFooter,
   getAllFooter,
+  resetState,
   updateFooter,
 } from "../../../slices/footerSlice";
 
@@ -27,23 +28,57 @@ type Props = {};
 const FooterAdmin = (props: Props) => {
   const navigate = useNavigate();
   const param = useParams();
-  // không hiển thị khi lần đầu load trang
-  const [initialRender, setInitialRender] = useState<boolean>(true);
-  const [isActive, setIsActive] = useState<boolean>(false);
-  // get from database
   const dispatch = useAppDispatch();
 
-  const { footers, success, error } = useAppSelector((state) => state.footers);
-
-  useEffect(() => {
-    setInitialRender(false);
-    if (footers.length === 0) dispatch(getAllFooter());
-  }, [dispatch]);
-
-  //set active modal
   const [selectedFooter, setSelectedFooter] = useState<any>(); // boolean or record._id
+  const firstRender = useRef<boolean>(true);
 
   const [messageApi, contextHolder] = message.useMessage();
+
+  const [createForm] = Form.useForm<FieldType>();
+  const [updateForm] = Form.useForm<FieldType>();
+
+  const {
+    footers,
+    isSuccessCreate,
+    isSuccessUpdate,
+    isErrorCreate,
+    isErrorUpdate,
+  } = useAppSelector((state) => state.footers);
+
+  useEffect(() => {
+    firstRender.current = false;
+    if (footers.length === 0) dispatch(getAllFooter());
+  }, []);
+
+  useEffect(() => {
+    if (!firstRender.current) {
+      if (isErrorUpdate || isErrorCreate) {
+        if (!param.id && isErrorCreate) {
+          onShowMessage(`Tạo footer không thành công`, "error");
+        } else {
+          onShowMessage(`Cập nhật footer không thành công`, "error");
+          navigate(-1);
+          setSelectedFooter(false);
+        }
+        updateForm.resetFields();
+        dispatch(getAllFooter());
+        dispatch(resetState());
+      }
+      if (isSuccessUpdate || isSuccessCreate) {
+        if (!param.id && isSuccessCreate) {
+          onShowMessage("Tạo footer thành công", "success");
+        } else {
+          onShowMessage("Cập nhật footer thành công", "success");
+          navigate(-1);
+          setSelectedFooter(false);
+        }
+        createForm.resetFields();
+        dispatch(getAllFooter());
+        dispatch(resetState());
+      }
+    }
+  }, [isSuccessCreate, isSuccessUpdate, isErrorCreate, isErrorUpdate]);
 
   const MESSAGE_TYPE = {
     SUCCESS: "success",
@@ -51,6 +86,7 @@ const FooterAdmin = (props: Props) => {
     WARNING: "warning",
     ERROR: "error",
   };
+
   const onShowMessage = useCallback(
     (content: any, type: any = MESSAGE_TYPE.SUCCESS) => {
       messageApi.open({
@@ -69,53 +105,19 @@ const FooterAdmin = (props: Props) => {
     optional?: string;
   };
 
-  const [createForm] = Form.useForm<FieldType>();
-  const [updateForm] = Form.useForm<FieldType>();
-
-  useEffect(() => {
-    if (!initialRender) {
-      if (!success) {
-        if (!param.id) {
-          onShowMessage(`${error.errors.name}`, "error");
-        } else {
-          onShowMessage(`${error.errors.name}`, "error");
-        }
-      } else {
-        if (!param.id) {
-          onShowMessage("Tạo footer thành công", "success");
-        } else {
-          onShowMessage("Cập nhật footer thành công", "success");
-          navigate(-1);
-          setSelectedFooter(false);
-        }
-        dispatch(getAllFooter());
-        createForm.resetFields();
-      }
-    }
-  }, [isActive]);
-
   const onFinish = async (values: any) => {
-    // console.log("««««« values »»»»»", values);
     await dispatch(createFooter(values));
-    // setInitialRender(false);
-    setIsActive(!isActive);
   };
 
   //copy
   const handleCopy = async (values: any) => {
     await dispatch(createFooter({ ...values, name: `${values.name} (copy)` }));
-    setIsActive(!isActive);
   };
 
   // update category modal
 
   const onUpdate = async (values: any) => {
-    // console.log("««««« { id: selectedFooter, values: values } »»»»»", {
-    //   id: selectedFooter,
-    //   values: values,
-    // });
     await dispatch(updateFooter({ id: selectedFooter, values: values }));
-    setIsActive(!isActive);
   };
 
   const onDelete = async (values: any) => {
@@ -214,6 +216,7 @@ const FooterAdmin = (props: Props) => {
       },
     },
   ];
+
   return (
     <div>
       {contextHolder}

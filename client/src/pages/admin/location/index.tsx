@@ -1,4 +1,5 @@
-import { useCallback, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useCallback, useRef, useState } from "react";
 import {
   Button,
   Form,
@@ -18,6 +19,7 @@ import {
   getAllLocation,
   deleteLocation,
   updateLocation,
+  resetState,
 } from "../../../slices/locationSlice";
 import { useAppSelector, useAppDispatch } from "../../../store";
 import { CopyOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
@@ -29,25 +31,61 @@ type Props = {};
 const LocationAdmin = (props: Props) => {
   const navigate = useNavigate();
   const param = useParams();
-  // không hiển thị khi lần đầu load trang
-  const [initialRender, setInitialRender] = useState<boolean>(true);
-  const [isActive, setIsActive] = useState<boolean>(false);
-  // get from database
   const dispatch = useAppDispatch();
 
-  const { locations, error } = useAppSelector((state) => state.locations);
-
-  useEffect(() => {
-    setInitialRender(false);
-    if (locations.length === 0) {
-      dispatch(getAllLocation());
-    }
-  }, [dispatch]);
-
-  //set active modal
+  const [albumCreate, setAlbumCreate] = useState<(string | undefined)[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const firstRender = useRef<boolean>(true);
   const [selectedLocation, setSelectedLocation] = useState<any>(); // boolean or record._id
 
   const [messageApi, contextHolder] = message.useMessage();
+
+  const [createForm] = Form.useForm<FieldType>();
+  const [updateForm] = Form.useForm<FieldType>();
+
+  const {
+    locations,
+    isSuccessCreate,
+    isSuccessUpdate,
+    isErrorCreate,
+    isErrorUpdate,
+  } = useAppSelector((state) => state.locations);
+
+  useEffect(() => {
+    firstRender.current = false;
+    if (locations.length === 0) {
+      dispatch(getAllLocation());
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!firstRender.current) {
+      if (isErrorUpdate || isErrorCreate) {
+        if (!param.id && isErrorCreate) {
+          onShowMessage(`Tạo địa chỉ cửa hàng không thành công`, "error");
+        } else {
+          onShowMessage(`Cập nhật địa chỉ cửa hàng không thành công`, "error");
+          navigate(-1);
+          setSelectedLocation(false);
+        }
+        updateForm.resetFields();
+        dispatch(getAllLocation());
+        dispatch(resetState());
+      }
+      if (isSuccessUpdate || isSuccessCreate) {
+        if (!param.id && isSuccessCreate) {
+          onShowMessage("Tạo địa chỉ cửa hàng thành công", "success");
+        } else {
+          onShowMessage("Cập nhật địa chỉ cửa hàng thành công", "success");
+          navigate(-1);
+          setSelectedLocation(false);
+        }
+        createForm.resetFields();
+        dispatch(getAllLocation());
+        dispatch(resetState());
+      }
+    }
+  }, [isSuccessCreate, isSuccessUpdate, isErrorCreate, isErrorUpdate]);
 
   const MESSAGE_TYPE = {
     SUCCESS: "success",
@@ -55,6 +93,7 @@ const LocationAdmin = (props: Props) => {
     WARNING: "warning",
     ERROR: "error",
   };
+
   const onShowMessage = useCallback(
     (content: any, type: any = MESSAGE_TYPE.SUCCESS) => {
       messageApi.open({
@@ -76,30 +115,9 @@ const LocationAdmin = (props: Props) => {
     iframe?: string;
   };
 
-  const [createForm] = Form.useForm<FieldType>();
-  const [updateForm] = Form.useForm<FieldType>();
-
-  useEffect(() => {
-    if (!initialRender) {
-      if (!param.id) {
-        onShowMessage("Tạo địa chỉ thành công", "success");
-      } else {
-        onShowMessage("Cập nhật địa chỉ thành công", "success");
-        navigate(-1);
-        setSelectedLocation(false);
-      }
-      dispatch(getAllLocation());
-      createForm.resetFields();
-    }
-  }, [isActive]);
-
   const onFinish = async (values: any) => {
     await dispatch(createLocation({ ...values, album: albumCreate }));
-    setIsActive(!isActive);
     setAlbumCreate([]);
-    setPic("");
-    setPicDetail("");
-    setPicAdd("");
   };
 
   // update location modal
@@ -110,11 +128,7 @@ const LocationAdmin = (props: Props) => {
         values: { ...values, album: albumCreate },
       })
     );
-    setIsActive(!isActive);
     setAlbumCreate([]);
-    setPic("");
-    setPicDetail("");
-    setPicAdd("");
   };
 
   const onDelete = async (values: any) => {
@@ -122,9 +136,6 @@ const LocationAdmin = (props: Props) => {
     dispatch(getAllLocation());
     onShowMessage("Xoá location thành công");
     setAlbumCreate([]);
-    setPic("");
-    setPicDetail("");
-    setPicAdd("");
   };
 
   //copy
@@ -132,19 +143,8 @@ const LocationAdmin = (props: Props) => {
     await dispatch(
       createLocation({ ...values, name: `${values.name} (copy)` })
     );
-    setIsActive(!isActive);
     setAlbumCreate([]);
-    setPic("");
-    setPicDetail("");
-    setPicAdd("");
   };
-
-  // album
-  const [albumCreate, setAlbumCreate] = useState<(string | undefined)[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [picDetail, setPicDetail] = useState<string>();
-  const [picAdd, setPicAdd] = useState<string>();
-  const [pic, setPic] = useState<string>();
 
   const handleUploadAlbum = async (albums: any, infor: string) => {
     if (albums === undefined) {
@@ -181,8 +181,6 @@ const LocationAdmin = (props: Props) => {
               setAlbumCreate((prev) => [...prev, ...resultAlbum]);
               setIsLoading(true);
             }
-          } else {
-            setPicDetail(result);
           }
         } else {
           return;
@@ -249,7 +247,6 @@ const LocationAdmin = (props: Props) => {
                   setSelectedLocation(record._id);
                   updateForm.setFieldsValue(record);
                   setAlbumCreate(record.album ? record.album : []);
-                  setPicDetail(record.pic);
                 }}
               ></Button>
             </Link>
@@ -271,7 +268,7 @@ const LocationAdmin = (props: Props) => {
   return (
     <div>
       {contextHolder}
-      <Card title="Tạo location mới" style={{ width: "100%" }}>
+      <Card title="Tạo địa chỉ mới" style={{ width: "100%" }}>
         <Form
           form={createForm}
           name="basic"
@@ -460,9 +457,6 @@ const LocationAdmin = (props: Props) => {
             </Form.Item>
 
             <Form.Item<FieldType> label="Album ảnh" name="album">
-              {picAdd && (
-                <Image title="Thêm ảnh" height={100} src={picAdd}></Image>
-              )}
               <Input
                 type="file"
                 multiple={true}

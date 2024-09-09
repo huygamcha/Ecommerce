@@ -20,7 +20,6 @@ import {
   resetState,
 } from "../../../slices/tagSlice";
 import { useAppSelector, useAppDispatch } from "../../../store";
-import { useForm } from "antd/es/form/Form";
 import { CopyOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
@@ -29,29 +28,57 @@ type Props = {};
 const Tag = (props: Props) => {
   const navigate = useNavigate();
   const param = useParams();
-  // không hiển thị khi lần đầu load trang
-  const [initialRender, setInitialRender] = useState<boolean>(true);
-  const [isActive, setIsActive] = useState<boolean>(false);
-  // get from database
   const dispatch = useAppDispatch();
 
-  const { tags, error, isSuccessCreate } = useAppSelector(
-    (state) => state.tags
-  );
-
-  useEffect(() => {
-    setInitialRender(false);
-    if (tags.length === 0) dispatch(getAllTag());
-  }, [dispatch]);
-
-  // useEffect(() => {
-  //   if (isSuccessCreate) dispatch(getAllTag());
-  // }, [isSuccessCreate]);
-
-  //set active modal
-  const [selectedTag, setSelectedTag] = useState<any>(); // boolean or record._id
+  const firstRender = useRef<boolean>(true);
+  const [selectedTag, setSelectedTag] = useState<any>();
 
   const [messageApi, contextHolder] = message.useMessage();
+
+  const [createForm] = Form.useForm<FieldType>();
+  const [updateForm] = Form.useForm<FieldType>();
+
+  const {
+    tags,
+    isSuccessCreate,
+    isSuccessUpdate,
+    isErrorCreate,
+    isErrorUpdate,
+  } = useAppSelector((state) => state.tags);
+
+  useEffect(() => {
+    firstRender.current = false;
+    if (tags.length === 0) dispatch(getAllTag());
+  }, []);
+
+  useEffect(() => {
+    if (!firstRender.current) {
+      if (isErrorUpdate || isErrorCreate) {
+        if (!param.id && isErrorCreate) {
+          onShowMessage(`Tạo tag không thành công`, "error");
+        } else {
+          onShowMessage(`Cập nhật tag không thành công`, "error");
+          navigate(-1);
+          setSelectedTag(false);
+        }
+        updateForm.resetFields();
+        dispatch(getAllTag());
+        dispatch(resetState());
+      }
+      if (isSuccessUpdate || isSuccessCreate) {
+        if (!param.id && isSuccessCreate) {
+          onShowMessage("Tạo tag thành công", "success");
+        } else {
+          onShowMessage("Cập nhật tag thành công", "success");
+          navigate(-1);
+          setSelectedTag(false);
+        }
+        createForm.resetFields();
+        dispatch(getAllTag());
+        dispatch(resetState());
+      }
+    }
+  }, [isSuccessCreate, isSuccessUpdate, isErrorCreate, isErrorUpdate]);
 
   const MESSAGE_TYPE = {
     SUCCESS: "success",
@@ -59,6 +86,7 @@ const Tag = (props: Props) => {
     WARNING: "warning",
     ERROR: "error",
   };
+
   const onShowMessage = useCallback(
     (content: any, type: any = MESSAGE_TYPE.SUCCESS) => {
       messageApi.open({
@@ -74,49 +102,20 @@ const Tag = (props: Props) => {
     name?: string;
   };
 
-  const [createForm] = Form.useForm<FieldType>();
-  const [updateForm] = Form.useForm<FieldType>();
-
-  useEffect(() => {
-    if (!initialRender) {
-      if (error.message !== "") {
-        if (!param.id) {
-          onShowMessage(`${error.errors.name}`, "error");
-        } else {
-          onShowMessage(`${error.errors.name}`, "error");
-        }
-      } else {
-        if (!param.id) {
-          onShowMessage("Tạo tag thành công", "success");
-        } else {
-          onShowMessage("Cập nhật tag thành công", "success");
-          navigate(-1);
-          setSelectedTag(false);
-        }
-        dispatch(getAllTag());
-        createForm.resetFields();
-      }
-    }
-  }, [isActive]);
-
   const onFinish = async (values: any) => {
     await dispatch(createTag(values));
     dispatch(resetState());
-    // setInitialRender(false);
-    setIsActive(!isActive);
   };
 
   //copy
   const handleCopy = async (values: any) => {
     await dispatch(createTag({ ...values, name: `${values.name} (copy)` }));
-    setIsActive(!isActive);
   };
 
   // update tag modal
 
   const onUpdate = async (values: any) => {
-    await dispatch(updateTag({ id: selectedTag, values: values }));
-    setIsActive(!isActive);
+    await dispatch(updateTag({ id: selectedTag, values }));
   };
 
   const onDelete = async (values: any) => {
@@ -124,11 +123,6 @@ const Tag = (props: Props) => {
     dispatch(getAllTag());
     onShowMessage("Xoá tag thành công");
   };
-
-  // console.log("««««« tag »»»»»", tag);
-  // console.log("««««« tags »»»»»", tags);
-  // console.log("««««« error »»»»»", error);
-  // console.log("««««« initialRender »»»»»", initialRender);
 
   // table
   const columns = [
@@ -188,6 +182,7 @@ const Tag = (props: Props) => {
       },
     },
   ];
+
   return (
     <div>
       {contextHolder}

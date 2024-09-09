@@ -9,17 +9,23 @@ interface TagsType {
 
 interface InitialType {
   success: boolean;
+  isSuccessCreate: boolean;
+  isErrorCreate: boolean;
+  isSuccessUpdate: boolean;
+  isErrorUpdate: boolean;
   error: { message: string; errors: { name: string } };
   tag: TagsType;
   loading: boolean;
   deleted: boolean;
   updated: boolean;
   tags: TagsType[];
-  isSuccessCreate: boolean;
 }
 
 const initialState: InitialType = {
   isSuccessCreate: false,
+  isSuccessUpdate: false,
+  isErrorCreate: false,
+  isErrorUpdate: false,
   success: false,
   error: {
     message: "",
@@ -45,8 +51,6 @@ const getAllTag = createAsyncThunk<TagsType[]>("tag/getAll", async () => {
 const createTag = createAsyncThunk<TagsType, TagsType>(
   "tag/createTag",
   async (name, { rejectWithValue }) => {
-    
-
     try {
       // const response = await axios.post(
       //   `${process.env.REACT_APP_BACKEND}/tags`,
@@ -72,8 +76,6 @@ const createTag = createAsyncThunk<TagsType, TagsType>(
 const deleteTag = createAsyncThunk<TagsType, string>(
   "tag/deleteTag",
   async (id, { rejectWithValue }) => {
-    
-
     try {
       // const response = await axios.delete(
       //   `${process.env.REACT_APP_BACKEND}/tags/${id}`,
@@ -97,8 +99,6 @@ const deleteTag = createAsyncThunk<TagsType, string>(
 const updateTag = createAsyncThunk<TagsType, { id: string; values: TagsType }>(
   "tag/updateTag",
   async ({ id, values }, { rejectWithValue }) => {
-    
-
     try {
       const response = await authorizedAxiosInstance.patch(
         `${process.env.REACT_APP_BACKEND}/tags/${id}`,
@@ -134,6 +134,17 @@ const tagSlice = createSlice({
   reducers: {
     resetState: (state) => {
       state.isSuccessCreate = false;
+      state.isSuccessUpdate = false;
+      state.isErrorCreate = false;
+      state.isErrorUpdate = false;
+      state.success = false;
+      state.error = {
+        message: "",
+        errors: { name: "" },
+      };
+      state.loading = false;
+      state.deleted = false;
+      state.updated = false;
     },
   },
   extraReducers(builder) {
@@ -173,6 +184,7 @@ const tagSlice = createSlice({
       state.error = { message: "", errors: { name: "" } };
     });
     builder.addCase(createTag.rejected, (state, action) => {
+      state.isErrorCreate = true;
       state.loading = false;
       const customErrors = action.payload as {
         message: string;
@@ -206,11 +218,13 @@ const tagSlice = createSlice({
     });
 
     builder.addCase(updateTag.fulfilled, (state, action) => {
+      state.isSuccessUpdate = true;
       state.loading = false;
       state.tag = action.payload;
     });
 
     builder.addCase(updateTag.rejected, (state, action) => {
+      state.isErrorUpdate = true;
       state.loading = false;
       const customErrors = action.payload as {
         message: string;

@@ -11,6 +11,10 @@ interface BannersType {
 
 interface InitialType {
   success: boolean;
+  isSuccessCreate: boolean;
+  isErrorCreate: boolean;
+  isSuccessUpdate: boolean;
+  isErrorUpdate: boolean;
   error: { message: string; errors: { name: string } };
   banner: BannersType;
   loading: boolean;
@@ -20,6 +24,10 @@ interface InitialType {
 }
 
 const initialState: InitialType = {
+  isSuccessCreate: false,
+  isSuccessUpdate: false,
+  isErrorCreate: false,
+  isErrorUpdate: false,
   success: false,
   error: {
     message: "",
@@ -43,9 +51,6 @@ const getAllBanner = createAsyncThunk<BannersType[]>(
     const response = await axios.get(
       `${process.env.REACT_APP_BACKEND}/banners`
     );
-    // const response = await authorizedAxiosInstance.get(
-    //   `${process.env.REACT_APP_BACKEND}/banners`
-    // );
     const data: BannersType[] = response.data.payload;
     return data;
   }
@@ -55,7 +60,6 @@ const getAllBanner = createAsyncThunk<BannersType[]>(
 const createBanner = createAsyncThunk<BannersType, BannersType>(
   "banner/createBanner",
   async (name, { rejectWithValue }) => {
-    
     try {
       const response = await authorizedAxiosInstance.post(
         `${process.env.REACT_APP_BACKEND}/banners`,
@@ -76,7 +80,6 @@ const createBanner = createAsyncThunk<BannersType, BannersType>(
 const deleteBanner = createAsyncThunk<BannersType, string>(
   "banner/deleteBanner",
   async (id, { rejectWithValue }) => {
-    
     try {
       const response = await authorizedAxiosInstance.delete(
         `${process.env.REACT_APP_BACKEND}/banners/${id}`
@@ -97,9 +100,7 @@ const updateBanner = createAsyncThunk<
   BannersType,
   { id: string; values: BannersType }
 >("banner/updateBanner", async ({ id, values }, { rejectWithValue }) => {
-  
   try {
- 
     const response = await authorizedAxiosInstance.patch(
       `${process.env.REACT_APP_BACKEND}/banners/${id}`,
       values
@@ -119,7 +120,22 @@ const updateBanner = createAsyncThunk<
 const bannerSlice = createSlice({
   name: "banner",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    resetState: (state) => {
+      state.isSuccessCreate = false;
+      state.isSuccessUpdate = false;
+      state.isErrorCreate = false;
+      state.isErrorUpdate = false;
+      state.success = false;
+      state.error = {
+        message: "",
+        errors: { name: "" },
+      };
+      state.loading = false;
+      state.deleted = false;
+      state.updated = false;
+    },
+  },
   extraReducers(builder) {
     builder.addCase(getAllBanner.pending, (state) => {
       state.loading = true;
@@ -144,9 +160,11 @@ const bannerSlice = createSlice({
       state.loading = false;
       state.banner = action.payload;
       state.error = { message: "", errors: { name: "" } };
+      state.isSuccessCreate = true;
     });
     builder.addCase(createBanner.rejected, (state, action) => {
       state.loading = false;
+      state.isErrorCreate = true;
       const customErrors = action.payload as {
         message: string;
         errors: { name: string };
@@ -182,10 +200,12 @@ const bannerSlice = createSlice({
     builder.addCase(updateBanner.fulfilled, (state, action) => {
       state.loading = false;
       state.banner = action.payload;
+      state.isSuccessUpdate = true;
     });
 
     builder.addCase(updateBanner.rejected, (state, action) => {
       state.loading = false;
+      state.isErrorUpdate = true;
       const customErrors = action.payload as {
         message: string;
         errors: { name: string };
@@ -196,6 +216,6 @@ const bannerSlice = createSlice({
 });
 
 const { reducer } = bannerSlice;
-
 export default reducer;
+export const { resetState } = bannerSlice.actions;
 export { getAllBanner, createBanner, deleteBanner, updateBanner };

@@ -11,6 +11,10 @@ interface PoliciesType {
 }
 
 interface InitialType {
+  isSuccessCreate: boolean;
+  isErrorCreate: boolean;
+  isSuccessUpdate: boolean;
+  isErrorUpdate: boolean;
   success: boolean;
   error: { message: string; errors: { name: string } };
   policy: PoliciesType;
@@ -21,6 +25,10 @@ interface InitialType {
 }
 
 const initialState: InitialType = {
+  isSuccessCreate: false,
+  isSuccessUpdate: false,
+  isErrorCreate: false,
+  isErrorUpdate: false,
   success: false,
   error: {
     message: "",
@@ -65,8 +73,6 @@ const getPolicyById = createAsyncThunk<PoliciesType, string | undefined>(
 const createPolicy = createAsyncThunk<PoliciesType, PoliciesType>(
   "policy/createPolicy",
   async (name, { rejectWithValue }) => {
-    
-
     try {
       const response = await authorizedAxiosInstance.post(
         `${process.env.REACT_APP_BACKEND}/policies`,
@@ -87,8 +93,6 @@ const createPolicy = createAsyncThunk<PoliciesType, PoliciesType>(
 const deletePolicy = createAsyncThunk<PoliciesType, string>(
   "policy/deletePolicy",
   async (id, { rejectWithValue }) => {
-    
-
     try {
       const response = await authorizedAxiosInstance.delete(
         `${process.env.REACT_APP_BACKEND}/policies/${id}`
@@ -109,10 +113,7 @@ const updatePolicy = createAsyncThunk<
   PoliciesType,
   { id: string; values: PoliciesType }
 >("policy/updatePolicy", async ({ id, values }, { rejectWithValue }) => {
- 
-
   try {
-   
     const response = await authorizedAxiosInstance.patch(
       `${process.env.REACT_APP_BACKEND}/policies/${id}`,
       values
@@ -132,12 +133,26 @@ const updatePolicy = createAsyncThunk<
 const policySlice = createSlice({
   name: "policy",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    resetState: (state) => {
+      state.isSuccessCreate = false;
+      state.isSuccessUpdate = false;
+      state.isErrorCreate = false;
+      state.isErrorUpdate = false;
+      state.success = false;
+      state.error = {
+        message: "",
+        errors: { name: "" },
+      };
+      state.loading = false;
+      state.deleted = false;
+      state.updated = false;
+    },
+  },
   extraReducers(builder) {
     builder.addCase(getAllPolicy.pending, (state) => {
       state.loading = true;
     });
-
     builder.addCase(getAllPolicy.fulfilled, (state, action) => {
       state.loading = false;
       state.policies = action.payload;
@@ -150,13 +165,12 @@ const policySlice = createSlice({
     // create
     builder.addCase(createPolicy.pending, (state) => {
       state.loading = true;
-      // state.error = "";
     });
-
     builder.addCase(createPolicy.fulfilled, (state, action) => {
       state.loading = false;
       state.policy = action.payload;
       state.error = { message: "", errors: { name: "" } };
+      state.isSuccessCreate = true;
     });
     builder.addCase(createPolicy.rejected, (state, action) => {
       state.loading = false;
@@ -164,7 +178,8 @@ const policySlice = createSlice({
         message: string;
         errors: { name: string };
       };
-      state.error = customErrors; // Ensure a default message or fallback if action.error is undefined
+      state.error = customErrors;
+      state.isErrorCreate = true;
     });
 
     //delete
@@ -195,6 +210,7 @@ const policySlice = createSlice({
     builder.addCase(updatePolicy.fulfilled, (state, action) => {
       state.loading = false;
       state.policy = action.payload;
+      state.isSuccessUpdate = true;
     });
 
     builder.addCase(updatePolicy.rejected, (state, action) => {
@@ -204,6 +220,7 @@ const policySlice = createSlice({
         errors: { name: string };
       };
       state.error = customErrors; // Ensure a default message or fallback if action.error is undefined
+      state.isErrorUpdate = true;
     });
 
     //get by id
@@ -234,8 +251,8 @@ const policySlice = createSlice({
 });
 
 const { reducer } = policySlice;
-
 export default reducer;
+export const { resetState } = policySlice.actions;
 export {
   getAllPolicy,
   createPolicy,

@@ -1,4 +1,5 @@
-import { useCallback, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useCallback, useMemo, useRef, useState } from "react";
 import {
   Button,
   Form,
@@ -19,6 +20,7 @@ import {
   getAllBanner,
   deleteBanner,
   updateBanner,
+  resetState,
 } from "../../../slices/bannerSlice";
 import { useAppSelector, useAppDispatch } from "../../../store";
 import { CopyOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
@@ -31,145 +33,71 @@ type Props = {};
 const BannerAdmin = (props: Props) => {
   const navigate = useNavigate();
   const param = useParams();
-  // không hiển thị khi lần đầu load trang
-  const [initialRender, setInitialRender] = useState<boolean>(true);
-  const [isActive, setIsActive] = useState<boolean>(false);
-
-  // get from database
   const dispatch = useAppDispatch();
 
-  const { banners, error } = useAppSelector((state) => state.banners);
-  const { categories } = useAppSelector((state) => state.categories);
-
-  useEffect(() => {
-    setInitialRender(false);
-    if (banners.length === 0) dispatch(getAllBanner());
-    if (categories.length === 0) dispatch(getAllCategory());
-  }, [dispatch]);
-
-  //set active modal
+  // không hiển thị khi lần đầu load trang
+  const firstRender = useRef<boolean>(true);
   const [selectedBanner, setSelectedBanner] = useState<any>(); // boolean or record._id
-
-  const [messageApi, contextHolder] = message.useMessage();
-
-  const MESSAGE_TYPE = {
-    SUCCESS: "success",
-    INFO: "info",
-    WARNING: "warning",
-    ERROR: "error",
-  };
-  const onShowMessage = useCallback(
-    (content: any, type: any = MESSAGE_TYPE.SUCCESS) => {
-      messageApi.open({
-        type: type,
-        content: content,
-      });
-    },
-    [messageApi]
-  );
-
-  // form
-  type FieldType = {
-    pic?: string;
-    subBanner: boolean;
-    link: boolean;
-  };
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const [createForm] = Form.useForm<FieldType>();
   const [updateForm] = Form.useForm<FieldType>();
 
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const {
+    banners,
+    isSuccessCreate,
+    isSuccessUpdate,
+    isErrorCreate,
+    isErrorUpdate,
+  } = useAppSelector((state) => state.banners);
+  const { categories } = useAppSelector((state) => state.categories);
+
   useEffect(() => {
-    if (!initialRender) {
-      if (error.message !== "") {
-        if (!param.id) {
+    firstRender.current = false;
+    if (banners.length === 0) dispatch(getAllBanner());
+    if (categories.length === 0) dispatch(getAllCategory());
+  }, []);
+
+  useEffect(() => {
+    if (!firstRender.current) {
+      if (isErrorUpdate || isErrorCreate) {
+        if (!param.id && isErrorCreate) {
           onShowMessage(`Tạo banner không thành công`, "error");
         } else {
-          onShowMessage(`Tạo banner thành công`, "error");
+          onShowMessage(`Cập nhật banner không thành công`, "error");
+          navigate(-1);
+          setSelectedBanner(false);
         }
-      } else {
-        if (!param.id) {
+        updateForm.resetFields();
+        dispatch(getAllBanner());
+        dispatch(resetState());
+      }
+      if (isSuccessUpdate || isSuccessCreate) {
+        if (!param.id && isSuccessCreate) {
           onShowMessage("Tạo banner thành công", "success");
         } else {
           onShowMessage("Cập nhật banner thành công", "success");
           navigate(-1);
           setSelectedBanner(false);
         }
-        dispatch(getAllBanner());
         createForm.resetFields();
+        dispatch(getAllBanner());
+        dispatch(resetState());
       }
     }
-  }, [isActive]);
+  }, [isSuccessCreate, isSuccessUpdate, isErrorCreate, isErrorUpdate]);
 
-  const onFinish = async (values: any) => {
-    await dispatch(createBanner({ ...values, pic: pic }));
-    setPic("");
-    setPicDetail("");
-    setIsActive(!isActive);
-  };
-
-  //copy
-  const handleCopy = async (values: any) => {
-    await dispatch(createBanner({ ...values, name: `${values.name} (copy)` }));
-    setIsActive(!isActive);
-    setPicDetail("");
-    setPic("");
-  };
-
-  // update banner modal
-  const onUpdate = async (values: any) => {
-    // console.log("««««« values »»»»»", values);
-    await dispatch(
-      updateBanner({
-        id: selectedBanner,
-        values: { ...values, pic: picDetail },
-      })
-    );
-    setPicDetail("");
-    setPic("");
-    setIsActive(!isActive);
-  };
-
-  const onDelete = async (values: any) => {
-    await dispatch(deleteBanner(values));
-    dispatch(getAllBanner());
-    onShowMessage("Xoá banner thành công");
-  };
-
-  // upload image
-  const [picDetail, setPicDetail] = useState<string>();
-  const [pic, setPic] = useState<string>();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  const postDetails = async (pics: any, infor: string) => {
-    if (pics === undefined) {
-      return;
-    }
-    if (
-      pics.type === "image/jpeg" ||
-      pics.type === "image/jpg" ||
-      pics.type === "image/svg+xml" ||
-      pics.type === "image/png" ||
-      pics.type === "image/webp"
-    ) {
-      setIsLoading(false);
-      const data = new FormData();
-      data.append("file", pics);
-      const response = await fetch(`${process.env.REACT_APP_BACKEND}/upload`, {
-        method: "post",
-        body: data,
-      });
-      const result = await response.text();
-      setIsLoading(true);
-      if (infor === "create") {
-        setPic(result);
-        createForm.setFieldValue("pic", result);
-      } else {
-        setPicDetail(result);
-      }
-    } else {
-      return;
-    }
-  };
+  const MESSAGE_TYPE = useMemo(
+    () => ({
+      SUCCESS: "success",
+      INFO: "info",
+      WARNING: "warning",
+      ERROR: "error",
+    }),
+    []
+  );
 
   // table
   const columns = [
@@ -237,7 +165,6 @@ const BannerAdmin = (props: Props) => {
                 onClick={() => {
                   setSelectedBanner(record._id);
                   updateForm.setFieldsValue(record);
-                  setPicDetail(record.pic);
                 }}
               ></Button>
             </Link>
@@ -256,6 +183,76 @@ const BannerAdmin = (props: Props) => {
       },
     },
   ];
+
+  // type form
+  type FieldType = {
+    pic?: string;
+    subBanner: boolean;
+    link: boolean;
+  };
+
+  const onShowMessage = useCallback(
+    (content: any, type: any = MESSAGE_TYPE.SUCCESS) => {
+      messageApi.open({
+        type: type,
+        content: content,
+      });
+    },
+    [messageApi]
+  );
+
+  const onFinish = async (values: any) => {
+    dispatch(createBanner({ ...values }));
+  };
+
+  const handleCopy = async (values: any) => {
+    await dispatch(createBanner({ ...values, name: `${values.name} (copy)` }));
+  };
+
+  const onUpdate = async (values: any) => {
+    await dispatch(
+      updateBanner({
+        id: selectedBanner,
+        values,
+      })
+    );
+  };
+
+  const onDelete = async (values: any) => {
+    await dispatch(deleteBanner(values));
+    dispatch(getAllBanner());
+    onShowMessage("Xoá banner thành công");
+  };
+
+  const postDetails = async (pics: any, infor: string) => {
+    if (pics === undefined) {
+      return;
+    }
+    if (
+      pics.type === "image/jpeg" ||
+      pics.type === "image/jpg" ||
+      pics.type === "image/svg+xml" ||
+      pics.type === "image/png" ||
+      pics.type === "image/webp"
+    ) {
+      setIsLoading(false);
+      const data = new FormData();
+      data.append("file", pics);
+      const response = await fetch(`${process.env.REACT_APP_BACKEND}/upload`, {
+        method: "post",
+        body: data,
+      });
+      const result = await response.text();
+      setIsLoading(true);
+      if (infor === "create") {
+        createForm.setFieldValue("pic", result);
+      } else {
+        updateForm.setFieldValue("pic", result);
+      }
+    } else {
+      return;
+    }
+  };
   return (
     <div>
       {contextHolder}
@@ -274,7 +271,6 @@ const BannerAdmin = (props: Props) => {
             name="pic"
             label="Hình ảnh"
           >
-            {pic && <Image height={100} src={pic}></Image>}
             <Input
               type="file"
               accept="image/*"
@@ -284,11 +280,16 @@ const BannerAdmin = (props: Props) => {
                   postDetails(selectedFile, "create");
                 }
               }}
-            ></Input>
+            ></Input>{" "}
+            {createForm.getFieldValue("pic") && (
+              <Image height={100} src={createForm.getFieldValue("pic")}></Image>
+            )}
           </Form.Item>
+
           <Form.Item<FieldType> name="link" label="Link">
             <Input></Input>
           </Form.Item>
+
           <Form.Item<FieldType> name="subBanner" label="Sub Banner">
             <Select
               options={[
@@ -339,7 +340,7 @@ const BannerAdmin = (props: Props) => {
             autoComplete="off"
           >
             <Form.Item<FieldType> name="pic" label="Hình ảnh">
-              <Image height={100} src={picDetail}></Image>
+              <Image height={100} src={updateForm.getFieldValue("pic")}></Image>
               <Input
                 type="file"
                 accept="image/*"

@@ -2,8 +2,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import authorizedAxiosInstance from "../utils/axiosCustom";
 
-
-
 interface detailProduct {
   name: string;
   discount: number;
@@ -40,9 +38,17 @@ interface InitialType {
   deleted: boolean;
   updated: boolean;
   orders: OrdersType[];
+  isSuccessCreate: boolean;
+  isErrorCreate: boolean;
+  isSuccessUpdate: boolean;
+  isErrorUpdate: boolean;
 }
 
 const initialState: InitialType = {
+  isSuccessCreate: false,
+  isSuccessUpdate: false,
+  isErrorCreate: false,
+  isErrorUpdate: false,
   success: false,
   error: "",
   order: {
@@ -88,13 +94,10 @@ const getAllOrder = createAsyncThunk<OrdersType[]>("order/getAll", async () => {
 const createOrder = createAsyncThunk<OrdersType, OrdersType>(
   "order/createOrder",
   async (name, { rejectWithValue }) => {
-    
-
     try {
-  
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND}/orders`,
-        name,
+        name
       );
       const data: OrdersType = response.data;
       return data;
@@ -111,8 +114,6 @@ const createOrder = createAsyncThunk<OrdersType, OrdersType>(
 const deleteOrder = createAsyncThunk<OrdersType, string>(
   "order/deleteOrder",
   async (id, { rejectWithValue }) => {
-    
-
     try {
       const response = await authorizedAxiosInstance.delete(
         `${process.env.REACT_APP_BACKEND}/orders/${id}`
@@ -133,10 +134,7 @@ const updateOrder = createAsyncThunk<
   OrdersType,
   { id: string; values: OrdersType }
 >("order/updateOrder", async ({ id, values }, { rejectWithValue }) => {
-  
-
   try {
-   
     const response = await authorizedAxiosInstance.patch(
       `${process.env.REACT_APP_BACKEND}/orders/${id}`,
       values
@@ -156,7 +154,18 @@ const updateOrder = createAsyncThunk<
 const orderSlice = createSlice({
   name: "order",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    resetState: (state) => {
+      state.isSuccessCreate = false;
+      state.isSuccessUpdate = false;
+      state.isErrorCreate = false;
+      state.isErrorUpdate = false;
+      state.success = false;
+      state.loading = false;
+      state.deleted = false;
+      state.updated = false;
+    },
+  },
   extraReducers(builder) {
     builder.addCase(getAllOrder.pending, (state) => {
       state.loading = true;
@@ -176,13 +185,14 @@ const orderSlice = createSlice({
       state.loading = true;
       // state.error = "";
     });
-
     builder.addCase(createOrder.fulfilled, (state, action) => {
       state.loading = false;
       state.order = action.payload;
+      state.isSuccessCreate = true;
     });
     builder.addCase(createOrder.rejected, (state, action) => {
       state.loading = false;
+      state.isErrorCreate = true;
       state.error = action.error.message || "An error occurred";
     });
 
@@ -190,7 +200,6 @@ const orderSlice = createSlice({
     builder.addCase(deleteOrder.pending, (state) => {
       state.loading = true;
     });
-
     builder.addCase(deleteOrder.fulfilled, (state, action) => {
       state.loading = false;
       state.order = action.payload;
@@ -204,21 +213,20 @@ const orderSlice = createSlice({
     builder.addCase(updateOrder.pending, (state) => {
       state.loading = true;
     });
-
     builder.addCase(updateOrder.fulfilled, (state, action) => {
       state.loading = false;
       state.order = action.payload;
+      state.isSuccessUpdate = true
     });
-
     builder.addCase(updateOrder.rejected, (state, action) => {
       state.loading = false;
-
       state.error = action.error.message || "An error occurred";
+      state.isErrorUpdate = true
     });
   },
 });
 
 const { reducer } = orderSlice;
-
+export const {resetState} = orderSlice.actions
 export default reducer;
 export { getAllOrder, createOrder, deleteOrder, updateOrder };

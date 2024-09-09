@@ -14,6 +14,10 @@ interface LocationsType {
 }
 
 interface InitialType {
+  isSuccessCreate: boolean;
+  isErrorCreate: boolean;
+  isSuccessUpdate: boolean;
+  isErrorUpdate: boolean;
   success: boolean;
   error: string | undefined;
   location: LocationsType;
@@ -24,6 +28,10 @@ interface InitialType {
 }
 
 const initialState: InitialType = {
+  isSuccessCreate: false,
+  isSuccessUpdate: false,
+  isErrorCreate: false,
+  isErrorUpdate: false,
   success: false,
   error: "",
   location: {
@@ -57,7 +65,6 @@ const getAllLocation = createAsyncThunk<LocationsType[]>(
 const createLocation = createAsyncThunk<LocationsType, LocationsType>(
   "location/createLocation",
   async (name, { rejectWithValue }) => {
-    
     try {
       const response = await authorizedAxiosInstance.post(
         `${process.env.REACT_APP_BACKEND}/locations`,
@@ -78,7 +85,6 @@ const createLocation = createAsyncThunk<LocationsType, LocationsType>(
 const deleteLocation = createAsyncThunk<LocationsType, string>(
   "location/deleteLocation",
   async (id, { rejectWithValue }) => {
-    
     try {
       const response = await authorizedAxiosInstance.delete(
         `${process.env.REACT_APP_BACKEND}/locations/${id}`
@@ -99,9 +105,7 @@ const updateLocation = createAsyncThunk<
   LocationsType,
   { id: string; values: LocationsType }
 >("location/updateLocation", async ({ id, values }, { rejectWithValue }) => {
- 
   try {
-   
     const response = await authorizedAxiosInstance.patch(
       `${process.env.REACT_APP_BACKEND}/locations/${id}`,
       values
@@ -121,7 +125,18 @@ const updateLocation = createAsyncThunk<
 const locationSlice = createSlice({
   name: "location",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    resetState: (state) => {
+      state.isSuccessCreate = false;
+      state.isSuccessUpdate = false;
+      state.isErrorCreate = false;
+      state.isErrorUpdate = false;
+      state.success = false;
+      state.loading = false;
+      state.deleted = false;
+      state.updated = false;
+    },
+  },
   extraReducers(builder) {
     builder.addCase(getAllLocation.pending, (state) => {
       state.loading = true;
@@ -144,17 +159,18 @@ const locationSlice = createSlice({
     builder.addCase(createLocation.fulfilled, (state, action) => {
       state.loading = false;
       state.location = action.payload;
+      state.isSuccessCreate = true;
     });
     builder.addCase(createLocation.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
+      state.isErrorCreate = true;
     });
 
     //delete
     builder.addCase(deleteLocation.pending, (state) => {
       state.loading = true;
     });
-
     builder.addCase(deleteLocation.fulfilled, (state, action) => {
       state.loading = false;
       state.location = action.payload;
@@ -168,19 +184,21 @@ const locationSlice = createSlice({
     builder.addCase(updateLocation.pending, (state) => {
       state.loading = true;
     });
-
     builder.addCase(updateLocation.fulfilled, (state, action) => {
       state.loading = false;
       state.location = action.payload;
+      state.isSuccessUpdate = true;
     });
-
     builder.addCase(updateLocation.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
+      state.isErrorUpdate = true;
     });
   },
 });
 
 const { reducer } = locationSlice;
 export default reducer;
+export const { resetState } = locationSlice.actions;
+
 export { getAllLocation, createLocation, deleteLocation, updateLocation };

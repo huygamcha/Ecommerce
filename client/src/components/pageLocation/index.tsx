@@ -1,13 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-has-content */
 /* eslint-disable jsx-a11y/iframe-has-title */
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import style from "./pageLocation.module.css";
 import clsx from "clsx";
 import { Breadcrumb, Col, Flex, Row, Space } from "antd";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { getAllBanner } from "../../slices/bannerSlice";
 import { Link, useLocation } from "react-router-dom";
-import ButtonNavigation from "../buttonNavigation";
 // swiper
 import { Swiper, SwiperSlide } from "swiper/react";
 import {
@@ -19,7 +18,6 @@ import {
 } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
-import { Virtual } from "swiper/modules";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
@@ -27,7 +25,6 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import "swiper/css/autoplay";
 import PolicyFooter from "../policyFooter";
-import { FaFacebookMessenger } from "react-icons/fa6";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 function PageLocation() {
   const dispatch = useAppDispatch();

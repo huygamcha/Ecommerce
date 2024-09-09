@@ -1,7 +1,8 @@
-import React, { useCallback, useRef, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useCallback, useRef, useState } from "react";
+import "react-quill/dist/quill.snow.css";
 import {
   Button,
-  Checkbox,
   Form,
   Input,
   Card,
@@ -17,9 +18,9 @@ import {
   getAllPolicy,
   deletePolicy,
   updatePolicy,
+  resetState,
 } from "../../../slices/policySlice";
 import { useAppSelector, useAppDispatch } from "../../../store";
-import { useForm } from "antd/es/form/Form";
 import { CopyOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import ReactQuill from "react-quill";
@@ -29,23 +30,60 @@ type Props = {};
 const PolicyAdmin = (props: Props) => {
   const navigate = useNavigate();
   const param = useParams();
-  // không hiển thị khi lần đầu load trang
-  const [initialRender, setInitialRender] = useState<boolean>(true);
-  const [isActive, setIsActive] = useState<boolean>(false);
-  // get from database
   const dispatch = useAppDispatch();
 
-  const { policies, error } = useAppSelector((state) => state.policies);
-
-  useEffect(() => {
-    setInitialRender(false);
-    if (policies.length === 0) dispatch(getAllPolicy());
-  }, [dispatch]);
-
-  //set active modal
+  const firstRender = useRef<boolean>(true);
+  const reactQuillRef = useRef<ReactQuill>(null);
   const [selectedPolicy, setSelectedPolicy] = useState<any>(); // boolean or record._id
   const [value, setValue] = useState("");
-  const reactQuillRef = useRef<ReactQuill>(null);
+
+  const [createForm] = Form.useForm<FieldType>();
+  const [updateForm] = Form.useForm<FieldType>();
+
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const {
+    policies,
+    isSuccessCreate,
+    isSuccessUpdate,
+    isErrorCreate,
+    isErrorUpdate,
+  } = useAppSelector((state) => state.policies);
+
+  useEffect(() => {
+    firstRender.current = false;
+    if (policies.length === 0) dispatch(getAllPolicy());
+  }, []);
+
+  useEffect(() => {
+    if (!firstRender.current) {
+      if (isErrorUpdate || isErrorCreate) {
+        if (!param.id && isErrorCreate) {
+          onShowMessage(`Tạo chính sách không thành công`, "error");
+        } else {
+          onShowMessage(`Cập nhật chính sách không thành công`, "error");
+          navigate(-1);
+          setSelectedPolicy(false);
+        }
+        updateForm.resetFields();
+        dispatch(getAllPolicy());
+        dispatch(resetState());
+      }
+      if (isSuccessUpdate || isSuccessCreate) {
+        if (!param.id && isSuccessCreate) {
+          onShowMessage("Tạo chính sách thành công", "success");
+        } else {
+          onShowMessage("Cập nhật chính sách thành công", "success");
+          navigate(-1);
+          setSelectedPolicy(false);
+        }
+        createForm.resetFields();
+        dispatch(getAllPolicy());
+        dispatch(resetState());
+      }
+    }
+  }, [isSuccessCreate, isSuccessUpdate, isErrorCreate, isErrorUpdate]);
+
   const imageHandler = useCallback(() => {
     const input = document.createElement("input");
     input.setAttribute("type", "file");
@@ -75,14 +113,13 @@ const PolicyAdmin = (props: Props) => {
     return result;
   };
 
-  const [messageApi, contextHolder] = message.useMessage();
-
   const MESSAGE_TYPE = {
     SUCCESS: "success",
     INFO: "info",
     WARNING: "warning",
     ERROR: "error",
   };
+
   const onShowMessage = useCallback(
     (content: any, type: any = MESSAGE_TYPE.SUCCESS) => {
       messageApi.open({
@@ -93,49 +130,18 @@ const PolicyAdmin = (props: Props) => {
     [messageApi]
   );
 
-  // form
   type FieldType = {
     name?: string;
     content?: string;
     link?: string;
   };
 
-  const [createForm] = Form.useForm<FieldType>();
-  const [updateForm] = Form.useForm<FieldType>();
-
-  useEffect(() => {
-    if (!initialRender) {
-      if (error.message !== "") {
-        if (!param.id) {
-          onShowMessage(`${error.errors.name}`, "error");
-        } else {
-          onShowMessage(`${error.errors.name}`, "error");
-        }
-      } else {
-        if (!param.id) {
-          onShowMessage("Tạo chính sách thành công", "success");
-        } else {
-          onShowMessage("Cập nhật chính sách thành công", "success");
-          navigate(-1);
-          setSelectedPolicy(false);
-        }
-        dispatch(getAllPolicy());
-        createForm.resetFields();
-      }
-    }
-  }, [isActive]);
-
   const onFinish = async (values: any) => {
     await dispatch(createPolicy(values));
-    // setInitialRender(false);
-    setIsActive(!isActive);
   };
 
-  // update policy modal
-
   const onUpdate = async (values: any) => {
-    await dispatch(updatePolicy({ id: selectedPolicy, values: values }));
-    setIsActive(!isActive);
+    await dispatch(updatePolicy({ id: selectedPolicy, values }));
   };
 
   const onDelete = async (values: any) => {
@@ -147,7 +153,6 @@ const PolicyAdmin = (props: Props) => {
   //copy
   const handleCopy = async (values: any) => {
     await dispatch(createPolicy({ ...values, name: `${values.name} (copy)` }));
-    setIsActive(!isActive);
   };
 
   // table
@@ -198,6 +203,7 @@ const PolicyAdmin = (props: Props) => {
                 onClick={() => {
                   setSelectedPolicy(record._id);
                   updateForm.setFieldsValue(record);
+                  setValue(record.content);
                 }}
               ></Button>
             </Link>
@@ -216,6 +222,7 @@ const PolicyAdmin = (props: Props) => {
       },
     },
   ];
+
   return (
     <div>
       {contextHolder}
@@ -225,7 +232,6 @@ const PolicyAdmin = (props: Props) => {
           name="basic"
           labelCol={{ span: 6 }}
           wrapperCol={{ span: 12 }}
-          initialValues={{ name: "", description: "" }}
           onFinish={onFinish}
           autoComplete="off"
         >
@@ -238,7 +244,6 @@ const PolicyAdmin = (props: Props) => {
                 min: 2,
                 message: "Tên policy phải lớn hơn 2 kí tự",
               },
-              {},
             ]}
           >
             <Input />
@@ -328,9 +333,11 @@ const PolicyAdmin = (props: Props) => {
             form={updateForm}
             name="update-form"
             labelCol={{ span: 24 }}
-            initialValues={{ name: "", description: "" }}
             onFinish={onUpdate}
             autoComplete="off"
+            initialValues={{
+              content: value,
+            }}
           >
             <Form.Item<FieldType>
               label="Sửa tiêu đề"
@@ -373,7 +380,7 @@ const PolicyAdmin = (props: Props) => {
                     },
                   },
                   clipboard: {
-                    matchVisual: false,
+                    matchVisual: true,
                   },
                 }}
                 formats={[
@@ -393,8 +400,8 @@ const PolicyAdmin = (props: Props) => {
                   "video",
                   "code-block",
                 ]}
-                value="abc"
-                // onChange={onChange}
+                key={value}
+                value={value}
               />
             </Form.Item>
           </Form>

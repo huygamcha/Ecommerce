@@ -284,7 +284,7 @@ function HeaderScreen() {
                   <Link to="/" className={clsx(style.header_image)}>
                     <LazyLoadImage
                       effect="blur"
-                      src="https://pub-50bb58cfabdd4b93abb4e154d0eada9e.r2.dev/fff.png"
+                      src="https://pub-50bb58cfabdd4b93abb4e154d0eada9e.r2.dev/logo1.webp"
                       alt="product"
                     />
                   </Link>
@@ -446,7 +446,7 @@ function HeaderScreen() {
             <Link to="/" className={clsx(style.header_image)}>
               <LazyLoadImage
                 effect="blur"
-                src="https://pub-50bb58cfabdd4b93abb4e154d0eada9e.r2.dev/fff.png"
+                src="https://pub-50bb58cfabdd4b93abb4e154d0eada9e.r2.dev/logo1.webp"
                 alt="header"
               />
             </Link>

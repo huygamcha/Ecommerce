@@ -12,15 +12,13 @@ import {
   Col,
   Row,
   Space,
-  Image,
   Flex,
   Empty,
   Breadcrumb,
   message,
   ConfigProvider,
   Skeleton,
-  Form,
-  Input,
+  Image,
 } from "antd";
 import numeral from "numeral";
 import style from "./product.module.css";
@@ -28,13 +26,8 @@ import clsx from "clsx";
 import { addToCart } from "../../../slices/cartSlice";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import { PiCaretDoubleDownBold, PiCaretDoubleUpBold } from "react-icons/pi";
-import {
-  FaClock,
-  FaFacebookMessenger,
-  FaLocationCrosshairs,
-  FaLocationDot,
-} from "react-icons/fa6";
-import { FaCartShopping, FaBars } from "react-icons/fa6";
+import { FaClock, FaFacebookMessenger, FaLocationDot } from "react-icons/fa6";
+import { FaCartShopping } from "react-icons/fa6";
 
 import { FiChevronRight } from "react-icons/fi";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -48,7 +41,6 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import Discount from "../../../components/discount";
 import ButtonNavigation from "../../../components/buttonNavigation";
-import Label from "../../../components/label";
 import Specifications from "../../../components/specifications";
 import { FaCheckCircle } from "react-icons/fa";
 import FakeNumber from "../../../components/fakeNumber";
@@ -387,12 +379,19 @@ function ProductDetail() {
                                     className={clsx(style.wrapper_album)}
                                     key={index}
                                   >
-                                    <LazyLoadImage
+                                    <Image
+                                      // width={200}
+                                      className={clsx(style.album_item)}
+                                       alt="product"
+                                       src={item}
+                                      // src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                                    />
+                                    {/* <LazyLoadImage
                                       effect="blur"
                                       className={clsx(style.album_item)}
                                       src={item}
                                       alt="product"
-                                    />
+                                    /> */}
                                   </SwiperSlide>
                                 ))}
                             </Swiper>

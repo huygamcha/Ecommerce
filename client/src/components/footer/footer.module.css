@@ -106,6 +106,20 @@
   margin-right: 5px,
 }
 
+.location_footer {
+  display: flex;
+}
+
+.location_footer > li {
+  margin-right : 25px;
+}
+
+
+.location_footer_text,
+.location_footer_text:hover {
+  color: #1250dc;
+}
+
 /* mobile */
 @media (max-width: 575.98px) {
   

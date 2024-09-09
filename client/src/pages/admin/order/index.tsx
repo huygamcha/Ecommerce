@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import {
   Button,
   Form,
@@ -19,6 +19,7 @@ import { useEffect } from "react";
 import {
   deleteOrder,
   getAllOrder,
+  resetState,
   updateOrder,
 } from "../../../slices/orderSlice";
 import { useAppSelector, useAppDispatch } from "../../../store";
@@ -35,30 +36,71 @@ const Order = (props: Props) => {
   const { RangePicker } = DatePicker;
   const navigate = useNavigate();
   const param = useParams();
-  // không hiển thị khi lần đầu load trang
-  const [initialRender, setInitialRender] = useState<boolean>(true);
-  const [isActive, setIsActive] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
 
+  const firstRender = useRef<boolean>(true);
+  const [selectedOrder, setSelectedOrder] = useState<any>(); // boolean or record._id
   const [search, setSearch] = useState<string>("");
   const [dates, setDates] = useState<any[]>([]);
   const [isDateSearch, setIsDateSearch] = useState<boolean>(false);
 
-  // get from database
-  const dispatch = useAppDispatch();
+  // thong tin
+  const [province, setProvince] = useState([]);
+  const [district, setDistrict] = useState([]);
+  const [commune, setCommune] = useState([]);
 
-  const { orders, error } = useAppSelector((state) => state.orders);
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const [createForm] = Form.useForm<FieldType>();
+  const [updateForm] = Form.useForm<FieldType>();
+
+  const {
+    orders,
+    isSuccessCreate,
+    isSuccessUpdate,
+    isErrorCreate,
+    isErrorUpdate,
+  } = useAppSelector((state) => state.orders);
   const { categories } = useAppSelector((state) => state.categories);
 
   useEffect(() => {
-    setInitialRender(false);
+    getProvince();
+  }, []);
+
+  useEffect(() => {
+    firstRender.current = false;
     if (orders.length === 0) dispatch(getAllOrder());
     if (categories.length === 0) dispatch(getAllCategory());
-  }, [dispatch]);
+  }, []);
 
-  //set active modal
-  const [selectedOrder, setSelectedOrder] = useState<any>(); // boolean or record._id
-
-  const [messageApi, contextHolder] = message.useMessage();
+  useEffect(() => {
+    if (!firstRender.current) {
+      if (isErrorUpdate || isErrorCreate) {
+        if (!param.id && isErrorCreate) {
+          onShowMessage(`Tạo đơn đặt hàng không thành công`, "error");
+        } else {
+          onShowMessage(`Cập nhật đơn đặt hàng không thành công`, "error");
+          navigate(-1);
+          setSelectedOrder(false);
+        }
+        updateForm.resetFields();
+        dispatch(getAllOrder());
+        dispatch(resetState());
+      }
+      if (isSuccessUpdate || isSuccessCreate) {
+        if (!param.id && isSuccessCreate) {
+          onShowMessage("Tạo đơn đặt hàng thành công", "success");
+        } else {
+          onShowMessage("Cập nhật đơn đặt hàng thành công", "success");
+          navigate(-1);
+          setSelectedOrder(false);
+        }
+        createForm.resetFields();
+        dispatch(getAllOrder());
+        dispatch(resetState());
+      }
+    }
+  }, [isSuccessCreate, isSuccessUpdate, isErrorCreate, isErrorUpdate]);
 
   const MESSAGE_TYPE = {
     SUCCESS: "success",
@@ -66,6 +108,7 @@ const Order = (props: Props) => {
     WARNING: "warning",
     ERROR: "error",
   };
+
   const onShowMessage = useCallback(
     (content: any, type: any = MESSAGE_TYPE.SUCCESS) => {
       messageApi.open({
@@ -92,25 +135,9 @@ const Order = (props: Props) => {
     _id: string;
   };
 
-  const [createForm] = Form.useForm<FieldType>();
-  const [updateForm] = Form.useForm<FieldType>();
-
-  useEffect(() => {
-    if (!initialRender) {
-      if (param.id) {
-        onShowMessage("Cập nhật đơn đặt hàng thành công", "success");
-        navigate(-1);
-        setSelectedOrder(false);
-      }
-      dispatch(getAllOrder());
-      createForm.resetFields();
-    }
-  }, [isActive]);
-
   // update order modal
   const onUpdate = async (values: any) => {
     await dispatch(updateOrder({ id: selectedOrder, values: values }));
-    setIsActive(!isActive);
   };
 
   const onDelete = async (values: any, carts: any) => {
@@ -129,9 +156,35 @@ const Order = (props: Props) => {
   };
 
   // upload image
-  const [picDetail, setPicDetail] = useState<string>();
-  const [pic, setPic] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const getProvince = async () => {
+    const data = await axios.get(
+      "https://api.mysupership.vn/v1/partner/areas/province"
+    );
+    setProvince(data.data.results);
+  };
+
+  const handleDistrict = async (id: string) => {
+    updateForm.setFieldValue("district", null);
+    updateForm.setFieldValue("commune", null);
+    const data = await axios.get(
+      `https://api.mysupership.vn/v1/partner/areas/district?province=${id}`
+    );
+    setDistrict(data.data.results);
+  };
+
+  const handleCommune = async (id: string) => {
+    updateForm.setFieldValue("commune", null);
+    const data = await axios.get(
+      `https://api.mysupership.vn/v1/partner/areas/commune?district=${id}`
+    );
+    setCommune(data.data.results);
+  };
+
+  const handleAddressDetail = async () => {
+    updateForm.setFieldValue("addressDetail", null);
+  };
 
   // table
   const columns = [
@@ -310,7 +363,6 @@ const Order = (props: Props) => {
                 onClick={() => {
                   setSelectedOrder(record._id);
                   updateForm.setFieldsValue(record);
-                  setPicDetail(record.pic);
                 }}
               ></Button>
             </Link>
@@ -329,43 +381,6 @@ const Order = (props: Props) => {
       },
     },
   ];
-
-  // thong tin
-  const [province, setProvince] = useState([]);
-  const [district, setDistrict] = useState([]);
-  const [commune, setCommune] = useState([]);
-
-  useEffect(() => {
-    getProvince();
-  }, []);
-
-  const getProvince = async () => {
-    const data = await axios.get(
-      "https://api.mysupership.vn/v1/partner/areas/province"
-    );
-    setProvince(data.data.results);
-  };
-
-  const handleDistrict = async (id: string) => {
-    updateForm.setFieldValue("district", null);
-    updateForm.setFieldValue("commune", null);
-    const data = await axios.get(
-      `https://api.mysupership.vn/v1/partner/areas/district?province=${id}`
-    );
-    setDistrict(data.data.results);
-  };
-
-  const handleCommune = async (id: string) => {
-    updateForm.setFieldValue("commune", null);
-    const data = await axios.get(
-      `https://api.mysupership.vn/v1/partner/areas/commune?district=${id}`
-    );
-    setCommune(data.data.results);
-  };
-
-  const handleAddressDetail = async () => {
-    updateForm.setFieldValue("addressDetail", null);
-  };
 
   return (
     <div>

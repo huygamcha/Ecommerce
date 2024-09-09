@@ -1,4 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useRef, useState } from "react";
+import "react-quill/dist/quill.snow.css";
 import {
   Button,
   Form,
@@ -23,6 +25,7 @@ import {
   getAllProduct,
   deleteProduct,
   updateProduct,
+  resetState,
 } from "../../../slices/productSlice";
 import { useAppSelector, useAppDispatch } from "../../../store";
 import { CopyOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
@@ -38,18 +41,22 @@ type Props = {};
 const Product = (props: Props) => {
   const navigate = useNavigate();
   const param = useParams();
-  // không hiển thị khi lần đầu load trang
-  const [initialRender, setInitialRender] = useState<boolean>(true);
-  const [isActive, setIsActive] = useState<boolean>(false);
-  // get from database
   const dispatch = useAppDispatch();
 
-  // value for pic update, create and remove
-  const [albumUpdate, setAlbumUpdate] = useState<(string | undefined)[]>([]);
-
-  // quill text editor
+  const firstRender = useRef<boolean>(true);
   const [value, setValue] = useState("");
   const reactQuillRef = useRef<ReactQuill>(null);
+  const [selectedProduct, setSelectedProduct] = useState<any>(); // boolean or record._id
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [albumCreate, setAlbumCreate] = useState<Array<string>>([]);
+
+  const [createForm] = Form.useForm<FieldType>();
+  const [updateForm] = Form.useForm<FieldType>();
+  const categoryFormCreate = Form.useWatch("categoryId", createForm);
+  const categoryFormUpdate = Form.useWatch("categoryId", updateForm);
+
+  const [messageApi, contextHolder] = message.useMessage();
+
   const imageHandler = useCallback(() => {
     const input = document.createElement("input");
     input.setAttribute("type", "file");
@@ -93,23 +100,70 @@ const Product = (props: Props) => {
     // return url;
   };
 
-  const { products, error } = useAppSelector((state) => state.products);
+  const {
+    products,
+    isSuccessCreate,
+    isSuccessUpdate,
+    isErrorCreate,
+    isErrorUpdate,
+  } = useAppSelector((state) => state.products);
   const { categories } = useAppSelector((state) => state.categories);
   const { brands } = useAppSelector((state) => state.brands);
   const { tags } = useAppSelector((state) => state.tags);
 
   useEffect(() => {
-    setInitialRender(false);
+    firstRender.current = false;
     if (products.length === 0) dispatch(getAllProduct({}));
     if (categories.length === 0) dispatch(getAllCategory());
     if (tags.length === 0) dispatch(getAllTag());
     if (brands.length === 0) dispatch(getAllBrand());
   }, []);
 
-  //set active modal
-  const [selectedProduct, setSelectedProduct] = useState<any>(); // boolean or record._id
+  useEffect(() => {
+    if (!firstRender.current) {
+      if (isErrorUpdate || isErrorCreate) {
+        if (!param.id && isErrorCreate) {
+          onShowMessage(`Tạo sản phẩm không thành công`, "error");
+        } else {
+          onShowMessage(`Cập nhật sản phẩm không thành công`, "error");
+          navigate(-1);
+          setSelectedProduct(false);
+        }
+        updateForm.resetFields();
+        dispatch(getAllProduct({}));
+        dispatch(resetState());
+      }
+      if (isSuccessUpdate || isSuccessCreate) {
+        if (!param.id && isSuccessCreate) {
+          onShowMessage("Tạo sản phẩm thành công", "success");
+        } else {
+          onShowMessage("Cập nhật sản phẩm thành công", "success");
+          navigate(-1);
+          setSelectedProduct(false);
+        }
+        createForm.resetFields();
+        dispatch(getAllProduct({}));
+        dispatch(resetState());
+      }
+    }
+  }, [isSuccessCreate, isSuccessUpdate, isErrorCreate, isErrorUpdate]);
 
-  const [messageApi, contextHolder] = message.useMessage();
+  // change when select category -> select brand
+  useEffect(() => {
+    createForm.setFieldValue("brandId", "");
+  }, [categoryFormCreate]);
+
+  useEffect(() => {
+    // kiểm tra xem nếu category bị thay đổi thì brand sẽ set là rỗng
+    const matchBrand = brands
+      .filter(
+        (brand) => brand.categoryId === updateForm.getFieldValue("categoryId")
+      )
+      .find((brand) => brand._id === updateForm.getFieldValue("brandId"));
+    if (!matchBrand) {
+      updateForm.setFieldValue("brandId", "");
+    }
+  }, [categoryFormUpdate]);
 
   const MESSAGE_TYPE = {
     SUCCESS: "success",
@@ -117,6 +171,7 @@ const Product = (props: Props) => {
     WARNING: "warning",
     ERROR: "error",
   };
+
   const onShowMessage = useCallback(
     (content: any, type: any = MESSAGE_TYPE.SUCCESS) => {
       messageApi.open({
@@ -126,8 +181,6 @@ const Product = (props: Props) => {
     },
     [messageApi]
   );
-
-  // form
 
   type FieldType = {
     name: string;
@@ -152,53 +205,18 @@ const Product = (props: Props) => {
     fakeNumber: number;
   };
 
-  const [createForm] = Form.useForm<FieldType>();
-  const [updateForm] = Form.useForm<FieldType>();
-  const categoryFormCreate = Form.useWatch("categoryId", createForm);
-  const categoryFormUpdate = Form.useWatch("categoryId", updateForm);
-
-  useEffect(() => {
-    if (!initialRender) {
-      if (error.message !== "") {
-        if (!param.id) {
-          onShowMessage(`${error.errors?.name}`, "error");
-        } else {
-          onShowMessage(`${error.errors?.name}`, "error");
-        }
-        dispatch(getAllProduct({}));
-      } else {
-        if (!param.id) {
-          onShowMessage("Tạo sản phẩm thành công", "success");
-        } else {
-          onShowMessage("Cập nhật sản phẩm thành công", "success");
-          navigate(-1);
-          setSelectedProduct(false);
-        }
-        dispatch(getAllProduct({}));
-        createForm.resetFields();
-      }
-    }
-  }, [isActive]);
-
   const onFinish = async (values: any) => {
     await dispatch(createProduct({ ...values, album: albumCreate }));
-    setPic("");
-    setIsActive(!isActive);
   };
 
   // update product modal
   const onUpdate = async (values: any) => {
-    // console.log("««««« albumUpdate »»»»»", albumUpdate);
     await dispatch(
       updateProduct({
         id: selectedProduct,
-        values: { ...values, pic: picDetail, album: albumCreate },
+        values: { ...values, album: albumCreate },
       })
     );
-    setPicDetail("");
-    setPicAdd("");
-    setAlbumUpdate([]);
-    setIsActive(!isActive);
   };
 
   const onDelete = async (values: any) => {
@@ -207,31 +225,90 @@ const Product = (props: Props) => {
     onShowMessage("Xoá sản phẩm thành công");
   };
 
-  // change when select category -> select brand
-  useEffect(() => {
-    createForm.setFieldValue("brandId", "");
-  }, [categoryFormCreate]);
-
-  useEffect(() => {
-    // kiểm tra xem nếu category bị thay đổi thì brand sẽ set là rỗng
-    const matchBrand = brands
-      .filter(
-        (brand) => brand.categoryId === updateForm.getFieldValue("categoryId")
-      )
-      .find((brand) => brand._id === updateForm.getFieldValue("brandId"));
-    if (!matchBrand) {
-      updateForm.setFieldValue("brandId", "");
-    }
-  }, [categoryFormUpdate]);
-
   // xoa anh ra khoi album
   const handleImageRemove = (index: number) => {
     const updatedImages = albumCreate.filter((_, id) => id !== index);
     setAlbumCreate(updatedImages);
   };
 
-  // image screen with add
-  const [picAdd, setPicAdd] = useState<string>();
+  // upload hình ảnh đại diện cho sản phẩm
+  const postDetails = async (pics: any, infor: string) => {
+    if (pics === undefined) {
+      return;
+    }
+    if (
+      pics.type === "image/jpeg" ||
+      pics.type === "image/jpg" ||
+      pics.type === "image/svg+xml" ||
+      pics.type === "image/png" ||
+      pics.type === "image/webp"
+    ) {
+      setIsLoading(false);
+      const data = new FormData();
+      data.append("file", pics);
+      const response = await fetch(`${process.env.REACT_APP_BACKEND}/upload`, {
+        method: "post",
+        body: data,
+      });
+      const result = await response.text();
+      setIsLoading(true);
+      if (infor === "create") {
+        createForm.setFieldValue("pic", result);
+      } else {
+        updateForm.setFieldValue("pic", result);
+      }
+    } else {
+      return;
+    }
+  };
+
+  // upload nhiều ảnh vào album
+  const handleUploadAlbum = async (albums: any, infor: string) => {
+    if (albums === undefined) {
+      return;
+    }
+    // chuyển object sang array
+    const asArrayAlbum = Object.entries(albums);
+    const resultAlbum: string[] = [];
+    await Promise.all(
+      asArrayAlbum.map(async (album: any, index: number) => {
+        setIsLoading(false);
+        if (
+          album[1].type === "image/jpeg" ||
+          album[1].type === "image/jpg" ||
+          album[1].type === "image/svg+xml" ||
+          album[1].type === "image/png" ||
+          album[1].type === "image/webp"
+        ) {
+          setIsLoading(false);
+          const data = new FormData();
+          data.append("file", album[1]);
+          const response = await fetch(
+            `${process.env.REACT_APP_BACKEND}/upload`,
+            {
+              method: "post",
+              body: data,
+            }
+          );
+          const result = await response.text();
+          if (infor === "create") {
+            resultAlbum.push(result);
+            if (index === asArrayAlbum.length - 1) {
+              setAlbumCreate((prev) => [...prev, ...resultAlbum]);
+              setIsLoading(true);
+            }
+          }
+        } else {
+          return;
+        }
+      })
+    );
+  };
+
+  //copy
+  const handleCopy = async (values: any) => {
+    await dispatch(createProduct({ ...values, name: `${values.name} (copy)` }));
+  };
 
   // table
   const columns = [
@@ -331,9 +408,8 @@ const Product = (props: Props) => {
                 onClick={() => {
                   setSelectedProduct(record._id);
                   updateForm.setFieldsValue(record);
-                  setPicDetail(record.pic);
                   setAlbumCreate(record.album ? record.album : []);
-                  setValue(record.detail);
+                  // setValue(record.detail);
                 }}
               ></Button>
             </Link>
@@ -352,118 +428,6 @@ const Product = (props: Props) => {
       },
     },
   ];
-
-  // upload image with create
-  const [pic, setPic] = useState<string>();
-  // image screen with update, create
-  const [picDetail, setPicDetail] = useState<string>();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  // image album
-  const [albumCreate, setAlbumCreate] = useState<Array<string>>([]);
-
-  // upload hình ảnh đại diện cho sản phẩm
-  const postDetails = async (pics: any, infor: string) => {
-    if (pics === undefined) {
-      return;
-    }
-    if (
-      pics.type === "image/jpeg" ||
-      pics.type === "image/png" ||
-      pics.type === "image/webp"
-    ) {
-      setIsLoading(false);
-      const data = new FormData();
-      data.append("file", pics);
-      const response = await fetch(`${process.env.REACT_APP_BACKEND}/upload`, {
-        method: "post",
-        body: data,
-      });
-      const result = await response.text();
-      setIsLoading(true);
-      if (infor === "create") {
-        setPic(result);
-        createForm.setFieldValue("pic", result);
-      } else {
-        setPicDetail(result);
-      }
-    } else {
-      return;
-    }
-    // console.log("««««« pic »»»»»", pic);
-  };
-
-  // upload nhiều ảnh vào album
-  const handleUploadAlbum = async (albums: any, infor: string) => {
-    if (albums === undefined) {
-      return;
-    }
-    // chuyển object sang array
-    const asArrayAlbum = Object.entries(albums);
-    const resultAlbum: string[] = [];
-    await Promise.all(
-      asArrayAlbum.map(async (album: any, index: number) => {
-        setIsLoading(false);
-        if (
-          album[1].type === "image/jpeg" ||
-          album[1].type === "image/jpg" ||
-          album[1].type === "image/svg+xml" ||
-          album[1].type === "image/png" ||
-          album[1].type === "image/webp"
-        ) {
-          setIsLoading(false);
-          const data = new FormData();
-          data.append("file", album[1]);
-          const response = await fetch(
-            `${process.env.REACT_APP_BACKEND}/upload`,
-            {
-              method: "post",
-              body: data,
-            }
-          );
-          const result = await response.text();
-          if (infor === "create") {
-            resultAlbum.push(result);
-            if (index === asArrayAlbum.length - 1) {
-              setAlbumCreate((prev) => [...prev, ...resultAlbum]);
-              setIsLoading(true);
-            }
-          } else {
-            setPicDetail(result);
-          }
-
-          // data.append("upload_preset", "pbl3_chatbot");
-          // data.append("cloud_name", "drqphlfn6");
-          // fetch("https://api.cloudinary.com/v1_1/drqphlfn6/image/upload", {
-          //   method: "post",
-          //   body: data,
-          // })
-          //   .then((res) => res.json())
-          //   .then((data) => {
-          //     if (infor === "create") {
-          //       resultAlbum.push(data.url.toString());
-          //       if (index === asArrayAlbum.length - 1) {
-          //         setAlbumCreate(resultAlbum);
-          //         setIsLoading(true);
-          //       }
-          //     } else {
-          //       setPicDetail(data.url.toString());
-          //     }
-          //   })
-          //   .catch((err) => {
-          //     console.log(err);
-          //   });
-        } else {
-          return;
-        }
-      })
-    );
-  };
-
-  //copy
-  const handleCopy = async (values: any) => {
-    await dispatch(createProduct({ ...values, name: `${values.name} (copy)` }));
-    setIsActive(!isActive);
-  };
 
   return (
     <div>
@@ -486,7 +450,6 @@ const Product = (props: Props) => {
             name="basic"
             labelCol={{ span: 6 }}
             wrapperCol={{ span: 12 }}
-            initialValues={{ name: "", description: "" }}
             onFinish={onFinish}
             autoComplete="off"
           >
@@ -534,24 +497,6 @@ const Product = (props: Props) => {
                   }))}
               />
             </Form.Item>
-
-            {/* <Form.Item<FieldType>
-              label="Nhà cung cấp"
-              name="supplierId"
-              rules={[
-                { required: true, message: "Vui lòng chọn nhà cung cấp!" },
-              ]}
-              hasFeedback
-            >
-              <Select
-                options={suppliers.map((item: any) => {
-                  return {
-                    label: item.name,
-                    value: item._id,
-                  };
-                })}
-              />
-            </Form.Item> */}
 
             <Form.Item<FieldType>
               label="Giá sản phẩm"
@@ -652,7 +597,6 @@ const Product = (props: Props) => {
             </Form.Item>
 
             <Form.Item<FieldType> label="Chọn ảnh hiển thị" name="pic">
-              {pic ? <Image height={100} src={pic}></Image> : <Space></Space>}
               <Input
                 type="file"
                 accept="image/*"
@@ -663,10 +607,15 @@ const Product = (props: Props) => {
                   }
                 }}
               ></Input>
+              {createForm.getFieldValue("pic") && (
+                <Image
+                  height={100}
+                  src={createForm.getFieldValue("pic")}
+                ></Image>
+              )}
             </Form.Item>
 
             <Form.Item<FieldType> label="Album ảnh" name="album">
-              {/* {pic ? <Image height={100} src={pic}></Image> : <Space></Space>} */}
               <Input
                 type="file"
                 multiple={true}
@@ -678,6 +627,26 @@ const Product = (props: Props) => {
                   }
                 }}
               ></Input>
+              {albumCreate &&
+                albumCreate.map((item: any, index: number) => (
+                  <div
+                    key={index}
+                    style={{ display: "inline-block", marginRight: 8 }}
+                  >
+                    <LazyLoadImage
+                      effect="blur"
+                      style={{ width: "100px", height: "100px" }}
+                      src={item}
+                      alt="albumCreate"
+                    />
+                    <Button
+                      onClick={() => handleImageRemove(index)}
+                      type="link"
+                    >
+                      Xóa
+                    </Button>
+                  </div>
+                ))}
             </Form.Item>
 
             <Form.Item<FieldType> label="Mô tả chi tiết" name="detail">
@@ -929,7 +898,6 @@ const Product = (props: Props) => {
               </Form.Item>
 
               <Form.Item<FieldType> label="Chọn ảnh hiển thị" name="pic">
-                <Image height={100} src={picDetail}></Image>
                 <Input
                   type="file"
                   accept="image/*"
@@ -940,12 +908,15 @@ const Product = (props: Props) => {
                     }
                   }}
                 ></Input>
+                {updateForm.getFieldValue("pic") && (
+                  <Image
+                    height={100}
+                    src={updateForm.getFieldValue("pic")}
+                  ></Image>
+                )}
               </Form.Item>
 
               <Form.Item<FieldType> label="Album ảnh" name="album">
-                {picAdd && (
-                  <Image title="Thêm ảnh" height={100} src={picAdd}></Image>
-                )}
                 <Input
                   type="file"
                   multiple={true}

@@ -306,10 +306,15 @@ function ProductScreen() {
                       effect="blur"
                       src="https://cdn.nhathuoclongchau.com.vn/unsafe/28x28/https://cms-prod.s3-sgn09.fptcloud.com/smalls/danh_muc_noi_bat_d03496597a.png"
                       className={clsx(style.content_img_banner)}
-                      style={{ height: "28px", width: "28px" }}
+                      style={{
+                        height: "28px",
+                        width: "28px",
+                      }}
                       alt="danh_muc_noi_bat"
                     />
-                    Danh mục nổi bật
+                    <Space style={{ marginLeft: "8px" }}>
+                      Danh mục nổi bật
+                    </Space>
                   </Flex>
                   <Row>
                     <Col xs={24} sm={24}>
